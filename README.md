@@ -1,2 +1,1 @@
-# nukleus-kafka.spec
-Kafka Nukleus Specification
+# Kafka Nukleus Specification
