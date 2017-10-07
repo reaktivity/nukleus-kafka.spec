@@ -71,6 +71,39 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/zero.offset.messagesets/client",
+        "${scripts}/zero.offset.messagesets/server"})
+    public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.messages.fanout/client",
+        "${scripts}/zero.offset.messages.fanout/server"})
+    public void shouldFanoutMessagesAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.messagesets.fanout/client",
+        "${scripts}/zero.offset.messagesets.fanout/server"})
+    public void shouldFanoutMessageSetsAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/nonzero.offset/client",
         "${scripts}/nonzero.offset/server"})
     public void shouldRequestMessagesAtNonZeroOffset() throws Exception
