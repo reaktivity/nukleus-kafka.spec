@@ -68,4 +68,37 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/topic.offset.nonzero/client",
+        "${scripts}/topic.offset.nonzero/server"})
+    public void shouldRequestTopicMessagesAtOffsetNonZero() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/topic.offset.nonzero.message/client",
+        "${scripts}/topic.offset.nonzero.message/server"})
+    public void shouldReceiveTopicMessageAtOffsetNonZero() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/topic.offset.nonzero.messages/client",
+        "${scripts}/topic.offset.nonzero.messages/server"})
+    public void shouldReceiveTopicMessagesAtOffsetNonZero() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 }
