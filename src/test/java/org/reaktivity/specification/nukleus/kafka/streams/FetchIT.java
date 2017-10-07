@@ -38,9 +38,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/topic.offset.zero/client",
-        "${scripts}/topic.offset.zero/server"})
-    public void shouldRequestTopicMessagesAtOffsetZero() throws Exception
+        "${scripts}/offset.zero/client",
+        "${scripts}/offset.zero/server"})
+    public void shouldRequestMessagesAtOffsetZero() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -49,9 +49,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/topic.offset.zero.message/client",
-        "${scripts}/topic.offset.zero.message/server"})
-    public void shouldReceiveTopicMessageAtOffsetZero() throws Exception
+        "${scripts}/offset.zero.message/client",
+        "${scripts}/offset.zero.message/server"})
+    public void shouldReceiveMessageAtOffsetZero() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -60,9 +60,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/topic.offset.zero.messages/client",
-        "${scripts}/topic.offset.zero.messages/server"})
-    public void shouldReceiveTopicMessagesAtOffsetZero() throws Exception
+        "${scripts}/offset.zero.messages/client",
+        "${scripts}/offset.zero.messages/server"})
+    public void shouldReceiveMessagesAtOffsetZero() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -71,9 +71,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/topic.offset.nonzero/client",
-        "${scripts}/topic.offset.nonzero/server"})
-    public void shouldRequestTopicMessagesAtOffsetNonZero() throws Exception
+        "${scripts}/offset.nonzero/client",
+        "${scripts}/offset.nonzero/server"})
+    public void shouldRequestMessagesAtOffsetNonZero() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -82,9 +82,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/topic.offset.nonzero.message/client",
-        "${scripts}/topic.offset.nonzero.message/server"})
-    public void shouldReceiveTopicMessageAtOffsetNonZero() throws Exception
+        "${scripts}/offset.nonzero.message/client",
+        "${scripts}/offset.nonzero.message/server"})
+    public void shouldReceiveMessageAtOffsetNonZero() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -93,9 +93,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/topic.offset.nonzero.messages/client",
-        "${scripts}/topic.offset.nonzero.messages/server"})
-    public void shouldReceiveTopicMessagesAtOffsetNonZero() throws Exception
+        "${scripts}/offset.nonzero.messages/client",
+        "${scripts}/offset.nonzero.messages/server"})
+    public void shouldReceiveMessagesAtOffsetNonZero() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
