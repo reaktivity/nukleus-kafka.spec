@@ -134,4 +134,15 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/distinct.offset.messagesets.fanout/client",
+        "${scripts}/distinct.offset.messagesets.fanout/server"})
+    public void shouldFanoutMessageSetsAtDistinctOffsets() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 }
