@@ -15,6 +15,8 @@
  */
 package org.reaktivity.specification.kafka.internal;
 
+import static java.lang.System.currentTimeMillis;
+
 import java.util.Random;
 
 import org.kaazing.k3po.lang.el.Function;
@@ -28,6 +30,12 @@ public final class Functions
     public static int newRequestId()
     {
         return RANDOM.nextInt();
+    }
+
+    @Function
+    public static long timestamp()
+    {
+        return currentTimeMillis();
     }
 
     private Functions()

@@ -48,4 +48,13 @@ public class FunctionsTest
         Object value = expression.getValue(ctx);
         assertTrue(value instanceof Integer);
     }
+
+    @Test
+    public void shouldInvokeTimestamp() throws Exception
+    {
+        String expressionText = "${kafka:timestamp()}";
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, Long.class);
+        Object value = expression.getValue(ctx);
+        assertTrue(value instanceof Long);
+    }
 }

@@ -40,7 +40,29 @@ public class FetchIT
     @Specification({
         "${scripts}/topic.offset.zero/client",
         "${scripts}/topic.offset.zero/server"})
-    public void shouldRequestTopicAtOffsetZero() throws Exception
+    public void shouldRequestTopicMessagesAtOffsetZero() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/topic.offset.zero.message/client",
+        "${scripts}/topic.offset.zero.message/server"})
+    public void shouldReceiveTopicMessageAtOffsetZero() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/topic.offset.zero.messages/client",
+        "${scripts}/topic.offset.zero.messages/server"})
+    public void shouldReceiveTopicMessagesAtOffsetZero() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
