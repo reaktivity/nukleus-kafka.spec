@@ -15,6 +15,8 @@
  */
 package org.reaktivity.specification.kafka.internal;
 
+import static java.lang.Integer.highestOneBit;
+import static java.lang.Integer.numberOfTrailingZeros;
 import static java.lang.System.currentTimeMillis;
 
 import java.util.Random;
@@ -36,6 +38,45 @@ public final class Functions
     public static long timestamp()
     {
         return currentTimeMillis();
+    }
+
+    @Function
+    public static byte[] varint(
+        int value)
+    {
+        final int bits = (value << 1) ^ (value >> 31);
+
+        switch (numberOfTrailingZeros(highestOneBit(bits)) >> 3)
+        {
+        case 0:
+        case 4:
+            return new byte[]
+            {
+                (byte) ((bits >> 0) & 0xff)
+            };
+        case 1:
+            return new byte[]
+            {
+                (byte) ((bits >> 8) & 0xff),
+                (byte) ((bits >> 0) & 0xff)
+            };
+        case 2:
+            return new byte[]
+            {
+                (byte) ((bits >> 16) & 0xff),
+                (byte) ((bits >> 8) & 0xff),
+                (byte) ((bits >> 0) & 0xff)
+            };
+        case 3:
+        default:
+            return new byte[]
+            {
+                (byte) ((bits >> 24) & 0xff),
+                (byte) ((bits >> 16) & 0xff),
+                (byte) ((bits >> 8) & 0xff),
+                (byte) ((bits >> 0) & 0xff)
+            };
+        }
     }
 
     private Functions()
