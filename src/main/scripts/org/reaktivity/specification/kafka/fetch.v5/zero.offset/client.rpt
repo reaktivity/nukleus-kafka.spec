@@ -26,25 +26,24 @@ connect await ROUTED_SERVER
   option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
 
 connected
 
-#write nukleus:order network
-
-write [0x00 0x00 0x00 0x4b]
-write [0x00 0x01]
-write [0x00 0x05]
+write 0x4b
+write 0x01s
+write 0x05s
 write ${newRequestId}
-write [0x00 0x0a] "consumer-1"
+write 0x0as "consumer-1"
 write -1
-write [0x7f 0xff 0xff 0xff]
-write [0x00 0x00 0x00 0x01]
-write [0x03 0x20 0x00 0x00]
+write 0x7fffffff
+write 0x01
+write 0x03200000
 write 0x00
-write [0x00 0x00 0x00 0x01]
-write [0x00 0x04] "test"
-write [0x00 0x00 0x00 0x01]
-write 0x00000000
-write 0x0000000000000000L
+write 0x01
+write 0x04s "test"
+write 0x01
+write 0x00
+write 0x00L
 write -1L
-write ${networkConnectWindow} # currently in native byte order, needs to be in network byte order
+write ${networkConnectWindow}

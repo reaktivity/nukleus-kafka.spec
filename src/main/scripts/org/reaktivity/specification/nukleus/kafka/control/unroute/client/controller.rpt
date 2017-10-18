@@ -35,6 +35,7 @@ write [0x06] "source"
 write ${newClientAcceptRef}
 write [0x06] "target"
 write ${newClientConnectRef}
+write 0L
 write flush
 
 read 0x40000002
