@@ -25,41 +25,41 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext [0x04 0x00] "test"
-read nukleus:begin.ext 0x00000000
-read nukleus:begin.ext 0x0000000000000001L
+read nukleus:begin.ext 0x04s "test"
+read nukleus:begin.ext 0x00
+read nukleus:begin.ext 0x01L
 
 connected
 
-write nukleus:begin.ext [0x04 0x00] "test"
-write nukleus:begin.ext 0x00000000
-write nukleus:begin.ext 0x0000000000000001L
+write nukleus:begin.ext 0x04s "test"
+write nukleus:begin.ext 0x00
+write nukleus:begin.ext 0x01L
 write flush
 
 write "Hello, again"
-write nukleus:data.ext 0x00000000
-write nukleus:data.ext 0x0000000000000001L
+write nukleus:data.ext 0x00
+write nukleus:data.ext 0x01L
 write flush
 
 accepted
 
-read nukleus:begin.ext [0x04 0x00] "test"
-read nukleus:begin.ext 0x00000000
-read nukleus:begin.ext 0x0000000000000000L
+read nukleus:begin.ext 0x04s "test"
+read nukleus:begin.ext 0x00
+read nukleus:begin.ext 0x00L
 
 connected
 
-write nukleus:begin.ext [0x04 0x00] "test"
-write nukleus:begin.ext 0x00000000
-write nukleus:begin.ext 0x0000000000000000L
+write nukleus:begin.ext 0x04s "test"
+write nukleus:begin.ext 0x00
+write nukleus:begin.ext 0x00L
 write flush
 
 write "Hello, world"
-write nukleus:data.ext 0x00000000
-write nukleus:data.ext 0x0000000000000000L
+write nukleus:data.ext 0x00
+write nukleus:data.ext 0x00L
 write flush
 
 write "Hello, again"
-write nukleus:data.ext 0x00000000
-write nukleus:data.ext 0x0000000000000001L
+write nukleus:data.ext 0x00
+write nukleus:data.ext 0x01L
 write flush

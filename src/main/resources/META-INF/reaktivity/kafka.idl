@@ -30,7 +30,6 @@ scope kafka
           string16 topicName;
           int32 partitionId;
           int64 fetchOffset;
-          int64 maximumBytes;
         }
 
         struct KafkaDataEx
