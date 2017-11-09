@@ -22,6 +22,9 @@ property networkConnectWindow 8192
 property newRequestId1 ${kafka:newRequestId()}
 property newRequestId2 ${kafka:newRequestId()}
 property newRequestId3 ${kafka:newRequestId()}
+property maximumWaitTime 500
+property maximumBytes 65535
+property maximumBytesTest0 8192
 
 connect await ROUTED_SERVER
         ${networkConnect}
@@ -32,15 +35,15 @@ connect await ROUTED_SERVER
 
 connected
 
-write 0x4b
+write 0x41
 write 0x01s
 write 0x05s
 write ${newRequestId1}
-write 0x0as "consumer-1"
+write -1s
 write -1
-write 0x7fffffff
-write 0x00000001
-write 0x03200000
+write ${maximumWaitTime}
+write 0x01
+write ${maximumBytes}
 write 0x00
 write 0x01
 write 0x04s "test"
@@ -48,17 +51,17 @@ write 0x01
 write 0x00
 write 0x01L
 write -1L
-write ${networkConnectWindow}
+write ${maximumBytesTest0}
 
-write 0x4b
+write 0x41
 write 0x01s
 write 0x05s
 write ${newRequestId2}
-write 0x0as "consumer-1"
+write -1s
 write -1
-write 0x7fffffff
+write ${maximumWaitTime}
 write 0x01
-write 0x03200000
+write ${maximumBytes}
 write 0x00
 write 0x01
 write 0x04s "test"
@@ -66,7 +69,7 @@ write 0x01
 write 0x00
 write 0x00L
 write -1L
-write ${networkConnectWindow}
+write ${maximumBytesTest0}
 
 read 0x7d
 read ${newRequestId1}
@@ -103,15 +106,15 @@ read ${kafka:varint(12)}
 read "Hello, again"
 read 0x00
 
-write 0x4b
+write 0x41
 write 0x01s
 write 0x05s
 write ${newRequestId3}
-write 0x0as "consumer-1"
+write -1s
 write -1
-write 0x7fffffff
+write ${maximumWaitTime}
 write 0x01
-write 0x03200000
+write ${maximumBytes}
 write 0x00
 write 0x01
 write 0x04s "test"
@@ -119,7 +122,7 @@ write 0x01
 write 0x00
 write 0x02L
 write -1L
-write ${networkConnectWindow}
+write ${maximumBytesTest0}
 
 read 0x7d
 read ${newRequestId2}

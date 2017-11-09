@@ -19,19 +19,17 @@ import static java.lang.Integer.highestOneBit;
 import static java.lang.Integer.numberOfTrailingZeros;
 import static java.lang.System.currentTimeMillis;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 
 public final class Functions
 {
-    private static final Random RANDOM = new Random();
-
     @Function
     public static int newRequestId()
     {
-        return RANDOM.nextInt();
+        return ThreadLocalRandom.current().nextInt();
     }
 
     @Function
