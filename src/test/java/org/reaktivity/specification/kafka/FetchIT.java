@@ -88,6 +88,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
         k3po.finish();
     }
 
@@ -99,6 +100,8 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_ONE");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_TWO");
         k3po.finish();
     }
 
@@ -143,6 +146,8 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_ONE");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_TWO");
         k3po.finish();
     }
 }

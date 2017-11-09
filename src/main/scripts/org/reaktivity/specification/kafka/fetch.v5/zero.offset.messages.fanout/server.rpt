@@ -48,6 +48,8 @@ read 0x00L
 read -1L
 read [0..4]
 
+write await SERVER_DELIVER_RESPONSE
+
 write 0x7d
 write ${requestId}
 write 0

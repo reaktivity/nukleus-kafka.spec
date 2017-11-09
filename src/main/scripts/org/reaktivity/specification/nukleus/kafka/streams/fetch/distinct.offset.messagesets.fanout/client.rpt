@@ -31,6 +31,8 @@ write nukleus:begin.ext 0x01L
 
 connected
 
+write notify CLIENT_ONE_CONNECTED
+
 read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 0x00
 read nukleus:begin.ext 0x01L
@@ -51,6 +53,8 @@ write nukleus:begin.ext 0x00
 write nukleus:begin.ext 0x00L
 
 connected
+
+write notify CLIENT_TWO_CONNECTED
 
 read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 0x00

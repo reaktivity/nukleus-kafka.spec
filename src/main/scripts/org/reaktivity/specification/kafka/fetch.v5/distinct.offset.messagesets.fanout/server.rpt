@@ -48,6 +48,8 @@ read 0x01L
 read -1L
 read [0..4]
 
+write await SERVER_DELIVER_RESPONSE_ONE
+
 write 0x7d
 write ${requestId1}
 write 0
@@ -100,6 +102,8 @@ read 0x00
 read 0x00L
 read -1L
 read [0..4]
+
+write await SERVER_DELIVER_RESPONSE_TWO
 
 write 0x7d
 write ${requestId2}

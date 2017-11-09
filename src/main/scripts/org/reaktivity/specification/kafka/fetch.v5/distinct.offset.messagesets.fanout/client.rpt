@@ -53,24 +53,6 @@ write 0x01L
 write -1L
 write ${maximumBytesTest0}
 
-write 0x41
-write 0x01s
-write 0x05s
-write ${newRequestId2}
-write -1s
-write -1
-write ${maximumWaitTime}
-write 0x01
-write ${maximumBytes}
-write 0x00
-write 0x01
-write 0x04s "test"
-write 0x01
-write 0x00
-write 0x00L
-write -1L
-write ${maximumBytesTest0}
-
 read 0x7d
 read ${newRequestId1}
 read [0..4]
@@ -109,7 +91,7 @@ read 0x00
 write 0x41
 write 0x01s
 write 0x05s
-write ${newRequestId3}
+write ${newRequestId2}
 write -1s
 write -1
 write ${maximumWaitTime}
@@ -120,7 +102,7 @@ write 0x01
 write 0x04s "test"
 write 0x01
 write 0x00
-write 0x02L
+write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
@@ -179,3 +161,21 @@ read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, again"
 read 0x00
+
+write 0x41
+write 0x01s
+write 0x05s
+write ${newRequestId3}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 0x01
+write ${maximumBytes}
+write 0x00
+write 0x01
+write 0x04s "test"
+write 0x01
+write 0x00
+write 0x02L
+write -1L
+write ${maximumBytesTest0}
