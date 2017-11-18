@@ -26,24 +26,20 @@ connect await ROUTED_CLIENT
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 0x00
-write nukleus:begin.ext 0x00L
+write nukleus:begin.ext 0x01 ${kafka:varint(0)}
 
 connected
 
 write notify CLIENT_ONE_CONNECTED
 
 read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 0x00
-read nukleus:begin.ext 0x00L
+read nukleus:begin.ext 0x01 ${kafka:varint(0)}
 
 read "Hello, world"
-read nukleus:data.ext 0x00
-read nukleus:data.ext 0x00L
+read nukleus:data.ext 0x01 ${kafka:varint(0)}
 
 read "Hello, again"
-read nukleus:data.ext 0x00
-read nukleus:data.ext 0x01L
+read nukleus:data.ext 0x01 ${kafka:varint(1)}
 
 
 connect await ROUTED_CLIENT
@@ -53,21 +49,17 @@ connect await ROUTED_CLIENT
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 0x00
-write nukleus:begin.ext 0x00L
+write nukleus:begin.ext 0x01 ${kafka:varint(0)}
 
 connected
 
 write notify CLIENT_TWO_CONNECTED
 
 read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 0x00
-read nukleus:begin.ext 0x00L
+read nukleus:begin.ext 0x01 ${kafka:varint(0)}
 
 read "Hello, world"
-read nukleus:data.ext 0x00
-read nukleus:data.ext 0x00L
+read nukleus:data.ext 0x01 ${kafka:varint(0)}
 
 read "Hello, again"
-read nukleus:data.ext 0x00
-read nukleus:data.ext 0x01L
+read nukleus:data.ext 0x01 ${kafka:varint(1)}

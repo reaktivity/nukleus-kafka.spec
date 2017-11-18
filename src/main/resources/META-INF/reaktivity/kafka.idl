@@ -19,7 +19,7 @@ scope kafka
     {
         struct KafkaRouteEx
         {
-          string16 topicName;
+            string16 topicName;
         }
     }
 
@@ -27,15 +27,13 @@ scope kafka
     {
         struct KafkaBeginEx
         {
-          string16 topicName;
-          int32 partitionId;
-          int64 fetchOffset;
+            string16 topicName;
+            varint64[] fetchOffsets;
         }
 
         struct KafkaDataEx
         {
-          int32 partitionId;
-          int64 fetchOffset;
+            varint64[] fetchOffsets;
         }
     }
 }

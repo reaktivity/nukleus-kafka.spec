@@ -26,11 +26,9 @@ connect await ROUTED_CLIENT
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 0x00
-write nukleus:begin.ext 0x01L
+write nukleus:begin.ext 0x01 ${kafka:varint(1)}
 
 connected
 
 read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 0x00
-read nukleus:begin.ext 0x01L
+read nukleus:begin.ext 0x01 ${kafka:varint(1)}
