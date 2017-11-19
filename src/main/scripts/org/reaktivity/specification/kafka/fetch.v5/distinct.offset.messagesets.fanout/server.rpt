@@ -39,7 +39,7 @@ read -1
 read [0..4]
 read 0x01
 read [0..4]
-read 0x00
+read [0x00]
 read 0x01
 read 0x04s "test"
 read 0x01
@@ -94,7 +94,7 @@ read -1
 read [0..4]
 read 0x01
 read [0..4]
-read 0x00
+read [0x00]
 read 0x01
 read 0x04s "test"
 read 0x01
@@ -170,7 +170,7 @@ read -1
 read [0..4]
 read 0x01
 read [0..4]
-read 0x00
+read [0x00]
 read 0x01
 read 0x04s "test"
 read 0x01

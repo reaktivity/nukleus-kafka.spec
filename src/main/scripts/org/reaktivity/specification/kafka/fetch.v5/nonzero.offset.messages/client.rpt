@@ -42,7 +42,7 @@ write -1
 write ${maximumWaitTime}
 write 0x01
 write ${maximumBytes}
-write 0x00
+write [0x00]
 write 0x01
 write 0x04s "test"
 write 0x01
