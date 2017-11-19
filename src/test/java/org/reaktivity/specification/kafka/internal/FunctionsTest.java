@@ -29,7 +29,6 @@ import org.kaazing.k3po.lang.internal.el.ExpressionContext;
 
 public class FunctionsTest
 {
-
     private ExpressionFactory factory;
     private ELContext ctx;
 
@@ -60,56 +59,198 @@ public class FunctionsTest
     }
 
     @Test
-    public void shouldComputeVarintFourBytes() throws Exception
+    public void shouldComputeVarintTenBytesMax() throws Exception
     {
-        String expressionText = "${kafka:varint(17000000)}";
+        String expressionText = String.format("${kafka:varint(%d)}", Long.MAX_VALUE);
         ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
         byte[] actuals = (byte[]) expression.getValue(ctx);
-        assertArrayEquals(new byte[] { (byte) 0x02, 0x06, (byte) 0xcc, (byte) 0x80 }, actuals);
+        assertArrayEquals(new byte[] { (byte) 0xfe, (byte) 0xff,
+                                       (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff,
+                                       (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x01 }, actuals);
     }
 
     @Test
-    public void shouldComputeVarintThreeBytes() throws Exception
+    public void shouldComputeVarintTenBytesMin() throws Exception
     {
-        String expressionText = "${kafka:varint(80000)}";
+        String expressionText = String.format("${kafka:varint(%d)}", 1L << 62);
         ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
         byte[] actuals = (byte[]) expression.getValue(ctx);
-        assertArrayEquals(new byte[] { 0x02, 0x71, 0x00 }, actuals);
+        assertArrayEquals(new byte[] { (byte) 0x80, (byte) 0x80,
+                                       (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80,
+                                       (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x01 }, actuals);
     }
 
     @Test
-    public void shouldComputeVarintTwoBytes() throws Exception
+    public void shouldComputeVarintNineBytesMax() throws Exception
     {
-        String expressionText = "${kafka:varint(300)}";
+        String expressionText = String.format("${kafka:varint(%d)}", -1L << 62);
         ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
         byte[] actuals = (byte[]) expression.getValue(ctx);
-        assertArrayEquals(new byte[] { (byte) 0x02, 0x58 }, actuals);
+        assertArrayEquals(new byte[] { (byte) 0xff,
+                                       (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff,
+                                       (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f }, actuals);
     }
 
     @Test
-    public void shouldComputeVarintOneByte() throws Exception
+    public void shouldComputeVarintNineBytesMin() throws Exception
     {
-        String expressionText = "${kafka:varint(12)}";
+        String expressionText = String.format("${kafka:varint(%d)}", 1L << 55);
         ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
         byte[] actuals = (byte[]) expression.getValue(ctx);
-        assertArrayEquals(new byte[] { 0x18 }, actuals);
+        assertArrayEquals(new byte[] { (byte) 0x80,
+                                       (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80,
+                                       (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x01 }, actuals);
     }
 
     @Test
-    public void shouldComputeVarintZero() throws Exception
+    public void shouldComputeVarintEightBytesMax() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", -1L << 55);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff,
+                                       (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintEightBytesMin() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", 1L << 48);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80,
+                                       (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x01 }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintSevenBytesMax() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", -1L << 48);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0xff, (byte) 0xff, (byte) 0xff,
+                                       (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintSevenBytesMin() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", 1L << 41);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0x80, (byte) 0x80, (byte) 0x80,
+                                       (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x01 }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintSixBytesMax() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", -1L << 41);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0xff, (byte) 0xff,
+                                       (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintSixBytesMin() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", 1L << 34);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0x80, (byte) 0x80,
+                                       (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x01 }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintFiveBytesMax() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", -1L << 34);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0xff,
+                                       (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintFiveBytesMin() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", 1L << 27);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0x80,
+                                       (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x01 }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintFourBytesMax() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", -1L << 27);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintFourBytesMin() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", 1L << 20);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x01 }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintThreeBytesMax() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", -1L << 20);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0xff, (byte) 0xff, 0x7f }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintThreeBytesMin() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", 1L << 13);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0x80, (byte) 0x80, 0x01 }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintTwoBytesMax() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", -1L << 13);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0xff, 0x7f }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintTwoBytesMin() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", 1L << 6);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { (byte) 0x80, 0x01 }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintOneByteMax() throws Exception
+    {
+        String expressionText = String.format("${kafka:varint(%d)}", -1L << 6);
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        byte[] actuals = (byte[]) expression.getValue(ctx);
+        assertArrayEquals(new byte[] { 0x7f }, actuals);
+    }
+
+    @Test
+    public void shouldComputeVarintOneByteMin() throws Exception
     {
         String expressionText = "${kafka:varint(0)}";
         ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
         byte[] actuals = (byte[]) expression.getValue(ctx);
         assertArrayEquals(new byte[] { 0x00 }, actuals);
-    }
-
-    @Test
-    public void shouldComputeVarintMinus1() throws Exception
-    {
-        String expressionText = "${kafka:varint(-1)}";
-        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
-        byte[] actuals = (byte[]) expression.getValue(ctx);
-        assertArrayEquals(new byte[] { 0x01 }, actuals);
     }
 }

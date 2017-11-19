@@ -15,8 +15,8 @@
  */
 package org.reaktivity.specification.kafka.internal;
 
-import static java.lang.Integer.highestOneBit;
-import static java.lang.Integer.numberOfTrailingZeros;
+import static java.lang.Long.highestOneBit;
+import static java.lang.Long.numberOfTrailingZeros;
 import static java.lang.System.currentTimeMillis;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -40,39 +40,106 @@ public final class Functions
 
     @Function
     public static byte[] varint(
-        int value)
+        long value)
     {
-        final int bits = (value << 1) ^ (value >> 31);
+        final long bits = (value << 1) ^ (value >> 63);
 
-        switch (numberOfTrailingZeros(highestOneBit(bits)) >> 3)
+        switch (bits != 0L ? (int) Math.ceil((1 + numberOfTrailingZeros(highestOneBit(bits))) / 7.0) : 1)
         {
-        case 0:
-        case 4:
-            return new byte[]
-            {
-                (byte) ((bits >> 0) & 0xff)
-            };
         case 1:
             return new byte[]
             {
-                (byte) ((bits >> 8) & 0xff),
-                (byte) ((bits >> 0) & 0xff)
+                (byte) ((bits >> 0) & 0x7f)
             };
         case 2:
             return new byte[]
             {
-                (byte) ((bits >> 16) & 0xff),
-                (byte) ((bits >> 8) & 0xff),
-                (byte) ((bits >> 0) & 0xff)
+                (byte) ((bits >> 0) & 0x7f | 0x80),
+                (byte) ((bits >> 7) & 0x7f)
             };
         case 3:
+            return new byte[]
+            {
+                (byte) ((bits >> 0) & 0x7f | 0x80),
+                (byte) ((bits >> 7) & 0x7f | 0x80),
+                (byte) ((bits >> 14) & 0x7f)
+            };
+        case 4:
+            return new byte[]
+            {
+                (byte) ((bits >> 0) & 0x7f | 0x80),
+                (byte) ((bits >> 7) & 0x7f | 0x80),
+                (byte) ((bits >> 14) & 0x7f | 0x80),
+                (byte) ((bits >> 21) & 0x7f)
+            };
+        case 5:
+            return new byte[]
+            {
+                (byte) ((bits >> 0) & 0x7f | 0x80),
+                (byte) ((bits >> 7) & 0x7f | 0x80),
+                (byte) ((bits >> 14) & 0x7f | 0x80),
+                (byte) ((bits >> 21) & 0x7f | 0x80),
+                (byte) ((bits >> 28) & 0x7f)
+            };
+        case 6:
+            return new byte[]
+            {
+                (byte) ((bits >> 0) & 0x7f | 0x80),
+                (byte) ((bits >> 7) & 0x7f | 0x80),
+                (byte) ((bits >> 14) & 0x7f | 0x80),
+                (byte) ((bits >> 21) & 0x7f | 0x80),
+                (byte) ((bits >> 28) & 0x7f | 0x80),
+                (byte) ((bits >> 35) & 0x7f)
+            };
+        case 7:
+            return new byte[]
+            {
+                (byte) ((bits >> 0) & 0x7f | 0x80),
+                (byte) ((bits >> 7) & 0x7f | 0x80),
+                (byte) ((bits >> 14) & 0x7f | 0x80),
+                (byte) ((bits >> 21) & 0x7f | 0x80),
+                (byte) ((bits >> 28) & 0x7f | 0x80),
+                (byte) ((bits >> 35) & 0x7f | 0x80),
+                (byte) ((bits >> 42) & 0x7f)
+            };
+        case 8:
+            return new byte[]
+            {
+                (byte) ((bits >> 0) & 0x7f | 0x80),
+                (byte) ((bits >> 7) & 0x7f | 0x80),
+                (byte) ((bits >> 14) & 0x7f | 0x80),
+                (byte) ((bits >> 21) & 0x7f | 0x80),
+                (byte) ((bits >> 28) & 0x7f | 0x80),
+                (byte) ((bits >> 35) & 0x7f | 0x80),
+                (byte) ((bits >> 42) & 0x7f | 0x80),
+                (byte) ((bits >> 49) & 0x7f),
+            };
+        case 9:
+            return new byte[]
+            {
+                (byte) ((bits >> 0) & 0x7f | 0x80),
+                (byte) ((bits >> 7) & 0x7f | 0x80),
+                (byte) ((bits >> 14) & 0x7f | 0x80),
+                (byte) ((bits >> 21) & 0x7f | 0x80),
+                (byte) ((bits >> 28) & 0x7f | 0x80),
+                (byte) ((bits >> 35) & 0x7f | 0x80),
+                (byte) ((bits >> 42) & 0x7f | 0x80),
+                (byte) ((bits >> 49) & 0x7f | 0x80),
+                (byte) ((bits >> 56) & 0x7f),
+            };
         default:
             return new byte[]
             {
-                (byte) ((bits >> 24) & 0xff),
-                (byte) ((bits >> 16) & 0xff),
-                (byte) ((bits >> 8) & 0xff),
-                (byte) ((bits >> 0) & 0xff)
+                (byte) ((bits >> 0) & 0x7f | 0x80),
+                (byte) ((bits >> 7) & 0x7f | 0x80),
+                (byte) ((bits >> 14) & 0x7f | 0x80),
+                (byte) ((bits >> 21) & 0x7f | 0x80),
+                (byte) ((bits >> 28) & 0x7f | 0x80),
+                (byte) ((bits >> 35) & 0x7f | 0x80),
+                (byte) ((bits >> 42) & 0x7f | 0x80),
+                (byte) ((bits >> 49) & 0x7f | 0x80),
+                (byte) ((bits >> 56) & 0x7f | 0x80),
+                (byte) ((bits >> 63) & 0x01)
             };
         }
     }
