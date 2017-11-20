@@ -52,7 +52,7 @@ write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 0x8b
+read 0x8f
 read ${newRequestId1}
 read [0..4]
 read 0x01
@@ -64,9 +64,9 @@ read 0x01L
 read -1L
 read 0L
 read -1
-read 0x4d
+read 0x53
 read 0x00L
-read 0x41
+read 0x47
 read 0x00
 read [0x02]
 read 0x4e8723aa
@@ -105,7 +105,7 @@ write 0x01L
 write -1L
 write ${networkConnectWindow}
 
-read 0x8b
+read 0x8f
 read ${newRequestId2}
 read [0..4]
 read 0x01
@@ -117,9 +117,9 @@ read 0x02L
 read -1L
 read 0L
 read -1
-read 0x4d
+read 0x53
 read 0x01L
-read 0x41
+read 0x47
 read 0x00
 read [0x02]
 read 0x4e8723aa
