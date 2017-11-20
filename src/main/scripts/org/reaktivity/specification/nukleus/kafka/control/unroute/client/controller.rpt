@@ -14,8 +14,8 @@
 # under the License.
 #
 
-property newClientAcceptRef ${nuklei:newReferenceId()} # external scope
-property newClientConnectRef ${nuklei:newReferenceId()} # external scope
+property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
+property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
 property nukleiUR020101C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
@@ -32,9 +32,9 @@ write 0x00000002
 write ${controlUR020101C.nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
-write ${newClientAcceptRef}
+write ${newApplicationRouteRef}
 write [0x06] "target"
-write ${newClientConnectRef}
+write ${newNetworkRouteRef}
 write 0L
 write flush
 

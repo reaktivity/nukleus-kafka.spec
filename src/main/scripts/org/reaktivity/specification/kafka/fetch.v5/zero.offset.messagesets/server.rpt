@@ -40,7 +40,7 @@ read -1
 read [0..4]
 read 0x01
 read [0..4]
-read 0x00
+read [0x00]
 read 0x01
 read 0x04s "test"
 read 0x01
@@ -49,7 +49,7 @@ read 0x00L
 read -1L
 read [0..4]
 
-write 0x7d
+write 0x8b
 write ${requestId1}
 write 0
 write 0x01
@@ -75,7 +75,7 @@ write -1L
 write -1s
 write -1
 write 0x01
-write ${kafka:varint(18)}
+write ${kafka:varint(21)}
 write [0x00]
 write ${kafka:varint(0)}
 write ${kafka:varint(0)}
@@ -93,7 +93,7 @@ read -1
 read [0..4]
 read 0x01
 read [0..4]
-read 0x00
+read [0x00]
 read 0x01
 read 0x04s "test"
 read 0x01
@@ -102,7 +102,7 @@ read 0x01L
 read -1L
 read [0..4]
 
-write 0x7d
+write 0x8b
 write ${requestId2}
 write 0
 write 0x01
@@ -128,7 +128,7 @@ write -1L
 write -1s
 write -1
 write 0x01
-write ${kafka:varint(18)}
+write ${kafka:varint(21)}
 write [0x00]
 write ${kafka:varint(0)}
 write ${kafka:varint(0)}

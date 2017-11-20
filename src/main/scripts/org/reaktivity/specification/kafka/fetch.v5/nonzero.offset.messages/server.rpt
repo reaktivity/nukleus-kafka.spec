@@ -39,7 +39,7 @@ read -1
 read [0..4]
 read 0x01
 read [0..4]
-read 0x00
+read [0x00]
 read 0x01
 read 0x04s "test"
 read 0x01
@@ -48,7 +48,7 @@ read 0x01L
 read -1L
 read [0..4]
 
-write 0x7d
+write 0xa1
 write ${requestId}
 write 0
 write 0x01
@@ -73,8 +73,8 @@ write ${newTimestamp}
 write -1L
 write -1s
 write -1
-write 0x01
-write ${kafka:varint(18)}
+write 0x02
+write ${kafka:varint(21)}
 write [0x00]
 write ${kafka:varint(0)}
 write ${kafka:varint(0)}
@@ -82,23 +82,10 @@ write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, world"
 write 0x00
-write 0x02L
-write 0x41
-write 0x00
-write [0x02]
-write 0x4e8723aa
-write 0x00s
-write 0
-write ${newTimestamp}
-write ${newTimestamp}
-write -1L
-write -1s
-write -1
-write 0x01
-write ${kafka:varint(18)}
+write ${kafka:varint(21)}
 write [0x00]
 write ${kafka:varint(0)}
-write ${kafka:varint(0)}
+write ${kafka:varint(1)}
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, again"

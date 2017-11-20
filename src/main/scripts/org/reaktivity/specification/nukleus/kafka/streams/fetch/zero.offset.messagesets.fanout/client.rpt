@@ -35,11 +35,11 @@ write notify CLIENT_ONE_CONNECTED
 read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 0x01 ${kafka:varint(0)}
 
-read "Hello, world"
-read nukleus:data.ext 0x01 ${kafka:varint(0)}
-
-read "Hello, again"
 read nukleus:data.ext 0x01 ${kafka:varint(1)}
+read "Hello, world"
+
+read nukleus:data.ext 0x01 ${kafka:varint(2)}
+read "Hello, again"
 
 
 connect await ROUTED_CLIENT
@@ -58,8 +58,8 @@ write notify CLIENT_TWO_CONNECTED
 read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 0x01 ${kafka:varint(0)}
 
-read "Hello, world"
-read nukleus:data.ext 0x01 ${kafka:varint(0)}
-
-read "Hello, again"
 read nukleus:data.ext 0x01 ${kafka:varint(1)}
+read "Hello, world"
+
+read nukleus:data.ext 0x01 ${kafka:varint(2)}
+read "Hello, again"
