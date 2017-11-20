@@ -50,7 +50,7 @@ read [0..4]
 
 write await SERVER_DELIVER_RESPONSE
 
-write 0xa1
+write 0xa5
 write ${requestId}
 write 0
 write 0x01
@@ -62,9 +62,9 @@ write 0x02L
 write -1L
 write 0L
 write -1
-write 0x9a
+write 0x69
 write 0x00L
-write 0x41
+write 0x5d
 write 0x00
 write [0x02]
 write 0x4e8723aa

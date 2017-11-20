@@ -50,7 +50,7 @@ read [0..4]
 
 write await SERVER_DELIVER_RESPONSE_ONE
 
-write 0x8b
+write 0x8f
 write ${requestId1}
 write 0
 write 0x01
@@ -62,9 +62,9 @@ write 0x02L
 write -1L
 write 0L
 write -1
-write 0x4d
+write 0x53
 write 0x01L
-write 0x41
+write 0x47
 write 0x00
 write [0x02]
 write 0x4e8723aa
@@ -105,7 +105,7 @@ read [0..4]
 
 write await SERVER_DELIVER_RESPONSE_TWO
 
-write 0x08
+write 0x0c
 write ${requestId2}
 write 0
 write 0x00
@@ -128,7 +128,7 @@ read 0x00L
 read -1L
 read [0..4]
 
-write 0xb7
+write 0xbb
 write ${requestId3}
 write 0
 write 0x01
@@ -140,9 +140,9 @@ write 0x02L
 write -1L
 write 0L
 write -1
-write 0x9a
+write 0x7f
 write 0x00L
-write 0x41
+write 0x73
 write 0x00
 write [0x02]
 write 0x4e8723aa
