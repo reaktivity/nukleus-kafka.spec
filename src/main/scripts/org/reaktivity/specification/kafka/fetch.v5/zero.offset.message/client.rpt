@@ -51,7 +51,7 @@ write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 0x7d
+read 0x8b
 read ${newRequestId}
 read [0..4]
 read 0x01
@@ -77,7 +77,7 @@ read -1L
 read -1s
 read -1
 read 0x01
-read ${kafka:varint(18)}
+read ${kafka:varint(21)}
 read [0x00]
 read ${kafka:varint(0)}
 read ${kafka:varint(0)}

@@ -34,12 +34,12 @@ write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 0x01 ${kafka:varint(0)}
 write flush
 
+write nukleus:data.ext 0x01 ${kafka:varint(1)}
 write "Hello, world"
-write nukleus:data.ext 0x01 ${kafka:varint(0)}
 write flush
 
+write nukleus:data.ext 0x01 ${kafka:varint(2)}
 write "Hello, again"
-write nukleus:data.ext 0x01 ${kafka:varint(1)}
 write flush
 
 accepted
@@ -53,10 +53,10 @@ write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 0x01 ${kafka:varint(0)}
 write flush
 
+write nukleus:data.ext 0x01 ${kafka:varint(1)}
 write "Hello, world"
-write nukleus:data.ext 0x01 ${kafka:varint(0)}
 write flush
 
+write nukleus:data.ext 0x01 ${kafka:varint(2)}
 write "Hello, again"
-write nukleus:data.ext 0x01 ${kafka:varint(1)}
 write flush

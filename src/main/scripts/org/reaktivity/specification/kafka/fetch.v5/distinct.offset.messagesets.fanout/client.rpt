@@ -22,6 +22,7 @@ property networkConnectWindow 8192
 property newRequestId1 ${kafka:newRequestId()}
 property newRequestId2 ${kafka:newRequestId()}
 property newRequestId3 ${kafka:newRequestId()}
+property newRequestId4 ${kafka:newRequestId()}
 property maximumWaitTime 500
 property maximumBytes 65535
 property maximumBytesTest0 8192
@@ -53,7 +54,7 @@ write 0x01L
 write -1L
 write ${maximumBytesTest0}
 
-read 0x7d
+read 0x8b
 read ${newRequestId1}
 read [0..4]
 read 0x01
@@ -79,7 +80,7 @@ read -1L
 read -1s
 read -1
 read 0x01
-read ${kafka:varint(18)}
+read ${kafka:varint(21)}
 read [0x00]
 read ${kafka:varint(0)}
 read ${kafka:varint(0)}
@@ -102,12 +103,35 @@ write 0x01
 write 0x04s "test"
 write 0x01
 write 0x00
+write 0x02L
+write -1L
+write ${maximumBytesTest0}
+
+read 0x08
+read ${newRequestId2}
+read 0
+read 0x00
+
+write 0x41
+write 0x01s
+write 0x05s
+write ${newRequestId3}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 0x01
+write ${maximumBytes}
+write [0x00]
+write 0x01
+write 0x04s "test"
+write 0x01
+write 0x00
 write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 0x7d
-read ${newRequestId2}
+read 0xb7
+read ${newRequestId3}
 read [0..4]
 read 0x01
 read 0x04s "test"
@@ -131,8 +155,8 @@ read ${timestamp2a}
 read -1L
 read -1s
 read -1
-read 0x01
-read ${kafka:varint(18)}
+read 0x03
+read ${kafka:varint(21)}
 read [0x00]
 read ${kafka:varint(0)}
 read ${kafka:varint(0)}
@@ -140,32 +164,27 @@ read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, world"
 read 0x00
-read 0x01L
-read 0x41
-read 0x00
-read [0x02]
-read 0x4e8723aa
-read 0x00s
-read 0
-read (long:timestamp2b)
-read ${timestamp2b}
-read -1L
-read -1s
-read -1
-read 0x01
-read ${kafka:varint(18)}
+read ${kafka:varint(21)}
 read [0x00]
 read ${kafka:varint(0)}
-read ${kafka:varint(0)}
+read ${kafka:varint(1)}
 read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, again"
+read 0x00
+read ${kafka:varint(21)}
+read [0x00]
+read ${kafka:varint(0)}
+read ${kafka:varint(2)}
+read ${kafka:varint(-1)}
+read ${kafka:varint(12)}
+read "Hi, everyone"
 read 0x00
 
 write 0x41
 write 0x01s
 write 0x05s
-write ${newRequestId3}
+write ${newRequestId4}
 write -1s
 write -1
 write ${maximumWaitTime}
@@ -176,6 +195,6 @@ write 0x01
 write 0x04s "test"
 write 0x01
 write 0x00
-write 0x02L
+write 0x03L
 write -1L
 write ${maximumBytesTest0}

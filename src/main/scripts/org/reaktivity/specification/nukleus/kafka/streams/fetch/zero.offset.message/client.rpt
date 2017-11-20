@@ -33,5 +33,5 @@ connected
 read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 0x01 ${kafka:varint(0)}
 
+read nukleus:data.ext 0x01 ${kafka:varint(1)}
 read "Hello, world"
-read nukleus:data.ext 0x01 ${kafka:varint(0)}
