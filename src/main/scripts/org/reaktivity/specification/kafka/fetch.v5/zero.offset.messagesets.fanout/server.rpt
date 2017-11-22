@@ -51,7 +51,7 @@ read [0..4]
 
 write await SERVER_DELIVER_RESPONSE_ONE
 
-write 0x8f
+write 0x8c
 write ${requestId1}
 write 0
 write 0x01
@@ -63,9 +63,9 @@ write 0x01L
 write -1L
 write 0L
 write -1
-write 0x53
+write 0x50
 write 0x00L
-write 0x47
+write 0x44
 write 0x00
 write [0x02]
 write 0x4e8723aa
@@ -77,14 +77,14 @@ write -1L
 write -1s
 write -1
 write 0x01
-write ${kafka:varint(21)}
+write ${kafka:varint(18)}
 write [0x00]
 write ${kafka:varint(0)}
 write ${kafka:varint(0)}
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, world"
-write 0x00
+write [0x00]
 
 read 0x41
 read 0x01s
@@ -106,7 +106,7 @@ read [0..4]
 
 write await SERVER_DELIVER_RESPONSE_TWO
 
-write 0x8f
+write 0x8c
 write ${requestId2}
 write 0
 write 0x01
@@ -118,9 +118,9 @@ write 0x02L
 write -1L
 write 0L
 write -1
-write 0x53
+write 0x50
 write 0x01L
-write 0x47
+write 0x44
 write 0x00
 write [0x02]
 write 0x4e8723aa
@@ -132,11 +132,11 @@ write -1L
 write -1s
 write -1
 write 0x01
-write ${kafka:varint(21)}
+write ${kafka:varint(18)}
 write [0x00]
 write ${kafka:varint(0)}
 write ${kafka:varint(0)}
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, again"
-write 0x00
+write [0x00]
