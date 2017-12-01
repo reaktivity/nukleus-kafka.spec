@@ -113,4 +113,15 @@ public class MetadataIT
         k3po.finish();
     }
 
+    @Test
+    @Specification({
+        "${scripts}/one.topic.single.partition/client",
+        "${scripts}/one.topic.single.partition/server"})
+    public void shouldRequestMetadataForOneTopicSinglePartition() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
 }
