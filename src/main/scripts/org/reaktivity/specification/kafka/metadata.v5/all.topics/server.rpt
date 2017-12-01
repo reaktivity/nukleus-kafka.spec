@@ -34,9 +34,9 @@ read 0x05s # ApiVersion int16
 read ${newRequestId} # CorrelationId int32
 read -1s # ClientId string (null)
 read -1 # [TopicName] array of string (null)
-read 0 # allow_auto_topic_creation (boolean)
+read [0x00] # allow_auto_topic_creation (boolean)
 
-write 151 # Size int32
+write 202 # Size int32
 write ${newRequestId} # CorrelationId int32 # 151
 write 0 # throttle_time_ms int32
 write 2      # brokers array length
