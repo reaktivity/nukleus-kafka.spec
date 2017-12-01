@@ -38,17 +38,17 @@ read 2 # [TopicName] array length
   read 5s "test2"
 read 0 # allow_auto_topic_creation (boolean)
 
-write 202 # Size int32
+write 184 # Size int32
 write ${newRequestId} # CorrelationId int32
 write 0 # throttle_time_ms int32
 write 2      # brokers array length
   write 1    # broker id 
-  write 16s "broker1_hostname"
+  write 7s "broker1"
   write 9093 # port int32
   write -1s  # rack string (null)
 
   write 2
-  write 16s "broker2_hostname"
+  write 7s "broker2"
   write 9093
   write -1s
 write 9s "cluster 1"
