@@ -28,6 +28,7 @@ accept ${networkAccept}
   option nukleus:byteorder "network"
 
 accepted
+read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
 read 0x41
