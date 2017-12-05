@@ -30,7 +30,7 @@ connect await ROUTED_SERVER
 
 connected
 
-write 24 # Size int32
+write 21 # Size int32
 write 0x03s # ApiKey int16 (Metadata)
 write 0x05s # ApiVersion int16
 write ${newRequestId} # CorrelationId int32
@@ -40,17 +40,17 @@ write 1 # [TopicName] array length
 write 0 # allow_auto_topic_creation (boolean)
 
 read 85 # Size int32
-read ${newRequestId} # CorrelationId int32 # 151
+read ${newRequestId} # CorrelationId int32
 read [0..4] # throttle_time_ms int32
 read 1      # brokers array length
-  read 1    # broker id # 12 + 127 = 139
+  read 1    # broker id
   read 7s "broker1"
   read 9093 # port int32
   read -1s  # rack string (null)
-read 9s "cluster 1"  # 125
+read 9s "cluster 1"
 read 1 # controller broker id
 read 1 # topic array length
-  read 0s # error code   57 + 58 = 115
+  read 0s # error code
   read 4s "test"
   read [0x00] # is_internal boolean
   read 1 # partition array length
