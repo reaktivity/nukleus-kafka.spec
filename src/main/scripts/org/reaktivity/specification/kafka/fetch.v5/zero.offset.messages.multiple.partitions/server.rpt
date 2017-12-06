@@ -26,7 +26,7 @@ accept ${networkAccept}
   option nukleus:window ${networkAcceptWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
-  
+
 # Metadata stream
 accepted
 connected
@@ -131,7 +131,7 @@ write 2 # Number of partition responses
     write ${kafka:varint(12)} # value length
     write "Hello, world"   # value
     write ${kafka:varint(0)} # headers array length
-    
+  
     write 1 # Partition
     write 0x00s
     write 0x01L # high_watermark

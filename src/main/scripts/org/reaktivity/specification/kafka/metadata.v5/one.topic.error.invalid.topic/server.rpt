@@ -52,4 +52,3 @@ write 1 # topic array length
   write 8s "bad#name"
   write byte 0x00 # is_internal
   write -1 # partition array length (null)
-  

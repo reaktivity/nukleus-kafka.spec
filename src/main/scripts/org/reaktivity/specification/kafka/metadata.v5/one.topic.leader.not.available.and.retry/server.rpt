@@ -72,7 +72,7 @@ write 1 # topic array length
     write 0 # replicas array (empty)
     write -1 # isr array (null)
     write 0 # offline replicas array (empty)
-  
+
 # Second attempt succeeds 
 
 read 21 # Size int32
