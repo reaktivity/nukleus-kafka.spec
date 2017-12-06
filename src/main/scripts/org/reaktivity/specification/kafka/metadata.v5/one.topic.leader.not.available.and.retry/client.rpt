@@ -19,7 +19,8 @@ property newNetworkRouteRef  ${nuklei:newReferenceId()} # external
 property networkConnect "nukleus://kafka/streams/source"
 property networkConnectWindow 8192
 
-property newRequestId ${kafka:newRequestId()}
+property newMetadataRequestId1 ${kafka:newRequestId()}
+property newMetadataRequestId2 ${kafka:newRequestId()}
 
 connect await ROUTED_SERVER
         ${networkConnect}
@@ -32,17 +33,17 @@ connected
 
 # First attempt leader not available (in mid failover)
 
-write 24 # Size int32
+write 21 # Size int32
 write 0x03s # ApiKey int16 (Metadata)
 write 0x05s # ApiVersion int16
-write ${newRequestId} # CorrelationId int32
+write ${newMetadataRequestId1} # CorrelationId int32
 write -1s # ClientId string (null)
 write 1 # [TopicName] array length
   write 4s "test"
-write 0 # allow_auto_topic_creation (boolean)
+write [0x00] # allow_auto_topic_creation (boolean)
 
 read 126 # Size int32
-read ${newRequestId} # CorrelationId int32
+read ${newMetadataRequestId1} # CorrelationId int32
 read [0..4] # throttle_time_ms int32
 read 2      # brokers array length
   read 1    # broker id
@@ -77,17 +78,17 @@ read 1 # topic array length
       
 # Second attempt succeeds 
 
-write 24 # Size int32
+write 21 # Size int32
 write 0x03s # ApiKey int16 (Metadata)
 write 0x05s # ApiVersion int16
-write ${newRequestId} # CorrelationId int32
+write ${newMetadataRequestId2} # CorrelationId int32
 write -1s # ClientId string (null)
 write 1 # [TopicName] array length
   write 4s "test"
-write 0 # allow_auto_topic_creation (boolean)
+write [0x00] # allow_auto_topic_creation (boolean)
 
 read 126 # Size int32
-read ${newRequestId} # CorrelationId int32 # 151
+read ${newMetadataRequestId2} # CorrelationId int32 # 151
 read [0..4] # throttle_time_ms int32
 read 2      # brokers array length
   read 1    # broker id # 12 + 127 = 139

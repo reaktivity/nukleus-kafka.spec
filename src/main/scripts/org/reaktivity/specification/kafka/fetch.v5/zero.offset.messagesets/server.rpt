@@ -28,6 +28,42 @@ accept ${networkAccept}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
+# Metadata stream
+accepted
+connected
+
+read 21 # Size int32
+read 0x03s # ApiKey int16 (Metadata)
+read 0x05s # ApiVersion int16
+read (int:metadataRequestId)
+read -1s # ClientId string (null)
+read 1 # [TopicName] array length
+  read 4s "test"
+read [0x00] # allow_auto_topic_creation (boolean)
+
+write 85 # Size int32
+write ${metadataRequestId} # CorrelationId int32
+write 0 # throttle_time_ms int32
+write 1      # brokers array length
+  write 1    # broker id
+  write 7s "broker1"
+  write 9093 # port int32
+  write -1s  # rack string (null)
+write 9s "cluster 1"
+write 1 # controller broker id
+write 1 # topic array length
+  write 0s # error code
+  write 4s "test"
+  write byte 0x00 # is_internal
+  write 1 # partition array length
+    write 0s # error code
+    write 0 # partition
+    write 1 # leader
+    write 0 # replicas array (empty)
+    write -1 # isr array (null)
+    write 0 # offline replicas array (empty)
+
+# Fetch stream
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected

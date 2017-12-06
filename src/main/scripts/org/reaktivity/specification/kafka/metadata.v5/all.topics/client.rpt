@@ -30,7 +30,7 @@ connect await ROUTED_SERVER
 
 connected
 
-write int 15 # Size int32
+write 15 # Size int32
 write 0x03s # ApiKey int16 (Metadata)
 write 0x05s # ApiVersion int16
 write ${newRequestId} # CorrelationId int32

@@ -19,7 +19,7 @@ property newNetworkRouteRef  ${nuklei:newReferenceId()} # external
 property networkConnect "nukleus://kafka/streams/source"
 property networkConnectWindow 8192
 
-property newRequestId ${kafka:newRequestId()}
+property newMetadataRequestId ${kafka:newRequestId()}
 
 connect await ROUTED_SERVER
         ${networkConnect}
@@ -30,17 +30,17 @@ connect await ROUTED_SERVER
 
 connected
 
-write 24 # Size int32
+write 21 # Size int32
 write 0x03s # ApiKey int16 (Metadata)
 write 0x05s # ApiVersion int16
-write ${newRequestId} # CorrelationId int32
+write ${newMetadataRequestId} # CorrelationId int32
 write -1s # ClientId string (null)
 write 1 # [TopicName] array length
   write 4s "test"
-write 0 # allow_auto_topic_creation (boolean)
+write [0x00] # allow_auto_topic_creation (boolean)
 
 read 107 # Size int32
-read ${newRequestId} # CorrelationId int32
+read ${newMetadataRequestId} # CorrelationId int32
 read [0..4] # throttle_time_ms int32
 read 1      # brokers array length
   read 1    # broker id

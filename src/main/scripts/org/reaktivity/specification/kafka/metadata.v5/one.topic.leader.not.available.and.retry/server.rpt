@@ -30,17 +30,17 @@ connected
 
 # First attempt leader not available (in mid failover)
 
-read 24 # Size int32
+read 21 # Size int32
 read 0x03s # ApiKey int16 (Metadata)
 read 0x05s # ApiVersion int16
-read ${newRequestId} # CorrelationId int32
+read (int:metadataRequestId1) # CorrelationId int32
 read -1s # ClientId string (null)
 read 1 # [TopicName] array length
   read 4s "test"
-read 0 # allow_auto_topic_creation (boolean)
+read [0x00] # allow_auto_topic_creation (boolean)
 
 write 126 # Size int32
-write ${newRequestId} # CorrelationId int32
+write ${metadataRequestId1} # CorrelationId int32
 write 0 # throttle_time_ms int32
 write 2      # brokers array length
   write 1    # broker id
@@ -75,17 +75,17 @@ write 1 # topic array length
   
 # Second attempt succeeds 
 
-read 24 # Size int32
+read 21 # Size int32
 read 0x03s # ApiKey int16 (Metadata)
 read 0x05s # ApiVersion int16
-read ${newRequestId} # CorrelationId int32
+read (int:metadataRequestId2) # CorrelationId int32
 read -1s # ClientId string (null)
 read 1 # [TopicName] array length
   read 4s "test"
-read 0 # allow_auto_topic_creation (boolean)
+read [0x00] # allow_auto_topic_creation (boolean)
 
 write 126 # Size int32
-write ${newRequestId} # CorrelationId int32
+write ${metadataRequestId2} # CorrelationId int32
 write 0 # throttle_time_ms int32
 write 2      # brokers array length
   write 1    # broker id

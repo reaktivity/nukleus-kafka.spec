@@ -28,18 +28,18 @@ accept ${networkAccept}
 accepted
 connected
 
-read 31 # Size int32
+read 28 # Size int32
 read 0x03s # ApiKey int16 (Metadata)
 read 0x05s # ApiVersion int16
-read ${newRequestId} # CorrelationId int32
+read (int:metadataRequestId) # CorrelationId int32
 read -1s # ClientId string (null)
 read 2 # [TopicName] array length
   read 4s "test"
   read 5s "test2"
-read 0 # allow_auto_topic_creation (boolean)
+read [0x00] # allow_auto_topic_creation (boolean)
 
 write 184 # Size int32
-write ${newRequestId} # CorrelationId int32
+write ${metadataRequestId} # CorrelationId int32
 write 0 # throttle_time_ms int32
 write 2      # brokers array length
   write 1    # broker id 
