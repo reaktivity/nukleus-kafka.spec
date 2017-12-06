@@ -65,7 +65,7 @@ read 1 # topic array length
   read 4s "test"
   read [0x00] # is_internal boolean
   read 2 # partition array length
-    read 0s # error code 76
+    read 0s # error code
     read 0 # partition
     read 1 # leader
     read 0 # replicas array (empty)
