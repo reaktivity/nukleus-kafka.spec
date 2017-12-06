@@ -20,7 +20,8 @@ property networkConnect "nukleus://kafka/streams/source"
 property networkConnectWindow 8192
 
 property newMetadataRequestId ${kafka:newRequestId()}
-property newRequestId ${kafka:newRequestId()}
+property newRequestId1 ${kafka:newRequestId()}
+property newRequestId2 ${kafka:newRequestId()}
 property maximumWaitTime 500
 property maximumBytes 65535
 property maximumBytesTest0 8192
@@ -35,16 +36,16 @@ connect await ROUTED_SERVER
 
 connected
 
-write 24 # Size int32
+write 21 # Size int32
 write 0x03s # ApiKey int16 (Metadata)
 write 0x05s # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
 write -1s # ClientId string (null)
 write 1 # [TopicName] array length
   write 4s "test"
-write 0 # allow_auto_topic_creation (boolean)
+write [0x00] # allow_auto_topic_creation (boolean)
 
-read 140 # Size
+read 126 # Size
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4] # throttle_time_ms int32
 read 2      # brokers array length
@@ -96,7 +97,7 @@ read notify FETCH_STREAM_ONE_CONNECTED
 write 65
 write 0x01s
 write 0x05s
-write ${newRequestId}
+write ${newRequestId1}
 write -1s
 write -1
 write ${maximumWaitTime}
@@ -112,7 +113,7 @@ write -1L
 write ${maximumBytesTest0}
 
 read 140
-read ${newRequestId}
+read ${newRequestId1}
 read [0..4]
 read 1
 read 0x04s "test"
@@ -161,7 +162,7 @@ connected
 write 0x41
 write 0x01s
 write 0x05s
-write ${newRequestId}
+write ${newRequestId2}
 write -1s
 write -1
 write ${maximumWaitTime}
@@ -177,7 +178,7 @@ write -1L
 write ${maximumBytesTest0}
 
 read 0x8c
-read ${newRequestId}
+read ${newRequestId2}
 read [0..4]
 read 1
 read 0x04s "test"

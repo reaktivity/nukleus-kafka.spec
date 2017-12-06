@@ -39,7 +39,7 @@ write 1 # [TopicName] array length
   write 8s "bad#name"
 write [0x00] # allow_auto_topic_creation (boolean)
 
-read 63 # Size int32
+read 67 # Size int32
 read ${newMetadataRequestId} # CorrelationId int32 # 151
 read [0..4] # throttle_time_ms int32
 read 1      # brokers array length
@@ -51,7 +51,7 @@ read 9s "cluster 1"  # 125
 read 1 # controller broker id
 read 1 # topic array length
   read 17s # InvalidTopic
-  read 4s "test"
+  read 8s "bad#name"
   read [0x00] # is_internal boolean
   read -1 # partition array length (null)
 

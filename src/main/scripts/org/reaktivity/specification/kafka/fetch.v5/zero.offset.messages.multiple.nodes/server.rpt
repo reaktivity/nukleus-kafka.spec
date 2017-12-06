@@ -31,17 +31,17 @@ accept ${networkAccept}
 accepted
 connected
 
-read 24 # Size int32
+read 21 # Size int32
 read 0x03s # ApiKey int16 (Metadata)
 read 0x05s # ApiVersion int16
-read ${newMetadataRequestId} # CorrelationId int32
+read (int:metadataRequestId) # CorrelationId int32
 read -1s # ClientId string (null)
 read 1 # [TopicName] array length
   read 4s "test"
-read 0 # allow_auto_topic_creation (boolean)
+read [0x00] # allow_auto_topic_creation (boolean)
 
-write 140 # Size int32
-write ${newMetadataRequestId} # CorrelationId int32
+write 126 # Size int32
+write ${metadataRequestId} # CorrelationId int32
 write 0 # throttle_time_ms int32
 write 2      # brokers array length
   write 1    # broker id
@@ -83,7 +83,7 @@ connected
 read 65
 read 0x01s
 read 0x05s
-read (int:requestId)
+read (int:requestId1)
 read -1s
 read -1
 read [0..4]
@@ -99,7 +99,7 @@ read -1L
 read [0..4]
 
 write 140
-write ${requestId}
+write ${requestId1}
 write 0
 write 1  # Number of responses
 write 0x04s "test"
@@ -139,10 +139,10 @@ accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
 connected
 
-read 0x41
+read 65
 read 0x01s
 read 0x05s
-read (int:requestId)
+read (int:requestId2)
 read -1s
 read -1
 read [0..4]
@@ -157,8 +157,8 @@ read 0x00L
 read -1L
 read [0..4]
 
-write 0x8c
-write ${requestId}
+write 140
+write ${requestId2}
 write 0
 write 1  # Number of responses
 write 0x04s "test"
