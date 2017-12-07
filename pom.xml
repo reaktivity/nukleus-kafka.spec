@@ -65,7 +65,6 @@
       <groupId>org.reaktivity</groupId>
       <artifactId>nukleus-tcp.spec</artifactId>
       <version>${nukleus.tcp.spec.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
