@@ -16,8 +16,7 @@
 
 property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
-property newTimestamp1 ${kafka:timestamp()}
-property newTimestamp2 ${kafka:timestamp()}
+property newTimestamp ${kafka:timestamp()}
 
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
@@ -35,27 +34,32 @@ connected
 read 21 # Size int32
 read 0x03s # ApiKey int16 (Metadata)
 read 0x05s # ApiVersion int16
-read (int:metadataRequestId)
+read (int:metadataRequestId) # CorrelationId int32
 read -1s # ClientId string (null)
 read 1 # [TopicName] array length
   read 4s "test"
 read [0x00] # allow_auto_topic_creation (boolean)
 
-write 85 # Size int32
+write 126 # Size int32
 write ${metadataRequestId} # CorrelationId int32
 write 0 # throttle_time_ms int32
-write 1      # brokers array length
+write 2      # brokers array length
   write 1    # broker id
   write 7s "broker1"
   write 9093 # port int32
   write -1s  # rack string (null)
+
+  write 2
+  write 7s "broker2"
+  write 9093
+  write -1s
 write 9s "cluster 1"
 write 1 # controller broker id
 write 1 # topic array length
   write 0s # error code
   write 4s "test"
   write byte 0x00 # is_internal
-  write 1 # partition array length
+  write 2 # partition array length
     write 0s # error code
     write 0 # partition
     write 1 # leader
@@ -63,12 +67,20 @@ write 1 # topic array length
     write -1 # isr array (null)
     write 0 # offline replicas array (empty)
 
-# Fetch stream
+    write 0s # error code
+    write 1 # partition
+    write 2 # leader
+    write 0 # replicas array (empty)
+    write -1 # isr array (null)
+    write 0 # offline replicas array (empty)
+
+
+# Fetch stream 1
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
-read 0x41
+read 65
 read 0x01s
 read 0x05s
 read (int:requestId1)
@@ -86,15 +98,13 @@ read 0x00L
 read -1L
 read [0..4]
 
-write await SERVER_DELIVER_RESPONSE_ONE
-
-write 0x8c
+write 140
 write ${requestId1}
 write 0
-write 0x01
+write 1  # Number of responses
 write 0x04s "test"
-write 0x01
-write 0
+write 1 # Number of partition responses
+write 0 # Partition
 write 0x00s
 write 0x01L
 write -1L
@@ -108,8 +118,8 @@ write [0x02]
 write 0x4e8723aa
 write 0x00s
 write 0
-write ${newTimestamp1}
-write ${newTimestamp1}
+write ${newTimestamp}
+write ${newTimestamp}
 write -1L
 write -1s
 write -1
@@ -121,9 +131,15 @@ write ${kafka:varint(0)}
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, world"
-write [0x00]
+write ${kafka:varint(0)}
 
-read 0x41
+
+# Fetch stream 2
+accepted
+read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+connected
+
+read 65
 read 0x01s
 read 0x05s
 read (int:requestId2)
@@ -133,38 +149,36 @@ read [0..4]
 read 0x01
 read [0..4]
 read [0x00]
-read 0x01
+read 1
 read 0x04s "test"
-read 0x01
-read 0x00
-read 0x01L
+read 1
+read 1
+read 0x00L
 read -1L
 read [0..4]
 
-write await SERVER_DELIVER_RESPONSE_TWO
-
-write 0x8c
+write 140
 write ${requestId2}
 write 0
-write 0x01
+write 1  # Number of responses
 write 0x04s "test"
-write 0x01
-write 0
+write 1 # Number of partition responses
+write 1 # Partition
 write 0x00s
-write 0x02L
+write 0x01L
 write -1L
 write 0L
 write -1
 write 0x50
-write 0x01L
+write 0x00L
 write 0x44
 write 0x00
 write [0x02]
 write 0x4e8723aa
 write 0x00s
 write 0
-write ${newTimestamp2}
-write ${newTimestamp2}
+write ${newTimestamp}
+write ${newTimestamp}
 write -1L
 write -1s
 write -1
@@ -176,4 +190,5 @@ write ${kafka:varint(0)}
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, again"
-write [0x00]
+write ${kafka:varint(0)}
+

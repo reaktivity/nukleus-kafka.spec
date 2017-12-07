@@ -51,6 +51,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/invalid.topic.name/client",
+        "${scripts}/invalid.topic.name/server"})
+    public void shouldRejectInvalidTopicName() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset/client",
         "${scripts}/zero.offset/server"})
     public void shouldRequestMessagesAtZeroOffset() throws Exception
@@ -142,6 +153,17 @@ public class FetchIT
         "${scripts}/nonzero.offset.messages/client",
         "${scripts}/nonzero.offset.messages/server"})
     public void shouldReceiveMessagesAtNonZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unknown.topic.name/client",
+        "${scripts}/unknown.topic.name/server"})
+    public void shouldRejectUnknownTopicName() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
