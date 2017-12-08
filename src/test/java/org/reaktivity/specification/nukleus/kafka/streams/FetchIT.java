@@ -73,6 +73,28 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fanout.with.historical.message/client",
+        "${scripts}/fanout.with.historical.message/server"})
+    public void shouldFanoutUsingHistoricalConnection() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fanout.with.historical.messages/client",
+        "${scripts}/fanout.with.historical.messages/server"})
+    public void shouldFanoutDiscardingHistoricalMessageToJoinLiveStream() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
