@@ -101,7 +101,7 @@ read [0..4]
 write 140
 write ${requestId1}
 write 0
-write 1  # Number of responses
+write 1  # Number of topic responses
 write 0x04s "test"
 write 1 # Number of partition responses
 write 0 # Partition
