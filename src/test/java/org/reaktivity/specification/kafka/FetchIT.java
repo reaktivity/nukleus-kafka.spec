@@ -69,6 +69,16 @@ public class FetchIT
         k3po.finish();
     }
 
+    @Test
+    @Specification({
+        "${scripts}/fanout.with.slow.consumer/client",
+        "${scripts}/fanout.with.slow.consumer/server"})
+    public void shouldFanoutWithSlowConsumer() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 
     @Test
     @Specification({

@@ -95,6 +95,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fanout.with.slow.consumer/client",
+        "${scripts}/fanout.with.slow.consumer/server"})
+    public void shouldFanoutWithSlowConsumer() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
