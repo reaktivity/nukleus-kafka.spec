@@ -93,6 +93,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/zero.offset.message.single.partition.multiple.nodes/client",
+        "${scripts}/zero.offset.message.single.partition.multiple.nodes/server"})
+    public void shouldReceiveMessageAtZeroOffsetSinglePartitionMultipleNodes() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.messages/client",
         "${scripts}/zero.offset.messages/server"})
     public void shouldReceiveMessagesAtZeroOffset() throws Exception
