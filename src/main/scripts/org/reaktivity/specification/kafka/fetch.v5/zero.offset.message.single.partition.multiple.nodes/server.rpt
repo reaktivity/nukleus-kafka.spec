@@ -73,8 +73,8 @@ read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
 write await BROKER_TWO_FETCH_REQUEST_RECEIVED
-write close
-read closed
+close
+closed
 
 # Fetch stream node 2
 accepted
