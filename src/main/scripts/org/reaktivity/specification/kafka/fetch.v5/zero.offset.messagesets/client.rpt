@@ -38,36 +38,36 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
-write 21 # Size int32
-write 0x03s # ApiKey int16 (Metadata)
-write 0x05s # ApiVersion int16
+write 21        # Size int32
+write 0x03s     # ApiKey int16 (Metadata)
+write 0x05s     # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
-write -1s # ClientId string (null)
-write 1 # [TopicName] array length
+write -1s       # ClientId string (null)
+write 1         # [TopicName] array length
   write 4s "test"
-write [0x00] # allow_auto_topic_creation (boolean)
+write [0x00]    # allow_auto_topic_creation (boolean)
 
-read 85 # Size int32
+read 85         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
-read [0..4] # throttle_time_ms int32
-read 1      # brokers array length
-  read 1    # broker id
+read [0..4]     # throttle_time_ms int32
+read 1          # brokers array length
+  read 1        # broker id
   read 7s "broker1"
-  read 9093 # port int32
-  read -1s  # rack string (null)
+  read 9093     # port int32
+  read -1s      # rack string (null)
 read 9s "cluster 1"
-read 1 # controller broker id
-read 1 # topic array length
-  read 0s # error code
+read 1          # controller broker id
+read 1          # topic array length
+  read 0s       # error code
   read 4s "test"
-  read [0x00] # is_internal boolean
-  read 1 # partition array length
-    read 0s # error code
-    read 0 # partition
-    read 1 # leader
-    read 0 # replicas array (empty)
-    read -1 # isr array (null)
-    read 0 # offline replicas array (empty)
+  read [0x00]   # is_internal boolean
+  read 1        # partition array length
+    read 0s     # error code
+    read 0      # partition
+    read 1      # leader
+    read 0      # replicas array (empty)
+    read -1     # isr array (null)
+    read 0      # offline replicas array (empty)
 read notify METADATA_RECEIVED
 
 # Fetch stream
