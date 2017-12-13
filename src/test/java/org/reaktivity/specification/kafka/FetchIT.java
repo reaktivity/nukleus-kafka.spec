@@ -226,6 +226,8 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_ONE");
         k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_TWO");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_THREE");
+        k3po.notifyBarrier("SERVER_DELIVER_HISTORICAL_RESPONSE");
         k3po.finish();
     }
 }

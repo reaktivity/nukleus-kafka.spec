@@ -152,8 +152,8 @@ read [0x00]
 read 1
 read 0x04s "test"
 read 1
-read 1
-read 0x00L
+read 1 # partition
+read 0L # offset
 read -1L
 read [0..4]
 
@@ -165,12 +165,12 @@ write 0x04s "test"
 write 1 # Number of partition responses
 write 1 # Partition
 write 0x00s
-write 0x01L
+write 1L # high_watermark
 write -1L
 write 0L
 write -1
 write 0x50
-write 0x00L
+write 0L # first offset
 write 0x44
 write 0x00
 write [0x02]

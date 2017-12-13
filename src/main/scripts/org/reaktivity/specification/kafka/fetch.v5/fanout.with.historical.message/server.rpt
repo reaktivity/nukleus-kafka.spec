@@ -208,7 +208,7 @@ write 0x04s "test"
 write 1 # Number of partitions
 write 0 # Partition
 write 0x00s # partition error code
-write 0x01L # high_watermark
+write 1L # high_watermark
 write -1L # last_stable_offset
 write 0L # log_start_offset
 write -1 # aborted_transactions (null)

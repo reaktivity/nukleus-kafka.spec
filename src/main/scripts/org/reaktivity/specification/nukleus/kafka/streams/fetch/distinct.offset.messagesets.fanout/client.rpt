@@ -43,6 +43,8 @@ write notify CLIENT_ONE_RECEIVED
 read nukleus:data.ext 0x01 ${kafka:varint(3)}
 read "Hi, everyone"
 
+write notify CLIENT_ONE_RECEIVED_THIRD_MESSAGE
+
 connect await CLIENT_ONE_RECEIVED
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}

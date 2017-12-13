@@ -83,6 +83,8 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
+read notify LIVE_CONNECTED
+
 write 65 # Size
 write 0x01s # Fetch
 write 0x05s
@@ -190,7 +192,7 @@ read "Hello, again"
 read [0x00] # headers array length
 
 # Historical fetch stream
-connect await METADATA_RECEIVED
+connect await LIVE_CONNECTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 

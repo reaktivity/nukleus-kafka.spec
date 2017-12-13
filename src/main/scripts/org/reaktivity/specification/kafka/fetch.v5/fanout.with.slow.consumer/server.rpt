@@ -83,7 +83,7 @@ read 0x01
 read 0x04s "test"
 read 0x01
 read 0x00 # Partition
-read 0x00L # offset
+read 0L # offset
 read -1L
 read [0..4]
 
