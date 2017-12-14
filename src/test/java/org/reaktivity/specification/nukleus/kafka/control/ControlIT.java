@@ -56,4 +56,26 @@ public class ControlIT
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "route.ext/client/nukleus",
+        "route.ext/client/controller"
+    })
+    public void shouldRouteClientWithExtension() throws Exception
+    {
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "unroute.ext/client/nukleus",
+        "unroute.ext/client/controller"
+    })
+    public void shouldUnrouteClientWithExtension() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
 }

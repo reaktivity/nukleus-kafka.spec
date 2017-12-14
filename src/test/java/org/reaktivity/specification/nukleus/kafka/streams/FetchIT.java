@@ -194,6 +194,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/topic.name.not.equals.route.ext/client",
+        "${scripts}/topic.name.not.equals.route.ext/server"})
+    public void shouldRejectTopicNameNutEqualToRoutedTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/unknown.topic.name/client",
         "${scripts}/unknown.topic.name/server"})
     public void shouldRejectUnknownTopicName() throws Exception
