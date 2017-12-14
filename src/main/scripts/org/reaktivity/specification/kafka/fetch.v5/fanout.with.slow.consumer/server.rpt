@@ -18,6 +18,7 @@ property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
 property newTimestamp1 ${kafka:timestamp()}
 property newTimestamp2 ${kafka:timestamp()}
+property newTimestamp3 ${kafka:timestamp()}
 
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
@@ -63,7 +64,7 @@ write 1         # topic array length
     write -1    # isr array (null)
     write 0     # offline replicas array (empty)
 
-# Fetch stream
+# Live Fetch stream
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
@@ -82,34 +83,96 @@ read 0x01
 read 0x04s "test"
 read 0x01
 read 0x00       # Partition
-read 0x00L      # offset
+read 0L         # offset
 read -1L
 read [0..4]
 
-write await SERVER_DELIVER_RESPONSE_ONE
+write 159       # Size
+write ${requestId1}
+write 0
+write 1         # Number of topics
+write 0x04s "test"
+write 1         # Number of partitions
+write 0         # partition
+write 0x00s     # partition error code
+write 2L        # high_watermark
+write -1L
+write 0L
+write -1
+write 99        # length of record batch
+write 0x00L     # first offset
+write 87        # length
+write 0         # partition leader epoque
+write [0x02]    # magic
+write 0x4e8723aa # CRC32
+write 0x00s     # attributes
+write 1         # last offset delta
+write ${newTimestamp1} # first timestamp
+write ${newTimestamp2} # last timestamp
+write -1L       # producer ID
+write -1s       # producer epoque
+write -1        # first sequence
+write 2         # number of records
+write ${kafka:varint(18)} # Record length
+write [0x00]    # attributes
+write ${kafka:varint(0)} # timestamp delta
+write ${kafka:varint(0)} # offset delta
+write ${kafka:varint(-1)} # key length
+write ${kafka:varint(12)} # value length
+write "Hello, world"
+write [0x00]    # headers array length
+
+write ${kafka:varint(18)} # Record length
+write [0x00]    # attributes
+write ${kafka:varint(newTimestamp2 - newTimestamp1)} # timestamp delta
+write ${kafka:varint(1)} # offset delta
+write ${kafka:varint(-1)} # key length
+write ${kafka:varint(12)} # value length
+write "Hello, again"
+write [0x00]    # headers array length
+
+read 0x41
+read 0x01s
+read 0x05s
+read (int:requestId3)
+read -1s
+read -1
+read [0..4]
+read 0x01
+read [0..4]
+read [0x00]
+read 0x01
+read 0x04s "test"
+read 0x01
+read 0x00       # partition
+read 0x02L      # offset
+read -1L
+read [0..4]
+
+write await SERVER_DELIVER_LIVE_RESPONSE_TWO
 
 write 140       # Size
-write ${requestId1}
+write ${requestId3}
 write 0
 write 1         # Number of topics
 write 0x04s "test"
 write 1         # Number of partitions
 write 0         # Partition
 write 0x00s     # partition error code
-write 0x01L     # high_watermark
+write 0x03L     # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
 write 80        # length of record batch
-write 0x00L     # First offset
+write 0x02L     # First offset
 write 68        # length
 write 0         # partition leader epoque
 write [0x02]    # magic
 write 0x4e8723aa # CRC32
 write 0x00s     # attributes
 write 0         # last offset delta
-write ${newTimestamp1} # first timestamp
-write ${newTimestamp1} # maximum timestamp
+write ${newTimestamp3} # first timestamp
+write ${newTimestamp3} # maximum timestamp
 write -1L       # producer ID
 write -1s       # producer epoque
 write -1        # first sequence
@@ -120,11 +183,16 @@ write ${kafka:varint(0)} # timestamp delta
 write ${kafka:varint(0)} # offset delta
 write ${kafka:varint(-1)} # key length
 write ${kafka:varint(12)} # value length
-write "Hello, world"
+write "Hello, third"
 write [0x00]
 
-read 0x41
-read 0x01s
+# Historical Fetch stream
+accepted
+read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+connected
+
+read 65         # Size
+read 0x01s      # Fetch
 read 0x05s
 read (int:requestId2)
 read -1s
@@ -136,12 +204,10 @@ read [0x00]
 read 0x01
 read 0x04s "test"
 read 0x01
-read 0x00
-read 0x01L
+read 0x00       # Partition
+read 0x01L      # offset
 read -1L
 read [0..4]
-
-write await SERVER_DELIVER_RESPONSE_TWO
 
 write 140       # Size
 write ${requestId2}

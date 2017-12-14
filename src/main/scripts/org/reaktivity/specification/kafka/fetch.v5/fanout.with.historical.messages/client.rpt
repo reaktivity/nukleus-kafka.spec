@@ -22,6 +22,7 @@ property networkConnectWindow 8192
 property newMetadataRequestId ${kafka:newRequestId()}
 property newRequestId1 ${kafka:newRequestId()}
 property newRequestId2 ${kafka:newRequestId()}
+property newRequestId3 ${kafka:newRequestId()}
 property maximumWaitTime 500
 property maximumBytes 65535
 property maximumBytesTest0 8192
@@ -70,7 +71,7 @@ read 1          # topic array length
     read 0      # offline replicas array (empty)
 read notify METADATA_RECEIVED
 
-# Fetch stream
+# Live fetch stream
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
@@ -138,7 +139,7 @@ read [0x00]     # headers array length
 write 0x41
 write 0x01s
 write 0x05s
-write ${newRequestId2}
+write ${newRequestId3}
 write -1s
 write -1
 write ${maximumWaitTime}
@@ -154,7 +155,7 @@ write -1L
 write ${maximumBytesTest0}
 
 read 140
-read ${newRequestId2}
+read ${newRequestId3}
 read [0..4]
 read 1
 read 0x04s "test"
@@ -187,3 +188,80 @@ read ${kafka:varint(-1)} # key length
 read ${kafka:varint(12)} # value length
 read "Hello, again"
 read [0x00]     # headers array length
+
+# Historical fetch stream
+connect await METADATA_RECEIVED
+        ${networkConnect}
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+
+connected
+
+write 65        # Size
+write 0x01s     # Fetch
+write 0x05s
+write ${newRequestId2}
+write -1s       # client id
+write -1
+write ${maximumWaitTime}
+write 0x01
+write ${maximumBytes}
+write [0x00]
+write 1         # Number of topics
+write 0x04s "test"
+write 1         # Number of partitions
+write 0         # Partition 
+write 0x00L     # offset
+write -1L
+write ${maximumBytesTest0}
+
+read 159        # Size
+read ${newRequestId2}
+read [0..4]
+read 1
+read 0x04s "test"
+read 1
+read 0          # Partition
+read 0x00s
+read 2L         # high_watermark
+read -1L        # last_stable_offset
+read 0L         # log_start_offset
+read -1         # aborted_transactions (null)
+read 0x63       # length of the record batch
+read 0x00L      # First offset
+read 0x57       # length
+read 0          # partition leader epoque
+read [0x02]     # magic
+read 0x4e8723aa # CRC32
+read 0s         # attributes
+read 0          # Last offset delta
+read ${timestamp1} # first timestamp
+read (long:timestamp2) #  maximum timestamp
+read -1L        # producer ID
+read -1s        # producer epoque
+read -1         # first sequence
+read 2          # Number of records
+read ${kafka:varint(18)} # Record length
+read [0x00]     # attributes
+read ${kafka:varint(0)} # timestamp delta
+read ${kafka:varint(0)} # offset delta
+read ${kafka:varint(-1)} # key length
+read ${kafka:varint(12)} # value
+read "Hello, world"
+read [0x00]     # headers array length
+
+read ${kafka:varint(18)} # Record length
+read [0x00]     # attributes
+read ${kafka:varint(timestamp2 - timestamp1)} # timestamp delta
+read ${kafka:varint(1)} # offset delta
+read ${kafka:varint(-1)} # key length
+read ${kafka:varint(12)} # value
+read "Hello, again"
+read [0x00]     # headers array length
+
+read notify SERVER_DELIVER_LIVE_RESPONSE_TWO 
+

@@ -49,9 +49,53 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fanout.with.historical.message/client",
+        "${scripts}/fanout.with.historical.message/server"})
+    public void shouldFanoutUsingHistoricalConnection() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fanout.with.historical.messages/client",
+        "${scripts}/fanout.with.historical.messages/server"})
+    public void shouldFanoutDiscardingHistoricalMessageToJoinLiveStream() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fanout.with.slow.consumer/client",
+        "${scripts}/fanout.with.slow.consumer/server"})
+    public void shouldFanoutWithSlowConsumer() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.message.single.partition.multiple.nodes/client",
+        "${scripts}/zero.offset.message.single.partition.multiple.nodes/server"})
+    public void shouldReceiveMessageAtZeroOffsetSinglePartitionMultipleNodes() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -182,6 +226,8 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_ONE");
         k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_TWO");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_THREE");
+        k3po.notifyBarrier("SERVER_DELIVER_HISTORICAL_RESPONSE");
         k3po.finish();
     }
 }
