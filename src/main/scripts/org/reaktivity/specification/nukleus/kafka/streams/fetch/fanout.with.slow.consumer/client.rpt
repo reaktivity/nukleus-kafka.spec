@@ -26,37 +26,11 @@ connect await ROUTED_CLIENT
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 0x01 ${kafka:varint(1)}
-
-connected
-
-write notify CLIENT_ONE_CONNECTED
-
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 0x01 ${kafka:varint(1)}
-
-read nukleus:data.ext 0x01 ${kafka:varint(2)}
-read "Hello, again"
-
-write notify CLIENT_ONE_RECEIVED
-
-read nukleus:data.ext 0x01 ${kafka:varint(3)}
-read "Hi, everyone"
-
-write notify CLIENT_ONE_RECEIVED_THIRD_MESSAGE
-
-connect await CLIENT_ONE_RECEIVED
-        ${applicationConnect}
-    option nukleus:route ${newApplicationRouteRef}
-    option nukleus:window ${applicationConnectWindow}
-    option nukleus:transmission "half-duplex"
-
-write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 0x01 ${kafka:varint(0)}
 
 connected
 
-write notify CLIENT_TWO_CONNECTED
+write notify CLIENT_ONE_CONNECTED
 
 read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 0x01 ${kafka:varint(0)}
@@ -68,4 +42,31 @@ read nukleus:data.ext 0x01 ${kafka:varint(2)}
 read "Hello, again"
 
 read nukleus:data.ext 0x01 ${kafka:varint(3)}
-read "Hi, everyone"
+read "Hello, third"
+
+
+connect await CLIENT_ONE_CONNECTED
+        ${applicationConnect}
+    option nukleus:route ${newApplicationRouteRef}
+    option nukleus:window 15
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext 0x04s "test"
+write nukleus:begin.ext 0x01 ${kafka:varint(0)}
+
+connected
+
+read nukleus:begin.ext 0x04s "test"
+read nukleus:begin.ext 0x01 ${kafka:varint(0)}
+
+read nukleus:data.ext 0x01 ${kafka:varint(1)}
+read "Hello, world"
+
+read nukleus:data.ext 0x01 ${kafka:varint(2)}
+read "Hello, again"
+
+read notify SERVER_DELIVER_LIVE_RESPONSE_TWO
+
+read nukleus:data.ext 0x01 ${kafka:varint(3)}
+read "Hello, third"
+

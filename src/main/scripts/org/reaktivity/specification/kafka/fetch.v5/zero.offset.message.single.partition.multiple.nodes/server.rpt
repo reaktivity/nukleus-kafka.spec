@@ -16,6 +16,8 @@
 
 property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
+property newTimestamp ${kafka:timestamp()}
+
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
 
@@ -38,12 +40,17 @@ read 1          # [TopicName] array length
   read 4s "test"
 read [0x00]     # allow_auto_topic_creation (boolean)
 
-write 85        # Size int32
+write 104       # Size int32
 write ${metadataRequestId} # CorrelationId int32
 write 0         # throttle_time_ms int32
-write 1         # brokers array length
+write 2         # brokers array length
   write 1       # broker id
   write 7s "broker1"
+  write 9093    # port int32
+  write -1s     # rack string (null)
+  
+  write 2       # broker id
+  write 7s "broker2"
   write 9093    # port int32
   write -1s     # rack string (null)
 write 9s "cluster 1"
@@ -55,17 +62,26 @@ write 1         # topic array length
   write 1       # partition array length
     write 0s    # error code
     write 0     # partition
-    write 1     # leader
+    write 2     # leader
     write 0     # replicas array (empty)
     write -1    # isr array (null)
     write 0     # offline replicas array (empty)
 
-# Fetch stream
+# Fetch stream node 1
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
-read 0x41
+write await BROKER_TWO_FETCH_REQUEST_RECEIVED
+close
+closed
+
+# Fetch stream node 2
+accepted
+read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+connected
+
+read 65         # Size
 read 0x01s
 read 0x05s
 read (int:requestId)
@@ -82,3 +98,40 @@ read 0x00
 read 0x00L
 read -1L
 read [0..4]
+
+read notify BROKER_TWO_FETCH_REQUEST_RECEIVED
+
+write 0x8c
+write ${requestId}
+write 0
+write 0x01
+write 0x04s "test"
+write 0x01
+write 0
+write 0x00s
+write 0x01L
+write -1L
+write 0L
+write -1
+write 0x50
+write 0x00L
+write 0x44
+write 0x00
+write [0x02]
+write 0x4e8723aa
+write 0x00s
+write 0
+write ${newTimestamp}
+write ${newTimestamp}
+write -1L
+write -1s
+write -1
+write 0x01
+write ${kafka:varint(18)}
+write [0x00]
+write ${kafka:varint(0)}
+write ${kafka:varint(0)}
+write ${kafka:varint(-1)}
+write ${kafka:varint(12)}
+write "Hello, world"
+write ${kafka:varint(0)}
