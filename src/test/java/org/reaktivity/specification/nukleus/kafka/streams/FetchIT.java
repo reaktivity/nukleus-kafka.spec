@@ -51,6 +51,40 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/invalid.fetch.key.and.multiple.offsets/client",
+        "${scripts}/invalid.fetch.key.and.multiple.offsets/server"})
+    public void shouldRejectInvalidBeginExWithFetchKeyAndMultipleOffsets() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/invalid.missing.fetch.key/client",
+        "${scripts}/invalid.missing.fetch.key/server"})
+    public void shouldRejectInvalidBeginExWithMissingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/invalid.more.than.one.fetch.key.hash/client",
+        "${scripts}/invalid.more.than.one.fetch.key.hash/server"})
+    public void shouldRejectInvalidBeginExWithMoreThanOneFetchKeyHash() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+
+    @Test
+    @Specification({
         "${scripts}/invalid.topic.name/client",
         "${scripts}/invalid.topic.name/server"})
     public void shouldRejectInvalidTopicName() throws Exception
