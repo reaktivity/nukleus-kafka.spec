@@ -82,7 +82,6 @@ public class FetchIT
         k3po.finish();
     }
 
-
     @Test
     @Specification({
         "${scripts}/invalid.topic.name/client",

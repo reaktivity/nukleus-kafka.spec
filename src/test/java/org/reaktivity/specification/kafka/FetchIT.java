@@ -82,6 +82,28 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/live.fetch.abort.and.reconnect/client",
+        "${scripts}/live.fetch.abort.and.reconnect/server"})
+    public void shouldReconnectWhenLiveFetchReceivesAbort() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/live.fetch.reset.reconnect.and.message/client",
+        "${scripts}/live.fetch.reset.reconnect.and.message/server"})
+    public void shouldReconnectAndReceiveMessageWhenLiveFetchReceivesReset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
