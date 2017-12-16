@@ -100,7 +100,7 @@ write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
 write 80        # length of record batch
-write 0x00L     # First offset
+write 0L        # First offset
 write 68        # length
 write 0         # partition leader epoque
 write [0x02]    # magic

@@ -82,6 +82,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.zero.offset.first.of.two.matches/client",
+        "${scripts}/fetch.key.zero.offset.first.of.two.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyFirstOfTwo() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/live.fetch.abort.and.reconnect/client",
         "${scripts}/live.fetch.abort.and.reconnect/server"})
     public void shouldReconnectWhenLiveFetchReceivesAbort() throws Exception
