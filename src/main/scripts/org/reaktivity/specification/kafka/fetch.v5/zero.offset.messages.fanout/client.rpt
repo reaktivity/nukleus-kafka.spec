@@ -119,26 +119,26 @@ read [0x02]     # magic
 read 0x4e8723aa # CRC32
 read 0x00s      # attributes
 read 0          # Last offset delta
-read (long:timestamp) # first timestamp
-read ${timestamp} #  maximum timestamp
+read (long:timestamp)       # first timestamp
+read ${timestamp}           #  maximum timestamp
 read -1L        # producer ID
 read -1s        # producer epoque
 read -1         # first sequence
 read 2          # Number of records
-read ${kafka:varint(18)} # Record length
+read ${kafka:varint(18)}    # Record length
 read [0x00]     # attributes
-read ${kafka:varint(0)} # timestamp delta
-read ${kafka:varint(0)} # offset delta
-read ${kafka:varint(-1)} # key length
-read ${kafka:varint(12)} # value
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(-1)}    # key length
+read ${kafka:varint(12)}    # value
 read "Hello, world"
 read [0x00]     # headers array length
 
-read ${kafka:varint(18)} # Record length
+read ${kafka:varint(18)}    # Record length
 read [0x00]     # attributes
-read ${kafka:varint(0)} # timestamp delta
-read ${kafka:varint(1)} # offset delta
-read ${kafka:varint(-1)} # key length
-read ${kafka:varint(12)} # value
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(1)}     # offset delta
+read ${kafka:varint(-1)}    # key length
+read ${kafka:varint(12)}    # value
 read "Hello, again"
 read [0x00]     # headers array length
