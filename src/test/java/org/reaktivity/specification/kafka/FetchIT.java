@@ -82,9 +82,75 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/fetch.key.zero.offset.first.of.two.matches/client",
-        "${scripts}/fetch.key.zero.offset.first.of.two.matches/server"})
-    public void shouldReceiveMessageMatchingFetchKeyFirstOfTwo() throws Exception
+        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
+        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndExplicitHashCode() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/client",
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndDefaultPartitioner() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.nonzero.offset.first.matches/client",
+        "${scripts}/fetch.key.nonzero.offset.first.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyFirstNonZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.first.matches/client",
+        "${scripts}/fetch.key.zero.offset.first.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyFirst() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.last.matches/client",
+        "${scripts}/fetch.key.zero.offset.last.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyLast() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.multiple.matches/client",
+        "${scripts}/fetch.key.zero.offset.multiple.matches/server"})
+    public void shouldReceiveMultipleMessagesMatchingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.multiple.matches.historical/client",
+        "${scripts}/fetch.key.zero.offset.multiple.matches.historical/server"})
+    public void shouldReceiveMultipleHistoricalMessagesMatchingFetchKey() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

@@ -139,9 +139,64 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
+        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndExplicitHashCode() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/client",
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/server"})
+    public void shouldReceiveMessageUsingFetchKeyWithDefaultHashCode() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.nonzero.offset.message/client",
+        "${scripts}/fetch.key.nonzero.offset.message/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndNonZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.zero.offset.message/client",
         "${scripts}/fetch.key.zero.offset.message/server"})
     public void shouldReceiveMessageUsingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.messages/client",
+        "${scripts}/fetch.key.zero.offset.messages/server"})
+    public void shouldReceiveMessagesUsingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.messages.historical/client",
+        "${scripts}/fetch.key.zero.offset.messages.historical/server"})
+    public void shouldReceiveHistoricalMessagesUsingFetchKey() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
