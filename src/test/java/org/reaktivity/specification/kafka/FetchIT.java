@@ -104,6 +104,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.multiple.matches.flow.controlled/client",
+        "${scripts}/fetch.key.multiple.matches.flow.controlled/server"})
+    public void shouldReceiveMessagesMatchingFetchKeyFlowControlled() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.nonzero.offset.first.matches/client",
         "${scripts}/fetch.key.nonzero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyFirstNonZeroOffset() throws Exception
@@ -112,6 +123,18 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.three.matches.flow.controlled/client",
+        "${scripts}/fetch.key.three.matches.flow.controlled/server"})
+    public void shouldReceiveMessagesThreeMatchingFetchKeyFlowControlled() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
 
     @Test
     @Specification({

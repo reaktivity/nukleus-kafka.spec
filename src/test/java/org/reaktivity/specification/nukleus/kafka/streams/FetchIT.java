@@ -205,6 +205,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.zero.offset.three.messages/client",
+        "${scripts}/fetch.key.zero.offset.three.messages/server"})
+    public void shouldReceiveThreeMessagesUsingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
