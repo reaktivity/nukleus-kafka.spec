@@ -25,7 +25,7 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 0x08s "test"
+read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext 9 "fetchkey1"
 read nukleus:begin.ext [0x02] 123498 2345980

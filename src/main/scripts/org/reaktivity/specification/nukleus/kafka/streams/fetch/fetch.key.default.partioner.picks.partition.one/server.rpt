@@ -27,7 +27,7 @@ accepted
 
 read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 1 ${kafka:varint(10)}
-read nukleus:begin.ext 12
+read nukleus:begin.ext 17
 read nukleus:begin.ext "hazOddDefaultHash"
 read nukleus:begin.ext [0xFF]
 
@@ -35,7 +35,7 @@ connected
 
 write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 1 ${kafka:varint(10)}
-write nukleus:begin.ext 12
+write nukleus:begin.ext 17
 write nukleus:begin.ext "hazOddDefaultHash"
 write nukleus:begin.ext [0xFF]
 write flush
