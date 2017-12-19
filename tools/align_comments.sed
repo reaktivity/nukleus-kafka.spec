@@ -1,8 +1,16 @@
-# HOWTO Upgrade
+# Indents '#' style comments following instructions in scripts to align on columns 17 and 29 (mimicking tab stops of 8)
 #
+# Example:
+#  write 65 # Size
+#  write 0x01s # Fetch
+# is transformed to
+#  write 65        # Size
+#  write 0x01s     # Fetch
+#
+# Usage
+# =====
 # ufind src/main/scripts/org/reaktivity/specification/kafka/fetch.v5/ -name "*.rpt"| xargs -L 1 sed -i "~" -f tools/align_comments.sed
 #
-# Indents '#' style comments to align on columns 17 and 29
 
 /^[^#]\{4\}[^#]* * #/s/  *#/ #/
 
