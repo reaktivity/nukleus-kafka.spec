@@ -26,12 +26,16 @@ accept ${applicationAccept}
 accepted
 
 read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 0x01 ${kafka:varint(1)}
+read nukleus:begin.ext 1 ${kafka:varint(1)}
+read nukleus:begin.ext -1
+read nukleus:begin.ext [0xFF]
 
 connected
 
 write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 0x01 ${kafka:varint(1)}
+write nukleus:begin.ext 1 ${kafka:varint(1)}
+write nukleus:begin.ext -1
+write nukleus:begin.ext [0xFF]
 write flush
 
 write nukleus:data.ext 0x01 ${kafka:varint(2)}

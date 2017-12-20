@@ -82,6 +82,128 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
+        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndExplicitHashCode() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/client",
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndDefaultPartitioner() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.multiple.matches.flow.controlled/client",
+        "${scripts}/fetch.key.multiple.matches.flow.controlled/server"})
+    public void shouldReceiveMessagesMatchingFetchKeyFlowControlled() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.nonzero.offset.first.matches/client",
+        "${scripts}/fetch.key.nonzero.offset.first.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyFirstNonZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.three.matches.flow.controlled/client",
+        "${scripts}/fetch.key.three.matches.flow.controlled/server"})
+    public void shouldReceiveMessagesThreeMatchingFetchKeyFlowControlled() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.first.matches/client",
+        "${scripts}/fetch.key.zero.offset.first.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyFirst() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.last.matches/client",
+        "${scripts}/fetch.key.zero.offset.last.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyLast() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.multiple.matches/client",
+        "${scripts}/fetch.key.zero.offset.multiple.matches/server"})
+    public void shouldReceiveMultipleMessagesMatchingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.multiple.matches.historical/client",
+        "${scripts}/fetch.key.zero.offset.multiple.matches.historical/server"})
+    public void shouldReceiveMultipleHistoricalMessagesMatchingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/live.fetch.abort.and.reconnect/client",
+        "${scripts}/live.fetch.abort.and.reconnect/server"})
+    public void shouldReconnectWhenLiveFetchReceivesAbort() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/live.fetch.reset.reconnect.and.message/client",
+        "${scripts}/live.fetch.reset.reconnect.and.message/server"})
+    public void shouldReconnectAndReceiveMessageWhenLiveFetchReceivesReset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception

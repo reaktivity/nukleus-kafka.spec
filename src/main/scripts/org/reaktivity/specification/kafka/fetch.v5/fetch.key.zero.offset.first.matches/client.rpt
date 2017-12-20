@@ -1,0 +1,145 @@
+#
+# Copyright 2016-2017 The Reaktivity Project
+#
+# The Reaktivity Project licenses this file to you under the Apache License,
+# version 2.0 (the "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at:
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+property newNetworkRouteRef  ${nuklei:newReferenceId()} # external
+
+property networkConnect "nukleus://kafka/streams/source"
+property networkConnectWindow 8192
+
+property newMetadataRequestId ${kafka:newRequestId()}
+property newRequestId ${kafka:newRequestId()}
+property maximumWaitTime 500
+property maximumBytes 65535
+property maximumBytesTest0 8192
+
+# Metadata stream
+connect await ROUTED_SERVER
+        ${networkConnect}
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+
+connected
+
+write 21        # Size int32
+write 0x03s     # ApiKey int16 (Metadata)
+write 0x05s     # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # [TopicName] array length
+  write 4s "test"
+write [0x00]    # allow_auto_topic_creation (boolean)
+
+read 85         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read [0..4]     # throttle_time_ms int32
+read 1          # brokers array length
+  read 1        # broker id
+  read 7s "broker1"
+  read 9093     # port int32
+  read -1s      # rack string (null)
+read 9s "cluster 1"
+read 1          # controller broker id
+read 1          # topic array length
+  read 0s       # error code
+  read 4s "test"
+  read [0x00]   # is_internal boolean
+  read 1        # partition array length
+    read 0s     # error code
+    read 0      # partition
+    read 1      # leader
+    read 0      # replicas array (empty)
+    read -1     # isr array (null)
+    read 0      # offline replicas array (empty)
+read notify METADATA_RECEIVED
+
+# Fetch stream
+connect await METADATA_RECEIVED
+        ${networkConnect}
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+
+connected
+
+write 0x41
+write 0x01s
+write 0x05s
+write ${newRequestId}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 0x01
+write ${maximumBytes}
+write [0x00]
+write 0x01
+write 0x04s "test"
+write 0x01
+write 0x00
+write 0x00L
+write -1L
+write ${maximumBytesTest0}
+
+read 172
+read ${newRequestId}
+read [0..4]
+read 0x01
+read 0x04s "test"
+read 1
+read 0          # Partition
+read 0x00s
+read 12L        # high watermark
+read -1L
+read 0L         # log start offset
+read -1         # aborted transactions (null)
+read 112
+read 10L        # first offset
+read 100        # length
+read 0
+read [0x02]
+read 0x4e8723aa
+read 0x00s
+read 1          # last offset delta
+read (long:timestamp)
+read ${timestamp}
+read -1L
+read -1s
+read -1
+read 2          # number of records
+read ${kafka:varint(23)}    # record length
+read [0x00]
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(5)}     # key length
+read "match"
+read ${kafka:varint(12)}
+read "Hello, world"
+read [0x00]
+read ${kafka:varint(26)}    # record length
+read [0x00]
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(1)}     # offset delta
+read ${kafka:varint(8)}     # key length
+read "no match"
+read ${kafka:varint(12)}
+read "Hello, again"
+read [0x00]

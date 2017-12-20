@@ -29,6 +29,10 @@ scope kafka
         {
             string16 topicName;
             varint64[] fetchOffsets;
+            int32 fetchKeySize;
+            octets[fetchKeySize] fetchKey = null;
+            int8 fetchKeyHashCount;
+            int32[fetchKeyHashCount] fetchKeyHash = null;
         }
 
         struct KafkaDataEx
