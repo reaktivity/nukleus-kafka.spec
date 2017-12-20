@@ -51,6 +51,39 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/invalid.fetch.key.and.multiple.offsets/client",
+        "${scripts}/invalid.fetch.key.and.multiple.offsets/server"})
+    public void shouldRejectInvalidBeginExWithFetchKeyAndMultipleOffsets() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/invalid.missing.fetch.key/client",
+        "${scripts}/invalid.missing.fetch.key/server"})
+    public void shouldRejectInvalidBeginExWithMissingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/invalid.more.than.one.fetch.key.hash/client",
+        "${scripts}/invalid.more.than.one.fetch.key.hash/server"})
+    public void shouldRejectInvalidBeginExWithMoreThanOneFetchKeyHash() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/invalid.topic.name/client",
         "${scripts}/invalid.topic.name/server"})
     public void shouldRejectInvalidTopicName() throws Exception
@@ -98,6 +131,83 @@ public class FetchIT
         "${scripts}/fanout.with.slow.consumer/client",
         "${scripts}/fanout.with.slow.consumer/server"})
     public void shouldFanoutWithSlowConsumer() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
+        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndExplicitHashCode() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/client",
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/server"})
+    public void shouldReceiveMessageUsingFetchKeyWithDefaultHashCode() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.nonzero.offset.message/client",
+        "${scripts}/fetch.key.nonzero.offset.message/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndNonZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.message/client",
+        "${scripts}/fetch.key.zero.offset.message/server"})
+    public void shouldReceiveMessageUsingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.messages/client",
+        "${scripts}/fetch.key.zero.offset.messages/server"})
+    public void shouldReceiveMessagesUsingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.messages.historical/client",
+        "${scripts}/fetch.key.zero.offset.messages.historical/server"})
+    public void shouldReceiveHistoricalMessagesUsingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.three.messages/client",
+        "${scripts}/fetch.key.zero.offset.three.messages/server"})
+    public void shouldReceiveThreeMessagesUsingFetchKey() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -186,6 +296,17 @@ public class FetchIT
         "${scripts}/nonzero.offset.messages/client",
         "${scripts}/nonzero.offset.messages/server"})
     public void shouldReceiveMessagesAtNonZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/topic.name.not.equals.route.ext/client",
+        "${scripts}/topic.name.not.equals.route.ext/server"})
+    public void shouldRejectTopicNameNutEqualToRoutedTopic() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");

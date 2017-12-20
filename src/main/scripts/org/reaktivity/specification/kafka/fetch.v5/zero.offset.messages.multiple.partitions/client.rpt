@@ -116,21 +116,21 @@ read 0x04s "test"
 read 2          # Number of partition responses
     read 0      # Partition
     read 0x00s
-    read 0x01L # high_watermark
+    read 0x01L  # high_watermark
     read -1L    # last_stable_offset
     read 0L     # log_start_offset
     read -1     # aborted_transactions (null)
     read 0x50   # Length of the record batch
-    # Start of RecordBatch
-    read 0x00L # First offset 
-    read 0x44  # Length
+                # Start of RecordBatch
+    read 0x00L  # First offset 
+    read 0x44   # Length
     read 0x00   # Partition leader epoque
     read [0x02] # Magic
-    read 0x4e8723aa # CRC32
-    read 0x00s # attributes
+    read 0x4e8723aa         # CRC32
+    read 0x00s  # attributes
     read 0      # last offset delta
-    read (long:timestamp) # first timestamp
-    read ${timestamp} # maximum timestamp
+    read (long:timestamp)   # first timestamp
+    read ${timestamp}       # maximum timestamp
     read -1L    # producer ID
     read -1s    # producer epoque
     read -1     # first sequence
@@ -141,26 +141,26 @@ read 2          # Number of partition responses
     read ${kafka:varint(0)} # offset delta
     read ${kafka:varint(-1)} # key length
     read ${kafka:varint(12)} # value length
-    read "Hello, world"   # value
+    read "Hello, world"     # value
     read ${kafka:varint(0)} # headers array length
   
     read 1      # Partition
     read 0x00s
-    read 0x01L # high_watermark
+    read 0x01L  # high_watermark
     read -1L    # last_stable_offset
     read 0L     # log_start_offset
     read -1     # aborted_transactions (null)
     read 0x50   # Length of the record batch
-    # Start of RecordBatch
-    read 0x00L # First offset 
-    read 0x44  # Length
+                # Start of RecordBatch
+    read 0x00L  # First offset 
+    read 0x44   # Length
     read 0x00   # Partition leader epoque
     read [0x02] # Magic
-    read 0x4e8723aa # CRC32
-    read 0x00s # attributes
+    read 0x4e8723aa         # CRC32
+    read 0x00s  # attributes
     read 0      # last offset delta
-    read (long:timestamp) # first timestamp
-    read ${timestamp} # maximum timestamp
+    read (long:timestamp)   # first timestamp
+    read ${timestamp}       # maximum timestamp
     read -1L    # producer ID
     read -1s    # producer epoque
     read -1     # first sequence
@@ -171,5 +171,5 @@ read 2          # Number of partition responses
     read ${kafka:varint(0)} # offset delta
     read ${kafka:varint(-1)} # key length
     read ${kafka:varint(12)} # value length
-    read "Hello, again"   # value
+    read "Hello, again"     # value
     read ${kafka:varint(0)} # headers array length
