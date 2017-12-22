@@ -193,6 +193,28 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/headers.and.fetch.key.zero.offset.first.matches/client",
+        "${scripts}/headers.and.fetch.key.zero.offset.first.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyAndHeadersFirst() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/headers.zero.offset.multiple.matches.historical/client",
+        "${scripts}/headers.zero.offset.multiple.matches.historical/server"})
+    public void shouldReceiveHistoricalMessagesMatchingHeaders() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/header.zero.offset.first.matches/client",
         "${scripts}/header.zero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingHeaderFirst() throws Exception

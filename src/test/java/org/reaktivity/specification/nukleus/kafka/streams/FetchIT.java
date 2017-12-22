@@ -249,6 +249,28 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/headers.and.fetch.key.zero.offset.message/client",
+        "${scripts}/headers.and.fetch.key.zero.offset.message/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndMultipleHeaders() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/headers.zero.offset.messages.historical/client",
+        "${scripts}/headers.zero.offset.messages.historical/server"})
+    public void shouldReceiveHistoricalMessagesUsingHeaders() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception

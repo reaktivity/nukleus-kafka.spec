@@ -99,7 +99,7 @@ write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 191
+read 231
 read ${newRequestId}
 read [0..4]
 read 0x01
@@ -111,9 +111,9 @@ read 12L        # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 131        # length of record batch
+read 171        # length of record batch
 read 10L        # first offset
-read 119        # length
+read 159         # length
 read 0
 read [0x02]
 read 0x4e8723aa
@@ -126,28 +126,38 @@ read -1s
 read -1
 read 2          # number of records
 
-read ${kafka:varint(33)}    # record length
+read ${kafka:varint(53)}    # Record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(-1)}    # key length
+read ${kafka:varint(5)}     # key length
+read "match"
 read ${kafka:varint(12)}
 read "Hello, world"
-read ${kafka:varint(1)}     # number of headers
+read ${kafka:varint(2)}     # number of headers
+read ${kafka:varint(7)}     # header key length
+read "header1"              # header key
+read ${kafka:varint(6)}     # header value length
+read "match1"                # header value
+read ${kafka:varint(7)}     # header key length
+read "header2"              # header key
+read ${kafka:varint(6)}     # header value length
+read "match2"                # header value
+
+read ${kafka:varint(55)}    # Record length
+read [0x00]
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(1)}     # offset delta
+read ${kafka:varint(5)}     # key length
+read "match"
+read ${kafka:varint(12)}
+read "Hello, again"
+read ${kafka:varint(2)}     # number of headers
 read ${kafka:varint(7)}     # header key length
 read "header1"              # header key
 read ${kafka:varint(6)}     # header value length
 read "match1"               # header value
-
-read ${kafka:varint(35)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(1)}     # offset delta
-read ${kafka:varint(-1)}    # key length
-read ${kafka:varint(12)}
-read "Hello, again"
-read ${kafka:varint(1)}     # number of headers
 read ${kafka:varint(7)}     # header key length
-read "header1"              # header key
+read "header2"              # header key
 read ${kafka:varint(8)}     # header value length
 read "no match"             # header value
