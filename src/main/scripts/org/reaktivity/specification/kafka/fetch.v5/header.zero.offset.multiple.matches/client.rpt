@@ -99,7 +99,7 @@ write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 224        # Size
+read 225         # Size
 read ${newRequestId}
 read [0..4]
 read 0x01
@@ -111,9 +111,9 @@ read 13L        # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 164        # length of record batch
+read 165        # length of record batch
 read 10L        # first offset
-read 152         # length
+read 153         # length
 read 0
 read [0x02]
 read 0x4e8723aa

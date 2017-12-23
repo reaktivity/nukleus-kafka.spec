@@ -85,7 +85,7 @@ read 0L         # offset
 read -1L
 read [0..4]
 
-write 224       # Size
+write 225       # Size
 write ${requestId}
 write 0
 write 1
@@ -97,9 +97,9 @@ write 13L       # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
-write 164       # length of record batch
+write 165       # length of record batch
 write 10L       # first offset
-write 152        # length
+write 153        # length
 write 0
 write [0x02]
 write 0x4e8723aa

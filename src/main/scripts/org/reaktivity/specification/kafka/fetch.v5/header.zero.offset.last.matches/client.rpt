@@ -132,7 +132,7 @@ read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
 read ${kafka:varint(-1)}    # key length
 read ${kafka:varint(12)}
-read "Hello, world"
+read "Hello, first"
 read ${kafka:varint(1)}     # number of headers
 read ${kafka:varint(7)}     # header key length
 read "header1"              # header key
@@ -145,7 +145,7 @@ read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(1)}     # offset delta
 read ${kafka:varint(-1)}    # key length
 read ${kafka:varint(12)}
-read "Hello, again"
+read "Hello, world"
 read ${kafka:varint(1)}     # number of headers
 read ${kafka:varint(7)}     # header key length
 read "header1"              # header key
