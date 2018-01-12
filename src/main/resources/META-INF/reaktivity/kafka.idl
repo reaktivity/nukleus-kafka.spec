@@ -25,6 +25,13 @@ scope kafka
 
     scope stream
     {
+        struct KafkaHeader
+        {
+            string16 key;
+            int32 valueLen;
+            octets[valueLen] value = null;
+        }
+    
         struct KafkaBeginEx
         {
             string16 topicName;
@@ -33,6 +40,7 @@ scope kafka
             octets[fetchKeySize] fetchKey = null;
             int8 fetchKeyHashCount;
             int32[fetchKeyHashCount] fetchKeyHash = null;
+            list<kafka::stream::KafkaHeader> headers;
         }
 
         struct KafkaDataEx
