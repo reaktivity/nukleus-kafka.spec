@@ -42,5 +42,6 @@ read nukleus:begin.ext 7s "header1"
 read nukleus:begin.ext 6 "match1"
 
 read nukleus:data.ext 0x01 ${kafka:varint(12)}
+read nukleus:data.ext -1
 read "Hello, world"
 

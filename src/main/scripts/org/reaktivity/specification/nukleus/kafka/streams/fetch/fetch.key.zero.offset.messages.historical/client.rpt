@@ -40,6 +40,7 @@ read nukleus:begin.ext "match"
 read nukleus:begin.ext [0xFF]
 
 read nukleus:data.ext 0x01 ${kafka:varint(11)}
+read nukleus:data.ext -1
 read "Hello, world"
 
 read notify CLIENT_ONE_RECEIVED_MESSAGE
@@ -65,8 +66,10 @@ read nukleus:begin.ext "match"
 read nukleus:begin.ext [0xFF]
 
 read nukleus:data.ext 0x01 ${kafka:varint(12)}
+read nukleus:data.ext -1
 read "Hello, world"
 
 read nukleus:data.ext 0x01 ${kafka:varint(13)}
+read nukleus:data.ext -1
 read "Hello, third"
 
