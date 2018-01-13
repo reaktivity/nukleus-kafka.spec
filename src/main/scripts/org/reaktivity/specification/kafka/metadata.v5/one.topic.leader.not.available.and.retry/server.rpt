@@ -117,3 +117,29 @@ write 1 # topic array length
     write 0 # replicas array (empty)
     write -1 # isr array (null)
     write 0 # offline replicas array (empty)
+
+read 41         # Size int32
+read 32s        # ApiKey int16 (DescribeConfigs)
+read 0s         # ApiVersion int16
+read (int:describeRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [Resources] array length
+read [0x02]     # resource type int8 (topic) 
+read 4s "test"  # topic name
+read 1          # config_names count
+read 14s "cleanup.policy"
+
+write 54        # Size int32
+write ${describeRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # resources count
+write 0s        # error code
+write -1s       # error message
+write [0x02]    # resource type
+write 4s "test" # topic name
+write 1         # config entries count
+write 14s "cleanup.policy"  # config name
+write 6s "delete"           # config  value
+write [0x00]    # read_only boolean
+write [0x01]    # is_default boolean
+write [0x00]    # is_sensitive boolean
