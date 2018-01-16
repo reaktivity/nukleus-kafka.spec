@@ -312,6 +312,16 @@ public class FetchIT
         k3po.finish();
     }
 
+    @Test
+    @Specification({
+        "${scripts}/ktable.messages.multiple.nodes/client",
+        "${scripts}/ktable.messages.multiple.nodes/server"})
+    public void shouldReceiveKtableMessagesFromMultipleNodes() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 
     @Test
     @Specification({
