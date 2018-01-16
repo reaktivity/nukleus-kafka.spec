@@ -292,6 +292,29 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.messages/client",
+        "${scripts}/ktable.messages/server"})
+    public void shouldReceiveKtableMessages() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.messages.historical/client",
+        "${scripts}/ktable.messages.historical/server"})
+    public void shouldReceiveHistoricalKtableMessages() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message.single.partition.multiple.nodes/client",
         "${scripts}/zero.offset.message.single.partition.multiple.nodes/server"})
     public void shouldReceiveMessageAtZeroOffsetSinglePartitionMultipleNodes() throws Exception
