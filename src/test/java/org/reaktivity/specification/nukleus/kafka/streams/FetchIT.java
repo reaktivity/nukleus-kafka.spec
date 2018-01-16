@@ -326,6 +326,50 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.message/client",
+        "${scripts}/ktable.message/server"})
+    public void shouldReceiveKTableMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.messages/client",
+        "${scripts}/ktable.messages/server"})
+    public void shouldReceiveKTableMessages() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.messages.historical/client",
+        "${scripts}/ktable.messages.historical/server"})
+    public void shouldReceiveKTableHistoricalMessages() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.messages.multiple.nodes/client",
+        "${scripts}/ktable.messages.multiple.nodes/server"})
+    public void shouldReceiveKTableMessagesFromMultipleNodes() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/nonzero.offset/client",
         "${scripts}/nonzero.offset/server"})
     public void shouldRequestMessagesAtNonZeroOffset() throws Exception

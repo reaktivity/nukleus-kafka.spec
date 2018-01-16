@@ -16,34 +16,27 @@
 
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 
-property applicationAccept "nukleus://kafka/streams/source"
-property applicationAcceptWindow 8192
+property applicationConnect "nukleus://kafka/streams/source"
+property applicationConnectWindow 8192
 
-accept ${applicationAccept}
-       option nukleus:route ${newApplicationRouteRef}
-       option nukleus:window ${applicationAcceptWindow}
-       option nukleus:transmission "half-duplex"
-accepted
+connect await ROUTED_CLIENT
+        ${applicationConnect}
+    option nukleus:route ${newApplicationRouteRef}
+    option nukleus:window ${applicationConnectWindow}
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext 0x04s "test"
+write nukleus:begin.ext 1 ${kafka:varint(0)}
+write nukleus:begin.ext -1
+write nukleus:begin.ext [0xFF]
+
+connected
 
 read nukleus:begin.ext 4s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 
-connected
-
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write flush
-
-write nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(0)}
-write nukleus:data.ext -1
-write "Hello, world"
-write flush
-
-write nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(1)}
-write nukleus:data.ext -1
-write "Hello, again"
-write flush
+read nukleus:data.ext 1 ${kafka:varint(1)}
+read nukleus:data.ext 4 "key1"
+read "Hello, world"
