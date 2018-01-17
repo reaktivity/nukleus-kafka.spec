@@ -30,6 +30,7 @@ read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext 5
 read nukleus:begin.ext "match"
 read nukleus:begin.ext [0xFF]
+read nukleus:begin.ext 18
 read nukleus:begin.ext 7s "header1"
 read nukleus:begin.ext 6 "match1"
 
@@ -40,6 +41,7 @@ write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext 5
 write nukleus:begin.ext "match"
 write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 18
 write nukleus:begin.ext 7s "header1"
 write nukleus:begin.ext 6 "match1"
 write flush
