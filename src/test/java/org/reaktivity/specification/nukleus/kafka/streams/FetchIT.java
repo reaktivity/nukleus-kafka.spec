@@ -282,6 +282,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/zero.offset.and.reset/client",
+        "${scripts}/zero.offset.and.reset/server"})
+    public void shouldUnsubscribe() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("FETCH_REQUEST_RECEIVED");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.messages/client",
         "${scripts}/zero.offset.messages/server"})
     public void shouldReceiveMessagesAtZeroOffset() throws Exception
