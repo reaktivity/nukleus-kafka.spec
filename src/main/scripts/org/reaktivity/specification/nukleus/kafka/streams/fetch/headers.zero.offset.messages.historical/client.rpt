@@ -29,6 +29,7 @@ write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 38
 write nukleus:begin.ext 7s "header1"
 write nukleus:begin.ext 6 "match1"
 write nukleus:begin.ext 7s "header2"
@@ -40,6 +41,7 @@ read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
+read nukleus:begin.ext 38
 read nukleus:begin.ext 7s "header1"
 read nukleus:begin.ext 6 "match1"
 read nukleus:begin.ext 7s "header2"
@@ -60,6 +62,7 @@ write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 38
 write nukleus:begin.ext 7s "header1"
 write nukleus:begin.ext 6 "match1"
 write nukleus:begin.ext 7s "header2"
@@ -71,6 +74,7 @@ read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
+read nukleus:begin.ext 38
 read nukleus:begin.ext 7s "header1"
 read nukleus:begin.ext 6 "match1"
 read nukleus:begin.ext 7s "header2"

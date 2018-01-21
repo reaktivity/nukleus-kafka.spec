@@ -29,6 +29,7 @@ write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext 9 "fetchkey1"
 write nukleus:begin.ext [0x02] 123498 2345980
+write nukleus:begin.ext 0
 
 connected
 
