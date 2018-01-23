@@ -29,6 +29,7 @@ read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 1 ${kafka:varint(1)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
+read nukleus:begin.ext 0
 
 connected
 
@@ -36,6 +37,7 @@ write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 1 ${kafka:varint(1)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 0
 write flush
 
 write nukleus:data.ext 0x01 ${kafka:varint(2)}
@@ -54,6 +56,7 @@ read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
+read nukleus:begin.ext 0
 
 connected
 
@@ -61,6 +64,7 @@ write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 0
 write flush
 
 write nukleus:data.ext 0x01 ${kafka:varint(1)}

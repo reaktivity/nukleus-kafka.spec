@@ -111,6 +111,10 @@ read 0x00L
 read -1L
 read [0..4]
 
+read notify FETCH_REQUEST_RECEIVED
+
+write await WRITE_FETCH_RESPONSE
+
 write 0x8c
 write ${requestId}
 write 0
