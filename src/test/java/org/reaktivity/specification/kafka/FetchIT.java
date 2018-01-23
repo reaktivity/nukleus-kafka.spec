@@ -304,6 +304,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.messages.header.multiple.matches/client",
+        "${scripts}/ktable.messages.header.multiple.matches/server"})
+    public void shouldReceiveKtableMessagesFilteredByHeader() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/ktable.messages.historical/client",
         "${scripts}/ktable.messages.historical/server"})
     public void shouldReceiveHistoricalKtableMessages() throws Exception
