@@ -104,6 +104,17 @@ public class MetadataIT
 
     @Test
     @Specification({
+        "${scripts}/one.topic.multiple.nodes.and.replicas/client",
+        "${scripts}/one.topic.multiple.nodes.and.replicas/server"})
+    public void shouldHandleMetadataResponseOneTopicMultipleNodesAndReplicas() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/one.topic.multiple.partitions/client",
         "${scripts}/one.topic.multiple.partitions/server"})
     public void shouldRequestMetadataForOneTopicMultiplePartitionsSingleNode() throws Exception

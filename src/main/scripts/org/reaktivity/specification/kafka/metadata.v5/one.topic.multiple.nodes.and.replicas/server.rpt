@@ -1,0 +1,102 @@
+#
+# Copyright 2016-2017 The Reaktivity Project
+#
+# The Reaktivity Project licenses this file to you under the Apache License,
+# version 2.0 (the "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at:
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
+
+property networkAccept "nukleus://kafka/streams/source"
+property networkAcceptWindow 8192
+
+accept ${networkAccept}
+  option nukleus:route  ${newNetworkRouteRef}
+  option nukleus:window ${networkAcceptWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+accepted
+connected
+
+read 21         # Size int32
+read 3s      # ApiKey int16 (Metadata)
+read 5s      # ApiVersion int16
+read (int:metadataRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [TopicName] array length
+  read 4s "test"
+read [0x00]     # allow_auto_topic_creation (boolean)
+
+write 142       # Size int32
+write ${metadataRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 2         # brokers array length
+  write 1001    # broker id
+  write 7s "broker1"
+  write 9093    # port int32
+  write -1s     # rack string (null)
+
+  write 1002
+  write 7s "broker2"
+  write 9093
+  write -1s
+write 9s "cluster 1"
+write 1         # controller broker id
+write 1         # topic array length
+  write 0s      # error code
+  write 4s "test"
+  write byte 0x00           # is_internal
+  write 2       # partition array length
+    write 0s    # error code
+    write 0     # partition
+    write 1001  # leader
+    write 2     # replica count
+    write 1001  # node owning replica 1
+    write 1002  # node owning replica 2
+    write 1     # in-sync replicas count
+    write 1001  # node owning the in sync replica
+    write 1     # offline replicas count
+    write 1002  # offline node owning the offline replica
+
+    write 0s    # error code
+    write 1     # partition
+    write 1002  # leader
+    write 0     # replicas array (empty)
+    write -1    # isr array (null)
+    write 0     # offline replicas array (empty)
+
+read 41         # Size int32
+read 32s        # ApiKey int16 (DescribeConfigs)
+read 0s         # ApiVersion int16
+read (int:metadataRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [Resources] array length
+read [0x02]     # resource type int8 (topic) 
+read 4s "test"  # topic name
+read 1          # config_names count
+read 14s "cleanup.policy"
+
+write 54        # Size int32
+write ${metadataRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # resources count
+write 0s        # error code
+write -1s       # error message
+write [0x02]    # resource type
+write 4s "test" # topic name
+write 1         # config entries count
+write 14s "cleanup.policy"  # config name
+write 6s "delete"           # config  value
+write [0x00]    # read_only boolean
+write [0x01]    # is_default boolean
+write [0x00]    # is_sensitive boolean
