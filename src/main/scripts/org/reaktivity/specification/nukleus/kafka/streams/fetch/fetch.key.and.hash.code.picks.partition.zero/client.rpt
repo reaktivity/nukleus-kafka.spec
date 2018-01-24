@@ -46,5 +46,6 @@ read nukleus:begin.ext ${evenHashCode}
 read nukleus:begin.ext 0
 
 read nukleus:data.ext 1 ${kafka:varint(11)}
+read nukleus:data.ext -1
 read "Hello, world"
 

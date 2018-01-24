@@ -39,8 +39,10 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext 0x02 ${kafka:varint(1)} ${kafka:varint(0)}
+read nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(0)}
+read nukleus:data.ext -1
 read "Hello, world"
 
-read nukleus:data.ext 0x02 ${kafka:varint(1)} ${kafka:varint(1)}
+read nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(1)}
+read nukleus:data.ext -1
 read "Hello, again"
