@@ -42,11 +42,13 @@ read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
 read nukleus:data.ext 0x01 ${kafka:varint(2)}
+read nukleus:data.ext -1
 read "Hello, again"
 
 write notify CLIENT_ONE_RECEIVED
 
 read nukleus:data.ext 0x01 ${kafka:varint(3)}
+read nukleus:data.ext -1
 read "Hi, everyone"
 
 write notify CLIENT_ONE_RECEIVED_THIRD_MESSAGE
@@ -74,10 +76,13 @@ read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
 read nukleus:data.ext 0x01 ${kafka:varint(1)}
+read nukleus:data.ext -1
 read "Hello, world"
 
 read nukleus:data.ext 0x01 ${kafka:varint(2)}
+read nukleus:data.ext -1
 read "Hello, again"
 
 read nukleus:data.ext 0x01 ${kafka:varint(3)}
+read nukleus:data.ext -1
 read "Hi, everyone"

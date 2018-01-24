@@ -47,5 +47,6 @@ write nukleus:begin.ext 6 "match1"
 write flush
 
 write nukleus:data.ext 0x01 ${kafka:varint(12)}
+write nukleus:data.ext -1
 write "Hello, world"
 write flush
