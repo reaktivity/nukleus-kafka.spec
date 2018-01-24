@@ -34,3 +34,23 @@ write nukleus:begin.ext 0
 connected
 
 write aborted
+
+read notify TRY_ONE_COMPLETED
+
+# Try with a different topic to check we don't repeat the metadata request for the first one
+connect await TRY_ONE_COMPLETED
+        ${applicationConnect}
+    option nukleus:route ${newApplicationRouteRef}
+    option nukleus:window ${applicationConnectWindow}
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext 0x05s "test2"
+write nukleus:begin.ext 1 ${kafka:varint(0)}
+write nukleus:begin.ext -1
+write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 0
+
+connected
+
+write aborted
+
