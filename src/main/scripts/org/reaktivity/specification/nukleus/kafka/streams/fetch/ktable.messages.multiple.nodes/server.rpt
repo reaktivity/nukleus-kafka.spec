@@ -49,7 +49,7 @@ write nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(1)}
 write nukleus:data.ext 4 "key2"
 write flush
 
-write nukleus:data.ext 2 ${kafka:varint(2)} ${kafka:varint(1)}
+write nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(2)}
 write nukleus:data.ext 4 "key1"
 write "Hello, third"
 write flush

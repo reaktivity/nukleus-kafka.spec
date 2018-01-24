@@ -204,7 +204,7 @@ write 0L
 write -1L
 write ${maximumBytesTest0}
 
-read 144
+read 155
 read ${newRequestId2}
 read [0..4]
 read 1
@@ -212,13 +212,13 @@ read 4s "test"
 read 1
 read 1          # Partition
 read 0s
-read 1L
+read 2L         # high watermark
 read -1L
 read 0L
 read -1
-read 84         # record batch length
+read 95         # record batch length
 read 0L
-read 72         # length
+read 83         # length
 read 0
 read [0x02]
 read 0x4e8723aa
@@ -229,13 +229,23 @@ read ${timestamp}
 read -1L
 read -1s
 read -1
-read 1          # number of records
+read 2          # number of records
+
+read ${kafka:varint(10)}    # record length
+read [0x00]
+read ${kafka:varint(0)}
+read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(4)}     # key length
+read "key2"
+read ${kafka:varint(-1)}
+read ${kafka:varint(0)}
+
 read ${kafka:varint(22)}    # record length
 read [0x00]
 read ${kafka:varint(0)}
-read ${kafka:varint(0)}
+read ${kafka:varint(1)}     # offset delta
 read ${kafka:varint(4)}     # key length
-read "key2"
+read "key1"
 read ${kafka:varint(12)}
-read "Hello, again"
+read "Hello, third"
 read ${kafka:varint(0)}
