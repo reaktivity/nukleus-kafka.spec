@@ -34,3 +34,15 @@ read nukleus:begin.ext 0
 connected
 
 read abort
+
+accepted
+
+read nukleus:begin.ext 0x05s "test2"
+read nukleus:begin.ext 1 ${kafka:varint(0)}
+read nukleus:begin.ext -1
+read nukleus:begin.ext [0xFF]
+read nukleus:begin.ext 0
+
+connected
+
+read abort
