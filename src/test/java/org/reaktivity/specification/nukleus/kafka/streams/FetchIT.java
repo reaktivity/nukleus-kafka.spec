@@ -183,6 +183,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.no.offsets.message/client",
+        "${scripts}/fetch.key.no.offsets.message/server"})
+    public void shouldReceiveMessageUsingFetchKeyWithEmptyOffsetsArray() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.zero.offset.messages/client",
         "${scripts}/fetch.key.zero.offset.messages/server"})
     public void shouldReceiveMessagesUsingFetchKey() throws Exception
@@ -274,6 +285,17 @@ public class FetchIT
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/no.offsets.message/client",
+        "${scripts}/no.offsets.message/server"})
+    public void shouldReceiveMessageAtZeroOffsetWithEmptyOffsetsArray() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
