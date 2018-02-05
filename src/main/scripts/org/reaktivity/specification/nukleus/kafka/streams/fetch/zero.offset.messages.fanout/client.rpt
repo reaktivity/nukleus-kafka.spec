@@ -22,7 +22,6 @@ property applicationConnectWindow 8192
 connect await ROUTED_CLIENT
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
-    option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext 0x04s "test"
@@ -41,19 +40,18 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext 0x01 ${kafka:varint(1)}
-read nukleus:data.ext -1
+read nukleus:transfer.ext 0x01 ${kafka:varint(1)}
+read nukleus:transfer.ext -1
 read "Hello, world"
 
-read nukleus:data.ext 0x01 ${kafka:varint(2)}
-read nukleus:data.ext -1
+read nukleus:transfer.ext 0x01 ${kafka:varint(2)}
+read nukleus:transfer.ext -1
 read "Hello, again"
 
 
 connect await ROUTED_CLIENT
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
-    option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext 0x04s "test"
@@ -72,10 +70,10 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext 0x01 ${kafka:varint(1)}
-read nukleus:data.ext -1
+read nukleus:transfer.ext 0x01 ${kafka:varint(1)}
+read nukleus:transfer.ext -1
 read "Hello, world"
 
-read nukleus:data.ext 0x01 ${kafka:varint(2)}
-read nukleus:data.ext -1
+read nukleus:transfer.ext 0x01 ${kafka:varint(2)}
+read nukleus:transfer.ext -1
 read "Hello, again"

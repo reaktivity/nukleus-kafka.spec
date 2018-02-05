@@ -29,7 +29,6 @@ property maximumBytesTest0 8192
 connect await ROUTED_SERVER
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -99,7 +98,6 @@ read notify METADATA_RECEIVED
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -145,7 +143,6 @@ read notify FETCH_ABORTED
 connect await FETCH_CONNECTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -159,7 +156,6 @@ read notify HISTORICAL_CONNECTED
 connect await FETCH_ABORTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 

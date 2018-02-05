@@ -24,7 +24,6 @@ property networkAcceptWindow 8192
 
 accept ${networkAccept}
   option nukleus:route  ${newNetworkRouteRef}
-  option nukleus:window ${networkAcceptWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 

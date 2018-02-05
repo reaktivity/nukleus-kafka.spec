@@ -26,6 +26,7 @@ import org.junit.rules.TestRule;
 import org.junit.rules.Timeout;
 import org.kaazing.k3po.junit.annotation.Specification;
 import org.kaazing.k3po.junit.rules.K3poRule;
+import org.reaktivity.specification.nukleus.NukleusRule;
 
 public class FetchIT
 {
@@ -34,8 +35,10 @@ public class FetchIT
 
     private final TestRule timeout = new DisableOnDebug(new Timeout(5, SECONDS));
 
+    private final TestRule nukleus = new NukleusRule().directory("target/nukleus-itests");
+
     @Rule
-    public final TestRule chain = outerRule(k3po).around(timeout);
+    public final TestRule chain = outerRule(nukleus).around(k3po).around(timeout);
 
     @Ignore("BEGIN vs RESET read order not yet guaranteed to match write order")
     @Test

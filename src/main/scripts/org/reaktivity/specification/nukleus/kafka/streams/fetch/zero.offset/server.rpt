@@ -21,7 +21,6 @@ property applicationAcceptWindow 8192
 
 accept ${applicationAccept}
        option nukleus:route ${newApplicationRouteRef}
-       option nukleus:window ${applicationAcceptWindow}
        option nukleus:transmission "half-duplex"
 accepted
 

@@ -30,7 +30,6 @@ property maximumBytesTest0 8192
 connect await ROUTED_SERVER
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -110,7 +109,6 @@ read notify METADATA_RECEIVED
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -177,7 +175,6 @@ read ${kafka:varint(0)}
 connect await FETCH_STREAM_ONE_CONNECTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 

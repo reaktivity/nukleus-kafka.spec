@@ -21,7 +21,6 @@ property applicationAcceptWindow 8192
 
 accept ${applicationAccept}
        option nukleus:route ${newApplicationRouteRef}
-       option nukleus:window ${applicationAcceptWindow}
        option nukleus:transmission "half-duplex"
 accepted
 
@@ -44,7 +43,7 @@ write nukleus:begin.ext 7s "header1"
 write nukleus:begin.ext 6 "match1"
 write flush
 
-write nukleus:data.ext 0x01 ${kafka:varint(12)}
-write nukleus:data.ext -1
+write nukleus:transfer.ext 0x01 ${kafka:varint(12)}
+write nukleus:transfer.ext -1
 write "Hello, world"
 write flush

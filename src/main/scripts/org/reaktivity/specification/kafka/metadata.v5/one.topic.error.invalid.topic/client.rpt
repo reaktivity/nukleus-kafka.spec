@@ -24,7 +24,6 @@ property newMetadataRequestId ${kafka:newRequestId()}
 connect await ROUTED_SERVER
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 

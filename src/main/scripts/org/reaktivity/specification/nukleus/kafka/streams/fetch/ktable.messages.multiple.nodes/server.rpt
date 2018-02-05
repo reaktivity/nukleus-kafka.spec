@@ -21,7 +21,6 @@ property applicationAcceptWindow 8192
 
 accept ${applicationAccept}
        option nukleus:route ${newApplicationRouteRef}
-       option nukleus:window ${applicationAcceptWindow}
        option nukleus:transmission "half-duplex"
 accepted
 
@@ -40,16 +39,16 @@ write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(0)}
-write nukleus:data.ext 4 "key1"
+write nukleus:transfer.ext 2 ${kafka:varint(1)} ${kafka:varint(0)}
+write nukleus:transfer.ext 4 "key1"
 write "Hello, world"
 write flush
 
-write nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(1)}
-write nukleus:data.ext 4 "key2"
+write nukleus:transfer.ext 2 ${kafka:varint(1)} ${kafka:varint(1)}
+write nukleus:transfer.ext 4 "key2"
 write flush
 
-write nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(2)}
-write nukleus:data.ext 4 "key1"
+write nukleus:transfer.ext 2 ${kafka:varint(1)} ${kafka:varint(2)}
+write nukleus:transfer.ext 4 "key1"
 write "Hello, third"
 write flush
