@@ -19,7 +19,6 @@ import static java.lang.Long.highestOneBit;
 import static java.lang.Long.numberOfTrailingZeros;
 import static java.lang.System.currentTimeMillis;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.kaazing.k3po.lang.el.Function;
@@ -27,8 +26,6 @@ import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 
 public final class Functions
 {
-    private static final Random RANDOM = new Random();
-
     @Function
     public static short lengthAsShort(String value)
     {
@@ -47,7 +44,7 @@ public final class Functions
         byte[] bytes = new byte[length];
         for (int i = 0; i < length; i++)
         {
-            bytes[i] = (byte) RANDOM.nextInt(0x100);
+            bytes[i] = (byte) ThreadLocalRandom.current().nextInt(0x100);
         }
         return bytes;
     }
