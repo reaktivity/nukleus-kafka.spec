@@ -16,6 +16,7 @@
 package org.reaktivity.specification.kafka.internal;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.kaazing.k3po.lang.internal.el.ExpressionFactoryUtils.newExpressionFactory;
 
@@ -35,7 +36,6 @@ public class FunctionsTest
     @Before
     public void setUp() throws Exception
     {
-
         factory = newExpressionFactory();
         ctx = new ExpressionContext();
     }
@@ -47,6 +47,16 @@ public class FunctionsTest
         ValueExpression expression = factory.createValueExpression(ctx, expressionText, Integer.class);
         Object actual = expression.getValue(ctx);
         assertTrue(actual instanceof Integer);
+    }
+
+    @Test
+    public void shouldInvokeRandomBytes() throws Exception
+    {
+        String expressionText = "${kafka:randomBytes(10)}";
+        ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
+        Object actual = expression.getValue(ctx);
+        assertTrue(actual instanceof byte[]);
+        assertEquals(10, ((byte[]) actual).length);
     }
 
     @Test
