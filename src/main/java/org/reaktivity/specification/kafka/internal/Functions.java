@@ -26,7 +26,6 @@ import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 
 public final class Functions
 {
-
     @Function
     public static short lengthAsShort(String value)
     {
@@ -37,6 +36,17 @@ public final class Functions
     public static int newRequestId()
     {
         return ThreadLocalRandom.current().nextInt();
+    }
+
+    @Function
+    public static byte[] randomBytes(int length)
+    {
+        byte[] bytes = new byte[length];
+        for (int i = 0; i < length; i++)
+        {
+            bytes[i] = (byte) ThreadLocalRandom.current().nextInt(0x100);
+        }
+        return bytes;
     }
 
     @Function
