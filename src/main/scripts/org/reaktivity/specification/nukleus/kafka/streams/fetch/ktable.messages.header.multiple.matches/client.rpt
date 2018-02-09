@@ -45,7 +45,7 @@ read nukleus:begin.ext 6 "match1"
 
 read nukleus:data.ext 0x01 ${kafka:varint(12)}
 read nukleus:data.ext 4 "key1"
-read "Hello, world"
+read nukleus:data.null
 
 read nukleus:data.ext 0x01 ${kafka:varint(13)}
 read nukleus:data.ext 4 "key3"
