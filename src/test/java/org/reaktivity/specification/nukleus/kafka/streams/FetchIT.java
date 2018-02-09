@@ -341,6 +341,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
+        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
+    public void shouldReceiveMessagesAtZeroOffsetMultiplePartitionsPartition1() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/client",
         "${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/server"})
     public void shouldReceiveMessagesAtZeroOffsetMultiplePartitionsMaxBytes256() throws Exception

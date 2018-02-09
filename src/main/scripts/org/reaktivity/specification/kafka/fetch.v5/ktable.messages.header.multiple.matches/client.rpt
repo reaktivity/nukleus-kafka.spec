@@ -123,7 +123,7 @@ write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 237         # Size
+read 225         # Size
 read ${newRequestId}
 read [0..4]
 read 0x01
@@ -135,9 +135,9 @@ read 13L        # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 177        # length of record batch
+read 165        # length of record batch
 read 10L        # first offset
-read 165         # length
+read 153         # length
 read 0
 read [0x02]
 read 0x4e8723aa
@@ -150,14 +150,13 @@ read -1s
 read -1
 read 3          # number of records
 
-read ${kafka:varint(37)}    # record length
+read ${kafka:varint(25)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
 read ${kafka:varint(4)}     # key length
 read "key1"
-read ${kafka:varint(12)}
-read "Hello, world"
+read ${kafka:varint(-1)}    # null value
 read ${kafka:varint(1)}     # number of headers
 read ${kafka:varint(7)}     # header key length
 read "header1"              # header key

@@ -383,6 +383,16 @@ public class FetchIT
         k3po.finish();
     }
 
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
+        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
+    public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitionsPartition1() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 
     @Test
     @Specification({
