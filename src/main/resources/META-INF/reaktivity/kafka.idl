@@ -43,7 +43,7 @@ scope kafka
             list<kafka::stream::KafkaHeader> headers;
         }
 
-        struct KafkaDataEx
+        struct KafkaTransferEx
         {
             varint64[] fetchOffsets;
             int32 messageKeySize;
