@@ -371,29 +371,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.multiple.partitions/client",
-        "${scripts}/zero.offset.messages.multiple.partitions/server"})
-    public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitions() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
-        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
-    public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitionsPartition1() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/zero.offset.messagesets/client",
         "${scripts}/zero.offset.messagesets/server"})
     public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
@@ -430,7 +407,19 @@ public class FetchIT
     @Specification({
         "${scripts}/zero.offset.messages.multiple.partitions/client",
         "${scripts}/zero.offset.messages.multiple.partitions/server"})
-    public void shouldReceiveMessagesAtZeroOffsetMultiplePartitions() throws Exception
+    public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitions() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
+        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
+    public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitionsPartition1() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
