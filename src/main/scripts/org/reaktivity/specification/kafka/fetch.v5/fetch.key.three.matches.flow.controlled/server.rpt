@@ -216,7 +216,7 @@ write 2         # number of records
 
 write ${kafka:varint(23)}   # cecord length
 write [0x00]    # attributes
-write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(10)}    # timestamp delta
 write ${kafka:varint(0)}    # offset delta
 write ${kafka:varint(5)}    # key length
 write "match"
@@ -226,7 +226,7 @@ write [0x00]
 
 write ${kafka:varint(23)}   # Record length
 write [0x00]    # attributes
-write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(20)}    # timestamp delta
 write ${kafka:varint(1)}    # offset delta
 write ${kafka:varint(5)}    # key length
 write "match"
@@ -283,7 +283,7 @@ write 1         # number of records
 
 write ${kafka:varint(23)}   # Record length
 write [0x00]    # attributes
-write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(20)}    # timestamp delta
 write ${kafka:varint(0)}    # offset delta
 write ${kafka:varint(5)}    # key length
 write "match"

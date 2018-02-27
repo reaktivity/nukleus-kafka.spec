@@ -45,6 +45,7 @@ scope kafka
 
         struct KafkaDataEx
         {
+            int64 timestamp;
             varint64[] fetchOffsets;
             int32 messageKeySize;
             octets[messageKeySize] messageKey = null;
