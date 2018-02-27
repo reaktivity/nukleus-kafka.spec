@@ -15,6 +15,7 @@
 #
 
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
+property newTimestamp ${kafka:timestamp()
 
 property applicationAccept "nukleus://kafka/streams/source"
 property applicationAcceptWindow 8192
