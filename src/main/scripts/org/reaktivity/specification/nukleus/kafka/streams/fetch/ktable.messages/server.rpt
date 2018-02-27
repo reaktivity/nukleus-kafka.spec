@@ -15,7 +15,7 @@
 #
 
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
-property newTimestamp ${kafka:timestamp()
+property newTimestamp ${kafka:timestamp()}
 property newTimestamp ${kafka:timestamp()}
 
 property applicationAccept "nukleus://kafka/streams/source"
