@@ -17,12 +17,12 @@
 property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
 property networkAccept "nukleus://kafka/streams/source"
-property networkAcceptReply "nukleus://source/streams/kafka"
 property networkAcceptWindow 8192
 
 accept ${networkAccept}
   option nukleus:route  ${newNetworkRouteRef}
   option nukleus:window ${networkAcceptWindow}
+  option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
   
 accepted
@@ -49,31 +49,6 @@ read 1 # [TopicName] array length
   read 4s "test"
 read [0x00] # allow_auto_topic_creation (boolean)
 
-read notify WRITE_RESPONSE_ONE
-
-read 41         # Size int32
-read 32s        # ApiKey int16 (DescribeConfigs)
-read 0s         # ApiVersion int16
-read (int:describeRequestId) # CorrelationId int32
-read -1s        # ClientId string (null)
-read 1          # [Resources] array length
-read [0x02]     # resource type int8 (topic) 
-read 4s "test"  # topic name
-read 1          # config_names count
-read 14s "cleanup.policy"
-
-read notify WRITE_RESPONSE_TWO
-
-connect await SERVER_ACCEPTED
-        ${networkAcceptReply}
-  option nukleus:route 0L
-  option nukleus:window ${networkAcceptWindow}
-  # option nukleus:correlation    # no way to retrieve last accepted correlationId
-  option nukleus:byteorder "network"
-connected
-
-write await WRITE_RESPONSE_ONE
-
 write 85 # Size int32
 write ${metadataRequestId} # CorrelationId int32
 write 0 # throttle_time_ms int32
@@ -95,10 +70,17 @@ write 1 # topic array length
     write 0 # replicas array (empty)
     write -1 # isr array (null)
     write 0 # offline replicas array (empty)
-    
-write notify RESPONSE_ONE_WRITTEN
 
-write await WRITE_RESPONSE_ONE
+read 41         # Size int32
+read 32s        # ApiKey int16 (DescribeConfigs)
+read 0s         # ApiVersion int16
+read (int:describeRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [Resources] array length
+read [0x02]     # resource type int8 (topic) 
+read 4s "test"  # topic name
+read 1          # config_names count
+read 14s "cleanup.policy"
 
 write 54        # Size int32
 write ${describeRequestId}  # CorrelationId int32

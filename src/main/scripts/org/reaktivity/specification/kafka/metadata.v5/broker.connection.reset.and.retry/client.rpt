@@ -52,6 +52,7 @@ connect await CLIENT_TWO_ABORTED
   option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:correlation ${correlationId}
+  option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
 connected
@@ -64,25 +65,6 @@ write -1s # ClientId string (null)
 write 1 # [TopicName] array length
   write 4s "test"
 write [0x00] # allow_auto_topic_creation (boolean)
-
-write 41        # Size int32
-write 32s       # ApiKey int16 (DescribeConfigs)
-write 0s        # ApiVersion int16
-write ${newMetadataRequestId} # CorrelationId int32
-write -1s       # ClientId string (null)
-write 1         # resources count
-write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
-write 4s "test" # topic name
-write 1         # config names count
-write 14s "cleanup.policy"  # config name
-
-accept ${networkConnectReply}
-  option nukleus:route  0L
-  option nukleus:window ${networkAcceptWindow}
-  option nukleus:byteorder "network"
-  
-accepted
-connected
 
 read 85 # Size (metadata response)
 read ${newMetadataRequestId} # CorrelationId int32
@@ -105,6 +87,17 @@ read 1 # topic array length
     read 0 # replicas array (empty)
     read -1 # isr array (null)
     read 0 # offline replicas array (empty)
+    
+write 41        # Size int32
+write 32s       # ApiKey int16 (DescribeConfigs)
+write 0s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # resources count
+write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
+write 4s "test" # topic name
+write 1         # config names count
+write 14s "cleanup.policy"  # config name
 
 read 54         # Size (describeConfigs response)
 read ${newMetadataRequestId} # CorrelationId int32
