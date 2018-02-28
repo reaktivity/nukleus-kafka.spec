@@ -49,6 +49,17 @@ public class MetadataIT
 
     @Test
     @Specification({
+        "${scripts}/broker.connection.reset.and.retry/client",
+        "${scripts}/broker.connection.reset.and.retry/server"})
+    public void shouldRetryWhenBrokerNotAvailable() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/multiple.topics.and.nodes/client",
         "${scripts}/multiple.topics.and.nodes/server"})
     public void shouldRequestMetadataForMultipleTopicsAndNodes() throws Exception
