@@ -46,12 +46,12 @@ write nukleus:data.ext -1
 write "Hello, world"
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(2)}
+write nukleus:data.ext ${newTimestamp + 11} 1 ${kafka:varint(2)}
 write nukleus:data.ext -1
 write "Hello, again"
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(3)}
+write nukleus:data.ext ${newTimestamp + 22} 1 ${kafka:varint(3)}
 write nukleus:data.ext -1
 write "Hello, third"
 write flush
@@ -78,14 +78,14 @@ write nukleus:data.ext -1
 write "Hello, world"
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(2)}
+write nukleus:data.ext ${newTimestamp + 11} 1 ${kafka:varint(2)}
 write nukleus:data.ext -1
 write "Hello, again"
 write flush
 
 write await SERVER_DELIVER_LIVE_RESPONSE_TWO
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(3)}
+write nukleus:data.ext ${newTimestamp + 22} 1 ${kafka:varint(3)}
 write nukleus:data.ext -1
 write "Hello, third"
 write flush

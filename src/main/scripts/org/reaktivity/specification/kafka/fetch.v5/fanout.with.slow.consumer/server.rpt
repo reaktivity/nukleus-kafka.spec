@@ -17,8 +17,8 @@
 property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
 property newTimestamp1 ${kafka:timestamp()}
-property newTimestamp2 ${kafka:timestamp()}
-property newTimestamp3 ${kafka:timestamp()}
+property newTimestamp2 ${newTimestamp1 + 11}
+property newTimestamp3 ${newTimestamp1 + 22}
 
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
