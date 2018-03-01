@@ -15,6 +15,7 @@
 #
 
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
+property newTimestamp ${kafka:timestamp()}
 
 property applicationAccept "nukleus://kafka/streams/source"
 property applicationAcceptWindow 8192
@@ -40,12 +41,12 @@ write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(0)}
+write nukleus:data.ext ${newTimestamp} 2 ${kafka:varint(1)} ${kafka:varint(0)}
 write nukleus:data.ext -1
 write "Hello, world"
 write flush
 
-write nukleus:data.ext 2 ${kafka:varint(1)} ${kafka:varint(1)}
+write nukleus:data.ext ${newTimestamp} 2 ${kafka:varint(1)} ${kafka:varint(1)}
 write nukleus:data.ext -1
 write "Hello, again"
 write flush

@@ -149,7 +149,7 @@ write [0x00]
 
 write ${kafka:varint(10)}   # Record length
 write [0x00]
-write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(10)}    # timestamp delta
 write ${kafka:varint(1)}    # offset delta
 write ${kafka:varint(4)}    # key length
 write "key2"
@@ -158,7 +158,7 @@ write [0x00]
 
 write ${kafka:varint(22)}   # Record length
 write [0x00]    # attributes
-write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(20)}    # timestamp delta
 write ${kafka:varint(2)}    # offset delta
 write ${kafka:varint(4)}    # key length
 write "key1"
