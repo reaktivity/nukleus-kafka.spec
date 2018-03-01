@@ -161,7 +161,7 @@ read "Hello, world"
 read [0x00]
 read ${kafka:varint(18)}
 read [0x00]
-read ${kafka:varint(100)}   # timestamp delta
+read ${kafka:varint(10)}    # timestamp delta
 read ${kafka:varint(1)}     # offset delta
 read ${kafka:varint(-1)}
 read ${kafka:varint(12)}

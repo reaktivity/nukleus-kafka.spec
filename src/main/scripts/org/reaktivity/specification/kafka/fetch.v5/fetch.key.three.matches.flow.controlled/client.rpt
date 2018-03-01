@@ -163,7 +163,7 @@ read [0x00]
 
 read ${kafka:varint(23)}    # record length
 read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(10)}    # timestamp delta
 read ${kafka:varint(1)}     # offset delta
 read ${kafka:varint(5)}     # key length
 read "match"
@@ -173,7 +173,7 @@ read [0x00]
 
 read ${kafka:varint(23)}    # record length
 read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(20)}    # timestamp delta
 read ${kafka:varint(2)}     # offset delta
 read ${kafka:varint(5)}     # key length
 read "match"
@@ -229,7 +229,7 @@ read 2          # number of records
 
 read ${kafka:varint(23)}    # record length
 read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(10)}    # timestamp delta
 read ${kafka:varint(0)}     # offset delta
 read ${kafka:varint(5)}     # key length
 read "match"
@@ -239,7 +239,7 @@ read [0x00]
 
 read ${kafka:varint(23)}    # Record length
 read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(20)}    # timestamp delta
 read ${kafka:varint(1)}     # offset delta
 read ${kafka:varint(5)}     # key length
 read "match"
@@ -295,7 +295,7 @@ read 1          # number of records
 
 read ${kafka:varint(23)}    # record length
 read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(20)}    # timestamp delta
 read ${kafka:varint(0)}     # offset delta
 read ${kafka:varint(5)}     # key length
 read "match"
