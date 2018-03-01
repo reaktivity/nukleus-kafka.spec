@@ -153,16 +153,16 @@ read -1
 read 0x02
 read ${kafka:varint(18)}
 read [0x00]
-read ${kafka:varint(0)}
-read ${kafka:varint(0)}
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(0)}     # offset delta
 read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, world"
 read [0x00]
 read ${kafka:varint(18)}
 read [0x00]
-read ${kafka:varint(0)}
-read ${kafka:varint(1)}
+read ${kafka:varint(10)}    # timestamp delta
+read ${kafka:varint(1)}     # offset delta
 read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, again"
