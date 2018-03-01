@@ -41,15 +41,15 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
+read nukleus:data.ext (long:timestamp1) 1 ${kafka:varint(1)}
 read nukleus:data.ext -1
 read "Hello, world"
 
-read nukleus:data.ext ${timestamp} 1 ${kafka:varint(2)}
+read nukleus:data.ext ${timestamp1 + 11} 1 ${kafka:varint(2)}
 read nukleus:data.ext -1
 read "Hello, again"
 
-read nukleus:data.ext ${timestamp} 1 ${kafka:varint(3)}
+read nukleus:data.ext ${timestamp1 + 22} 1 ${kafka:varint(3)}
 read nukleus:data.ext -1
 read "Hello, third"
 
@@ -74,17 +74,17 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext ${timestamp} 1 ${kafka:varint(1)}
+read nukleus:data.ext (long:timestamp1) 1 ${kafka:varint(1)}
 read nukleus:data.ext -1
 read "Hello, world"
 
-read nukleus:data.ext ${timestamp} 1 ${kafka:varint(2)}
+read nukleus:data.ext ${timestamp1 + 11} 1 ${kafka:varint(2)}
 read nukleus:data.ext -1
 read "Hello, again"
 
 read notify SERVER_DELIVER_LIVE_RESPONSE_TWO
 
-read nukleus:data.ext ${timestamp} 1 ${kafka:varint(3)}
+read nukleus:data.ext ${timestamp1 + 22} 1 ${kafka:varint(3)}
 read nukleus:data.ext -1
 read "Hello, third"
 
