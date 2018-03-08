@@ -171,6 +171,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.zero.offset.no.matches/client",
+        "${scripts}/fetch.key.zero.offset.no.matches/server"})
+    public void shouldReceiveNoMessagesMatchingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.zero.offset.multiple.matches.historical/client",
         "${scripts}/fetch.key.zero.offset.multiple.matches.historical/server"})
     public void shouldReceiveMultipleHistoricalMessagesMatchingFetchKey() throws Exception
