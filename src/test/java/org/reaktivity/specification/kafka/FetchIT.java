@@ -93,6 +93,19 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.and.no.key.multiple.partitions/client",
+        "${scripts}/fetch.key.and.no.key.multiple.partitions/server"})
+    public void shouldReceiveMessagesWithAndWithoutMessageKeysMultiplePartitions() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("CLIENT_TWO_CONNECTED");
+        k3po.notifyBarrier("MESSAGE_ONE_RECEIVED");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.default.partioner.picks.partition.one/client",
         "${scripts}/fetch.key.default.partioner.picks.partition.one/server"})
     public void shouldReceiveMessageUsingFetchKeyAndDefaultPartitioner() throws Exception

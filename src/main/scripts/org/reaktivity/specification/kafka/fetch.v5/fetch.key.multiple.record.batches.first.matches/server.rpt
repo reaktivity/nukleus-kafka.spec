@@ -126,7 +126,7 @@ write -1        # aborted_transactions (null)
 write 227       # length of record set
 
 # First record batch
-write 8L       # first offset
+write 8L        # first offset
 write 100       # length of record batch
 write 0
 write [0x02]

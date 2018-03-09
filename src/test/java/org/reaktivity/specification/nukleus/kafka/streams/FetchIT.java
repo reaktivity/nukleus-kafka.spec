@@ -139,6 +139,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.and.no.key.messages/client",
+        "${scripts}/fetch.key.and.no.key.messages/server"})
+    public void shouldFanoutToConsumersWithAndWithoutFetchKeys() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
         "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
     public void shouldReceiveMessageUsingFetchKeyAndExplicitHashCode() throws Exception
