@@ -150,6 +150,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.and.no.key.unsubscribe/client",
+        "${scripts}/fetch.key.and.no.key.unsubscribe/server"})
+    public void shouldHandleSubscribeWithAndWithoutKeyAndUnsubscribe() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("PARTITION_ONE_FETCH_REQUEST_RECEIVED");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
         "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
     public void shouldReceiveMessageUsingFetchKeyAndExplicitHashCode() throws Exception
