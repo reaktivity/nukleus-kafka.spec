@@ -106,6 +106,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.and.no.key.multiple.partitions.unsubscribe/client",
+        "${scripts}/fetch.key.and.no.key.multiple.partitions.unsubscribe/server"})
+    public void shouldHandleUnsubscribeWithAndWithoutMessageKeysMultiplePartitions() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("CLIENT_TWO_UNSUBSCRIBED");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.default.partioner.picks.partition.one/client",
         "${scripts}/fetch.key.default.partioner.picks.partition.one/server"})
     public void shouldReceiveMessageUsingFetchKeyAndDefaultPartitioner() throws Exception
