@@ -115,6 +115,39 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.multiple.record.batches.first.matches/client",
+        "${scripts}/fetch.key.multiple.record.batches.first.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyWithMultipleRecordBatches() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.multiple.record.batches.no.matches/client",
+        "${scripts}/fetch.key.multiple.record.batches.no.matches/server"})
+    public void shouldReceiveNoMessagesMatchingFetchKeyWithMultipleRecordBatches() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.no.matches/client",
+        "${scripts}/fetch.key.no.matches/server"})
+    public void shouldReceiveNoMessagesMatchingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.nonzero.offset.first.matches/client",
         "${scripts}/fetch.key.nonzero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyFirstNonZeroOffset() throws Exception
@@ -163,17 +196,6 @@ public class FetchIT
         "${scripts}/fetch.key.zero.offset.multiple.matches/client",
         "${scripts}/fetch.key.zero.offset.multiple.matches/server"})
     public void shouldReceiveMultipleMessagesMatchingFetchKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.no.matches/client",
-        "${scripts}/fetch.key.zero.offset.no.matches/server"})
-    public void shouldReceiveNoMessagesMatchingFetchKey() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
