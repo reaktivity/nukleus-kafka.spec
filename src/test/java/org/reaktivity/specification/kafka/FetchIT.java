@@ -93,6 +93,19 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.and.no.key.multiple.partitions/client",
+        "${scripts}/fetch.key.and.no.key.multiple.partitions/server"})
+    public void shouldReceiveMessagesWithAndWithoutMessageKeysMultiplePartitions() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("CLIENT_TWO_CONNECTED");
+        k3po.notifyBarrier("MESSAGE_ONE_RECEIVED");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.default.partioner.picks.partition.one/client",
         "${scripts}/fetch.key.default.partioner.picks.partition.one/server"})
     public void shouldReceiveMessageUsingFetchKeyAndDefaultPartitioner() throws Exception
@@ -107,6 +120,39 @@ public class FetchIT
         "${scripts}/fetch.key.multiple.matches.flow.controlled/client",
         "${scripts}/fetch.key.multiple.matches.flow.controlled/server"})
     public void shouldReceiveMessagesMatchingFetchKeyFlowControlled() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.multiple.record.batches.first.matches/client",
+        "${scripts}/fetch.key.multiple.record.batches.first.matches/server"})
+    public void shouldReceiveMessageMatchingFetchKeyWithMultipleRecordBatches() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.multiple.record.batches.no.matches/client",
+        "${scripts}/fetch.key.multiple.record.batches.no.matches/server"})
+    public void shouldReceiveNoMessagesMatchingFetchKeyWithMultipleRecordBatches() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.no.matches/client",
+        "${scripts}/fetch.key.no.matches/server"})
+    public void shouldReceiveNoMessagesMatchingFetchKey() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

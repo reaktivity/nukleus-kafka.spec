@@ -139,6 +139,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.and.no.key.messages/client",
+        "${scripts}/fetch.key.and.no.key.messages/server"})
+    public void shouldFanoutToConsumersWithAndWithoutFetchKeys() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
         "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
     public void shouldReceiveMessageUsingFetchKeyAndExplicitHashCode() throws Exception
@@ -208,6 +219,17 @@ public class FetchIT
         "${scripts}/fetch.key.zero.offset.messages.historical/client",
         "${scripts}/fetch.key.zero.offset.messages.historical/server"})
     public void shouldReceiveHistoricalMessagesUsingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.zero.offset.no.messages/client",
+        "${scripts}/fetch.key.zero.offset.no.messages/server"})
+    public void shouldReceiveNoMessagesUsingFetchKey() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
