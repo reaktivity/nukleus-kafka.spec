@@ -328,6 +328,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/record.batch.ends.with.deleted.record/client",
+        "${scripts}/record.batch.ends.with.deleted.record/server"})
+    public void shouldReportLastMessageOffsetFromRecordBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception

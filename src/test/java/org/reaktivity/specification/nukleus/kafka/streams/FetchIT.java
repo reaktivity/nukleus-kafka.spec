@@ -515,6 +515,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/record.batch.ends.with.deleted.record/client",
+        "${scripts}/record.batch.ends.with.deleted.record/server"})
+    public void shouldReceiveMessagesWithOffsetGap() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/topic.name.not.equals.route.ext/client",
         "${scripts}/topic.name.not.equals.route.ext/server"})
     public void shouldRejectTopicNameNutEqualToRoutedTopic() throws Exception

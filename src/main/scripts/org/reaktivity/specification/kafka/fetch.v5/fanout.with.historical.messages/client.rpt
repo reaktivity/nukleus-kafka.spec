@@ -264,7 +264,7 @@ read 0          # partition leader epoque
 read [0x02]     # magic
 read 0x4e8723aa # CRC32
 read 0s         # attributes
-read 0          # Last offset delta
+read 1          # Last offset delta
 read ${timestamp1}          # first timestamp
 read (long:timestamp2)      #  maximum timestamp
 read -1L        # producer ID
