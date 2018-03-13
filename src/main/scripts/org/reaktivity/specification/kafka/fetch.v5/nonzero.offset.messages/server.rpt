@@ -130,7 +130,7 @@ write 0x00
 write [0x02]
 write 0x4e8723aa
 write 0x00s
-write 0
+write 1         # last offset delta
 write ${newTimestamp}
 write ${newTimestamp}
 write -1L
