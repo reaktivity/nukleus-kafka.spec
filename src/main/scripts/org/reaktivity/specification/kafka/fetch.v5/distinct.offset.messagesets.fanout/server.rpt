@@ -283,24 +283,24 @@ write 3L        # high_watermark
 write -1L
 write 0L
 write -1
-write 0x76
-write 0x00L
-write 0x6a
+write 0x76      # length of record set
+write 0x00L     # 1st offset
+write 0x6a      # length of record batch
 write 0x00
-write [0x02]
+write [0x02]    # magic
 write 0x4e8723aa
-write 0x00s
-write 0
+write 0s        # attributes
+write 2         # last offset delta
 write ${newTimestamp}
 write ${newTimestamp}
 write -1L
 write -1s
 write -1
 write 0x03
-write ${kafka:varint(18)}
+write ${kafka:varint(18)}   # Record length
 write [0x00]
 write ${kafka:varint(0)}
-write ${kafka:varint(0)}
+write ${kafka:varint(0)}    # offset delta
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, world"
@@ -308,7 +308,7 @@ write [0x00]
 write ${kafka:varint(18)}
 write [0x00]
 write ${kafka:varint(0)}
-write ${kafka:varint(1)}
+write ${kafka:varint(1)}    # offset delta
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, again"
@@ -316,7 +316,7 @@ write [0x00]
 write ${kafka:varint(18)}
 write [0x00]
 write ${kafka:varint(0)}
-write ${kafka:varint(2)}
+write ${kafka:varint(2)}    # offset delta
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hi, everyone"

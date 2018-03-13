@@ -308,8 +308,8 @@ read 0x6a
 read 0x00
 read [0x02]
 read 0x4e8723aa
-read 0x00s
-read 0
+read 0s         # attributes
+read 2          # last offset delta       
 read (long:newTimestamp5)
 read ${newTimestamp5}
 read -1L

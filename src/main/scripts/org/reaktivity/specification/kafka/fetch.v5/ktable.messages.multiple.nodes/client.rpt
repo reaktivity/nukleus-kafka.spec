@@ -223,7 +223,7 @@ read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 0
+read 1          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
