@@ -243,8 +243,8 @@ write 87        # length
 write 0         # partition leader epoque
 write [0x02]    # magic
 write 0x4e8723aa            # CRC32
-write 0x00s     # attributes
-write 0         # last offset delta
+write 0s        # attributes
+write 1         # last offset delta
 write ${newTimestamp1}      # first timestamp
 write ${newTimestamp2}      # last timestamp
 write -1L       # producer ID
