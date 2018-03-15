@@ -410,6 +410,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.then.live.after.null.message/client",
+        "${scripts}/ktable.historical.uses.cached.key.then.live.after.null.message/server"})
+    public void shouldReceiveKTableMessagesFromLiveStreamAfterCachedKeyRemovedByNullMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/client",
         "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/server"})
     public void shouldReceiveKTableMessagesUsingCachedKeyThenZerotOffset() throws Exception
