@@ -208,6 +208,17 @@ public class FetchIT
     @Specification({
         "${scripts}/fetch.key.no.offsets.message/client",
         "${scripts}/fetch.key.no.offsets.message/server"})
+    public void shouldReceiveMessagesWithoutUsingKeyOffsetsCache() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.key.no.offsets.message/client",
+        "${scripts}/fetch.key.no.offsets.message/server"})
     public void shouldReceiveMessageUsingFetchKeyWithEmptyOffsetsArray() throws Exception
     {
         k3po.start();
@@ -419,6 +430,40 @@ public class FetchIT
         "${scripts}/zero.offset.messagesets.fanout/client",
         "${scripts}/zero.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.then.latest.offset/client",
+        "${scripts}/ktable.historical.uses.cached.key.then.latest.offset/server"})
+    public void shouldReceiveKTableMessagesUsingCachedKeyThenLatestOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.then.live/client",
+        "${scripts}/ktable.historical.uses.cached.key.then.live/server"})
+    public void shouldReceiveKTableMessagesUsingCachedKeyThenLive() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/client",
+        "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/server"})
+    public void shouldReceiveKTableMessagesUsingCachedKeyThenZerotOffset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
