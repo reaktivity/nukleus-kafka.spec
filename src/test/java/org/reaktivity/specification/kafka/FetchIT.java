@@ -374,6 +374,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/client",
+        "${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/server"})
+    public void shouldReceiveKTableMessagesUsingCachedKeyAfterUnsubscribe() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/ktable.historical.uses.cached.key.then.latest.offset/client",
         "${scripts}/ktable.historical.uses.cached.key.then.latest.offset/server"})
     public void shouldReceiveKTableMessagesUsingCachedKeyThenLatestOffset() throws Exception
