@@ -129,6 +129,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.historical.does.not.use.cached.key/client",
+        "${scripts}/fetch.key.historical.does.not.use.cached.key/server"})
+    public void shouldReceiveMessageFromNonCompactedTopicWithoutCachingKeyOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.multiple.matches.flow.controlled/client",
         "${scripts}/fetch.key.multiple.matches.flow.controlled/server"})
     public void shouldReceiveMessagesMatchingFetchKeyFlowControlled() throws Exception
@@ -358,6 +369,53 @@ public class FetchIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/client",
+        "${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/server"})
+    public void shouldReceiveKTableMessagesUsingCachedKeyAfterUnsubscribe() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.then.latest.offset/client",
+        "${scripts}/ktable.historical.uses.cached.key.then.latest.offset/server"})
+    public void shouldReceiveKTableMessagesUsingCachedKeyThenLatestOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_SECOND_LIVE_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.then.live/client",
+        "${scripts}/ktable.historical.uses.cached.key.then.live/server"})
+    public void shouldReceiveKTableMessagesUsingCachedKeyThenLive() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_SECOND_LIVE_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/client",
+        "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/server"})
+    public void shouldReceiveKTableMessagesUsingCachedKeyThenZerotOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
 
