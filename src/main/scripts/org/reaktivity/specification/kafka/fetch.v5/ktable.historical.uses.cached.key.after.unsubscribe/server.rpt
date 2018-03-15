@@ -178,7 +178,7 @@ read [0..4]
 
 read notify SECOND_LIVE_FETCH_REQUEST_RECEIVED
 
-write await DELIVER_SECOND_FETCH_RESPONSE
+write await DELIVER_SECOND_LIVE_FETCH_RESPONSE
 
 write 148       # Size
 write ${requestId}
