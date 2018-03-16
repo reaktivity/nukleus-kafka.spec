@@ -135,7 +135,7 @@ read 4s "test"
 read 1
 read 0          # Partition
 read 0s
-read 03L        # high watermark
+read 4L         # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
@@ -146,7 +146,7 @@ read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 2          # last offset delta
+read 3          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
@@ -198,7 +198,7 @@ write 1
 write 4s "test"
 write 1
 write 0
-write 3L         # offset
+write 4L         # offset
 write -1L
 write ${maximumBytesTest0}
 
@@ -212,12 +212,12 @@ read 4s "test"
 read 1
 read 0          # Partition
 read 0s
-read 4L         # high watermark
+read 5L         # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
 read 85         # length of record set
-read 3L         # first offset
+read 4L         # first offset
 read 73         # length of record batch
 read 0
 read [0x02]
@@ -280,7 +280,7 @@ read 4s "test"
 read 1
 read 0          # Partition
 read 0s
-read 3L         # high watermark
+read 4L         # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
@@ -291,7 +291,7 @@ read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 1          # last offset delta
+read 2          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
