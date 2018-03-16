@@ -119,7 +119,7 @@ write 4s "test"
 write 1
 write 0         # Partition
 write 0s        # partition error code
-write 03L       # high_watermark
+write 4L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
@@ -130,7 +130,7 @@ write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 2         # last offset delta
+write 3         # last offset delta (message at offset 3 was deleted)
 write ${newTimestamp}       # first timestamp
 write ${newTimestamp}       # maximum timestamp
 write -1L
@@ -182,7 +182,7 @@ read 1
 read 4s "test"
 read 1
 read 0          # Partition
-read 3L         # offset
+read 4L         # offset
 read -1L
 read [0..4]
 
@@ -196,12 +196,12 @@ write 4s "test"
 write 1
 write 0         # Partition
 write 0s        # partition error code
-write 4L        # high_watermark
+write 5L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
 write 85        # length of record set
-write 3L        # first offset
+write 4L        # first offset
 write 73        # length
 write 0
 write [0x02]
@@ -257,7 +257,7 @@ write 4s "test"
 write 1
 write 0         # Partition
 write 0s        # partition error code
-write 3L        # high_watermark
+write 4L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
@@ -268,7 +268,7 @@ write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 1         # last offset delta
+write 2         # last offset delta (message at offset 3 was deleted)
 write ${newTimestamp}       # first timestamp
 write ${newTimestamp}       # maximum timestamp
 write -1L
