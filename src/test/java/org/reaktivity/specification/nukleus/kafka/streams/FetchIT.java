@@ -106,6 +106,20 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/distinct.offsets.message.fanout/client",
+        "${scripts}/distinct.offsets.message.fanout/server"})
+    public void shouldHandleParallelSubscribesAtDistinctOffsets() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.awaitBarrier("CLIENT_TWO_CONNECTED");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fanout.with.historical.message/client",
         "${scripts}/fanout.with.historical.message/server"})
     public void shouldFanoutUsingHistoricalConnection() throws Exception
