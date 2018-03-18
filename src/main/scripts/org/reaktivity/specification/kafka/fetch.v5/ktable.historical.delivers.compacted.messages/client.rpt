@@ -164,24 +164,24 @@ read ${kafka:varint(12)}
 read "match1 first"
 read [0x00]
 
-read ${kafka:varint(24)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(1)}     # offset delta
-read ${kafka:varint(6)}     # key length
-read "match2"
-read ${kafka:varint(12)}
-read "match2 first"
-read [0x00]
-
 read ${kafka:varint(25)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(10)}     # offset delta
+read ${kafka:varint(9)}     # offset delta
 read ${kafka:varint(6)}     # key length
 read "match1"
 read ${kafka:varint(13)}
 read "match1 second"
+read [0x00]
+
+read ${kafka:varint(24)}    # record length
+read [0x00]
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(10)}     # offset delta
+read ${kafka:varint(6)}     # key length
+read "match2"
+read ${kafka:varint(12)}
+read "match2 first"
 read [0x00]
 
 read ${kafka:varint(25)}    # record length
@@ -253,11 +253,11 @@ write 1
 write 4s "test"
 write 1
 write 0
-write 10L       # offset
+write 9L        # offset
 write -1L
 write ${maximumBytesTest0}
 
-read 173        # Size
+read 198        # Size
 read ${newRequestId}
 read [0..4]
 read 1
@@ -269,20 +269,20 @@ read 12L        # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 113        # length of record set
-read 10L        # first offset
-read 101        # length of record batch
+read 138        # length of record set
+read 9L         # first offset
+read 126        # length of record batch
 read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 1          # last offset delta
+read 2          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 2          # number of records
+read 3          # number of records
 
 read ${kafka:varint(25)}    # record length
 read [0x00]
@@ -294,10 +294,20 @@ read ${kafka:varint(13)}
 read "match1 second"
 read [0x00]
 
-read ${kafka:varint(25)}    # record length
+read ${kafka:varint(24)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(1)}     # offset delta
+read ${kafka:varint(6)}     # key length
+read "match2"
+read ${kafka:varint(12)}
+read "match2 first"
+read [0x00]
+
+read ${kafka:varint(25)}    # record length
+read [0x00]
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(2)}     # offset delta
 read ${kafka:varint(6)}     # key length
 read "match2"
 read ${kafka:varint(13)}

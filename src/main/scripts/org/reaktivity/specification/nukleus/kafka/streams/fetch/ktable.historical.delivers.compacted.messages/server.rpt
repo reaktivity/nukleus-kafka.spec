@@ -41,19 +41,19 @@ write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(1)}
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(9)}
 write nukleus:data.ext 6 "match1"
 write "match1 first"
 write flush
 
 write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(10)}
-write nukleus:data.ext 6 "match2"
-write "match2 first"
+write nukleus:data.ext 6 "match1"
+write "match1 second"
 write flush
 
 write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(11)}
-write nukleus:data.ext 6 "match1"
-write "match1 second"
+write nukleus:data.ext 6 "match2"
+write "match2 first"
 write flush
 
 write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(12)}
