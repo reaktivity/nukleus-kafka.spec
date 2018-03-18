@@ -166,7 +166,7 @@ read 1
 read 4s "test"
 read 1
 read 0          # Partition
-read 0L         # offset
+read 10L        # offset
 read -1L
 read [0..4]
 
@@ -196,6 +196,7 @@ write -1L
 write -1s
 write -1        # first sequence
 write 3         # number of records
+
 write ${kafka:varint(22)}   # Record length
 write [0x00]    # attributes
 write ${kafka:varint(0)}    # timestamp delta

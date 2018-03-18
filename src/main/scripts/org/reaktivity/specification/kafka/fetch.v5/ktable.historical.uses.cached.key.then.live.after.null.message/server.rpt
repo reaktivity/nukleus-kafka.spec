@@ -204,7 +204,7 @@ read 1
 read 4s "test"
 read 1
 read 0          # Partition
-read 0L         # offset
+read 2L         # offset
 read -1L
 read [0..4]
 
