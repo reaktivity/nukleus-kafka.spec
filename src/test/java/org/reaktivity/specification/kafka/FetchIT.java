@@ -387,6 +387,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.historical.delivers.compacted.messages/client",
+        "${scripts}/ktable.historical.delivers.compacted.messages/server"})
+    public void shouldReceiveKTableCompactedMessages() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/client",
         "${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/server"})
     public void shouldReceiveKTableMessagesUsingCachedKeyAfterUnsubscribe() throws Exception
