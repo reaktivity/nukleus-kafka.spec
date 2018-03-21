@@ -116,7 +116,7 @@ read notify FETCH_REQUEST_RECEIVED
 write await WRITE_FETCH_RESPONSE
 
 # Kafka will exceed max fetch bytes to deliver at least one message
-write 384
+write 386
 write ${requestId}
 write 0
 write 1
@@ -124,28 +124,86 @@ write 4s "test"
 write 1         # number of partition responses
 write 0         # partition
 write 0s
-write 1L
+write 1L        # high watermark
 write -1L
 write 0L
 write -1
-write 336       # length of record batch
-write 0L
-write 324       # length
+write 326       # length of record set
+write 0L        # first offset
+write 314       # length of record batch
 write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 0
+write 0         # last offset delta
 write ${newTimestamp}
 write ${newTimestamp}
 write -1L
 write -1s
 write -1
-write 0x01
-write ${kafka:varint(18)}
+write 1         # number of records
+
+write ${kafka:varint(263)}  # Record length
 write [0x00]
-write ${kafka:varint(0)}
-write ${kafka:varint(0)}
-write ${kafka:varint(-1)}
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(0)}    # offset delta
+write ${kafka:varint(-1)}   # key length
 write ${kafka:varint(256)}  # value length
-write ${kafka:randomBytes(124)} # partial value, rest of response not written due to limited window 
+write ${kafka:randomBytes(256)}
+write [0x00]                # headers (none)
+
+# Live fetch request 2
+read 65
+read 1s         # API key (fetch)
+read 5s         # API version
+read (int:requestId)
+read -1s        # client id
+read -1 
+read [0..4]     # max wait time millis
+read 1
+read 256        # max fetch bytes
+read [0x00]
+read 1
+read 4s "test"
+read 1
+read 0
+read 1L         # fetch offset
+read -1L
+read [0..4]     # max partition bytes
+
+write 254    # -132
+write ${requestId}
+write 0
+write 1
+write 4s "test"
+write 1         # number of partition responses
+write 0         # partition
+write 0s
+write 2L        # high watermark
+write -1L       # last_stable_offset
+write 0L        # log_start_offset
+write -1        # aborted_transactions (null)
+write 194       # length of record set
+write 1L        # first offset
+write 182       # length of record batch
+write 0
+write [0x02]
+write 0x4e8723aa
+write 0s
+write 0         # last offset delta
+write ${newTimestamp+10}
+write ${newTimestamp+10}
+write -1L
+write -1s
+write -1
+write 1         # number of records
+
+write ${kafka:varint(131)}  # Record length
+write [0x00]
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(0)}    # offset delta
+write ${kafka:varint(-1)}   # key length
+write ${kafka:varint(124)}  # value length
+write ${kafka:randomBytes(124)}
+write [0x00]                # headers (none)
+

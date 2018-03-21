@@ -375,9 +375,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message.response.exceeds.requested.256.bytes/client",
-        "${scripts}/zero.offset.message.response.exceeds.requested.256.bytes/server"})
-    public void shouldHandleResponseExceedingMaxFetchBytes() throws Exception
+        "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/client",
+        "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/server"})
+    public void shouldHandleResponsesExceedingMaxFetchBytes() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
