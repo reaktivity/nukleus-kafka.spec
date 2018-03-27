@@ -133,7 +133,7 @@ read 0x04s "test"
 read 0x01
 read 0
 read 0x00s
-read 10L        # high watermark
+read 11L        # high watermark
 read -1L
 read 0L
 read -1

@@ -119,9 +119,9 @@ write 0x04s "test"
 write 0x01
 write 0         # partition
 write 0x00s
-write 10L     # high watermark
+write 11L       # high watermark
 write -1L
-write 0L
+write 0L        # first offset
 write -1
 write 84        # length of record set (15 too short for last record)
 write 0x00L
