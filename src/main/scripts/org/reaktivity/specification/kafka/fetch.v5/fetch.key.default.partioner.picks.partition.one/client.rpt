@@ -37,7 +37,7 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
-write 21        # Size int32
+write 21        # Size
 write 0x03s     # ApiKey int16 (Metadata)
 write 0x05s     # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
@@ -46,7 +46,7 @@ write 1         # [TopicName] array length
   write 4s "test"
 write [0x00]    # allow_auto_topic_creation (boolean)
 
-read 85         # Size int32
+read 107        # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
 read 1          # brokers array length
@@ -60,9 +60,16 @@ read 1          # topic array length
   read 0s       # error code
   read 4s "test"
   read [0x00]   # is_internal boolean
-  read 1        # partition array length
+  read 2        # partition array length
     read 0s     # error code
     read 0      # partition
+    read 1      # leader
+    read 0      # replicas array (empty)
+    read -1     # isr array (null)
+    read 0      # offline replicas array (empty)
+
+    read 0s     # error code
+    read 1      # partition
     read 1      # leader
     read 0      # replicas array (empty)
     read -1     # isr array (null)
@@ -95,31 +102,7 @@ read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 
-write 41        # Size int32
-write 2s        # ApiKey (ListOffsets)
-write 2s        # ApiVersion 
-write ${newMetadataRequestId} # CorrelationId 
-write -1s       # ClientId string (null)
-write -1        # replicaId
-write [0x00]    # isolation level (0=READ_UNCOMMITTED)
-write 1         # topic count 
-write 4s "test" # topic name
-write 1         # partition count
-write 0         # partition
-write -2L       # timestamp (earliest available offset)
-
-read 44         # Size int32
-read ${newMetadataRequestId} # CorrelationId int32
-read 0          # throttle_time_ms int32
-read 1          # topic count
-read 4s "test"  # topic name 
-read 1          # partition count
-read 0          # partition
-read 0s         # error code
-read -1L        # timestamp
-read 15L         # offset
-
-# Fetch stream
+# Live fetch connection
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
@@ -131,7 +114,9 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
-write 0x41
+read notify LIVE_FETCH_CONNECTED
+
+write 65
 write 0x01s
 write 0x05s
 write ${newRequestId}
@@ -143,53 +128,45 @@ write ${maximumBytes}
 write [0x00]
 write 0x01
 write 0x04s "test"
-write 0x01
-write 0x00
-write 15L       # offset
+write 1
+write 1         # partition
+write 10L       # offset
 write -1L
 write ${maximumBytesTest0}
 
-read 172
+read 157 # Size
 read ${newRequestId}
 read [0..4]
 read 0x01
 read 0x04s "test"
 read 1
-read 0          # Partition
-read 0x00s
-read 17L        # high watermark
+read 1          # Partition
+read 0s
+read 11L        # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 112
-read 15L        # first offset
-read 100        # length
+read 97         # length of record batch
+read 10L        # first offset
+read 85         # length
 read 0
 read [0x02]
 read 0x4e8723aa
 read 0x00s
-read 1          # last offset delta
+read 0          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 2          # number of records
-read ${kafka:varint(23)}    # record length
+read 1          # number of records
+read ${kafka:varint(35)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(5)}     # key length
-read "match"
+read ${kafka:varint(17)}    # key length
+read "hazOddDefaultHash"
 read ${kafka:varint(12)}
 read "Hello, world"
 read [0x00]
-read ${kafka:varint(26)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(1)}     # offset delta
-read ${kafka:varint(8)}     # key length
-read "no match"
-read ${kafka:varint(12)}
-read "Hello, again"
-read [0x00]
+

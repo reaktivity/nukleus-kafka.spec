@@ -120,17 +120,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/earliest.offset.message/client",
-        "${scripts}/earliest.offset.message/server"})
-    public void shouldReceiveMessageAtEarliestAvailableOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/fanout.with.historical.message/client",
         "${scripts}/fanout.with.historical.message/server"})
     public void shouldFanoutUsingHistoricalConnection() throws Exception
@@ -198,20 +187,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/fetch.key.default.partitioner.picks.partition.one/client",
-        "${scripts}/fetch.key.default.partitioner.picks.partition.one/server"})
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/client",
+        "${scripts}/fetch.key.default.partioner.picks.partition.one/server"})
     public void shouldReceiveMessageUsingFetchKeyWithDefaultHashCode() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.nonzero.offset.LT.earliest.message/client",
-        "${scripts}/fetch.key.nonzero.offset.LT.earliest.message/server"})
-    public void shouldReceiveMessageUsingFetchKeyAndNonZeroOffsetLTEarliestAvailableOffset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
