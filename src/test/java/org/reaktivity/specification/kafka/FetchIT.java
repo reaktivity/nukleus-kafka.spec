@@ -62,19 +62,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/earliest.offset.message/client",
-        "${scripts}/earliest.offset.message/server"})
-    public void shouldReceiveMessageAtEarliestAvailableOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
-        k3po.finish();
-    }
-
-
-    @Test
-    @Specification({
         "${scripts}/fanout.with.historical.message/client",
         "${scripts}/fanout.with.historical.message/server"})
     public void shouldFanoutUsingHistoricalConnection() throws Exception
