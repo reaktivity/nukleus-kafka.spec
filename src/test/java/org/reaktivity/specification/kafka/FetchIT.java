@@ -363,6 +363,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/record.batch.ends.with.truncated.record/client",
+        "${scripts}/record.batch.ends.with.truncated.record/server"})
+    public void shouldReceiveMessageWithTruncatedRecord() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
