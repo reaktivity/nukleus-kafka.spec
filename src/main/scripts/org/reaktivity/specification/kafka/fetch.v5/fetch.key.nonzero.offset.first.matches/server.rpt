@@ -110,7 +110,7 @@ write 1         # partition count
 write 0         # partition
 write 0s        # error code
 write -1L       # timestamp (from a real example)
-write 5L        # offset
+write 0L        # offset
 
 # Fetch connection
 accepted

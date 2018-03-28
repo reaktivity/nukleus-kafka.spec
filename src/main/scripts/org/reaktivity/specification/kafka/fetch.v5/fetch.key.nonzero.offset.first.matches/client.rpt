@@ -117,7 +117,7 @@ read 1          # partition count
 read 0          # partition
 read 0s         # error code
 read -1L        # timestamp
-read 5L         # offset
+read 0L         # offset
 
 # Fetch stream
 connect await METADATA_RECEIVED
