@@ -135,8 +135,6 @@ read 0s         # error code
 read -1L        # timestamp
 read 0L         # offset
 
-read notify METADATA_RECEIVED
-
 # Fetch stream 1
 connect await METADATA_RECEIVED
         ${networkConnect}
