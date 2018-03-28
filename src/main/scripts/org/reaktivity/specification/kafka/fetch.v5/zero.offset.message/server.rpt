@@ -54,7 +54,7 @@ write 1         # topic array length
   write 0s      # error code
   write 4s "test"
   write byte 0x00           # is_internal
-  write 1       # partition array length
+  write 1       # partition count
     write 0s    # error code
     write 0     # partition
     write 1     # leader
@@ -65,7 +65,7 @@ write 1         # topic array length
 read 41         # Size int32
 read 32s        # ApiKey int16 (DescribeConfigs)
 read 0s         # ApiVersion int16
-read (int:metadataRequestId) # CorrelationId int32
+read (int:describeConfigsRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
 read [0x02]     # resource type int8 (topic) 
@@ -74,7 +74,7 @@ read 1          # config_names count
 read 14s "cleanup.policy"
 
 write 54        # Size int32
-write ${metadataRequestId}  # CorrelationId int32
+write ${describeConfigsRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
 write 0s        # error code
@@ -87,6 +87,30 @@ write 6s "delete"           # config  value
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
+
+read 41         # Size int32
+read 2s         # ApiKey (ListOffsets)
+read 2s         # ApiVersion 
+read (int:listOffsetsRequestId) # CorrelationId 
+read -1s        # ClientId string (null)
+read -1         # replicaId
+read [0x00]     # isolation level (0=READ_UNCOMMITTED)
+read 1          # topic count 
+read 4s "test"  # topic name
+read 1          # partition count
+read 0          # partition
+read -2L        # timestamp (earliest available offset)
+
+write 44        # Size int32
+write ${listOffsetsRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # topic count
+write 4s "test" # topic name 
+write 1         # partition count
+write 0         # partition
+write 0s        # error code
+write -1L       # timestamp (from a real example)
+write 0L        # offset
 
 # Fetch stream
 accepted
