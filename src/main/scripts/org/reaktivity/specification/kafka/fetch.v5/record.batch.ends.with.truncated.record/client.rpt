@@ -37,7 +37,7 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
-write 21        # Size
+write 21        # Size int32
 write 0x03s     # ApiKey int16 (Metadata)
 write 0x05s     # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
@@ -46,7 +46,7 @@ write 1         # [TopicName] array length
   write 4s "test"
 write [0x00]    # allow_auto_topic_creation (boolean)
 
-read 107        # Size int32
+read 85         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
 read 1          # brokers array length
@@ -60,16 +60,9 @@ read 1          # topic array length
   read 0s       # error code
   read 4s "test"
   read [0x00]   # is_internal boolean
-  read 2        # partition array length
+  read 1        # partition array length
     read 0s     # error code
     read 0      # partition
-    read 1      # leader
-    read 0      # replicas array (empty)
-    read -1     # isr array (null)
-    read 0      # offline replicas array (empty)
-
-    read 0s     # error code
-    read 1      # partition
     read 1      # leader
     read 0      # replicas array (empty)
     read -1     # isr array (null)
@@ -102,7 +95,7 @@ read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 
-# Live fetch connection
+# Fetch stream
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
@@ -114,9 +107,7 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
-read notify LIVE_FETCH_CONNECTED
-
-write 65
+write 0x41
 write 0x01s
 write 0x05s
 write ${newRequestId}
@@ -128,45 +119,48 @@ write ${maximumBytes}
 write [0x00]
 write 0x01
 write 0x04s "test"
-write 1
-write 1         # partition
-write 10L       # offset
+write 0x01
+write 0x00
+write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 157 # Size
+read 144
 read ${newRequestId}
 read [0..4]
 read 0x01
 read 0x04s "test"
-read 1
-read 1          # Partition
-read 0s
+read 0x01
+read 0
+read 0x00s
 read 11L        # high watermark
 read -1L
-read 0L         # log start offset
-read -1         # aborted transactions (null)
-read 97         # length of record batch
-read 10L        # first offset
-read 85         # length
-read 0
+read 0L
+read -1
+read 84        # length of record set (15 too short for last record)
+read 0x00L
+read 72        # length of record batch
+read 0x00
 read [0x02]
 read 0x4e8723aa
 read 0x00s
-read 0          # last offset delta
+read 10         # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 1          # number of records
-read ${kafka:varint(35)}    # record length
+read 0x02
+read ${kafka:varint(18)}
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(17)}    # key length
-read "hazOddDefaultHash"
+read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, world"
 read [0x00]
-
+read ${kafka:varint(18)}
+read [0x00]
+read ${kafka:varint(10)}    # timestamp delta
+read ${kafka:varint(10)}     # offset delta
+# record truncated (15 remaining bytes missing)
