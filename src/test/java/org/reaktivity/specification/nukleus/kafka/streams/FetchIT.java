@@ -209,6 +209,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.nonzero.offset.LT.earliest.message/client",
+        "${scripts}/fetch.key.nonzero.offset.LT.earliest.message/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndNonZeroOffsetLTEarliestAvailableOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.nonzero.offset.message/client",
         "${scripts}/fetch.key.nonzero.offset.message/server"})
     public void shouldReceiveMessageUsingFetchKeyAndNonZeroOffset() throws Exception

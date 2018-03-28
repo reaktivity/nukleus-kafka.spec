@@ -117,7 +117,7 @@ read 1          # partition count
 read 0          # partition
 read 0s         # error code
 read -1L        # timestamp
-read 5L         # offset
+read 15L         # offset
 
 # Fetch stream
 connect await METADATA_RECEIVED
@@ -145,7 +145,7 @@ write 0x01
 write 0x04s "test"
 write 0x01
 write 0x00
-write 10L       # offset
+write 15L       # offset
 write -1L
 write ${maximumBytesTest0}
 
@@ -157,12 +157,12 @@ read 0x04s "test"
 read 1
 read 0          # Partition
 read 0x00s
-read 12L        # high watermark
+read 17L        # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
 read 112
-read 10L        # first offset
+read 15L        # first offset
 read 100        # length
 read 0
 read [0x02]

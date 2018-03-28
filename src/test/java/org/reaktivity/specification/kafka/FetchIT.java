@@ -221,6 +221,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/fetch.key.nonzero.offset.LT.earliest.first.matches/client",
+        "${scripts}/fetch.key.nonzero.offset.LT.earliest.first.matches/server"})
+    public void shouldReceiveMessageUsingFetchKeyAndNonZeroOffsetLTEarliestAvailableOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/fetch.key.three.matches.flow.controlled/client",
         "${scripts}/fetch.key.three.matches.flow.controlled/server"})
     public void shouldReceiveMessagesThreeMatchingFetchKeyFlowControlled() throws Exception
