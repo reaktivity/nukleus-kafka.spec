@@ -117,7 +117,31 @@ read 1          # partition count
 read 0          # partition
 read 0s         # error code
 read -1L        # timestamp
-read 13L         # offset
+read 0L         # offset
+
+write 41        # Size int32
+write 2s        # ApiKey (ListOffsets)
+write 2s        # ApiVersion 
+write ${newMetadataRequestId} # CorrelationId 
+write -1s       # ClientId string (null)
+write -1        # replicaId
+write [0x00]    # isolation level (0=READ_UNCOMMITTED)
+write 1         # topic count 
+write 4s "test" # topic name
+write 1         # partition count
+write 0         # partition
+write -2L       # timestamp (earliest available offset)
+
+read 44         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read 0          # throttle_time_ms int32
+read 1          # topic count
+read 4s "test"  # topic name 
+read 1          # partition count
+read 0          # partition
+read 0s         # error code
+read -1L        # timestamp
+read 123L         # offset
 
 # Fetch stream
 connect await METADATA_RECEIVED
@@ -145,7 +169,7 @@ write 0x01
 write 0x04s "test"
 write 0x01
 write 0x00
-write 13L
+write 123L
 write -1L
 write ${maximumBytesTest0}
 
@@ -157,12 +181,12 @@ read 0x04s "test"
 read 0x01
 read 0
 read 0x00s
-read 14L       # high watermark
+read 124L       # high watermark
 read -1L
 read 0L
 read -1
 read 0x50
-read 13L       # first offset
+read 0x00L
 read 0x44
 read 0x00
 read [0x02]
