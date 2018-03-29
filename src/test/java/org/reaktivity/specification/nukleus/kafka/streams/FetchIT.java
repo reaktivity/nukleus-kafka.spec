@@ -187,8 +187,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/fetch.key.default.partioner.picks.partition.one/client",
-        "${scripts}/fetch.key.default.partioner.picks.partition.one/server"})
+        "${scripts}/fetch.key.default.partitioner.picks.partition.one/client",
+        "${scripts}/fetch.key.default.partitioner.picks.partition.one/server"})
     public void shouldReceiveMessageUsingFetchKeyWithDefaultHashCode() throws Exception
     {
         k3po.start();

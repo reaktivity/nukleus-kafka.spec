@@ -100,7 +100,7 @@ read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 read notify DESCRIBE_CONFIGS_RECEIVED
 
-# List offsets stream
+# List offsets stream 1
 connect await DESCRIBE_CONFIGS_RECEIVED
         ${networkConnect}
         option nukleus:route ${newNetworkRouteRef}
@@ -109,6 +109,20 @@ connect await DESCRIBE_CONFIGS_RECEIVED
         option nukleus:byteorder "network"
 
 write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+
+connected
+
+read notify LIST_OFFSETS_STREAM_ONE_CONNECTED
+
+# List offsets stream 2
+connect await LIST_OFFSETS_STREAM_ONE_CONNECTED
+        ${networkConnect}
+        option nukleus:route ${newNetworkRouteRef}
+        option nukleus:window ${networkConnectWindow} 
+        option nukleus:transmission "duplex"
+        option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
 
 connected
 

@@ -99,7 +99,6 @@ write [0x00]    # is_sensitive boolean
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
-connected
 
 read 53         # Size int32
 read 2s         # ApiKey (ListOffsets)
