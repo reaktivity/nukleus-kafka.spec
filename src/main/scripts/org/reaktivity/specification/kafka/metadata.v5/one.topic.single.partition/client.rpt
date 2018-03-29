@@ -86,4 +86,42 @@ read 6s "delete"            # config value
 read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
+read notify DESCRIBE_CONFIGS_RECEIVED
+
+# List offsets stream
+connect await DESCRIBE_CONFIGS_RECEIVED
+        ${networkConnect}
+        option nukleus:route ${newNetworkRouteRef}
+        option nukleus:window ${networkConnectWindow} 
+        option nukleus:transmission "duplex"
+        option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+
+connected
+
+write 41        # Size int32
+write 2s        # ApiKey (ListOffsets)
+write 2s        # ApiVersion 
+write ${newMetadataRequestId} # CorrelationId 
+write -1s       # ClientId string (null)
+write -1        # replicaId
+write [0x00]    # isolation level (0=READ_UNCOMMITTED)
+write 1         # topic count 
+write 4s "test" # topic name
+write 1         # partition count
+write 0         # partition
+write -2L       # timestamp (earliest available offset)
+
+read 44         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read 0          # throttle_time_ms int32
+read 1          # topic count
+read 4s "test"  # topic name 
+read 1          # partition count
+read 0          # partition
+read 0s         # error code
+read -1L        # timestamp
+read 0L         # offset
+read notify METADATA_RECEIVED
 
