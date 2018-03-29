@@ -97,7 +97,7 @@ write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 
-# List offsets  stream node 1
+# List offsets stream node 1
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
@@ -126,7 +126,7 @@ write 0s        # error code
 write -1L       # timestamp (from a real example)
 write 0L        # offset
 
-# List offsets  stream node 2
+# List offsets stream node 2
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
 connected
