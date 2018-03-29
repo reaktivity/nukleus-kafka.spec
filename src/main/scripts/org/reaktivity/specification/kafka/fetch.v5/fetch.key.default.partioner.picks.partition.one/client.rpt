@@ -129,7 +129,7 @@ write [0x00]
 write 0x01
 write 0x04s "test"
 write 1
-write 0         # partition
+write 1         # partition
 write 10L       # offset
 write -1L
 write ${maximumBytesTest0}
@@ -140,7 +140,7 @@ read [0..4]
 read 0x01
 read 0x04s "test"
 read 1
-read 0          # Partition
+read 1          # Partition
 read 0s
 read 11L        # high watermark
 read -1L
