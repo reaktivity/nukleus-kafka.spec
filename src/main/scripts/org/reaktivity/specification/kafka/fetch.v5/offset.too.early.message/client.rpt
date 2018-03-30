@@ -134,10 +134,36 @@ read 4s "test"
 read 1          # partition count
 read 0          # partition
 read 1s         # errCode 1 (offset too early)
-read 999L        # high watermark
+read 999L       # high watermark
 read -1L        # last stable offset
 read 13L        # log start offset
 read -1         # aborted transaction count
+read 0          # record set size
+
+# list offsets request
+write 41        # Size int32
+write 2s        # ApiKey (ListOffsets)
+write 2s        # ApiVersion 
+write ${newMetadataRequestId} # CorrelationId 
+write -1s       # ClientId string (null)
+write -1        # replicaId
+write [0x00]    # isolation level (0=READ_UNCOMMITTED)
+write 1         # topic count 
+write 4s "test" # topic name
+write 1         # partition count
+write 0         # partition
+write -2L       # timestamp (earliest available offset)
+
+read 44         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read 0          # throttle_time_ms int32
+read 1          # topic count
+read 4s "test"  # topic name 
+read 1          # partition count
+read 0          # partition
+read 0s         # error code
+read -1L        # timestamp
+read 15L         # offset
 
 # second fetch request
 write 0x41

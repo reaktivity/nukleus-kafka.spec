@@ -108,7 +108,7 @@ read 1
 read 4s "test"
 read 1
 read 0          # partition
-read 10L         # offset
+read 10L        # offset
 read -1L
 read [0..4]
 
@@ -124,8 +124,34 @@ write 999L      # high watermark
 write -1L       # last stable offset
 write 15L       # log start offset
 write -1        # aborted transaction count
+write 0         # length of record batch
 
-# second fetch is done using reported log start offset
+# list offsets request
+read 41         # Size int32
+read 2s         # ApiKey (ListOffsets)
+read 2s         # ApiVersion 
+read (int:listOffsetsRequestId) # CorrelationId 
+read -1s        # ClientId string (null)
+read -1         # replicaId
+read [0x00]     # isolation level (0=READ_UNCOMMITTED)
+read 1          # topic count 
+read 4s "test"  # topic name
+read 1          # partition count
+read 0          # partition
+read -2L        # timestamp (earliest available offset)
+
+write 44        # Size int32
+write ${listOffsetsRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # topic count
+write 4s "test" # topic name 
+write 1         # partition count
+write 0         # partition
+write 0s        # error code
+write -1L       # timestamp (from a real example)
+write 15L        # offset
+
+# second fetch is done using reported offset
 read 65         # Size
 read 1s      # Fetch
 read 5s
