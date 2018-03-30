@@ -163,7 +163,7 @@ read 1          # partition count
 read 0          # partition
 read 0s         # error code
 read -1L        # timestamp
-read 15L         # offset
+read 13L         # offset
 
 # second fetch request
 write 0x41

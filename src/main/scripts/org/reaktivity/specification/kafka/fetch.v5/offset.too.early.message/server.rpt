@@ -149,7 +149,7 @@ write 1         # partition count
 write 0         # partition
 write 0s        # error code
 write -1L       # timestamp (from a real example)
-write 15L       # offset
+write 13L       # offset
 
 # second fetch is done using reported log start offset
 read 0x41
