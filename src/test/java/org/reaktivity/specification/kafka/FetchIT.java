@@ -466,6 +466,17 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
+    @Test
+    @Specification(
+    {"${scripts}/ktable.historical.uses.cached.key.then.live.after.offset.too.early.and.null.message/client",
+            "${scripts}/ktable.historical.uses.cached.key.then.live.after.offset.too.early.and.null.message/server"})
+    public void shouldReceiveKTableMessagesFromLiveStreamAfterOffsetTooEarlyAndCachedKeyRemovedByNullMessage()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 
     @Test
     @Specification({

@@ -54,7 +54,7 @@ write 1         # topic array length
   write 0s      # error code
   write 4s "test"
   write byte 0x00           # is_internal
-  write 1       # partition count
+  write 1       # partition array length
     write 0s    # error code
     write 0     # partition
     write 1     # leader
@@ -65,7 +65,7 @@ write 1         # topic array length
 read 41         # Size int32
 read 32s        # ApiKey int16 (DescribeConfigs)
 read 0s         # ApiVersion int16
-read (int:describeConfigsRequestId) # CorrelationId int32
+read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
 read [0x02]     # resource type int8 (topic) 
@@ -73,8 +73,8 @@ read 4s "test"  # topic name
 read 1          # config_names count
 read 14s "cleanup.policy"
 
-write 54        # Size int32
-write ${describeConfigsRequestId}  # CorrelationId int32
+write 55        # Size int32
+write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
 write 0s        # error code
@@ -83,12 +83,12 @@ write [0x02]    # resource type
 write 4s "test" # topic name
 write 1         # config entries count
 write 14s "cleanup.policy"  # config name
-write 6s "delete"           # config  value
+write 7s "compact"          # config  value
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 
-# Fetch stream
+# Live fetch connection
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
@@ -149,11 +149,11 @@ write 1         # partition count
 write 0         # partition
 write 0s        # error code
 write -1L       # timestamp (from a real example)
-write 13L       # offset
+write 10L       # offset
 
 # second fetch is done using reported log start offset
-read 0x41
-read 1s
+read 65         # Size
+read 1s         # Fetch
 read 5s
 read (int:requestId)
 read -1s
@@ -163,48 +163,107 @@ read 1
 read [0..4]
 read [0x00]
 read 1
-read 0x04s "test"
+read 4s "test"
 read 1
-read 0          # partition
-read 13L       # offset
+read 0          # Partition
+read 10L        # offset
 read -1L
 read [0..4]
 
-read notify FETCH_REQUEST_RECEIVED
-
-write await WRITE_FETCH_RESPONSE
-
-write 0x8c
+write 184       # Size
 write ${requestId}
 write 0
-write 0x01
-write 0x04s "test"
-write 0x01
+write 1
+write 4s "test"
+write 1
+write 0         # Partition
+write 0s        # partition error code
+write 999L      # high_watermark
+write -1L       # last_stable_offset
+write 10L       # log_start_offset
+write -1        # aborted_transactions (null)
+write 124       # length of record batch
+write 10L       # first offset
+write 112       # length
 write 0
-write 0x00s
-write 999L      # high watermark
-write -1L
-write 0L
-write -1
-write 0x50
-write 13L       # first offset
-write 0x44
-write 0x00
 write [0x02]
 write 0x4e8723aa
-write 0x00s
-write 0
-write ${newTimestamp}
-write ${newTimestamp}
+write 0s
+write 2         # last offset delta
+write ${newTimestamp}       # first timestamp
+write ${newTimestamp}       # maximum timestamp
 write -1L
 write -1s
-write -1
-write 0x01
-write ${kafka:varint(18)}
-write [0x00]
-write ${kafka:varint(0)}
-write ${kafka:varint(0)}
-write ${kafka:varint(-1)}
-write ${kafka:varint(12)}
+write -1        # first sequence
+write 3         # number of records
+
+write ${kafka:varint(23)}   # Record length
+write [0x00]    # attributes
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(0)}    # offset delta
+write ${kafka:varint(5)}    # key length 
+write "match"
+write ${kafka:varint(12)}   # value length
+write "Hello second"
+write [0x00]                # headers
+
+write ${kafka:varint(11)}   # Record length
+write [0x00]    # attributes
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(1)}    # offset delta
+write ${kafka:varint(5)}    # key length
+write "match"
+write ${kafka:varint(-1)}   # value length
+write [0x00]                # headers
+
+write ${kafka:varint(26)}   # Record length
+write [0x00]    # attributes
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(2)}    # offset delta
+write ${kafka:varint(8)}    # key length
+write "no match"
+write ${kafka:varint(12)}   # value length
 write "Hello, world"
-write ${kafka:varint(0)}
+write [0x00]                # headers
+
+read 65         # Size
+read 1s         # Fetch
+read 5s
+read (int:requestId)
+read -1s
+read -1
+read [0..4]
+read 1
+read [0..4]
+read [0x00]
+read 1
+read 4s "test"
+read 1
+read 0          # Partition
+read 13L        # offset
+read -1L
+read [0..4]
+
+# Historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+connected
+
+read 65         # Size
+read 1s         # Fetch
+read 5s
+read (int:requestId)
+read -1s
+read -1
+read [0..4]
+read 1
+read [0..4]
+read [0x00]
+read 1
+read 4s "test"
+read 1
+read 0          # Partition
+read 12L        # offset
+read -1L
+read [0..4]
+
