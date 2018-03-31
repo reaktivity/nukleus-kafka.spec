@@ -92,35 +92,6 @@ write [0x00]    # read_only boolean
 write [0x00]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 
-# List offsets  stream
-accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
-connected
-
-read 41         # Size int32
-read 2s         # ApiKey (ListOffsets)
-read 2s         # ApiVersion 
-read (int:listOffsetsRequestId) # CorrelationId 
-read -1s        # ClientId string (null)
-read -1         # replicaId
-read [0x00]     # isolation level (0=READ_UNCOMMITTED)
-read 1          # topic count 
-read 4s "test"  # topic name
-read 1          # partition count
-read 0          # partition
-read -2L        # timestamp (earliest available offset)
-
-write 44        # Size int32
-write ${listOffsetsRequestId}  # CorrelationId int32
-write 0         # throttle_time_ms int32
-write 1         # topic count
-write 4s "test" # topic name 
-write 1         # partition count
-write 0         # partition
-write 0s        # error code
-write -1L       # timestamp (from a real example)
-write 0L        # offset
-
 # Fetch stream
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}

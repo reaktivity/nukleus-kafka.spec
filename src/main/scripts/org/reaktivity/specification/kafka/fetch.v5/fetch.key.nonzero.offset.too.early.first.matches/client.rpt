@@ -93,20 +93,53 @@ read 6s "delete"            # config value
 read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
-read notify DESCRIBE_CONFIGS_RECEIVED
+read notify METADATA_RECEIVED
 
-# List offsets stream
-connect await DESCRIBE_CONFIGS_RECEIVED
+# Fetch stream
+connect await METADATA_RECEIVED
         ${networkConnect}
-        option nukleus:route ${newNetworkRouteRef}
-        option nukleus:window ${networkConnectWindow} 
-        option nukleus:transmission "duplex"
-        option nukleus:byteorder "network"
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
 
 write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
+# first fetch request
+write 65
+write 1s
+write 5s
+write ${newRequestId}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1
+write 4s "test"
+write 1
+write 0
+write 10L
+write -1L
+write ${maximumBytesTest0}
+
+read 60
+read ${newRequestId}
+read [0..4]
+read 1
+read 4s "test"
+read 1          # partition count
+read 0          # partition
+read 1s         # errCode 1 (offset too early)
+read 999L       # high watermark
+read -1L        # last stable offset
+read 15L        # log start offset
+read -1         # aborted transaction count
+
+# list offsets request
 write 41        # Size int32
 write 2s        # ApiKey (ListOffsets)
 write 2s        # ApiVersion 
@@ -130,23 +163,11 @@ read 0          # partition
 read 0s         # error code
 read -1L        # timestamp
 read 15L         # offset
-read notify METADATA_RECEIVED
 
-# Fetch stream
-connect await METADATA_RECEIVED
-        ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
-  option nukleus:transmission "duplex"
-  option nukleus:byteorder "network"
-
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
-
-connected
-
-write 0x41
-write 0x01s
-write 0x05s
+# second fetch request
+write 65
+write 1s
+write 5s
 write ${newRequestId}
 write -1s
 write -1
@@ -154,10 +175,10 @@ write ${maximumWaitTime}
 write 0x01
 write ${maximumBytes}
 write [0x00]
-write 0x01
-write 0x04s "test"
-write 0x01
-write 0x00
+write 1
+write 4s "test"
+write 1
+write 0
 write 15L       # offset
 write -1L
 write ${maximumBytesTest0}
@@ -165,13 +186,13 @@ write ${maximumBytesTest0}
 read 172
 read ${newRequestId}
 read [0..4]
-read 0x01
-read 0x04s "test"
+read 1
+read 4s "test"
 read 1
 read 0          # Partition
-read 0x00s
-read 17L        # high watermark
-read -1L
+read 0s         # error code
+read 999L       # high watermark
+read -1L        # last stable offset
 read 0L         # log start offset
 read -1         # aborted transactions (null)
 read 112
@@ -180,7 +201,7 @@ read 100        # length
 read 0
 read [0x02]
 read 0x4e8723aa
-read 0x00s
+read 0s
 read 1          # last offset delta
 read (long:timestamp)
 read ${timestamp}
