@@ -533,6 +533,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.historical.uses.cached.key.then.live.after.offset.too.early.and.null.message/client",
+        "${scripts}/ktable.historical.uses.cached.key.then.live.after.offset.too.early.and.null.message/server"})
+    public void shouldReceiveKTableMessagesFromLiveStreamAfterOffsetTooEarlyAndCachedKeyRemovedByNullMessage()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/client",
         "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/server"})
     public void shouldReceiveKTableMessagesUsingCachedKeyThenZerotOffset() throws Exception
@@ -636,6 +648,28 @@ public class FetchIT
         "${scripts}/nonzero.offset.messages/client",
         "${scripts}/nonzero.offset.messages/server"})
     public void shouldReceiveMessagesAtNonZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/offset.too.early.message/client",
+        "${scripts}/offset.too.early.message/server"})
+    public void shouldRefetchUsingReportedFirstOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/offset.too.early.multiple.topics/client",
+        "${scripts}/offset.too.early.multiple.topics/server"})
+    public void shouldRefetchUsingReportedFirstOffsetOnMultipleTopics() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
