@@ -656,6 +656,28 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/offset.too.early.message/client",
+        "${scripts}/offset.too.early.message/server"})
+    public void shouldRefetchUsingReportedFirstOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/offset.too.early.multiple.topics/client",
+        "${scripts}/offset.too.early.multiple.topics/server"})
+    public void shouldRefetchUsingReportedFirstOffsetOnMultipleTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/record.batch.ends.with.deleted.record/client",
         "${scripts}/record.batch.ends.with.deleted.record/server"})
     public void shouldReceiveMessagesWithOffsetGap() throws Exception

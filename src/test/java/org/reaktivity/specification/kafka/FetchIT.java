@@ -694,6 +694,32 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/offset.too.early.message/client",
+        "${scripts}/offset.too.early.message/server"})
+    public void shouldRefetchUsingReportedFirstOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/offset.too.early.multiple.topics/client",
+        "${scripts}/offset.too.early.multiple.topics/server"})
+    public void shouldRefetchUsingReportedFirstOffsetOnMultipleTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_METADATA_RESPONSE");
+        k3po.notifyBarrier("WRITE_SECOND_DESCRIBE_CONFIGS_RESPONSE");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/distinct.offset.messagesets.fanout/client",
         "${scripts}/distinct.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtDistinctOffsets() throws Exception
