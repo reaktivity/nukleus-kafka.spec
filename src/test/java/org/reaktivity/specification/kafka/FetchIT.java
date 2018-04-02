@@ -341,6 +341,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/no.progress.made.on.live.fetch/client",
+        "${scripts}/no.progress.made.on.live.fetch/server"})
+    public void shouldDetectStallOnFetchConnection() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/live.fetch.reset.reconnect.and.message/client",
         "${scripts}/live.fetch.reset.reconnect.and.message/server"})
     public void shouldReconnectAndReceiveMessageWhenLiveFetchReceivesReset() throws Exception
