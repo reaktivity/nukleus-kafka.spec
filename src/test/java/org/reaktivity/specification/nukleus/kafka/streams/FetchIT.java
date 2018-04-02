@@ -452,6 +452,17 @@ public class FetchIT
 
     @Test
     @Specification({
+            "${scripts}/zero.offset.messages.group.budget/client",
+            "${scripts}/zero.offset.messages.group.budget/server"})
+    public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudget() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.messagesets.fanout/client",
         "${scripts}/zero.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtZeroOffset() throws Exception
