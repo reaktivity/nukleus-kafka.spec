@@ -700,6 +700,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/record.batch.ends.with.truncated.record.then.stall/client",
+        "${scripts}/record.batch.ends.with.truncated.record.then.stall/server"})
+    public void shouldReportStalledFetch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/topic.name.not.equals.route.ext/client",
         "${scripts}/topic.name.not.equals.route.ext/server"})
     public void shouldRejectTopicNameNutEqualToRoutedTopic() throws Exception

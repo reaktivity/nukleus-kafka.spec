@@ -385,6 +385,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/record.batch.ends.with.truncated.record.then.stall/client",
+        "${scripts}/record.batch.ends.with.truncated.record.then.stall/server"})
+    public void shouldReportStuckFetch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception

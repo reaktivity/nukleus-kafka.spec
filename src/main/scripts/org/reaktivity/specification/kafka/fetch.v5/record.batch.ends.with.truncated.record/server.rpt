@@ -182,7 +182,7 @@ write 999L      # high watermark
 write -1L
 write 0L        # log start offset
 write -1
-write 80        # length of record set (15 too short for last record)
+write 80        # length of record set
 write 10L       # first offset
 write 68        # length of record batch
 write 0
