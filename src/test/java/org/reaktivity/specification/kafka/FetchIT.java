@@ -615,6 +615,18 @@ public class FetchIT
 
     @Test
     @Specification({
+            "${scripts}/zero.offset.messages.group.budget.reset/client",
+            "${scripts}/zero.offset.messages.group.budget.reset/server"})
+    public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudgetReset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.messages.multiple.nodes/client",
         "${scripts}/zero.offset.messages.multiple.nodes/server"})
     public void shouldReceiveMessagesAtZeroOffsetMultipleNodes() throws Exception
