@@ -168,3 +168,59 @@ read ${kafka:varint(-1)}    # key length
 read ${kafka:varint(12)}    # value
 read "Hello, again"
 read [0x00]     # headers array length
+
+# Second fetch to re-retrieve second message because it could not be delivered due to limited group window
+write 65
+write 0x01s
+write 0x05s
+write ${newRequestId}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 0x01
+write ${maximumBytes}
+write [0x00]
+write 0x01
+write 0x04s "test"
+write 0x01
+write 0         # Partition
+write 1L        # offset
+write -1L
+write ${maximumBytesTest0}
+
+read 145 # Size
+read ${newRequestId}
+read [0..4]
+read 0x01
+read 0x04s "test"
+read 1
+read 0          # Partition
+read 0x00s
+read 13L        # high watermark
+read -1L
+read 0L         # log start offset
+read -1         # aborted transactions (null)
+read 85
+read 1L        # first offset
+read 73        # length
+read 0
+read [0x02]
+read 0x4e8723aa
+read 0x00s
+read 0          # last offset delta
+read (long:timestamp)
+read ${timestamp}
+read -1L
+read -1s
+read -1
+read 1          # number of records
+
+read ${kafka:varint(23)}    # record length
+read [0x00]
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(5)}     # key length
+read "match"
+read ${kafka:varint(12)}
+read "Hello, again"
+read [0x00]
