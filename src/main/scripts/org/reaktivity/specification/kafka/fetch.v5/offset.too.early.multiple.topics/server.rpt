@@ -204,13 +204,13 @@ read 1
 read [0..4]
 read [0x00]
 read 2
-read 5s "test1" # 35
+read 5s "test1"
 read 1
 read 0          # partition
 read 0L         # offset
 read -1L
 read [0..4]
-read 5s "test2" # 35
+read 5s "test2"
 read 1
 read 0          # partition
 read 0L         # offset
