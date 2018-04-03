@@ -41,7 +41,7 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
+read nukleus:data.ext (long:timestamp1) 1 ${kafka:varint(1)}
 read nukleus:data.ext -1
 read "Hello, world"
 
@@ -49,7 +49,7 @@ read notify CLIENT_ONE_RECEIVED_MESSAGE_ONE
 
 read await SERVER_DELIVER_LIVE_RESPONSE_TWO
 
-read nukleus:data.ext ${timestamp} 1 ${kafka:varint(2)}
+read nukleus:data.ext ${timestamp1 + 10} 1 ${kafka:varint(2)}
 read nukleus:data.ext -1
 read "Hello, again"
 
@@ -76,12 +76,12 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext ${timestamp} 1 ${kafka:varint(1)}
+read nukleus:data.ext ${timestamp1} 1 ${kafka:varint(1)}
 read nukleus:data.ext -1
 read "Hello, world"
 
 read notify SERVER_DELIVER_LIVE_RESPONSE_TWO
 
-read nukleus:data.ext ${timestamp} 1 ${kafka:varint(2)}
+read nukleus:data.ext ${timestamp1 + 10} 1 ${kafka:varint(2)}
 read nukleus:data.ext -1
 read "Hello, again"
