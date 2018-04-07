@@ -38,17 +38,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset/client",
-        "${scripts}/zero.offset/server"})
-    public void shouldRequestMessagesAtZeroOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/distinct.offsets.message.fanout/client",
         "${scripts}/distinct.offsets.message.fanout/server"})
     public void shouldHandleParallelSubscribesAtDistinctOffsets() throws Exception
@@ -374,6 +363,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/zero.offset/client",
+        "${scripts}/zero.offset/server"})
+    public void shouldRequestMessagesAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
@@ -393,6 +393,18 @@ public class FetchIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/client",
+        "${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/server"})
+    public void shouldBootstrapTopicAndUseCachedKeyOffsetThenLive() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
         k3po.finish();
     }
 

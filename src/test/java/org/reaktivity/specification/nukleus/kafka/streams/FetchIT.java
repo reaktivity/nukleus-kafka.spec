@@ -485,6 +485,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/client",
+        "${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/server"})
+    public void shouldReceiveKTableMessagesAfterBootstrapUsingCachedKeyThenLive() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/ktable.delivers.compacted.deleted.messages/client",
         "${scripts}/ktable.delivers.compacted.deleted.messages/server"})
     public void shouldReceiveKTableCompactedDeletedMessages() throws Exception
