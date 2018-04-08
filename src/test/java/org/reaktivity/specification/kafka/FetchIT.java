@@ -570,6 +570,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.messages.multiple.topics/client",
+        "${scripts}/ktable.messages.multiple.topics/server"})
+    public void shouldReceiveKtableMessagesFromMultipleTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message.single.partition.multiple.nodes/client",
         "${scripts}/zero.offset.message.single.partition.multiple.nodes/server"})
     public void shouldReceiveMessageAtZeroOffsetSinglePartitionMultipleNodes() throws Exception
