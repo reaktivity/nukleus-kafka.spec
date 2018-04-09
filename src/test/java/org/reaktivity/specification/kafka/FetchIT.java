@@ -404,6 +404,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_HISTORICAL_FETCH_RESPONSE");
         k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
         k3po.finish();
     }
@@ -570,8 +571,19 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/ktable.messages.multiple.topics/client",
-        "${scripts}/ktable.messages.multiple.topics/server"})
+        "${scripts}/ktable.message.multiple.networks/client",
+        "${scripts}/ktable.message.multiple.networks/server"})
+    public void shouldReceiveKtableMessagesFromMultipleNetworks() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/ktable.message.multiple.topics/client",
+        "${scripts}/ktable.message.multiple.topics/server"})
     public void shouldReceiveKtableMessagesFromMultipleTopics() throws Exception
     {
         k3po.start();

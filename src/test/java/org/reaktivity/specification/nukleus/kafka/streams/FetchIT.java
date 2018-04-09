@@ -656,8 +656,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/ktable.messages.multiple.topics/client",
-        "${scripts}/ktable.messages.multiple.topics/server"})
+        "${scripts}/ktable.message.multiple.topics/client",
+        "${scripts}/ktable.message.multiple.topics/server"})
     public void shouldReceiveKTableMessagesFromMultipleTopics() throws Exception
     {
         k3po.start();

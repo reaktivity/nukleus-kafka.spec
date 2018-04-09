@@ -34,7 +34,7 @@ write ${controlRG010101C.nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
 write 0L
-write [0x06] "target1"
+write [0x07] "target1"
 write ${newNetworkRouteRef1}
 write 0L
 write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}
@@ -49,7 +49,7 @@ write ${controlRG010101C.nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
 write 0L
-write [0x06] "target2"
+write [0x07] "target2"
 write ${newNetworkRouteRef2}
 write 0L
 write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}

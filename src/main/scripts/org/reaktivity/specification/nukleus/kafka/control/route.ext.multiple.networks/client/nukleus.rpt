@@ -29,7 +29,7 @@ read (long:correlationIdRG010101N1)
 read [0x01]
 read [0x06] "source"
 read 0L
-read [0x06] "target1"
+read [0x07] "target1"
 read (long:clientConnectRefRG010101N1)
 read 0L
 read 4s "test"
@@ -44,7 +44,7 @@ read (long:correlationIdRG010101N2)
 read [0x01]
 read [0x06] "source"
 read 0L
-read [0x06] "target2"
+read [0x07] "target2"
 read (long:clientConnectRefRG010101N2)
 read 0L
 read 4s "test"

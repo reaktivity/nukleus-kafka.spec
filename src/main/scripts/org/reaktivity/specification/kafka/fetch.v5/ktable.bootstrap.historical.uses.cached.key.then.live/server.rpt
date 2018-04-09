@@ -253,6 +253,8 @@ read [0..4]
 
 read notify HISTORICAL_FETCH_REQUEST_RECEIVED
 
+write await DELIVER_HISTORICAL_FETCH_RESPONSE
+
 write 172       # Size
 write ${requestId}
 write 0
@@ -300,4 +302,4 @@ write ${kafka:varint(12)}   # value length
 write "Hello, third"
 write [0x00]                # headers
 
-
+write notify HISTORICAL_FETCH_RESPONSE_WRITTEN

@@ -72,7 +72,7 @@ public class ControlIT
         "route.ext.multiple.networks/client/nukleus",
         "route.ext.multiple.networks/client/controller"
     })
-    public void shouldRouteClientWithExtensionWithMultipleNetworks() throws Exception
+    public void shouldRouteClientWithMultipleNetworks() throws Exception
     {
         k3po.finish();
     }
@@ -82,7 +82,7 @@ public class ControlIT
         "route.ext.multiple.topics/client/nukleus",
         "route.ext.multiple.topics/client/controller"
     })
-    public void shouldRouteClientWithExtensionWithMultipleTopics() throws Exception
+    public void shouldRouteClientWithMultipleTopics() throws Exception
     {
         k3po.finish();
     }
