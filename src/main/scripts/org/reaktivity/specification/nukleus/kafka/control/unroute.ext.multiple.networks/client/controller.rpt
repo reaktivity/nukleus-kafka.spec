@@ -1,0 +1,65 @@
+#
+# Copyright 2016-2017 The Reaktivity Project
+#
+# The Reaktivity Project licenses this file to you under the Apache License,
+# version 2.0 (the "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at:
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
+
+property newNetworkRouteRef1 ${nuklei:newReferenceId()} # external scope
+property newNetworkRouteRef2 ${nuklei:newReferenceId()} # external scope
+
+property nukleiURMN01C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+
+property controlURMN01C ${nukleiURMN01C.control("kafka")}
+
+property unrouteCorrelationId1 ${controlURMN01C.nextCorrelationId()}
+property unrouteCorrelationId2 ${controlURMN01C.nextCorrelationId()}
+
+connect await ROUTED_CLIENT
+        "agrona://stream/bidirectional"
+        option agrona:reader ${agrona:broadcastReceiver(controlURMN01C.controller)}
+        option agrona:writer ${agrona:manyToOneWriter(controlURMN01C.nukleus)}
+
+connected
+
+write 0x00000002
+write ${unrouteCorrelationId1}
+write [0x01]
+write [0x06] "source"
+write ${newApplicationRouteRef}
+write [0x06] "target1"
+write ${newNetworkRouteRef1}
+write 0L
+write 4s "test"
+write flush
+
+write 0x00000002
+write ${unrouteCorrelationId2}
+write [0x01]
+write [0x06] "source"
+write ${newApplicationRouteRef}
+write [0x06] "target2"
+write ${newNetworkRouteRef2}
+write 0L
+write 4s "test"
+write flush
+
+read 0x40000002
+read ${unrouteCorrelationId1}
+
+read 0x40000002
+read ${unrouteCorrelationId2}
+
+close
+closed
