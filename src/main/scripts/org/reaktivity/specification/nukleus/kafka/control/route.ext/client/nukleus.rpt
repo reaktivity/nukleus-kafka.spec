@@ -14,13 +14,13 @@
 # under the License.
 #
 
-property nukleiRG010101N ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleiRG010101EN ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRG010101N ${nukleiRG010101N.controlNew("kafka")}
+property controlRG010101EN ${nukleiRG010101EN.controlNew("kafka")}
 
 connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:manyToOneReader(controlRG010101N.nukleus)}
-        option agrona:writer ${agrona:broadcastTransmitter(controlRG010101N.controller)}
+        option agrona:reader ${agrona:manyToOneReader(controlRG010101EN.nukleus)}
+        option agrona:writer ${agrona:broadcastTransmitter(controlRG010101EN.controller)}
 
 connected
 
