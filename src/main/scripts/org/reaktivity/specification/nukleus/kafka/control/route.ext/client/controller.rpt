@@ -16,20 +16,20 @@
 
 property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
-property nukleiRG010101C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleiRG010101EC ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRG010101C ${nukleiRG010101C.control("kafka")}
+property controlRG010101EC ${nukleiRG010101EC.control("kafka")}
 
 property routedTopicName "test" 
 
 connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:broadcastReceiver(controlRG010101C.controller)}
-        option agrona:writer ${agrona:manyToOneWriter(controlRG010101C.nukleus)}
+        option agrona:reader ${agrona:broadcastReceiver(controlRG010101EC.controller)}
+        option agrona:writer ${agrona:manyToOneWriter(controlRG010101EC.nukleus)}
 
 connected
 
 write 0x00000001
-write ${controlRG010101C.nextCorrelationId()}
+write ${controlRG010101EC.nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
 write 0L
@@ -40,7 +40,7 @@ write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}
 write flush
 
 read 0x40000001
-read ${controlRG010101C.correlationId()}
+read ${controlRG010101EC.correlationId()}
 read (long:newApplicationRouteRef)
 
 read notify ROUTED_CLIENT
