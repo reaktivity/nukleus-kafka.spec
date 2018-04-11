@@ -153,6 +153,64 @@ read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 
+# third metadata request
+write 22        # Size int32
+write 0x03s     # ApiKey int16 (Metadata)
+write 0x05s     # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # [TopicName] array length
+  write 5s "test3"
+write [0x00]    # allow_auto_topic_creation (boolean)
+
+read 86         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read [0..4]     # throttle_time_ms int32
+read 1          # brokers array length
+  read 1        # broker id
+  read 7s "broker1"
+  read 9093     # port int32
+  read -1s      # rack string (null)
+read 9s "cluster 1"
+read 1          # controller broker id
+read 1          # topic array length
+  read 0s       # error code
+  read 5s "test3"
+  read [0x00]   # is_internal boolean
+  read 1        # partition array length
+    read 0s     # error code
+    read 0      # partition
+    read 1      # leader
+    read 0      # replicas array (empty)
+    read -1     # isr array (null)
+    read 0      # offline replicas array (empty)
+
+write 42        # Size int32
+write 32s       # ApiKey int16 (DescribeConfigs)
+write 0s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # resources count
+write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
+write 5s "test3"            # topic name
+write 1         # config names count
+write 14s "cleanup.policy"  # config name
+
+read 56         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read [0..4]     # throttle_time_ms int32
+read 1          # resources count
+read 0s         # error code
+read -1s        # error message
+read [0x02]     # resource type (topic)
+read 5s "test3" # topic name
+read 1          # config entries count
+read 14s "cleanup.policy"   # config name
+read 7s "compact"           # config value
+read [0x00]     # read_only boolean
+read [0x01]     # is_default boolean
+read [0x00]     # is_sensitive boolean
+
 # Fetch stream
 connect await METADATA_RECEIVED
         ${networkConnect}
@@ -249,6 +307,73 @@ read ${newRequestId}
 read [0..4]
 read 1
 read 5s "test2"
+read 1
+read 0          # Partition
+read 0s
+read 1L         # high watermark
+read -1L
+read 0L         # log start offset
+read -1         # aborted transactions
+read 84         # length of record batch
+read 0L         # first offset
+read 72         # length     
+read 0x00
+read [0x02]
+read 0x4e8723aa
+read 0s
+read 0          # last offset delta
+read (long:timestamp)       # first timestamp
+read ${timestamp}           # maximum timestamp
+read -1L
+read -1s
+read -1
+read 1          # number of records
+read ${kafka:varint(22)}    # record length
+read [0x00]     # attributes
+read ${kafka:varint(0)}
+read ${kafka:varint(0)}
+read ${kafka:varint(4)}    # key length
+read "key1"
+read ${kafka:varint(12)}   # value length
+read "Hello, world"
+read ${kafka:varint(0)}
+
+# third live fetch request
+write 136        # size
+write 1s         # ApiKey Fetch
+write 5s         # version
+write ${newRequestId}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 2
+write 5s "test1"
+write 1
+write 0          # Partition
+write 1L         # offset
+write -1L
+write ${maximumBytesTest0}
+write 5s "test2"
+write 1
+write 0          # Partition
+write 0L         # offset
+write -1L
+write ${maximumBytesTest0}
+write 5s "test3"
+write 1
+write 0          # Partition
+write 0L         # offset
+write -1L
+write ${maximumBytesTest0}
+
+read 145
+read ${newRequestId}
+read [0..4]
+read 1
+read 5s "test3"
 read 1
 read 0          # Partition
 read 0s

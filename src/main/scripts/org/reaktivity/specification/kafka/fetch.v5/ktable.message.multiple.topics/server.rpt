@@ -149,7 +149,66 @@ write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 
-write notify SECOND_METADATA_RESPONSE_WRITTEN
+# metadata request test3
+read 22         # Size int32
+read 0x03s      # ApiKey int16 (Metadata)
+read 0x05s      # ApiVersion int16
+read (int:metadataRequestId)
+read -1s        # ClientId string (null)
+read 1          # [TopicName] array length
+  read 5s "test3"
+read [0x00]     # allow_auto_topic_creation (boolean)
+
+write 86        # Size int32
+write ${metadataRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # brokers array length
+  write 1       # broker id
+  write 7s "broker1"
+  write 9093    # port int32
+  write -1s     # rack string (null)
+write 9s "cluster 1"
+write 1         # controller broker id
+write 1         # topic array length
+  write 0s      # error code
+  write 5s "test3"
+  write byte 0x00           # is_internal
+  write 1       # partition array length
+    write 0s    # error code
+    write 0     # partition
+    write 1     # leader
+    write 0     # replicas array (empty)
+    write -1    # isr array (null)
+    write 0     # offline replicas array (empty)
+
+# describe configs request test3
+read 42         # Size int32
+read 32s        # ApiKey int16 (DescribeConfigs)
+read 0s         # ApiVersion int16
+read (int:metadataRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [Resources] array length
+read [0x02]     # resource type int8 (topic) 
+read 5s "test3" # topic name
+read 1          # config_names count
+read 14s "cleanup.policy"
+
+write 56        # Size int32
+write ${metadataRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # resources count
+write 0s        # error code
+write -1s       # error message
+write [0x02]    # resource type
+write 5s "test3"            # topic name
+write 1         # config entries count
+write 14s "cleanup.policy"  # config name
+write 7s "compact"          # config  value
+write [0x00]    # read_only boolean
+write [0x01]    # is_default boolean
+write [0x00]    # is_sensitive boolean
+
+write notify ALL_METADATA_RESPONSES_WRITTEN
 
 # Fetch stream
 accepted
@@ -237,6 +296,8 @@ read 0L
 read -1L
 read [0..4]
 
+write await WRITE_SECOND_FETCH_RESPONSE
+
 write 145
 write ${requestId}
 write 0
@@ -272,3 +333,71 @@ write "key1"
 write ${kafka:varint(12)}    # value length
 write "Hello, world"
 write ${kafka:varint(0)}
+
+# third live fetch request
+read 136
+read 1s
+read 5s
+read (int:requestId)
+read -1s
+read -1
+read [0..4]
+read 1
+read [0..4]
+read [0x00]
+read 2
+read 5s "test1"
+read 1
+read 0
+read 1L
+read -1L
+read [0..4]
+read 5s "test2"
+read 1
+read 0
+read 0L
+read -1L
+read [0..4]
+read 5s "test3"
+read 1
+read 0
+read 0L
+read -1L
+read [0..4]
+
+write 145
+write ${requestId}
+write 0
+write 1
+write 5s "test3"
+write 1
+write 0          # Partition
+write 0s
+write 1L         # high watermark
+write -1L
+write 0L         # log start offset
+write -1         # aborted transactions
+write 84         # length of record batch
+write 0L         # first offset
+write 72         # length
+write 0
+write [0x02]
+write 0x4e8723aa
+write 0s
+write 0          # last offset Delta
+write ${newTimestamp}        # first timestamp
+write ${newTimestamp}        # maximum timestamp
+write -1L
+write -1s
+write -1
+write 1          # number of records
+write ${kafka:varint(22)}    # record length
+write [0x00]     # attributes
+write ${kafka:varint(0)}
+write ${kafka:varint(0)}
+write ${kafka:varint(4)}     # key length
+write "key1"
+write ${kafka:varint(12)}    # value length
+write "Hello, world"
+write ${kafka:varint(0)}
+

@@ -17,20 +17,20 @@
 property newNetworkRouteRef1 ${nuklei:newReferenceId()} # external scope
 property newNetworkRouteRef2 ${nuklei:newReferenceId()} # external scope
 
-property nukleiRG010101MNC  ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleiRMN01C  ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRG010101MNC  ${nukleiRG010101MNC .control("kafka")}
+property controlRMN01C  ${nukleiRMN01C .control("kafka")}
 
 property routedTopicName "test"
 
 connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:broadcastReceiver(controlRG010101MNC .controller)}
-        option agrona:writer ${agrona:manyToOneWriter(controlRG010101MNC .nukleus)}
+        option agrona:reader ${agrona:broadcastReceiver(controlRMN01C .controller)}
+        option agrona:writer ${agrona:manyToOneWriter(controlRMN01C .nukleus)}
 
 connected
 
 write 0x00000001
-write ${controlRG010101MNC .nextCorrelationId()}
+write ${controlRMN01C .nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
 write 0L
@@ -41,11 +41,11 @@ write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}
 write flush
 
 read 0x40000001
-read ${controlRG010101MNC .correlationId()}
+read ${controlRMN01C .correlationId()}
 read (long:newApplicationRouteRef1)
 
 write 0x00000001
-write ${controlRG010101MNC .nextCorrelationId()}
+write ${controlRMN01C .nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
 write 0L
@@ -56,7 +56,7 @@ write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}
 write flush
 
 read 0x40000001
-read ${controlRG010101MNC .correlationId()}
+read ${controlRMN01C .correlationId()}
 read (long:newApplicationRouteRef2)
 
 read notify ROUTED_CLIENT

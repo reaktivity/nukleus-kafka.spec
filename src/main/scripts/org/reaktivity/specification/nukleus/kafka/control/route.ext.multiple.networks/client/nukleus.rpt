@@ -14,43 +14,43 @@
 # under the License.
 #
 
-property nukleiRG010101MNN ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleiRMN01N ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRG010101MNN ${nukleiRG010101MNN.controlNew("kafka")}
+property controlRMN01N ${nukleiRMN01N.controlNew("kafka")}
 
 connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:manyToOneReader(controlRG010101MNN.nukleus)}
-        option agrona:writer ${agrona:broadcastTransmitter(controlRG010101MNN.controller)}
+        option agrona:reader ${agrona:manyToOneReader(controlRMN01N.nukleus)}
+        option agrona:writer ${agrona:broadcastTransmitter(controlRMN01N.controller)}
 
 connected
 
 read 0x00000001
-read (long:correlationIdRG010101N1)
+read (long:correlationIdRMN01N1)
 read [0x01]
 read [0x06] "source"
 read 0L
 read [0x07] "target1"
-read (long:clientConnectRefRG010101N1)
+read (long:clientConnectRefRMN01N1)
 read 0L
 read 4s "test"
 
 write 0x40000001
-write ${correlationIdRG010101N1}
+write ${correlationIdRMN01N1}
 write ${nuklei:newReferenceId()}
 write flush
 
 read 0x00000001
-read (long:correlationIdRG010101N2)
+read (long:correlationIdRMN01N2)
 read [0x01]
 read [0x06] "source"
 read 0L
 read [0x07] "target2"
-read (long:clientConnectRefRG010101N2)
+read (long:clientConnectRefRMN01N2)
 read 0L
 read 4s "test"
 
 write 0x40000001
-write ${correlationIdRG010101N2}
+write ${correlationIdRMN01N2}
 write ${nuklei:newReferenceId()}
 write flush
 

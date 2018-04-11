@@ -14,7 +14,8 @@
 # under the License.
 #
 
-property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
+property newApplicationRouteRef1 ${nuklei:newReferenceId()} # external scope
+property newApplicationRouteRef2 ${nuklei:newReferenceId()} # external scope
 
 property newNetworkRouteRef1 ${nuklei:newReferenceId()} # external scope
 property newNetworkRouteRef2 ${nuklei:newReferenceId()} # external scope
@@ -37,8 +38,8 @@ write 0x00000002
 write ${unrouteCorrelationId1}
 write [0x01]
 write [0x06] "source"
-write ${newApplicationRouteRef}
-write [0x06] "target1"
+write ${newApplicationRouteRef1}
+write [0x07] "target1"
 write ${newNetworkRouteRef1}
 write 0L
 write 4s "test"
@@ -48,8 +49,8 @@ write 0x00000002
 write ${unrouteCorrelationId2}
 write [0x01]
 write [0x06] "source"
-write ${newApplicationRouteRef}
-write [0x06] "target2"
+write ${newApplicationRouteRef2}
+write [0x07] "target2"
 write ${newNetworkRouteRef2}
 write 0L
 write 4s "test"
