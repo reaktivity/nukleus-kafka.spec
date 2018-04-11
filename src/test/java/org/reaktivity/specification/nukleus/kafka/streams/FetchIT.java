@@ -594,7 +594,7 @@ public class FetchIT
     public void shouldReceiveKTableMessage() throws Exception
     {
         k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT");
         k3po.finish();
     }
 
