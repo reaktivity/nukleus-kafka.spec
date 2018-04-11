@@ -349,7 +349,7 @@ write ${maximumWaitTime}
 write 1
 write ${maximumBytes}
 write [0x00]
-write 2
+write 3
 write 5s "test1"
 write 1
 write 0          # Partition
@@ -359,7 +359,7 @@ write ${maximumBytesTest0}
 write 5s "test2"
 write 1
 write 0          # Partition
-write 0L         # offset
+write 1L         # offset
 write -1L
 write ${maximumBytesTest0}
 write 5s "test3"

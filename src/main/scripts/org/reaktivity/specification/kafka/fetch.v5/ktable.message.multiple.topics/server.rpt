@@ -149,6 +149,8 @@ write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 
+write notify SECOND_METADATA_RESPONSE_WRITTEN
+
 # metadata request test3
 read 22         # Size int32
 read 0x03s      # ApiKey int16 (Metadata)
@@ -345,7 +347,7 @@ read [0..4]
 read 1
 read [0..4]
 read [0x00]
-read 2
+read 3
 read 5s "test1"
 read 1
 read 0
@@ -355,7 +357,7 @@ read [0..4]
 read 5s "test2"
 read 1
 read 0
-read 0L
+read 1L
 read -1L
 read [0..4]
 read 5s "test3"
