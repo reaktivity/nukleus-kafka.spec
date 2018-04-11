@@ -14,52 +14,53 @@
 # under the License.
 #
 
+property newApplicationRouteRef1 ${nuklei:newReferenceId()} # external scope
+property newApplicationRouteRef2 ${nuklei:newReferenceId()} # external scope
+
 property newNetworkRouteRef1 ${nuklei:newReferenceId()} # external scope
 property newNetworkRouteRef2 ${nuklei:newReferenceId()} # external scope
 
-property nukleiRMN01C  ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleiURMN01C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRMN01C  ${nukleiRMN01C .control("kafka")}
+property controlURMN01C ${nukleiURMN01C.control("kafka")}
 
-property routedTopicName "test"
+property unrouteCorrelationId1 ${controlURMN01C.nextCorrelationId()}
+property unrouteCorrelationId2 ${controlURMN01C.nextCorrelationId()}
 
-connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:broadcastReceiver(controlRMN01C .controller)}
-        option agrona:writer ${agrona:manyToOneWriter(controlRMN01C .nukleus)}
+connect await ROUTED_CLIENT
+        "agrona://stream/bidirectional"
+        option agrona:reader ${agrona:broadcastReceiver(controlURMN01C.controller)}
+        option agrona:writer ${agrona:manyToOneWriter(controlURMN01C.nukleus)}
 
 connected
 
-write 0x00000001
-write ${controlRMN01C .nextCorrelationId()}
+write 0x00000002
+write ${unrouteCorrelationId1}
 write [0x01]
 write [0x06] "source"
-write 0L
+write ${newApplicationRouteRef1}
 write [0x07] "target1"
 write ${newNetworkRouteRef1}
 write 0L
-write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}
+write 4s "test"
 write flush
 
-read 0x40000001
-read ${controlRMN01C .correlationId()}
-read (long:newApplicationRouteRef1)
-
-write 0x00000001
-write ${controlRMN01C .nextCorrelationId()}
+write 0x00000002
+write ${unrouteCorrelationId2}
 write [0x01]
 write [0x06] "source"
-write 0L
+write ${newApplicationRouteRef2}
 write [0x07] "target2"
 write ${newNetworkRouteRef2}
 write 0L
-write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}
+write 4s "test"
 write flush
 
-read 0x40000001
-read ${controlRMN01C .correlationId()}
-read (long:newApplicationRouteRef2)
+read 0x40000002
+read ${unrouteCorrelationId1}
 
-read notify ROUTED_CLIENT
+read 0x40000002
+read ${unrouteCorrelationId2}
 
 close
 closed

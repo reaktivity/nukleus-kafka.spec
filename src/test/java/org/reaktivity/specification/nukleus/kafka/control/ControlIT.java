@@ -98,4 +98,28 @@ public class ControlIT
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "unroute.ext.multiple.networks/client/nukleus",
+        "unroute.ext.multiple.networks/client/controller"
+    })
+    public void shouldUnrouteClientWithMultipleNetworks() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "unroute.ext.multiple.topics/client/nukleus",
+        "unroute.ext.multiple.topics/client/controller"
+    })
+    public void shouldUnrouteClientWithMultipleTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
 }

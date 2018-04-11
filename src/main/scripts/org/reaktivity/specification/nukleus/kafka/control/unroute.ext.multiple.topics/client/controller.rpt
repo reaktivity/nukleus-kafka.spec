@@ -14,41 +14,36 @@
 # under the License.
 #
 
+property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
-property nukleiRMT01C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleiURMT01C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRMT01C ${nukleiRMT01C.control("kafka")}
+property controlURMT01C ${nukleiURMT01C.control("kafka")}
 
-property routeCorrelationId1 ${controlRMT01C.nextCorrelationId()}
-property routeCorrelationId2 ${controlRMT01C.nextCorrelationId()}
-property routeCorrelationId3 ${controlRMT01C.nextCorrelationId()}
-
-connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:broadcastReceiver(controlRMT01C.controller)}
-        option agrona:writer ${agrona:manyToOneWriter(controlRMT01C.nukleus)}
+connect await ROUTED_CLIENT
+        "agrona://stream/bidirectional"
+        option agrona:reader ${agrona:broadcastReceiver(controlURMT01C.controller)}
+        option agrona:writer ${agrona:manyToOneWriter(controlURMT01C.nukleus)}
 
 connected
 
-write 0x00000001
-write ${routeCorrelationId1}
+write 0x00000002
+write ${controlURMT01C.nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
-write 0L
+write ${newApplicationRouteRef}
 write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
 write 5s "test1"
 write flush
 
-read 0x40000001
-read ${routeCorrelationId1}
-read (long:newApplicationRouteRef)
+read 0x40000002
+read ${controlURMT01C.correlationId()}
 
-# Parallel requests
-
-write 0x00000001
-write ${routeCorrelationId2}
+write 0x00000002
+write ${controlURMT01C.nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
 write ${newApplicationRouteRef}
@@ -58,8 +53,11 @@ write 0L
 write 5s "test2"
 write flush
 
-write 0x00000001
-write ${routeCorrelationId3}
+read 0x40000002
+read ${controlURMT01C.correlationId()}
+
+write 0x00000002
+write ${controlURMT01C.nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
 write ${newApplicationRouteRef}
@@ -69,15 +67,8 @@ write 0L
 write 5s "test3"
 write flush
 
-read 0x40000001
-read ${routeCorrelationId2}
-read ${newApplicationRouteRef}
-
-read 0x40000001
-read ${routeCorrelationId3}
-read ${newApplicationRouteRef}
-
-read notify ROUTED_CLIENT
+read 0x40000002
+read ${controlURMT01C.correlationId()}
 
 close
 closed
