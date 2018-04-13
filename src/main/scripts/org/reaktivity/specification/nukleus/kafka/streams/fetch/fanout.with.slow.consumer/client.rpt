@@ -82,7 +82,7 @@ read nukleus:data.ext ${timestamp1 + 11} 1 ${kafka:varint(2)}
 read nukleus:data.ext -1
 read "Hello, again"
 
-read notify SERVER_DELIVER_LIVE_RESPONSE_TWO
+read notify CLIENT_TWO_RECEIVED_SECOND_MESSAGE
 
 read nukleus:data.ext ${timestamp1 + 22} 1 ${kafka:varint(3)}
 read nukleus:data.ext -1
