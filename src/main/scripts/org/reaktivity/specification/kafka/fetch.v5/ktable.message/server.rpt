@@ -20,6 +20,7 @@ property newTimestamp ${kafka:timestamp()}
 
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
+property maxPartitionBytes ${networkAcceptWindow}
 
 accept ${networkAccept}
   option nukleus:route  ${newNetworkRouteRef}
@@ -109,7 +110,7 @@ read 1
 read 0
 read 0L
 read -1L
-read [0..4]
+read ${maxPartitionBytes}
 
 write 144
 write ${requestId}
