@@ -32,8 +32,8 @@ accepted
 connected
 
 read 21         # Size int32
-read 3s      # ApiKey int16 (Metadata)
-read 5s      # ApiVersion int16
+read 3s         # ApiKey int16 (Metadata)
+read 5s         # ApiVersion int16
 read (int:metadataRequestId)
 read -1s        # ClientId string (null)
 read 1          # [TopicName] array length

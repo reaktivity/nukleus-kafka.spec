@@ -278,7 +278,7 @@ read "Hello, world"
 read ${kafka:varint(0)}
 
 # second live fetch request
-write 101        # size
+write 136        # size
 write 1s         # ApiKey Fetch
 write 5s         # version
 write ${newRequestId}
@@ -288,7 +288,7 @@ write ${maximumWaitTime}
 write 1
 write ${maximumBytes}
 write [0x00]
-write 2
+write 3
 write 5s "test1"
 write 1
 write 0          # Partition
@@ -301,11 +301,17 @@ write 0          # Partition
 write 0L         # offset
 write -1L
 write ${maximumBytesTest0}
+write 5s "test3"
+write 1
+write 0          # Partition
+write 0L         # offset
+write -1L
+write ${maximumBytesTest0}
 
-read 145
+read 278
 read ${newRequestId}
 read [0..4]
-read 1
+read 2
 read 5s "test2"
 read 1
 read 0          # Partition
@@ -337,42 +343,6 @@ read "key1"
 read ${kafka:varint(12)}   # value length
 read "Hello, world"
 read ${kafka:varint(0)}
-
-# third live fetch request
-write 136        # size
-write 1s         # ApiKey Fetch
-write 5s         # version
-write ${newRequestId}
-write -1s
-write -1
-write ${maximumWaitTime}
-write 1
-write ${maximumBytes}
-write [0x00]
-write 3
-write 5s "test1"
-write 1
-write 0          # Partition
-write 1L         # offset
-write -1L
-write ${maximumBytesTest0}
-write 5s "test2"
-write 1
-write 0          # Partition
-write 1L         # offset
-write -1L
-write ${maximumBytesTest0}
-write 5s "test3"
-write 1
-write 0          # Partition
-write 0L         # offset
-write -1L
-write ${maximumBytesTest0}
-
-read 145
-read ${newRequestId}
-read [0..4]
-read 1
 read 5s "test3"
 read 1
 read 0          # Partition
