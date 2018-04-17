@@ -186,7 +186,7 @@ write 5s "test1"
 write 1         # partition count
 write 0         # partition
 write 0s        # errCode
-write 999L      # high watermark
+write 0L        # high watermark
 write -1L       # last stable offset
 write 0L        # log start offset
 write -1        # aborted transaction count

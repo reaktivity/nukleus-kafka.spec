@@ -51,6 +51,6 @@ read nukleus:data.null
 # read nukleus:data.ext ${timestamp1 + 20} 1 ${kafka:varint(13)} 
 # gives a script diff with "Expected value 1519688695344 has unsupported type"
 # This only occurs when the second message has no payload. k3po/nukleus ext bug?
-read nukleus:data.ext (long:timestamp3)  1 ${kafka:varint(13)}
+read nukleus:data.ext (long:timestamp3)  1 ${kafka:varint(14)}
 read nukleus:data.ext 4 "key1"
 read "Hello, third"

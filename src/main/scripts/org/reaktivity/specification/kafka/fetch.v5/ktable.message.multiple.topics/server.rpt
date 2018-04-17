@@ -274,7 +274,7 @@ write "Hello, world"
 write ${kafka:varint(0)}
 
 # second live fetch request
-read 101
+read 136
 read 1s
 read 5s
 read (int:requestId)
@@ -284,7 +284,7 @@ read [0..4]
 read 1
 read [0..4]
 read [0x00]
-read 2
+read 3
 read 5s "test1"
 read 1
 read 0
@@ -297,13 +297,19 @@ read 0
 read 0L
 read -1L
 read [0..4]
+read 5s "test3"
+read 1
+read 0
+read 0L
+read -1L
+read [0..4]
 
 write await WRITE_SECOND_FETCH_RESPONSE
 
-write 145
+write 278
 write ${requestId}
 write 0
-write 1
+write 2
 write 5s "test2"
 write 1
 write 0          # Partition
@@ -336,41 +342,6 @@ write ${kafka:varint(12)}    # value length
 write "Hello, world"
 write ${kafka:varint(0)}
 
-# third live fetch request
-read 136
-read 1s
-read 5s
-read (int:requestId)
-read -1s
-read -1
-read [0..4]
-read 1
-read [0..4]
-read [0x00]
-read 3
-read 5s "test1"
-read 1
-read 0
-read 1L
-read -1L
-read [0..4]
-read 5s "test2"
-read 1
-read 0
-read 1L
-read -1L
-read [0..4]
-read 5s "test3"
-read 1
-read 0
-read 0L
-read -1L
-read [0..4]
-
-write 145
-write ${requestId}
-write 0
-write 1
 write 5s "test3"
 write 1
 write 0          # Partition

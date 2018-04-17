@@ -111,7 +111,7 @@ read 0L         # offset
 read -1L
 read [0..4]
 
-write 178       # Size
+write 208       # Size
 write ${requestId}
 write 0
 write 1
@@ -119,24 +119,25 @@ write 4s "test"
 write 1
 write 0         # Partition
 write 0s        # partition error code
-write 13L       # high_watermark
+write 999L      # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
-write 118       # length of record set
+write 148       # length of record set
 write 10L       # first offset
-write 106       # length of record batch
+write 136       # length of record batch
 write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 2         # last offset delta
+write 3         # last offset delta
 write ${newTimestamp}       # first timestamp
 write ${newTimestamp}       # maximum timestamp
 write -1L
 write -1s
 write -1        # first sequence
-write 3         # number of records
+write 4         # number of records
+
 write ${kafka:varint(22)}   # Record length
 write [0x00]    # attributes
 write ${kafka:varint(0)}    # timestamp delta
@@ -149,17 +150,27 @@ write [0x00]
 
 write ${kafka:varint(10)}   # Record length
 write [0x00]
-write ${kafka:varint(10)}    # timestamp delta
+write ${kafka:varint(10)}   # timestamp delta
 write ${kafka:varint(1)}    # offset delta
 write ${kafka:varint(4)}    # key length
 write "key2"
 write ${kafka:varint(-1)}
 write [0x00]
 
+write ${kafka:varint(29)}   # Record length
+write [0x00]    # attributes
+write ${kafka:varint(20)}   # timestamp delta
+write ${kafka:varint(2)}    # offset delta
+write ${kafka:varint(4)}    # key length
+write "key1"
+write ${kafka:varint(19)}   # value length
+write "Hello, longer value"
+write [0x00]
+
 write ${kafka:varint(22)}   # Record length
 write [0x00]    # attributes
-write ${kafka:varint(20)}    # timestamp delta
-write ${kafka:varint(2)}    # offset delta
+write ${kafka:varint(30)}   # timestamp delta
+write ${kafka:varint(3)}    # offset delta
 write ${kafka:varint(4)}    # key length
 write "key1"
 write ${kafka:varint(12)}   # value length

@@ -192,9 +192,9 @@ read 5s "test1"
 read 1          # partition count
 read 0          # partition
 read 0s         # errCode
-read 999L        # high watermark
+read 0L         # high watermark
 read -1L        # last stable offset
-read 0L        # log start offset
+read 0L         # log start offset
 read -1         # aborted transaction count
 read 0          # record set size
 

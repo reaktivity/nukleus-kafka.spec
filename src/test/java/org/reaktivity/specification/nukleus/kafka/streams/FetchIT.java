@@ -612,6 +612,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/ktable.message.subscribed.to.key/client",
+        "${scripts}/ktable.message.subscribed.to.key/server"})
+    public void shouldReceiveKTableMessageWhenSubscribedToKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/ktable.messages/client",
         "${scripts}/ktable.messages/server"})
     public void shouldReceiveKTableMessages() throws Exception
