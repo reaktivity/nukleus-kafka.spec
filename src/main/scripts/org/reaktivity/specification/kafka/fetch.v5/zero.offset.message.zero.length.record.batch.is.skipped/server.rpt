@@ -32,8 +32,8 @@ accepted
 connected
 
 read 21         # Size int32
-read 3s         # ApiKey int16 (Metadata)
-read 5s         # ApiVersion int16
+read 3s      # ApiKey int16 (Metadata)
+read 5s      # ApiVersion int16
 read (int:metadataRequestId)
 read -1s        # ClientId string (null)
 read 1          # [TopicName] array length
@@ -54,7 +54,7 @@ write 1         # topic array length
   write 0s      # error code
   write 4s "test"
   write byte 0           # is_internal
-  write 1       # partition count
+  write 1       # partition array length
     write 0s    # error code
     write 0     # partition
     write 1     # leader
@@ -65,7 +65,7 @@ write 1         # topic array length
 read 41         # Size int32
 read 32s        # ApiKey int16 (DescribeConfigs)
 read 0s         # ApiVersion int16
-read (int:describeConfigsRequestId) # CorrelationId int32
+read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
 read [0x02]     # resource type int8 (topic) 
@@ -74,7 +74,7 @@ read 1          # config_names count
 read 14s "cleanup.policy"
 
 write 54        # Size int32
-write ${describeConfigsRequestId}  # CorrelationId int32
+write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
 write 0s        # error code
@@ -93,10 +93,10 @@ accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
-# First fetch request fails with errcode 1
-read 65
-read 1s
-read 5s
+# first fetch request
+read 65         # Size
+read 1s         # Fetch
+read 5s         # version
 read (int:requestId)
 read -1s
 read -1
@@ -107,51 +107,26 @@ read [0x00]
 read 1
 read 4s "test"
 read 1
-read 0          # partition
+read 0          # Partition
 read 0L         # offset
 read -1L
 read [0..4]
 
-write 60
+write 60       # Size
 write ${requestId}
 write 0
 write 1
 write 4s "test"
-write 1         # partition count
-write 0         # partition
-write 1s        # errCode 1 (offset too early)
-write -1L       # high watermark
-write -1L       # last stable offset
-write -1L       # log start offset
-write -1        # aborted transaction count
-write 0         # record set size
+write 1
+write 0         # Partition
+write 0s        # partition error code
+write 999L      # high_watermark
+write -1L       # last_stable_offset
+write 0L        # log_start_offset
+write -1        # aborted_transactions (null)
+write 0         # length of record batch is zero because message at offset 9L is too large to fit maxPartitionBytes
 
-# list offsets request
-read 41         # Size int32
-read 2s         # ApiKey (ListOffsets)
-read 2s         # ApiVersion 
-read (int:listOffsetsRequestId) # CorrelationId 
-read -1s        # ClientId string (null)
-read -1         # replicaId
-read [0x00]     # isolation level (0=READ_UNCOMMITTED)
-read 1          # topic count 
-read 4s "test"  # topic name
-read 1          # partition count
-read 0          # partition
-read -2L        # timestamp (earliest available offset)
-
-write 44        # Size int32
-write ${listOffsetsRequestId}  # CorrelationId int32
-write 0         # throttle_time_ms int32
-write 1         # topic count
-write 4s "test" # topic name 
-write 1         # partition count
-write 0         # partition
-write 0s        # error code
-write -1L       # timestamp (from a real example)
-write 13L       # offset
-
-# second fetch is done using reported log start offset
+# second fetch request at one higher offset
 read 65
 read 1s
 read 5s
@@ -166,29 +141,25 @@ read 1
 read 4s "test"
 read 1
 read 0          # partition
-read 13L        # offset
+read 1L         # offset
 read -1L
 read [0..4]
 
-read notify FETCH_REQUEST_RECEIVED
-
-write await WRITE_FETCH_RESPONSE
-
-write 140
+write 0x8c
 write ${requestId}
 write 0
 write 1
 write 4s "test"
 write 1
-write 0
-write 0s
-write 999L      # high watermark
-write -1L       # last stable offest
-write 13L       # log start offset
-write -1
-write 80
-write 13L       # first offset
-write 68
+write 0         # partition
+write 0s        # partition error code
+write 999L      # high_watermark
+write -1L       # last_stable_offset
+write 0L        # log_start_offset
+write -1        # aborted_transactions (null)
+write 80        # length of record batch
+write 1L        # first offset
+write 68        # length
 write 0
 write [0x02]
 write 0x4e8723aa

@@ -28,8 +28,8 @@ import org.kaazing.k3po.junit.rules.K3poRule;
 
 public class FetchIT
 {
-    private final K3poRule k3po = new K3poRule()
-        .addScriptRoot("scripts", "org/reaktivity/specification/kafka/fetch.v5");
+    private final K3poRule k3po = new K3poRule().addScriptRoot("scripts",
+            "org/reaktivity/specification/kafka/fetch.v5");
 
     private final TestRule timeout = new DisableOnDebug(new Timeout(10, SECONDS));
 
@@ -37,9 +37,8 @@ public class FetchIT
     public final TestRule chain = outerRule(k3po).around(timeout);
 
     @Test
-    @Specification({
-        "${scripts}/distinct.offsets.message.fanout/client",
-        "${scripts}/distinct.offsets.message.fanout/server"})
+    @Specification(
+    {"${scripts}/distinct.offsets.message.fanout/client", "${scripts}/distinct.offsets.message.fanout/server"})
     public void shouldHandleParallelSubscribesAtDistinctOffsets() throws Exception
     {
         k3po.start();
@@ -50,9 +49,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fanout.with.historical.message/client",
-        "${scripts}/fanout.with.historical.message/server"})
+    @Specification(
+    {"${scripts}/fanout.with.historical.message/client", "${scripts}/fanout.with.historical.message/server"})
     public void shouldFanoutUsingHistoricalConnection() throws Exception
     {
         k3po.start();
@@ -61,9 +59,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fanout.with.historical.messages/client",
-        "${scripts}/fanout.with.historical.messages/server"})
+    @Specification(
+    {"${scripts}/fanout.with.historical.messages/client", "${scripts}/fanout.with.historical.messages/server"})
     public void shouldFanoutDiscardingHistoricalMessageToJoinLiveStream() throws Exception
     {
         k3po.start();
@@ -72,9 +69,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fanout.with.slow.consumer/client",
-        "${scripts}/fanout.with.slow.consumer/server"})
+    @Specification(
+    {"${scripts}/fanout.with.slow.consumer/client", "${scripts}/fanout.with.slow.consumer/server"})
     public void shouldFanoutWithSlowConsumer() throws Exception
     {
         k3po.start();
@@ -84,9 +80,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
-        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
+    @Specification(
+    {"${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
+            "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
     public void shouldReceiveMessageUsingFetchKeyAndExplicitHashCode() throws Exception
     {
         k3po.start();
@@ -95,9 +91,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.and.no.key.multiple.partitions/client",
-        "${scripts}/fetch.key.and.no.key.multiple.partitions/server"})
+    @Specification(
+    {"${scripts}/fetch.key.and.no.key.multiple.partitions/client",
+            "${scripts}/fetch.key.and.no.key.multiple.partitions/server"})
     public void shouldReceiveMessagesWithAndWithoutMessageKeysMultiplePartitions() throws Exception
     {
         k3po.start();
@@ -108,9 +104,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.and.no.key.multiple.partitions.unsubscribe/client",
-        "${scripts}/fetch.key.and.no.key.multiple.partitions.unsubscribe/server"})
+    @Specification(
+    {"${scripts}/fetch.key.and.no.key.multiple.partitions.unsubscribe/client",
+            "${scripts}/fetch.key.and.no.key.multiple.partitions.unsubscribe/server"})
     public void shouldHandleUnsubscribeWithAndWithoutMessageKeysMultiplePartitions() throws Exception
     {
         k3po.start();
@@ -120,9 +116,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.default.partitioner.picks.partition.one/client",
-        "${scripts}/fetch.key.default.partitioner.picks.partition.one/server"})
+    @Specification(
+    {"${scripts}/fetch.key.default.partitioner.picks.partition.one/client",
+            "${scripts}/fetch.key.default.partitioner.picks.partition.one/server"})
     public void shouldReceiveMessageUsingFetchKeyAndDefaultPartitioner() throws Exception
     {
         k3po.start();
@@ -131,9 +127,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.historical.does.not.use.cached.key/client",
-        "${scripts}/fetch.key.historical.does.not.use.cached.key/server"})
+    @Specification(
+    {"${scripts}/fetch.key.historical.does.not.use.cached.key/client",
+            "${scripts}/fetch.key.historical.does.not.use.cached.key/server"})
     public void shouldReceiveMessageFromNonCompactedTopicWithoutCachingKeyOffset() throws Exception
     {
         k3po.start();
@@ -142,9 +138,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.multiple.matches.flow.controlled/client",
-        "${scripts}/fetch.key.multiple.matches.flow.controlled/server"})
+    @Specification(
+    {"${scripts}/fetch.key.multiple.matches.flow.controlled/client",
+            "${scripts}/fetch.key.multiple.matches.flow.controlled/server"})
     public void shouldReceiveMessagesMatchingFetchKeyFlowControlled() throws Exception
     {
         k3po.start();
@@ -153,9 +149,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.multiple.record.batches.first.matches/client",
-        "${scripts}/fetch.key.multiple.record.batches.first.matches/server"})
+    @Specification(
+    {"${scripts}/fetch.key.multiple.record.batches.first.matches/client",
+            "${scripts}/fetch.key.multiple.record.batches.first.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyWithMultipleRecordBatches() throws Exception
     {
         k3po.start();
@@ -164,9 +160,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.multiple.record.batches.no.matches/client",
-        "${scripts}/fetch.key.multiple.record.batches.no.matches/server"})
+    @Specification(
+    {"${scripts}/fetch.key.multiple.record.batches.no.matches/client",
+            "${scripts}/fetch.key.multiple.record.batches.no.matches/server"})
     public void shouldReceiveNoMessagesMatchingFetchKeyWithMultipleRecordBatches() throws Exception
     {
         k3po.start();
@@ -175,9 +171,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.no.matches/client",
-        "${scripts}/fetch.key.no.matches/server"})
+    @Specification(
+    {"${scripts}/fetch.key.no.matches/client", "${scripts}/fetch.key.no.matches/server"})
     public void shouldReceiveNoMessagesMatchingFetchKey() throws Exception
     {
         k3po.start();
@@ -186,9 +181,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.nonzero.offset.first.matches/client",
-        "${scripts}/fetch.key.nonzero.offset.first.matches/server"})
+    @Specification(
+    {"${scripts}/fetch.key.nonzero.offset.first.matches/client",
+            "${scripts}/fetch.key.nonzero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyFirstNonZeroOffset() throws Exception
     {
         k3po.start();
@@ -197,9 +192,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.three.matches.flow.controlled/client",
-        "${scripts}/fetch.key.three.matches.flow.controlled/server"})
+    @Specification(
+    {"${scripts}/fetch.key.three.matches.flow.controlled/client",
+            "${scripts}/fetch.key.three.matches.flow.controlled/server"})
     public void shouldReceiveMessagesThreeMatchingFetchKeyFlowControlled() throws Exception
     {
         k3po.start();
@@ -207,11 +202,9 @@ public class FetchIT
         k3po.finish();
     }
 
-
     @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.first.matches/client",
-        "${scripts}/fetch.key.zero.offset.first.matches/server"})
+    @Specification(
+    {"${scripts}/fetch.key.zero.offset.first.matches/client", "${scripts}/fetch.key.zero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyFirst() throws Exception
     {
         k3po.start();
@@ -220,9 +213,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.last.matches/client",
-        "${scripts}/fetch.key.zero.offset.last.matches/server"})
+    @Specification(
+    {"${scripts}/fetch.key.zero.offset.last.matches/client", "${scripts}/fetch.key.zero.offset.last.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyLast() throws Exception
     {
         k3po.start();
@@ -231,9 +223,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.multiple.matches/client",
-        "${scripts}/fetch.key.zero.offset.multiple.matches/server"})
+    @Specification(
+    {"${scripts}/fetch.key.zero.offset.multiple.matches/client",
+            "${scripts}/fetch.key.zero.offset.multiple.matches/server"})
     public void shouldReceiveMultipleMessagesMatchingFetchKey() throws Exception
     {
         k3po.start();
@@ -242,9 +234,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.multiple.matches.historical/client",
-        "${scripts}/fetch.key.zero.offset.multiple.matches.historical/server"})
+    @Specification(
+    {"${scripts}/fetch.key.zero.offset.multiple.matches.historical/client",
+            "${scripts}/fetch.key.zero.offset.multiple.matches.historical/server"})
     public void shouldReceiveMultipleHistoricalMessagesMatchingFetchKey() throws Exception
     {
         k3po.start();
@@ -253,9 +245,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/header.and.fetch.key.zero.offset.first.matches/client",
-        "${scripts}/header.and.fetch.key.zero.offset.first.matches/server"})
+    @Specification(
+    {"${scripts}/header.and.fetch.key.zero.offset.first.matches/client",
+            "${scripts}/header.and.fetch.key.zero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyAndHeaderFirst() throws Exception
     {
         k3po.start();
@@ -264,9 +256,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/headers.and.fetch.key.zero.offset.first.matches/client",
-        "${scripts}/headers.and.fetch.key.zero.offset.first.matches/server"})
+    @Specification(
+    {"${scripts}/headers.and.fetch.key.zero.offset.first.matches/client",
+            "${scripts}/headers.and.fetch.key.zero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyAndHeadersFirst() throws Exception
     {
         k3po.start();
@@ -275,9 +267,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/headers.zero.offset.multiple.matches.historical/client",
-        "${scripts}/headers.zero.offset.multiple.matches.historical/server"})
+    @Specification(
+    {"${scripts}/headers.zero.offset.multiple.matches.historical/client",
+            "${scripts}/headers.zero.offset.multiple.matches.historical/server"})
     public void shouldReceiveHistoricalMessagesMatchingHeaders() throws Exception
     {
         k3po.start();
@@ -286,9 +278,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/header.zero.offset.first.matches/client",
-        "${scripts}/header.zero.offset.first.matches/server"})
+    @Specification(
+    {"${scripts}/header.zero.offset.first.matches/client", "${scripts}/header.zero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingHeaderFirst() throws Exception
     {
         k3po.start();
@@ -297,9 +288,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/header.zero.offset.last.matches/client",
-        "${scripts}/header.zero.offset.last.matches/server"})
+    @Specification(
+    {"${scripts}/header.zero.offset.last.matches/client", "${scripts}/header.zero.offset.last.matches/server"})
     public void shouldReceiveMessageMatchingHeaderLast() throws Exception
     {
         k3po.start();
@@ -308,9 +298,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/header.zero.offset.multiple.matches/client",
-        "${scripts}/header.zero.offset.multiple.matches/server"})
+    @Specification(
+    {"${scripts}/header.zero.offset.multiple.matches/client", "${scripts}/header.zero.offset.multiple.matches/server"})
     public void shouldReceiveMultipleMessagesMatchingHeader() throws Exception
     {
         k3po.start();
@@ -319,9 +308,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/live.fetch.abort.and.reconnect/client",
-        "${scripts}/live.fetch.abort.and.reconnect/server"})
+    @Specification(
+    {"${scripts}/live.fetch.abort.and.reconnect/client", "${scripts}/live.fetch.abort.and.reconnect/server"})
     public void shouldReconnectWhenLiveFetchReceivesAbort() throws Exception
     {
         k3po.start();
@@ -330,9 +318,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/live.fetch.reset.reconnect.and.message/client",
-        "${scripts}/live.fetch.reset.reconnect.and.message/server"})
+    @Specification(
+    {"${scripts}/live.fetch.reset.reconnect.and.message/client",
+            "${scripts}/live.fetch.reset.reconnect.and.message/server"})
     public void shouldReconnectAndReceiveMessageWhenLiveFetchReceivesReset() throws Exception
     {
         k3po.start();
@@ -341,9 +329,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/record.batch.ends.with.deleted.record/client",
-        "${scripts}/record.batch.ends.with.deleted.record/server"})
+    @Specification(
+    {"${scripts}/record.batch.ends.with.deleted.record/client",
+            "${scripts}/record.batch.ends.with.deleted.record/server"})
     public void shouldReportLastMessageOffsetFromRecordBatch() throws Exception
     {
         k3po.start();
@@ -352,9 +340,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/record.batch.ends.with.truncated.record/client",
-        "${scripts}/record.batch.ends.with.truncated.record/server"})
+    @Specification(
+    {"${scripts}/record.batch.ends.with.truncated.record/client",
+            "${scripts}/record.batch.ends.with.truncated.record/server"})
     public void shouldReceiveMessageWithTruncatedRecord() throws Exception
     {
         k3po.start();
@@ -363,9 +351,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset/client",
-        "${scripts}/zero.offset/server"})
+    @Specification(
+    {"${scripts}/zero.offset/client", "${scripts}/zero.offset/server"})
     public void shouldRequestMessagesAtZeroOffset() throws Exception
     {
         k3po.start();
@@ -374,9 +361,18 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.message/client",
-        "${scripts}/zero.offset.message/server"})
+    @Specification(
+    {"${scripts}/zero.offset.no.messages/client", "${scripts}/zero.offset.no.messages/server"})
+    public void shouldRequestMessagesAtZeroOffsetAndNotSkipEmptyRecordBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.message/client", "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
     {
         k3po.start();
@@ -386,9 +382,20 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/client",
-        "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/server"})
+    @Specification(
+    {"${scripts}/zero.offset.message.zero.length.record.batch.is.skipped/client",
+    "${scripts}/zero.offset.message.zero.length.record.batch.is.skipped/server"})
+    public void shouldReceiveMessageAtZeroOffsetAfterSkippingZeroLengthBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/client",
+            "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/server"})
     public void shouldHandleResponsesExceedingMaxFetchBytes() throws Exception
     {
         k3po.start();
@@ -398,9 +405,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/client",
-        "${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/server"})
+    @Specification(
+    {"${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/client",
+            "${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/server"})
     public void shouldBootstrapTopicAndUseCachedKeyOffsetThenLive() throws Exception
     {
         k3po.start();
@@ -411,9 +418,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.delivers.compacted.deleted.messages/client",
-        "${scripts}/ktable.delivers.compacted.deleted.messages/server"})
+    @Specification(
+    {"${scripts}/ktable.delivers.compacted.deleted.messages/client",
+            "${scripts}/ktable.delivers.compacted.deleted.messages/server"})
     public void shouldReceiveKTableCompactedDeletedMessages() throws Exception
     {
         k3po.start();
@@ -423,9 +430,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.delivers.compacted.messages/client",
-        "${scripts}/ktable.delivers.compacted.messages/server"})
+    @Specification(
+    {"${scripts}/ktable.delivers.compacted.messages/client", "${scripts}/ktable.delivers.compacted.messages/server"})
     public void shouldReceiveKTableCompactedMessages() throws Exception
     {
         k3po.start();
@@ -435,9 +441,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/client",
-        "${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/server"})
+    @Specification(
+    {"${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/client",
+            "${scripts}/ktable.historical.uses.cached.key.after.unsubscribe/server"})
     public void shouldReceiveKTableMessagesUsingCachedKeyAfterUnsubscribe() throws Exception
     {
         k3po.start();
@@ -447,9 +453,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.historical.uses.cached.key.then.latest.offset/client",
-        "${scripts}/ktable.historical.uses.cached.key.then.latest.offset/server"})
+    @Specification(
+    {"${scripts}/ktable.historical.uses.cached.key.then.latest.offset/client",
+            "${scripts}/ktable.historical.uses.cached.key.then.latest.offset/server"})
     public void shouldReceiveKTableMessagesUsingCachedKeyThenLatestOffset() throws Exception
     {
         k3po.start();
@@ -459,9 +465,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.historical.uses.cached.key.then.live/client",
-        "${scripts}/ktable.historical.uses.cached.key.then.live/server"})
+    @Specification(
+    {"${scripts}/ktable.historical.uses.cached.key.then.live/client",
+            "${scripts}/ktable.historical.uses.cached.key.then.live/server"})
     public void shouldReceiveKTableMessagesUsingCachedKeyThenLive() throws Exception
     {
         k3po.start();
@@ -471,15 +477,16 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.historical.uses.cached.key.then.live.after.null.message/client",
-        "${scripts}/ktable.historical.uses.cached.key.then.live.after.null.message/server"})
+    @Specification(
+    {"${scripts}/ktable.historical.uses.cached.key.then.live.after.null.message/client",
+            "${scripts}/ktable.historical.uses.cached.key.then.live.after.null.message/server"})
     public void shouldReceiveKTableMessagesFromLiveStreamAfterCachedKeyRemovedByNullMessage() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
+
     @Test
     @Specification(
     {"${scripts}/ktable.historical.uses.cached.key.then.live.after.offset.too.early.and.null.message/client",
@@ -493,9 +500,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/client",
-        "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/server"})
+    @Specification(
+    {"${scripts}/ktable.historical.uses.cached.key.then.zero.offset/client",
+            "${scripts}/ktable.historical.uses.cached.key.then.zero.offset/server"})
     public void shouldReceiveKTableMessagesUsingCachedKeyThenZerotOffset() throws Exception
     {
         k3po.start();
@@ -504,9 +511,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.message/client",
-        "${scripts}/ktable.message/server"})
+    @Specification(
+    {"${scripts}/ktable.message/client", "${scripts}/ktable.message/server"})
     public void shouldReceiveKtableMessage() throws Exception
     {
         k3po.start();
@@ -515,9 +521,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.message.delayed.describe.response/client",
-        "${scripts}/ktable.message.delayed.describe.response/server"})
+    @Specification(
+    {"${scripts}/ktable.message.delayed.describe.response/client",
+            "${scripts}/ktable.message.delayed.describe.response/server"})
     public void shouldReceiveKtableMessageDelayedDescribeResponse() throws Exception
     {
         k3po.start();
@@ -527,9 +533,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.messages/client",
-        "${scripts}/ktable.messages/server"})
+    @Specification(
+    {"${scripts}/ktable.messages/client", "${scripts}/ktable.messages/server"})
     public void shouldReceiveKtableMessages() throws Exception
     {
         k3po.start();
@@ -538,9 +543,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.messages.header.multiple.matches/client",
-        "${scripts}/ktable.messages.header.multiple.matches/server"})
+    @Specification(
+    {"${scripts}/ktable.messages.header.multiple.matches/client",
+            "${scripts}/ktable.messages.header.multiple.matches/server"})
     public void shouldReceiveKtableMessagesFilteredByHeader() throws Exception
     {
         k3po.start();
@@ -549,9 +554,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.messages.historical/client",
-        "${scripts}/ktable.messages.historical/server"})
+    @Specification(
+    {"${scripts}/ktable.messages.historical/client", "${scripts}/ktable.messages.historical/server"})
     public void shouldReceiveHistoricalKtableMessages() throws Exception
     {
         k3po.start();
@@ -560,9 +564,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.messages.multiple.nodes/client",
-        "${scripts}/ktable.messages.multiple.nodes/server"})
+    @Specification(
+    {"${scripts}/ktable.messages.multiple.nodes/client", "${scripts}/ktable.messages.multiple.nodes/server"})
     public void shouldReceiveKtableMessagesFromMultipleNodes() throws Exception
     {
         k3po.start();
@@ -571,9 +574,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.message.multiple.networks/client",
-        "${scripts}/ktable.message.multiple.networks/server"})
+    @Specification(
+    {"${scripts}/ktable.message.multiple.networks/client", "${scripts}/ktable.message.multiple.networks/server"})
     public void shouldReceiveKtableMessagesFromMultipleNetworks() throws Exception
     {
         k3po.start();
@@ -582,9 +584,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/ktable.message.multiple.topics/client",
-        "${scripts}/ktable.message.multiple.topics/server"})
+    @Specification(
+    {"${scripts}/ktable.message.multiple.topics/client", "${scripts}/ktable.message.multiple.topics/server"})
     public void shouldReceiveKtableMessagesFromMultipleTopics() throws Exception
     {
         k3po.start();
@@ -595,9 +596,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.message.single.partition.multiple.nodes/client",
-        "${scripts}/zero.offset.message.single.partition.multiple.nodes/server"})
+    @Specification(
+    {"${scripts}/zero.offset.message.single.partition.multiple.nodes/client",
+            "${scripts}/zero.offset.message.single.partition.multiple.nodes/server"})
     public void shouldReceiveMessageAtZeroOffsetSinglePartitionMultipleNodes() throws Exception
     {
         k3po.start();
@@ -606,9 +607,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.messages/client",
-        "${scripts}/zero.offset.messages/server"})
+    @Specification(
+    {"${scripts}/zero.offset.messages/client", "${scripts}/zero.offset.messages/server"})
     public void shouldReceiveMessagesAtZeroOffset() throws Exception
     {
         k3po.start();
@@ -617,9 +617,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.messagesets/client",
-        "${scripts}/zero.offset.messagesets/server"})
+    @Specification(
+    {"${scripts}/zero.offset.messagesets/client", "${scripts}/zero.offset.messagesets/server"})
     public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
     {
         k3po.start();
@@ -628,9 +627,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.messages.fanout/client",
-        "${scripts}/zero.offset.messages.fanout/server"})
+    @Specification(
+    {"${scripts}/zero.offset.messages.fanout/client", "${scripts}/zero.offset.messages.fanout/server"})
     public void shouldFanoutMessagesAtZeroOffset() throws Exception
     {
         k3po.start();
@@ -640,9 +638,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-            "${scripts}/zero.offset.messages.group.budget/client",
-            "${scripts}/zero.offset.messages.group.budget/server"})
+    @Specification(
+    {"${scripts}/zero.offset.messages.group.budget/client", "${scripts}/zero.offset.messages.group.budget/server"})
     public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudget() throws Exception
     {
         k3po.start();
@@ -652,8 +649,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-            "${scripts}/zero.offset.messages.group.budget.reset/client",
+    @Specification(
+    {"${scripts}/zero.offset.messages.group.budget.reset/client",
             "${scripts}/zero.offset.messages.group.budget.reset/server"})
     public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudgetReset() throws Exception
     {
@@ -664,9 +661,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.messages.multiple.nodes/client",
-        "${scripts}/zero.offset.messages.multiple.nodes/server"})
+    @Specification(
+    {"${scripts}/zero.offset.messages.multiple.nodes/client", "${scripts}/zero.offset.messages.multiple.nodes/server"})
     public void shouldReceiveMessagesAtZeroOffsetMultipleNodes() throws Exception
     {
         k3po.start();
@@ -675,9 +671,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.messages.multiple.partitions/client",
-        "${scripts}/zero.offset.messages.multiple.partitions/server"})
+    @Specification(
+    {"${scripts}/zero.offset.messages.multiple.partitions/client",
+            "${scripts}/zero.offset.messages.multiple.partitions/server"})
     public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitions() throws Exception
     {
         k3po.start();
@@ -687,9 +683,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
-        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
+    @Specification(
+    {"${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
+            "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
     public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitionsPartition1() throws Exception
     {
         k3po.start();
@@ -698,9 +694,9 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/client",
-        "${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/server"})
+    @Specification(
+    {"${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/client",
+            "${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/server"})
     public void shouldReceiveMessagesAtZeroOffsetMultiplePartitionsMaxBytes256() throws Exception
     {
         k3po.start();
@@ -709,9 +705,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/zero.offset.messagesets.fanout/client",
-        "${scripts}/zero.offset.messagesets.fanout/server"})
+    @Specification(
+    {"${scripts}/zero.offset.messagesets.fanout/client", "${scripts}/zero.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtZeroOffset() throws Exception
     {
         k3po.start();
@@ -722,9 +717,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/nonzero.offset/client",
-        "${scripts}/nonzero.offset/server"})
+    @Specification(
+    {"${scripts}/nonzero.offset/client", "${scripts}/nonzero.offset/server"})
     public void shouldRequestMessagesAtNonZeroOffset() throws Exception
     {
         k3po.start();
@@ -733,9 +727,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/nonzero.offset.message/client",
-        "${scripts}/nonzero.offset.message/server"})
+    @Specification(
+    {"${scripts}/nonzero.offset.message/client", "${scripts}/nonzero.offset.message/server"})
     public void shouldReceiveMessageAtNonZeroOffset() throws Exception
     {
         k3po.start();
@@ -744,9 +737,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/nonzero.offset.messages/client",
-        "${scripts}/nonzero.offset.messages/server"})
+    @Specification(
+    {"${scripts}/nonzero.offset.messages/client", "${scripts}/nonzero.offset.messages/server"})
     public void shouldReceiveMessagesAtNonZeroOffset() throws Exception
     {
         k3po.start();
@@ -755,9 +747,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/offset.too.early.message/client",
-        "${scripts}/offset.too.early.message/server"})
+    @Specification(
+    {"${scripts}/offset.too.early.message/client", "${scripts}/offset.too.early.message/server"})
     public void shouldRefetchUsingReportedFirstOffset() throws Exception
     {
         k3po.start();
@@ -767,9 +758,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/offset.too.early.multiple.topics/client",
-        "${scripts}/offset.too.early.multiple.topics/server"})
+    @Specification(
+    {"${scripts}/offset.too.early.multiple.topics/client", "${scripts}/offset.too.early.multiple.topics/server"})
     public void shouldRefetchUsingReportedFirstOffsetOnMultipleTopics() throws Exception
     {
         k3po.start();
@@ -781,9 +771,8 @@ public class FetchIT
     }
 
     @Test
-    @Specification({
-        "${scripts}/distinct.offset.messagesets.fanout/client",
-        "${scripts}/distinct.offset.messagesets.fanout/server"})
+    @Specification(
+    {"${scripts}/distinct.offset.messagesets.fanout/client", "${scripts}/distinct.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtDistinctOffsets() throws Exception
     {
         k3po.start();
