@@ -419,9 +419,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/client",
-        "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/server"})
-    public void shouldHandleFetchResponsesWithSizeExceedingSlotCapacity() throws Exception
+        "${scripts}/zero.offset.large.message/client",
+        "${scripts}/zero.offset.large.message/server"})
+    public void shouldReceiveLargeMessage() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");

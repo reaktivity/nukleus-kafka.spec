@@ -394,9 +394,9 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/client",
-            "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/server"})
-    public void shouldHandleResponsesExceedingMaxFetchBytes() throws Exception
+    {"${scripts}/zero.offset.message.response.exceeds.256.bytes/client",
+            "${scripts}/zero.offset.message.response.exceeds.256.bytes/server"})
+    public void shouldHandleResponseExceeding256Bytes() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -695,17 +695,6 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/client",
-            "${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/server"})
-    public void shouldReceiveMessagesAtZeroOffsetMultiplePartitionsMaxBytes256() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification(
     {"${scripts}/zero.offset.messagesets.fanout/client", "${scripts}/zero.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtZeroOffset() throws Exception
     {
@@ -723,6 +712,18 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.first.record.batch.exceeds.336.bytes/client",
+            "${scripts}/zero.offset.first.record.batch.exceeds.336.bytes/server"})
+    public void shouldSkipRecordBatchExceedingMaximumConfiguredSize() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
         k3po.finish();
     }
 
