@@ -125,22 +125,23 @@ write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 290 # Size
+read 328 # Size
 read ${newRequestId}
 read [0..4]
 read 1          # Number of topics
 read 4s "test"
-read 1          # Number of partition responses
+read 2          # Number of partition responses
+
+# Partition response 1
 read 0          # Partition
 read 0s
 read 12L        # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 230        # length of record set
-
-# First record batch
-read 8L        # first offset
+read 115        # size of record batch
+# record batch
+read 8L         # first offset
 read 103        # length
 read 0
 read [0x02]
@@ -172,7 +173,15 @@ read ${kafka:varint(12)}
 read "Hello, again"
 read [0x00]
 
-# Second record batch
+# Partition response 2
+read 0          # Partition
+read 0s
+read 12L        # high watermark
+read -1L
+read 0L         # log start offset
+read -1         # aborted transactions (null)
+read 115        # size of record batch
+# record batch
 read 10L        # first offset
 read 103        # length
 read 0
