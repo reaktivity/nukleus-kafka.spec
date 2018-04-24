@@ -211,7 +211,7 @@ write 12L         # offset
 write -1L
 write ${maximumBytesTest0}
 
-read 121        # Size
+read 60         # Size
 read ${newRequestId}
 read [0..4]
 read 1
@@ -226,17 +226,6 @@ read -1         # aborted transactions (null)
 read 0          # length of record set
 read 12L        # first offset
 read 0          # length of record batch
-read 0
-read [0x02]
-read 0x4e8723aa
-read 0s
-read 0          # last offset delta
-read (long:timestamp)
-read ${timestamp}
-read -1L
-read -1s
-read -1
-read 0          # number of records
 
 write 65        # size
 write 1s        # ApiKey Fetch

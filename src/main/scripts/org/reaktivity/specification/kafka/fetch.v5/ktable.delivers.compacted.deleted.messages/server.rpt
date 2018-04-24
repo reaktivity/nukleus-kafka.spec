@@ -199,7 +199,7 @@ read notify SECOND_LIVE_FETCH_REQUEST_RECEIVED
 
 write await DELIVER_SECOND_LIVE_FETCH_RESPONSE
 
-write 121       # Size
+write 60        # Size
 write ${requestId}
 write 0
 write 1
@@ -214,17 +214,6 @@ write -1        # aborted_transactions (null)
 write 0         # length of record set
 write 12L       # first offset
 write 0         # length of record batch
-write 0
-write [0x02]
-write 0x4e8723aa
-write 0s
-write 0         # last offset delta
-write ${newTimestamp}       # first timestamp
-write ${newTimestamp}       # maximum timestamp
-write -1L
-write -1s
-write -1        # first sequence
-write 0         # number of records
 
 read 65         # Size
 read 1s         # Fetch
