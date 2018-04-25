@@ -111,22 +111,22 @@ read 0L         # offset
 read -1L
 read [0..4]
 
-write 328         # Size
+write 290         # Size
 write ${requestId}
 write 0
 write 1
 write 0x04s "test"
-write 2		    # Number of partition responses (each must contain exactly one record batch)
-
-# Partition response 1
+write 1		    # Number of partition responses
 write 0         # Partition
 write 0s        # partition error code
-write 999L      # high_watermark
+write 12L       # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
-write 115       # size of record batch
-write 8L        # first offset
+write 230       # length of record set
+
+# First record batch
+write 8L       # first offset
 write 103       # length of record batch
 write 0
 write [0x02]
@@ -158,14 +158,7 @@ write ${kafka:varint(12)}
 write "Hello, again"
 write [0x00]
 
-# Second partition response
-write 0         # Partition
-write 0s        # partition error code
-write 999L      # high_watermark
-write -1L       # last_stable_offset
-write 0L        # log_start_offset
-write -1        # aborted_transactions (null)
-write 115       # size of record batch
+# Second record batch
 write 10L       # first offset
 write 103       # length
 write 0
