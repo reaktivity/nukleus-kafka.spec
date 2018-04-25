@@ -181,11 +181,11 @@ write 4s "test"
 write 1
 write 0         # Partition
 write 0s        # partition error code
-write 5L        # high_watermark
+write 999L      # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
-write 85        # length of record set
+write 84        # length of record set
 write 4L        # first offset
 write 72        # length
 write 0

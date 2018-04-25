@@ -362,6 +362,30 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/zero.offset.first.record.batch.large/client",
+            "${scripts}/zero.offset.first.record.batch.large/server"})
+    public void shouldSkipRecordBatchExceedingMaximumConfiguredSize() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.large.response/client",
+            "${scripts}/zero.offset.large.response/server"})
+    public void shouldHandleLargeResponse() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/zero.offset.no.messages/client", "${scripts}/zero.offset.no.messages/server"})
     public void shouldRequestMessagesAtZeroOffsetAndNotSkipEmptyRecordBatch() throws Exception
     {
@@ -394,18 +418,6 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.message.response.exceeds.256.bytes/client",
-            "${scripts}/zero.offset.message.response.exceeds.256.bytes/server"})
-    public void shouldHandleResponseExceeding256Bytes() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification(
     {"${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/client",
             "${scripts}/ktable.bootstrap.historical.uses.cached.key.then.live/server"})
     public void shouldBootstrapTopicAndUseCachedKeyOffsetThenLive() throws Exception
@@ -414,6 +426,23 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("DELIVER_HISTORICAL_FETCH_RESPONSE");
         k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/ktable.bootstrap.uses.historical/client",
+            "${scripts}/ktable.bootstrap.uses.historical/server"})
+    public void shouldBootstrapTopicUsingHistoricalConnectionWhenNeeded() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.awaitBarrier("FIRST_LIVE_FETCH_REQUEST_RECEIVED");
+        k3po.notifyBarrier("WRITE_FIRST_LIVE_FETCH_RESPONSE");
+        k3po.awaitBarrier("SECOND_LIVE_FETCH_REQUEST_RECEIVED");
+        k3po.awaitBarrier("HISTORICAL_FETCH_REQUEST_RECEIVED");
+        k3po.notifyBarrier("WRITE_HISTORICAL_FETCH_RESPONSE");
+        k3po.notifyBarrier("WRITE_SECOND_LIVE_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -712,18 +741,6 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification(
-    {"${scripts}/zero.offset.first.record.batch.exceeds.336.bytes/client",
-            "${scripts}/zero.offset.first.record.batch.exceeds.336.bytes/server"})
-    public void shouldSkipRecordBatchExceedingMaximumConfiguredSize() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
         k3po.finish();
     }
 

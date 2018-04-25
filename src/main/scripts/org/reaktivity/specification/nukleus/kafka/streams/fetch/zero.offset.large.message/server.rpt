@@ -16,7 +16,6 @@
 
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 property newTimestamp ${kafka:timestamp()}
-property newTimestamp ${kafka:timestamp()}
 
 property applicationAccept "nukleus://kafka/streams/source"
 property applicationAcceptWindow 8192
@@ -42,7 +41,7 @@ write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(2)}
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(2)}
 write nukleus:data.ext -1
 write ${kafka:randomBytes(256)}
 write flush

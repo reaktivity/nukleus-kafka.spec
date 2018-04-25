@@ -125,7 +125,7 @@ write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 172
+read 175
 read ${newRequestId}
 read [0..4]
 read 0x01

@@ -130,13 +130,13 @@ write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 10         # last offset delta
+write 10        # last offset delta
 write ${newTimestamp}
 write ${newTimestamp}
 write -1L
 write -1s
 write -1
-write 2
+write 2         # record count
 write ${kafka:varint(18)}
 write [0x00]    # attributes
 write ${kafka:varint(0)}     # timestamp delta

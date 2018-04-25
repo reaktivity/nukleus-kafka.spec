@@ -135,7 +135,7 @@ read 4s "test"
 read 1
 read 0          # Partition
 read 0s
-read 12L        # high watermark
+read 999L       # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
@@ -146,7 +146,7 @@ read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 11          # last offset delta
+read 11         # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
@@ -219,13 +219,11 @@ read 4s "test"
 read 1
 read 0          # Partition
 read 0s
-read 12L         # high watermark
+read 999L       # high_watermarkk
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
 read 0          # length of record set
-read 12L        # first offset
-read 0          # length of record batch
 
 write 65        # size
 write 1s        # ApiKey Fetch
@@ -253,7 +251,7 @@ read 4s "test"
 read 1
 read 0          # Partition
 read 0s
-read 12L        # high watermark
+read 999L       # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)

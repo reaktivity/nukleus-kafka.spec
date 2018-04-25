@@ -131,12 +131,12 @@ read 0x04s "test"
 read 1
 read 0
 read 0s
-read 1L        # high watermark
+read 999L      # high watermark
 read -1L
 read 0L        # log start offset
 read -1
 read 326       # length of record set
-read 0L        # first offset
+read 1L        # first offset
 read 314       # length of record batch
 read 0
 read [0x02]

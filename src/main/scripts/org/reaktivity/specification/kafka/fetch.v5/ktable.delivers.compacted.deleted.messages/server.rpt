@@ -119,7 +119,7 @@ write 4s "test"
 write 1
 write 0         # Partition
 write 0s        # partition error code
-write 12L        # high_watermark
+write 999L      # high watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
@@ -207,13 +207,11 @@ write 4s "test"
 write 1
 write 0         # Partition
 write 0s        # partition error code
-write 12L       # high_watermark
+write 999L      # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
 write 0         # length of record set
-write 12L       # first offset
-write 0         # length of record batch
 
 read 65         # Size
 read 1s         # Fetch
@@ -241,12 +239,12 @@ write 4s "test"
 write 1
 write 0         # Partition
 write 0s        # partition error code
-write 12L       # high_watermark
+write 999L      # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
 write 125       # length of record set
-write 9L       # first offset
+write 9L        # first offset
 write 113       # length of record batch
 write 0
 write [0x02]
