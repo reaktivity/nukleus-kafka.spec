@@ -430,6 +430,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/zero.offset.large.response/client",
+        "${scripts}/zero.offset.large.response/server"})
+    public void shouldReceiveLargResponse() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.messagesets/client",
         "${scripts}/zero.offset.messagesets/server"})
     public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
