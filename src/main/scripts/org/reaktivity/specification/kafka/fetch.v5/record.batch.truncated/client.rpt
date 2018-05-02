@@ -125,7 +125,7 @@ write 0L
 write -1L
 write ${maximumBytesTest0}
 
-read 144
+read 68
 read ${newRequestId}
 read [0..4]
 read 1
@@ -137,33 +137,9 @@ read 999L       # high watermark
 read -1L
 read 0L
 read -1
-read 84         # length of record set (15 too short for last record)
-read 0L
-read 87         # length of record batch
-read 0
-read [0x02]
-read 0x4e8723aa
-read 0s
-read 10         # last offset delta
-read (long:timestamp)
-read ${timestamp}
-read -1L
-read -1s
-read -1
-read 2
-read ${kafka:varint(18)}
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(-1)}
-read ${kafka:varint(12)}
-read "Hello, world"
-read [0x00]
-read ${kafka:varint(18)}
-read [0x00]
-read ${kafka:varint(10)}    # timestamp delta
-read ${kafka:varint(10)}     # offset delta
-# record truncated (15 remaining bytes missing)
+read 8         # length of record set (15 too short for last record)
+read 0L         # first offset
+# All of the other fields of the record batch are missing because it's truncated
 
 
 # second fetch request
@@ -181,11 +157,11 @@ write 1
 write 4s "test"
 write 1
 write 0
-write 10L
+write 0L
 write -1L
 write ${maximumBytesTest0}
 
-read 140
+read 159
 read ${newRequestId}
 read [0..4]
 read 1
@@ -197,24 +173,32 @@ read 999L       # high watermark
 read -1L
 read 0L         # log start offset
 read -1
-read 80         # length of record set
-read 10L        # first offset
-read 68         # length of record batch
+read 99         # length of record set
+read 0L        # first offset
+read 87         # length of record batch
 read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 0          # last offset delta
+read 10          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 1
+read 2
 read ${kafka:varint(18)}
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(-1)}
+read ${kafka:varint(12)}
+read "Hello, world"
+read [0x00]
+read ${kafka:varint(18)}
+read [0x00]
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(10)}     # offset delta
 read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, again"

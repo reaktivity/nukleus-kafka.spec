@@ -342,7 +342,7 @@ public class FetchIT
     @Test
     @Specification(
     {"${scripts}/record.batch.ends.with.truncated.record/client",
-            "${scripts}/record.batch.ends.with.truncated.record/server"})
+     "${scripts}/record.batch.ends.with.truncated.record/server"})
     public void shouldReceiveMessageWithTruncatedRecord() throws Exception
     {
         k3po.start();
@@ -352,8 +352,19 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/record.batch.truncated/client",
+     "${scripts}/record.batch.truncated/server"})
+    public void shouldReceiveMessageRecordBatchTruncatedInItsOwnFields() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/record.batch.truncated.at.record.boundary/client",
-            "${scripts}/record.batch.truncated.at.record.boundary/server"})
+     "${scripts}/record.batch.truncated.at.record.boundary/server"})
     public void shouldReceiveMessageRecordBatchTruncatedOnRecordBoundary() throws Exception
     {
         k3po.start();
@@ -418,8 +429,8 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.message.zero.length.record.batch.is.skipped/client",
-    "${scripts}/zero.offset.message.zero.length.record.batch.is.skipped/server"})
+    {"${scripts}/zero.length.record.batch/client",
+    "${scripts}/zero.length.record.batch/server"})
     public void shouldReceiveMessageAtZeroOffsetAfterSkippingZeroLengthBatch() throws Exception
     {
         k3po.start();

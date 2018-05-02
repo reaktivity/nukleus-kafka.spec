@@ -755,8 +755,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/record.batch.ends.with.truncated.record/client",
-        "${scripts}/record.batch.ends.with.truncated.record/server"})
+        "${scripts}/record.batch.truncated/client",
+        "${scripts}/record.batch.truncated/server"})
     public void shouldReceiveMessageWithTruncatedRecord() throws Exception
     {
         k3po.start();

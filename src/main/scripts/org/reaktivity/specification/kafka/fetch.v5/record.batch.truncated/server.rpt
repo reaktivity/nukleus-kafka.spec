@@ -111,7 +111,7 @@ read 0L
 read -1L
 read [0..4]
 
-write 144
+write 68
 write ${requestId}
 write 0
 write 1
@@ -123,35 +123,11 @@ write 999L      # high watermark
 write -1L
 write 0L        # log start offset
 write -1
-write 84        # length of record set (15 too short for last record)
+write 8        # length of record set (19 too short for missing last record)
 write 0L        # first offset
-write 87        # length of record batch
-write 0
-write [0x02]
-write 0x4e8723aa
-write 0s
-write 10        # last offset delta
-write ${newTimestamp}
-write ${newTimestamp}
-write -1L
-write -1s
-write -1
-write 2         # record count
-write ${kafka:varint(18)}
-write [0x00]    # attributes
-write ${kafka:varint(0)}     # timestamp delta
-write ${kafka:varint(0)}     # offset delta
-write ${kafka:varint(-1)}
-write ${kafka:varint(12)}
-write "Hello, world"
-write [0x00]
-write ${kafka:varint(18)}
-write [0x00]
-write ${kafka:varint(10)}    # timestamp delta
-write ${kafka:varint(10)}     # offset delta
-# record truncated (15 remaining bytes missing)
+# rest of record batch (length, leaderEpoque, etc) is missing
 
-# second request to get the truncated record
+# second request to get the truncated batch
 read 65
 read 1s
 read 5s
@@ -166,11 +142,11 @@ read 1
 read 4s "test"
 read 1
 read 0
-read 10L        # requested offset
+read 0L        # requested offset
 read -1L
 read [0..4]
 
-write 140
+write 159
 write ${requestId}
 write 0
 write 1
@@ -182,24 +158,34 @@ write 999L      # high watermark
 write -1L
 write 0L        # log start offset
 write -1
-write 80        # length of record set
-write 10L       # first offset
-write 68        # length of record batch
+write 99        # length of record set
+write 0L        # first offset
+write 87        # length of record batch
 write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 0          # last offset delta
+write 10          # last offset delta
 write ${newTimestamp}
 write ${newTimestamp}
 write -1L
 write -1s
 write -1
-write 1
+write 2
+
 write ${kafka:varint(18)}
 write [0x00]    # attributes
 write ${kafka:varint(0)}     # timestamp delta
 write ${kafka:varint(0)}     # offset delta
+write ${kafka:varint(-1)}
+write ${kafka:varint(12)}
+write "Hello, world"
+write [0x00]
+
+write ${kafka:varint(18)}
+write [0x00]    # attributes
+write ${kafka:varint(0)}     # timestamp delta
+write ${kafka:varint(10)}     # offset delta
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, again"
