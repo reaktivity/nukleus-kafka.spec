@@ -16,7 +16,6 @@
 
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 property newTimestamp ${kafka:timestamp()}
-property newTimestamp ${kafka:timestamp()}
 
 property applicationAccept "nukleus://kafka/streams/source"
 property applicationAcceptWindow 8192
@@ -27,7 +26,7 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 0x04s "test"
+read nukleus:begin.ext 4s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
@@ -35,19 +34,20 @@ read nukleus:begin.ext 0
 
 connected
 
-write nukleus:begin.ext 0x04s "test"
+write nukleus:begin.ext 4s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(1)}
+write nukleus:data.ext ${newTimestamp} 2 ${kafka:varint(1)} ${kafka:varint(0)}
 write nukleus:data.ext -1
-write ${kafka:randomBytes(256)}
+write ${kafka:randomBytes(210)}
+write "Hello, world"
 write flush
 
-write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(2)}
+write nukleus:data.ext ${newTimestamp} 2 ${kafka:varint(1)} ${kafka:varint(1)}
 write nukleus:data.ext -1
-write ${kafka:randomBytes(124)}
+write "Hello, world"
 write flush

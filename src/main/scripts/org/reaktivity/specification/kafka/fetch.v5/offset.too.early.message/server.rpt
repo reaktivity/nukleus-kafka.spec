@@ -186,9 +186,9 @@ write 999L      # high watermark
 write -1L       # last stable offest
 write 13L       # log start offset
 write -1
-write 80
+write 80        # record batch size
 write 13L       # first offset
-write 68
+write 68        # length
 write 0
 write [0x02]
 write 0x4e8723aa
@@ -198,8 +198,8 @@ write ${newTimestamp}
 write ${newTimestamp}
 write -1L
 write -1s
-write -1
-write 1
+write -1 
+write 1         # number of records
 write ${kafka:varint(18)}
 write [0x00]
 write ${kafka:varint(0)}

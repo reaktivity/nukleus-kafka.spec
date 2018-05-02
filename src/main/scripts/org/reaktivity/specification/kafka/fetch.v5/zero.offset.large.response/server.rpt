@@ -32,8 +32,8 @@ accepted
 connected
 
 read 21         # Size int32
-read 0x03s      # ApiKey int16 (Metadata)
-read 0x05s      # ApiVersion int16
+read 3s      # ApiKey int16 (Metadata)
+read 5s      # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [TopicName] array length
@@ -53,7 +53,7 @@ write 1         # controller broker id
 write 1         # topic array length
   write 0s      # error code
   write 4s "test"
-  write byte 0x00           # is_internal
+  write byte 0           # is_internal
   write 2       # partition array length
     write 0s    # error code
     write 0     # partition
@@ -101,89 +101,93 @@ read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
 read 89
-read 1s         # API key (fetch)
-read 5s         # API version
+read 1s
+read 5s
 read (int:requestId)
 read -1s        # client id
 read -1 
-read [0..4]     # max wait time millis
+read [0..4]
 read 1
-read 256        # max fetch bytes
+read [0..4]
 read [0x00]
 read 1
 read 4s "test"
 read 2          # Number of partitions
 read 0          # Partition
-read 0L      # fetch offset
-read -1L        # log start offset
-read 256        # max partition bytes
+read 0L
+read -1L
+read [0..4]
 read 1          # Partition
 read 0L
 read -1L
-read 256         # max partition bytes
+read [0..4]
 
-write 252
-write ${requestId}
-write 0
-write 1
-write 4s "test"
-write 2         # Number of partition responses
-    write 0     # Partition
-    write 0s
-    write 1L    # high_watermark
-    write -1L   # last_stable_offset
-    write 0L    # log_start_offset
-    write -1    # aborted_transactions (null)
-    write 77    # Length of the record batch
-                # Start of RecordBatch
-    write 0L    # First offset 
-    write 65    # Length
-    write 0     # Partition leader epoque
-    write [0x02]            # Magic
-    write 0x4e8723aa        # CRC32
-    write 0s # attributes
-    write 0     # last offset delta
-    write ${newTimestamp}
-    write ${newTimestamp}
-    write -1L   # producer ID
-    write -1s   # producer epoque
-    write -1    # first sequence
-    write 1     # Number of records
-    write ${kafka:varint(15)} # Record length
-    write [0x00]              # attributes
-    write ${kafka:varint(0)}  # timestamp delta
-    write ${kafka:varint(0)}  # offset delta
-    write ${kafka:varint(-1)} # key length
-    write ${kafka:varint(9)}  # value length
-    write "Hello one"         # value
-    write ${kafka:varint(0)}  # headers array length
-  
-    write 1     # Partition
-    write 0s
-    write 1L # high_watermark
-    write -1L   # last_stable_offset
-    write 0L    # log_start_offset
-    write -1    # aborted_transactions (null)
-    write 77    # Length of the record batch
-                # Start of RecordBatch
-    write 0L    # First offset 
-    write 65    # Length
-    write 0     # Partition leader epoque
-    write [0x02]            # Magic
-    write 0x4e8723aa        # CRC32
-    write 0x00s # attributes
-    write 0     # last offset delta
-    write ${newTimestamp}
-    write ${newTimestamp}
-    write -1L   # producer ID
-    write -1s   # producer epoque
-    write -1    # first sequence
-    write 1     # Number of records
-    write ${kafka:varint(15)} # Record length
-    write [0x00]            # attributes
-    write ${kafka:varint(0)} # timestamp delta
-    write ${kafka:varint(0)} # offset delta
-    write ${kafka:varint(-1)} # key length
-    write ${kafka:varint(9)} # value length
-    write "Hello two"    # value
-    write ${kafka:varint(0)} # headers array length
+read notify FETCH_REQUEST_RECEIVED
+
+write await WRITE_FETCH_RESPONSE
+
+write 458
+ ${requestId}
+ 0
+ 1
+ 4s "test"
+ 2         # Number of partition responses
+   0     # Partition
+   0s
+   1L # high_watermark
+   -1L   # last_stable_offset
+   0L    # log_start_offset
+   -1    # aborted_transactions (null)
+   280   # Length of the record set
+              # Start of RecordBatch
+   0L    # First offset 
+   268   # Length
+   0     # Partition leader epoque
+   [0x02]            # Magic
+   0x4e8723aa        # CRC32
+   0s    # attributes
+   0     # last offset delta
+   ${newTimestamp}
+   ${newTimestamp}
+   -1L   # producer ID
+   -1s   # producer epoque
+   -1    # first sequence
+   1     # Number of records
+   ${kafka:varint(217)} # Record length
+   [0x00]            # attributes
+   ${kafka:varint(0)} # timestamp delta
+   ${kafka:varint(0)} # offset delta
+   ${kafka:varint(-1)} # key length
+   ${kafka:varint(210)} # value length
+   ${kafka:randomBytes(210)}
+   ${kafka:varint(0)} 
+   1    # partition
+   0s 
+   1L    # first offset
+   -1L   # last_stable_offset
+   0L    # log_start_offset
+   -1    # aborted_transactions (null)
+   80    # Length of the record set
+   # Start of RecordBatch
+   0L    # First offset 
+   68    # Length
+   0     # Partition leader epoque
+   [0x02]            # Magic
+   0x4e8723aa        # CRC32
+   0s    # attributes
+   0     # last offset delta
+   ${newTimestamp}
+   ${newTimestamp}
+   -1L   # producer ID
+   -1s   # producer epoque
+   -1    # first sequence
+   1     # Number of records
+   ${kafka:varint(18)} # Record length
+   [0x00]            # attributes
+   ${kafka:varint(0)} # timestamp delta
+   ${kafka:varint(0)} # offset delta
+   ${kafka:varint(-1)} # key length
+   ${kafka:varint(12)} # value length
+   "Hello, world"    # value
+   ${kafka:varint(0)} # headers array length
+

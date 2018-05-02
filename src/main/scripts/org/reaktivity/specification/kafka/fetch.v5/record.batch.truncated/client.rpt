@@ -38,8 +38,8 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
 write 21        # Size int32
-write 0x03s     # ApiKey int16 (Metadata)
-write 0x05s     # ApiVersion int16
+write 3s     # ApiKey int16 (Metadata)
+write 5s     # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
 write -1s       # ClientId string (null)
 write 1         # [TopicName] array length
@@ -80,7 +80,7 @@ write 4s "test" # topic name
 write 1         # config names count
 write 14s "cleanup.policy"  # config name
 
-read 55         # Size int32
+read 54         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
 read 1          # resources count
@@ -90,12 +90,12 @@ read [0x02]     # resource type (topic)
 read 4s "test"  # topic name
 read 1          # config entries count
 read 14s "cleanup.policy"   # config name
-read 7s "compact"           # config value
+read 6s "delete"            # config value
 read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 
-# Live fetch connection
+# Fetch stream
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
@@ -107,11 +107,9 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
-read notify LIVE_FETCH_CONNECTED
-
-write 65         # size
-write 1s         # ApiKey Fetch
-write 5s         # version
+write 65
+write 1s
+write 5s
 write ${newRequestId}
 write -1s
 write -1
@@ -127,176 +125,81 @@ write 0L
 write -1L
 write ${maximumBytesTest0}
 
-read 223        # Size
+read 68
 read ${newRequestId}
 read [0..4]
 read 1
 read 4s "test"
 read 1
-read 0          # Partition
+read 0
 read 0s
-read 12L        # high watermark
+read 999L       # high watermark
+read -1L
+read 0L
+read -1
+read 8         # length of record set (15 too short for last record)
+read 0L         # first offset
+# All of the other fields of the record batch are missing because it's truncated
+
+
+# second fetch request
+write 65
+write 1s
+write 5s
+write ${newRequestId}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1
+write 4s "test"
+write 1
+write 0
+write 0L
+write -1L
+write ${maximumBytesTest0}
+
+read 159
+read ${newRequestId}
+read [0..4]
+read 1
+read 4s "test"
+read 1
+read 0
+read 0s
+read 999L       # high watermark
 read -1L
 read 0L         # log start offset
-read -1         # aborted transactions (null)
-read 163        # length of record set
-read 0L         # first offset
-read 151        # length of record batch
+read -1
+read 99         # length of record set
+read 0L        # first offset
+read 87         # length of record batch
 read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 11          # last offset delta
+read 10          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 4          # number of records
-
-read ${kafka:varint(24)}    # record length
+read 2
+read ${kafka:varint(18)}
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(6)}     # key length
-read "match1"
+read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
-read "match1 first"
+read "Hello, world"
 read [0x00]
-
-read ${kafka:varint(25)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(9)}     # offset delta
-read ${kafka:varint(6)}     # key length
-read "match1"
-read ${kafka:varint(13)}
-read "match1 second"
-read [0x00]
-
-read ${kafka:varint(24)}    # record length
+read ${kafka:varint(18)}
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(10)}     # offset delta
-read ${kafka:varint(6)}     # key length
-read "match2"
+read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
-read "match2 first"
-read [0x00]
-
-read ${kafka:varint(25)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(11)}     # offset delta
-read ${kafka:varint(6)}     # key length
-read "match2"
-read ${kafka:varint(13)}
-read "match2 second"
-read [0x00]
-
-write 65         # size
-write 1s         # ApiKey Fetch
-write 5s         # version
-write ${newRequestId}
-write -1s
-write -1
-write ${maximumWaitTime}
-write 1
-write ${maximumBytes}
-write [0x00]
-write 1
-write 4s "test"
-write 1
-write 0
-write 12L         # offset
-write -1L
-write ${maximumBytesTest0}
-
-read 60        # Size
-read ${newRequestId}
-read [0..4]
-read 1
-read 4s "test"
-read 1
-read 0          # Partition
-read 0s
-read 12L         # high watermark
-read -1L
-read 0L         # log start offset
-read -1         # aborted transactions (null)
-read 0          # length of record set
-
-write 65        # size
-write 1s        # ApiKey Fetch
-write 5s        # version
-write ${newRequestId}
-write -1s
-write -1
-write ${maximumWaitTime}
-write 1
-write ${maximumBytes}
-write [0x00]
-write 1
-write 4s "test"
-write 1
-write 0
-write 9L        # offset
-write -1L
-write ${maximumBytesTest0}
-
-read 198        # Size
-read ${newRequestId}
-read [0..4]
-read 1
-read 4s "test"
-read 1
-read 0          # Partition
-read 0s
-read 12L        # high watermark
-read -1L
-read 0L         # log start offset
-read -1         # aborted transactions (null)
-read 138        # length of record set
-read 9L         # first offset
-read 126        # length of record batch
-read 0
-read [0x02]
-read 0x4e8723aa
-read 0s
-read 2          # last offset delta
-read (long:timestamp)
-read ${timestamp}
-read -1L
-read -1s
-read -1
-read 3          # number of records
-
-read ${kafka:varint(25)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(6)}     # key length
-read "match1"
-read ${kafka:varint(13)}
-read "match1 second"
-read [0x00]
-
-read ${kafka:varint(24)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(1)}     # offset delta
-read ${kafka:varint(6)}     # key length
-read "match2"
-read ${kafka:varint(12)}
-read "match2 first"
-read [0x00]
-
-read ${kafka:varint(25)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(2)}     # offset delta
-read ${kafka:varint(6)}     # key length
-read "match2"
-read ${kafka:varint(13)}
-read "match2 second"
+read "Hello, again"
 read [0x00]
