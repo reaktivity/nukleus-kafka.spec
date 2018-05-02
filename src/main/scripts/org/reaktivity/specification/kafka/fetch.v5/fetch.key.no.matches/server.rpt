@@ -111,7 +111,7 @@ read 0L         # offset
 read -1L
 read [0..4]
 
-write 172       # Size
+write 175       # Size
 write ${requestId}
 write 0
 write 1
@@ -123,7 +123,7 @@ write 12L       # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
-write 115       # length of record batch
+write 115       # length of record set
 write 10L       # first offset
 write 103       # length
 write 0

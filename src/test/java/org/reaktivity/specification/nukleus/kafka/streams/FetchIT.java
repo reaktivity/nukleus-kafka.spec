@@ -419,9 +419,20 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/client",
-        "${scripts}/zero.offset.messages.response.exceeds.requested.256.bytes/server"})
-    public void shouldHandleFetchResponsesWithSizeExceedingSlotCapacity() throws Exception
+        "${scripts}/zero.offset.large.message/client",
+        "${scripts}/zero.offset.large.message/server"})
+    public void shouldReceiveLargeMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.large.response/client",
+        "${scripts}/zero.offset.large.response/server"})
+    public void shouldReceiveLargResponse() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -744,8 +755,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/record.batch.ends.with.truncated.record/client",
-        "${scripts}/record.batch.ends.with.truncated.record/server"})
+        "${scripts}/record.batch.truncated/client",
+        "${scripts}/record.batch.truncated/server"})
     public void shouldReceiveMessageWithTruncatedRecord() throws Exception
     {
         k3po.start();

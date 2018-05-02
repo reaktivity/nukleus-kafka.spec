@@ -124,7 +124,7 @@ write 999L      # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
-write 0         # length of record batch is zero because message at offset 9L is too large to fit maxPartitionBytes
+write 0         # length of record set is zero because message at offset 9L is too large to fit maxPartitionBytes
 
 # second fetch request at one higher offset
 read 65
