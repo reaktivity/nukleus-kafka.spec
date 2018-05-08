@@ -16,12 +16,10 @@
 
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 property newTimestamp ${kafka:timestamp()}
+property newTimestamp ${kafka:timestamp()}
 
 property applicationAccept "nukleus://kafka/streams/source"
 property applicationAcceptWindow 8192
-
-property offset 0
-property key "key1"
 
 accept ${applicationAccept}
        option nukleus:route ${newApplicationRouteRef}
@@ -30,7 +28,7 @@ accept ${applicationAccept}
 accepted
 
 read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(offset)}
+read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
@@ -38,13 +36,22 @@ read nukleus:begin.ext 0
 connected
 
 write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(offset)}
+write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(offset + 1)}
-write nukleus:data.ext ${kafka:length(key)} ${key}
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(1)}
+write nukleus:data.ext 4 "key1"
 write "Hello, world"
+write flush
+
+write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(2)}
+write nukleus:data.ext 4 "key1"
+write flush
+
+write nukleus:data.ext ${newTimestamp + 20} 1 ${kafka:varint(3)}
+write nukleus:data.ext 4 "key2"
+write "Hello, again"
 write flush
