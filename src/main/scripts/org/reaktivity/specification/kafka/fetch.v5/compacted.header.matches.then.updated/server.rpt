@@ -73,7 +73,7 @@ read 4s "test"  # topic name
 read 1          # config_names count
 read 14s "cleanup.policy"
 
-write 54        # Size int32
+write 55        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
@@ -83,7 +83,7 @@ write [0x02]    # resource type
 write 4s "test" # topic name
 write 1         # config entries count
 write 14s "cleanup.policy"  # config name
-write 6s "delete"           # config  value
+write 7s "compact"          # config  value
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
@@ -119,12 +119,12 @@ write 0x04s "test"
 write 1
 write 0         # Partition
 write 0x00s     # partition error code
-write 13L       # high_watermark
+write 999L      # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
 write 176       # length of record batch
-write 10L       # first offset
+write 0L        # first offset
 write 164       # length
 write 0
 write [0x02]
