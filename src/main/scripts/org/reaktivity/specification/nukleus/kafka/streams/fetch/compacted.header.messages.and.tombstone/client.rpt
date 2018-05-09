@@ -29,7 +29,9 @@ write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext 19
+write nukleus:begin.ext 7s "header1"
+write nukleus:begin.ext 6 "match1"
 
 connected
 
@@ -37,20 +39,18 @@ read nukleus:begin.ext 4s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext 19
+read nukleus:begin.ext 7s "header1"
+read nukleus:begin.ext 6 "match1"
 
 read nukleus:data.ext (long:timestamp1) 1 ${kafka:varint(1)}
 read nukleus:data.ext 4 "key1"
 read "Hello, world"
 
 read nukleus:data.ext ${timestamp1 + 10} 1 ${kafka:varint(2)}
-read nukleus:data.ext 4 "key1"
-read nukleus:data.null
-
-# TODO:
-# read nukleus:data.ext ${timestamp1 + 20} 1 ${kafka:varint(3)} 
-# gives a script diff with "Expected value 1519688695344 has unsupported type"
-# This only occurs when the second message has no payload. k3po/nukleus ext bug?
-read nukleus:data.ext (long:timestamp3)  1 ${kafka:varint(3)}
 read nukleus:data.ext 4 "key2"
 read "Hello, again"
+
+read nukleus:data.ext ${timestamp1 + 20} 1 ${kafka:varint(3)}
+read nukleus:data.ext 4 "key1"
+read nukleus:data.null

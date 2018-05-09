@@ -233,8 +233,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/compacted.messages.and.tombstone/client",
-        "${scripts}/compacted.messages.and.tombstone/server"})
+        "${scripts}/compacted.header.messages.and.tombstone/client",
+        "${scripts}/compacted.header.messages.and.tombstone/server"})
     public void shouldReceiveCompactedMessagesWithTombstone() throws Exception
     {
         k3po.start();

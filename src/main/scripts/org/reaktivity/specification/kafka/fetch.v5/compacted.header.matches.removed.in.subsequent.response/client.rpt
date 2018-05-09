@@ -80,7 +80,7 @@ write 4s "test" # topic name
 write 1         # config names count
 write 14s "cleanup.policy"  # config name
 
-read 54         # Size int32
+read 55         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
 read 1          # resources count
@@ -90,7 +90,7 @@ read [0x02]     # resource type (topic)
 read 4s "test"  # topic name
 read 1          # config entries count
 read 14s "cleanup.policy"   # config name
-read 6s "delete"            # config value
+read 7s "compact"           # config  value
 read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
@@ -168,7 +168,7 @@ read "match1"               # header value
 
 read ${kafka:varint(37)}    # record length
 read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(10)}     # timestamp delta
 read ${kafka:varint(1)}     # offset delta
 read ${kafka:varint(4)}     # key length
 read "key2"
@@ -199,7 +199,7 @@ write 2L        # offset
 write -1L
 write ${maximumBytesTest0}
 
-read 162        # Size
+read 144        # Size
 read ${newRequestId}
 read [0..4]
 read 0x01
@@ -211,9 +211,9 @@ read 999L       # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 102        # length of record batch
+read 84         # length of record batch
 read 2L         # first offset
-read 90         # length
+read 72         # length
 read 0
 read [0x02]
 read 0x4e8723aa
@@ -226,7 +226,7 @@ read -1s
 read -1
 read 1          # number of records
 
-read ${kafka:varint(38)}    # record length
+read ${kafka:varint(22)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
@@ -234,8 +234,4 @@ read ${kafka:varint(4)}     # key length
 read "key1"
 read ${kafka:varint(12)}
 read "Hello, third"
-read ${kafka:varint(1)}     # number of headers
-read ${kafka:varint(7)}     # header key length
-read "header1"              # header key
-read ${kafka:varint(7)}     # header value length
-read "updated"              # header value
+read ${kafka:varint(0)}     # number of headers

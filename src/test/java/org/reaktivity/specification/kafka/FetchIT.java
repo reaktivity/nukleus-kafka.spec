@@ -92,9 +92,9 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/compacted.header.matches.updated.in.same.response/client",
-     "${scripts}/compacted.header.matches.updated.in.same.response/server"})
-    public void shouldReceiveNotReceiveTombstonedMessage() throws Exception
+    {"${scripts}/compacted.header.matches.then.updated/client",
+     "${scripts}/compacted.header.matches.then.updated/server"})
+    public void shouldReceiveCompactedMessagesWithHeaderUpdated() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -103,9 +103,9 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/compacted.header.matches.updated.in.subsequent.response/client",
-     "${scripts}/compacted.header.matches.updated.in.subsequent.response/server"})
-    public void shouldReceiveCompactedMessagesMatchingHeader() throws Exception
+    {"${scripts}/compacted.header.matches.removed.in.subsequent.response/client",
+     "${scripts}/compacted.header.matches.removed.in.subsequent.response/server"})
+    public void shouldReceiveCompactedMessagesWithHeaderThenRemoved() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

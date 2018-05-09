@@ -168,7 +168,7 @@ read "match1"               # header value
 
 read ${kafka:varint(37)}    # record length
 read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(10)}     # timestamp delta
 read ${kafka:varint(1)}     # offset delta
 read ${kafka:varint(4)}     # key length
 read "key2"
@@ -182,7 +182,7 @@ read "match1"               # header value
 
 read ${kafka:varint(38)}    # record length
 read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(20)}     # timestamp delta
 read ${kafka:varint(2)}     # offset delta
 read ${kafka:varint(4)}     # key length
 read "key1"
