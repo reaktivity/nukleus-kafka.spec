@@ -27,6 +27,12 @@ import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 public final class Functions
 {
     @Function
+    public static int length(String value)
+    {
+        return value.length();
+    }
+
+    @Function
     public static short lengthAsShort(String value)
     {
         return (short) value.length();

@@ -92,6 +92,28 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.header.matches.then.updated/client",
+     "${scripts}/compacted.header.matches.then.updated/server"})
+    public void shouldReceiveCompactedMessagesWithHeaderUpdated() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.header.matches.removed.in.subsequent.response/client",
+     "${scripts}/compacted.header.matches.removed.in.subsequent.response/server"})
+    public void shouldReceiveCompactedMessagesWithHeaderThenRemoved() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/client",
      "${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/server"})
     public void shouldReceiveCompactedMessagesUsingCachedKeyAfterUnsubscribe() throws Exception
