@@ -263,7 +263,7 @@ read 1
 read 4s "test"
 read 1
 read 0          # Partition
-read 12L        # offset
+read 11L        # offset
 read -1L
 read [0..4]
 
