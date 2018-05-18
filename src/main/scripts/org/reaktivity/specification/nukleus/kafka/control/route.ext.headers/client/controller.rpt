@@ -20,13 +20,17 @@ property nukleiRG010101EC ${nuklei:directory("target/nukleus-itests").controlCap
 
 property controlRG010101EC ${nukleiRG010101EC.control("kafka")}
 
-property routedTopicName "test" 
+property routedTopicName "test"
+property routedHeaderName1 "header1"
+property routedHeaderValue1 "match1"
+property routedHeaderName2 "header2"
+property routedHeaderValue2 "match2"
 
 connect "agrona://stream/bidirectional"
         option agrona:reader ${agrona:broadcastReceiver(controlRG010101EC.controller)}
         option agrona:writer ${agrona:manyToOneWriter(controlRG010101EC.nukleus)}
 
-connected
+connected 
 
 write 0x00000001
 write ${controlRG010101EC.nextCorrelationId()}
@@ -37,7 +41,11 @@ write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
 write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}
-write 0
+write 2
+write ${kafka:lengthAsShort(routedHeaderName1)} ${routedHeaderName1}
+write ${kafka:length(routedHeaderValue1)} ${routedHeaderValue1}
+write ${kafka:lengthAsShort(routedHeaderName2)} ${routedHeaderName2}
+write ${kafka:length(routedHeaderValue2)} ${routedHeaderValue2}
 write flush
 
 read 0x40000001
