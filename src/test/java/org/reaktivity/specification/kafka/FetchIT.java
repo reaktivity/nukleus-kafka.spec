@@ -138,9 +138,33 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.historical.uses.cached.key.then.latest.offset.no.historical/client",
+     "${scripts}/compacted.historical.uses.cached.key.then.latest.offset.no.historical/server"})
+    public void shouldReceiveCompactedMessagesUsingCachedKeyThenLatestOffsetNoHistorical() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_SECOND_LIVE_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.historical.uses.cached.key.then.live/client",
      "${scripts}/compacted.historical.uses.cached.key.then.live/server"})
     public void shouldReceiveCompactedMessagesUsingCachedKeyThenLive() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_SECOND_LIVE_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.historical.uses.cached.key.then.live.no.historical/client",
+     "${scripts}/compacted.historical.uses.cached.key.then.live.no.historical/server"})
+    public void shouldReceiveCompactedMessagesUsingCachedKeyThenLiveNoHistorical() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
