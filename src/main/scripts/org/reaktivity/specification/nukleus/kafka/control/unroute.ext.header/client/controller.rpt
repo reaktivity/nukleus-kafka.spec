@@ -37,7 +37,7 @@ write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
 write 0x0004s "test"
-write 1
+write 19
 write 7s "header1"
 write 6 "match1"
 write flush

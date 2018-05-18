@@ -34,7 +34,7 @@ read [0x06] "target"
 read (long:clientConnectRefRG010101N)
 read 0L
 read 0x0004s "test"
-read 1
+read 19
 read 7s "header1"
 read 6 "match1"
 

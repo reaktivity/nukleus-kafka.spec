@@ -36,8 +36,8 @@ write ${newApplicationRouteRef}
 write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
-write 0x0004s "test"
-write 2
+write 4s "test"
+write 38
 write 7s "header1"
 write 6 "match1"
 write 7s "header2"
