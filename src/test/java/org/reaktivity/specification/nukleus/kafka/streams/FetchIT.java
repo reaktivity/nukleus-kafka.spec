@@ -211,9 +211,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/compacted.messages.from.cache/client",
-        "${scripts}/compacted.messages.from.cache/server"})
-    public void shouldReceiveMessagesFromCompactedTopicUltraCompacted() throws Exception
+        "${scripts}/compacted.messages.header/client",
+        "${scripts}/compacted.messages.header/server"})
+    public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -222,9 +222,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/compacted.messages.header.multiple.matches/client",
-        "${scripts}/compacted.messages.header.multiple.matches/server"})
-    public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
+        "${scripts}/compacted.messages.one.per.key/client",
+        "${scripts}/compacted.messages.one.per.key/server"})
+    public void shouldReceiveMessagesFromCompactedTopicUltraCompacted() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");

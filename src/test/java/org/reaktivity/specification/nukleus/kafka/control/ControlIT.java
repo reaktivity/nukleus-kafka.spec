@@ -89,6 +89,16 @@ public class ControlIT
 
     @Test
     @Specification({
+        "route.ext.multiple.headers/client/nukleus",
+        "route.ext.multiple.headers/client/controller"
+    })
+    public void shouldRouteClientWithHeaderConditionOnMultipleRoutesToSameTopic() throws Exception
+    {
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "route.ext.multiple.networks/client/nukleus",
         "route.ext.multiple.networks/client/controller"
     })
@@ -137,6 +147,18 @@ public class ControlIT
         "unroute.ext.headers/client/controller"
     })
     public void shouldUnrouteClientWithHeaderConditions() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "unroute.ext.multiple.headers/client/nukleus",
+        "unroute.ext.multiple.headers/client/controller"
+    })
+    public void shouldUnrouteClientWithMultipleRoutesDifferingInHeaders() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");

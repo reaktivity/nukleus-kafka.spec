@@ -125,7 +125,7 @@ write 0x00L
 write -1L
 write ${maximumBytesTest0}
 
-read 225         # Size
+read 287        # Size
 read ${newRequestId}
 read [0..4]
 read 0x01
@@ -133,62 +133,90 @@ read 0x04s "test"
 read 1
 read 0          # Partition
 read 0x00s
-read 13L        # high watermark
+read 999L       # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 165        # length of record batch
-read 10L        # first offset
-read 153         # length
+read 227        # length of record batch
+read 9L         # first offset
+read 215        # length
 read 0
 read [0x02]
 read 0x4e8723aa
 read 0x00s
-read 2          # last offset delta
+read 4          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 3          # number of records
+read 5          # number of records
 
-read ${kafka:varint(25)}    # record length
+read ${kafka:varint(35)}    # Record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
 read ${kafka:varint(4)}     # key length
-read "key1"
-read ${kafka:varint(-1)}    # null value
-read ${kafka:varint(1)}     # number of headers
-read ${kafka:varint(7)}     # header key length
-read "header1"              # header key
-read ${kafka:varint(6)}     # header value length
-read "match1"               # header value
-
-read ${kafka:varint(39)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(1)}     # offset delta
-read ${kafka:varint(4)}     # key length
-read "key2"
-read ${kafka:varint(12)}
-read "Hello, again"
+read "key0"
+read ${kafka:varint(8)}
+read "no match"
 read ${kafka:varint(1)}     # number of headers
 read ${kafka:varint(7)}     # header key length
 read "header1"              # header key
 read ${kafka:varint(8)}     # header value length
 read "no match"             # header value
 
-read ${kafka:varint(37)}    # record length
+read ${kafka:varint(37)}    # Record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(1)}     # offset delta
+read ${kafka:varint(4)}     # key length
+read "key1"
+read ${kafka:varint(12)}
+read "Hello, world"
+read ${kafka:varint(1)}     # number of headers
+read ${kafka:varint(7)}     # header key length
+read "header1"              # header key
+read ${kafka:varint(6)}     # header value length
+read "match1"               # header value
+
+read ${kafka:varint(25)}    # Record length
+read [0x00]     # attributes
+read ${kafka:varint(10)}    # timestamp delta
 read ${kafka:varint(2)}     # offset delta
 read ${kafka:varint(4)}     # key length
-read "key3"
-read ${kafka:varint(12)}
+read "key2"
+read ${kafka:varint(-1)}    # value is null
+read ${kafka:varint(1)}     # number of headers
+read ${kafka:varint(7)}     # header key length
+read "header1"              # header key
+read ${kafka:varint(6)}     # header value length
+read "match1"               # header value
+
+read ${kafka:varint(27)}    # Record length
+read [0x00]     # attributes
+read ${kafka:varint(20)}    # timestamp delta
+read ${kafka:varint(3)}     # offset delta
+read ${kafka:varint(4)}     # key length
+read "key1"
+read ${kafka:varint(2)}     # value is null
+read "vv"
+read ${kafka:varint(1)}     # number of headers
+read ${kafka:varint(7)}     # header key length
+read "header1"              # header key
+read ${kafka:varint(6)}     # header value length
+read "match1"               # header value
+
+read ${kafka:varint(37)}    # Record length
+read [0x00]     # attributes
+read ${kafka:varint(30)}    # timestamp delta
+read ${kafka:varint(4)}     # offset delta
+read ${kafka:varint(4)}     # key length
+read "key1"
+read ${kafka:varint(12)}    # value length
 read "Hello, third"
 read ${kafka:varint(1)}     # number of headers
 read ${kafka:varint(7)}     # header key length
 read "header1"              # header key
 read ${kafka:varint(6)}     # header value length
-read "match1"                # header value
+read "match1"               # header value

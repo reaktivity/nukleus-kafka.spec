@@ -242,8 +242,8 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/compacted.messages.header.multiple.matches/client",
-     "${scripts}/compacted.messages.header.multiple.matches/server"})
+    {"${scripts}/compacted.messages.header/client",
+     "${scripts}/compacted.messages.header/server"})
     public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
     {
         k3po.start();
