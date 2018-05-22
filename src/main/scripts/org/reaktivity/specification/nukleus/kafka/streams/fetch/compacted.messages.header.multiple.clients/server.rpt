@@ -82,7 +82,7 @@ write nukleus:begin.ext 7s "header1"
 write nukleus:begin.ext 6 "match1"
 write flush
 
-write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(12)}
+write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(13)}
 write nukleus:data.ext 4 "key2"
 write flush
 

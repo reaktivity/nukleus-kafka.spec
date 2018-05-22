@@ -14,15 +14,15 @@
 # under the License.
 #
 
-property nukleusRMT01N ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleusRMH01N ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRMT01N ${nukleusRMT01N.controlNew("kafka")}
+property controlRMH01N ${nukleusRMH01N.controlNew("kafka")}
 
 property newRouteRef ${nuklei:newReferenceId()}
 
 connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:manyToOneReader(controlRMT01N.nukleus)}
-        option agrona:writer ${agrona:broadcastTransmitter(controlRMT01N.controller)}
+        option agrona:reader ${agrona:manyToOneReader(controlRMH01N.nukleus)}
+        option agrona:writer ${agrona:broadcastTransmitter(controlRMH01N.controller)}
 
 connected
 
@@ -61,3 +61,5 @@ write 0x40000001
 write ${correlationIdRNT01N2}
 write ${newRouteRef}
 write flush
+
+close
