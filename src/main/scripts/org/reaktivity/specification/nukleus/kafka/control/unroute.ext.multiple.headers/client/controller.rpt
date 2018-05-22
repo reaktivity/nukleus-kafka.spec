@@ -14,8 +14,7 @@
 # under the License.
 #
 
-property newApplicationRouteRef1 ${nuklei:newReferenceId()} # external scope
-property newApplicationRouteRef2 ${nuklei:newReferenceId()} # external scope
+property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
 property nukleiURMH01C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
@@ -33,11 +32,11 @@ write 0x00000002
 write ${controlURMH01C.nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
-write ${newApplicationRouteRef1}
+write ${newApplicationRouteRef}
 write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
-write 5s "test1"
+write 4s "test"
 write 19
 write 7s "header1"
 write 6 "match1"
@@ -50,11 +49,11 @@ write 0x00000002
 write ${controlURMH01C.nextCorrelationId()}
 write [0x01]
 write [0x06] "source"
-write ${newApplicationRouteRef2}
+write ${newApplicationRouteRef}
 write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
-write 5s "test1"
+write 4s "test"
 write 19
 write 7s "header1"
 write 6 "match2"

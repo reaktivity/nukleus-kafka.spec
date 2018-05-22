@@ -92,7 +92,7 @@ public class ControlIT
         "route.ext.multiple.headers/client/nukleus",
         "route.ext.multiple.headers/client/controller"
     })
-    public void shouldRouteClientWithHeaderConditionOnMultipleRoutesToSameTopic() throws Exception
+    public void shouldRouteClientWithMultipleRoutesDifferingOnlyInHeaders() throws Exception
     {
         k3po.finish();
     }
@@ -158,7 +158,7 @@ public class ControlIT
         "unroute.ext.multiple.headers/client/nukleus",
         "unroute.ext.multiple.headers/client/controller"
     })
-    public void shouldUnrouteClientWithMultipleRoutesDifferingInHeaders() throws Exception
+    public void shouldUnrouteClientWithMultipleRoutesDifferingOnlyInHeaders() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");

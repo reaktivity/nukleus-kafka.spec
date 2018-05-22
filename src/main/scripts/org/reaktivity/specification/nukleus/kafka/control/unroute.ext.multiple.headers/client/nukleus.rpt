@@ -33,7 +33,7 @@ read (long:clientAcceptRefUR020101N)
 read [0x06] "target"
 read (long:clientConnectRefRG010101N)
 read 0L
-read 5s "test1"
+read 4s "test"
 read 19
 read 7s "header1"
 read 6 "match1"
@@ -50,7 +50,7 @@ read (long:clientAcceptRefUR020101N)
 read [0x06] "target"
 read (long:clientConnectRefRG010101N)
 read 0L
-read 5s "test1"
+read 4s "test"
 read 19
 read 7s "header1"
 read 6 "match2"

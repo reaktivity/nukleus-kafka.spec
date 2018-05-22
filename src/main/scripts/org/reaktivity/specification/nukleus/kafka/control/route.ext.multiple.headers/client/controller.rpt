@@ -37,7 +37,7 @@ write 0L
 write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
-write 5s "test1"
+write 4s "test"
 write 19
 write 7s "header1"
 write 6 "match1"
@@ -45,17 +45,17 @@ write flush
 
 read 0x40000001
 read ${routeCorrelationId1}
-read (long:newApplicationRouteRef1)
+read (long:newApplicationRouteRef)
 
 write 0x00000001
 write ${routeCorrelationId2}
 write [0x01]
 write [0x06] "source"
-write 0L
+write ${newApplicationRouteRef}
 write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
-write 5s "test1"
+write 4s "test"
 write 19
 write 7s "header1"
 write 6 "match2"
@@ -63,7 +63,7 @@ write flush
 
 read 0x40000001
 read ${routeCorrelationId2}
-read (long:newApplicationRouteRef2)
+read ${newApplicationRouteRef}
 
 read notify ROUTED_CLIENT
 

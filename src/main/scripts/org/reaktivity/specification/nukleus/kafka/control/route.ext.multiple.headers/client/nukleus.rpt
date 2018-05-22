@@ -34,30 +34,30 @@ read 0L
 read [0x06] "target"
 read (long:clientConnectRefRNT01N)
 read 0L
-read 5s "test1"
+read 4s "test"
 read 19
 read 7s "header1"
 read 6 "match1"
 
 write 0x40000001
 write ${correlationIdRNT01N1}
-write ${nuklei:newReferenceId()}
+write ${newRouteRef}
 write flush
 
 read 0x00000001
 read (long:correlationIdRNT01N2)
 read [0x01]
 read [0x06] "source"
-read 0L
+read ${newRouteRef}
 read [0x06] "target"
 read ${clientConnectRefRNT01N}
 read 0L
-read 5s "test1"
+read 4s "test"
 read 19
 read 7s "header1"
 read 6 "match2
 
 write 0x40000001
 write ${correlationIdRNT01N2}
-write ${nuklei:newReferenceId()}
+write ${newRouteRef}
 write flush
