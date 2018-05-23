@@ -253,6 +253,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.messages.headers/client",
+     "${scripts}/compacted.messages.headers/server"})
+    public void shouldReceiveCompactedMessagesFilteredByMultipleHeaders() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.messages.historical/client",
      "${scripts}/compacted.messages.historical/server"})
     public void shouldReceiveHistoricalCompactedMessages() throws Exception

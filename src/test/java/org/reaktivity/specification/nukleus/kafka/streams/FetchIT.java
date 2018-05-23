@@ -244,6 +244,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.messages.headers/client",
+        "${scripts}/compacted.messages.headers/server"})
+    public void shouldReceiveCompactedMessagesFilteredByMultipleHeaders() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.messages.one.per.key/client",
         "${scripts}/compacted.messages.one.per.key/server"})
     public void shouldReceiveMessagesFromCompactedTopicUltraCompacted() throws Exception
