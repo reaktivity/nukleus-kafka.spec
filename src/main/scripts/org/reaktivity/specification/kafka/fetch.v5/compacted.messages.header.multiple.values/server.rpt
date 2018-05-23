@@ -111,6 +111,8 @@ read 0L         # offset
 read -1L
 read [0..4]
 
+read notify FETCH_REQUEST_RECEIVED
+
 write 233       # Size
 write ${requestId}
 write 0

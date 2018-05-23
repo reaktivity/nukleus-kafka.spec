@@ -238,7 +238,7 @@ public class FetchIT
     public void shouldReceiveCompactedMessagesFilteredByHeaderOnMultipleRoutes() throws Exception
     {
         k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
         k3po.finish();
     }
 

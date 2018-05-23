@@ -18,8 +18,9 @@ property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 
 property applicationConnect "nukleus://kafka/streams/source"
 property applicationConnectWindow 8192
+property firstMessageOffset 13
 
-connect await ROUTED_CLIENT
+connect await CONNECT_CLIENT_ONE
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
     option nukleus:window ${applicationConnectWindow}
@@ -43,7 +44,7 @@ read nukleus:begin.ext 19
 read nukleus:begin.ext 7s "header1"
 read nukleus:begin.ext 6 "match1"
 
-read nukleus:data.ext (long:timestamp1) 1 ${kafka:varint(13)}
+read nukleus:data.ext (long:timestamp1) 1 ${kafka:varint(firstMessageOffset)}
 read nukleus:data.ext 4 "key1"
 read "Hello match1"
 
