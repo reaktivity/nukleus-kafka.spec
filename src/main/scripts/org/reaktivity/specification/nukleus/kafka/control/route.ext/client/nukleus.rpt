@@ -33,6 +33,7 @@ read [0x06] "target"
 read (long:clientConnectRefRG010101N)
 read 0L
 read 4s "test"
+read 0
 
 write 0x40000001
 write ${correlationIdRG010101N}

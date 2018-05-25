@@ -225,6 +225,6 @@ write 1
 write 4s "test"
 write 1
 write 0
-write 2L        # offset
+write 1L        # offset
 write -1L
 write ${maximumBytesTest0}
