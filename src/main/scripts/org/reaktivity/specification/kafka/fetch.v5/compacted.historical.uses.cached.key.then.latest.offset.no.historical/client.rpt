@@ -92,10 +92,10 @@ read 1          # config entries count
 read 14s "cleanup.policy"   # config name
 read 7s "compact"           # config value
 read [0x00]     # read_only boolean
-read [0x00]     # is_default boolean
+read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 
-# Fetch stream
+# Live fetch connection
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
@@ -107,88 +107,123 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
-write 0x41
-write 0x01s
-write 0x05s
+write 65         # size
+write 1s         # Fetch
+write 5s         # version
 write ${newRequestId}
 write -1s
 write -1
 write ${maximumWaitTime}
-write 0x01
+write 1
 write ${maximumBytes}
 write [0x00]
-write 0x01
-write 0x04s "test"
-write 0x01
-write 0x00
-write 0x00L
+write 1
+write 4s "test"
+write 1
+write 0
+write 0L
 write -1L
 write ${maximumBytesTest0}
 
-read 225         # Size
+read 173        # Size
 read ${newRequestId}
 read [0..4]
-read 0x01
-read 0x04s "test"
+read 1
+read 4s "test"
 read 1
 read 0          # Partition
-read 0x00s
-read 13L        # high watermark
+read 0s
+read 2L         # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 165        # length of record batch
-read 10L        # first offset
-read 153         # length
+read 113
+read 0L         # first offset
+read 101        # length
 read 0
 read [0x02]
 read 0x4e8723aa
-read 0x00s
-read 2          # last offset delta
+read 0s
+read 1          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 3          # number of records
+read 2          # number of records
 
-read ${kafka:varint(25)}    # record length
+read ${kafka:varint(26)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(4)}     # key length
-read "key1"
-read ${kafka:varint(-1)}    # null value
-read ${kafka:varint(1)}     # number of headers
-read ${kafka:varint(7)}     # header key length
-read "header1"              # header key
-read ${kafka:varint(6)}     # header value length
-read "match1"               # header value
+read ${kafka:varint(8)}     # key length
+read "no match"
+read ${kafka:varint(12)}
+read "Hello, world"
+read [0x00]
 
-read ${kafka:varint(39)}    # record length
+read ${kafka:varint(24)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(1)}     # offset delta
-read ${kafka:varint(4)}     # key length
-read "key2"
-read ${kafka:varint(12)}
-read "Hello, again"
-read ${kafka:varint(1)}     # number of headers
-read ${kafka:varint(7)}     # header key length
-read "header1"              # header key
-read ${kafka:varint(8)}     # header value length
-read "no match"             # header value
+read ${kafka:varint(6)}     # key length
+read "match1"
+read ${kafka:varint(12)}    # value length
+read "Hello second"
+read [0x00]
 
-read ${kafka:varint(37)}    # record length
+write 65         # size
+write 1s         # ApiKey Fetch
+write 5s         # version
+write ${newRequestId}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1
+write 4s "test"
+write 1
+write 0
+write 2L        # offset
+write -1L
+write ${maximumBytesTest0}
+
+read 146        # Size
+read ${newRequestId}
+read [0..4]
+read 1
+read 4s "test"
+read 1
+read 0          # Partition
+read 0s
+read 3L         # high watermark
+read -1L
+read 0L         # log start offset
+read -1         # aborted transactions (null)
+read 86        # length of record set
+read 2L         # first offset
+read 74         # length
+read 0
+read [0x02]
+read 0x4e8723aa
+read 0s
+read 0          # last offset delta
+read (long:timestamp)
+read ${timestamp}
+read -1L
+read -1s
+read -1
+read 1          # number of records
+
+read ${kafka:varint(24)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(2)}     # offset delta
-read ${kafka:varint(4)}     # key length
-read "key3"
+read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(6)}     # key length
+read "match2"
 read ${kafka:varint(12)}
 read "Hello, third"
-read ${kafka:varint(1)}     # number of headers
-read ${kafka:varint(7)}     # header key length
-read "header1"              # header key
-read ${kafka:varint(6)}     # header value length
-read "match1"                # header value
+read [0x00]
+

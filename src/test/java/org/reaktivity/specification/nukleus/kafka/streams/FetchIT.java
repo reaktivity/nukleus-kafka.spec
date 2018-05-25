@@ -211,9 +211,53 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/compacted.messages.header.multiple.matches/client",
-        "${scripts}/compacted.messages.header.multiple.matches/server"})
+        "${scripts}/compacted.messages.header/client",
+        "${scripts}/compacted.messages.header/server"})
     public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.messages.header.multiple.clients/client",
+        "${scripts}/compacted.messages.header.multiple.clients/server"})
+    public void shouldReceiveCompactedMessagesFilteredByHeaderOnMultipleClients() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.messages.header.multiple.routes/client",
+        "${scripts}/compacted.messages.header.multiple.routes/server"})
+    public void shouldReceiveCompactedMessagesFilteredByHeaderOnMultipleRoutes() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.messages.headers/client",
+        "${scripts}/compacted.messages.headers/server"})
+    public void shouldReceiveCompactedMessagesFilteredByMultipleHeaders() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.messages.one.per.key/client",
+        "${scripts}/compacted.messages.one.per.key/server"})
+    public void shouldReceiveMessagesFromCompactedTopicUltraCompacted() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
