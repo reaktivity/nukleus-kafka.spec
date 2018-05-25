@@ -154,9 +154,10 @@ read ${kafka:varint(274)}
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(-1)}    # key length
-read ${kafka:varint(267)}   # value length
-read [0..267]               # value
+read ${kafka:varint(1)}     # key length
+read "k"
+read ${kafka:varint(266)}   # value length
+read [0..266]               # value
 read [0x00]     # headers
 
 # Live fetch request 2

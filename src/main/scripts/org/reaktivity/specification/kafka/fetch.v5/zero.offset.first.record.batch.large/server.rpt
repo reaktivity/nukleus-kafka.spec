@@ -147,9 +147,10 @@ write ${kafka:varint(274)}  # Record length
 write [0x00]
 write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(0)}    # offset delta
-write ${kafka:varint(-1)}   # key length
-write ${kafka:varint(267)}  # value length
-write ${kafka:randomBytes(267)}
+write ${kafka:varint(1)}    # key length
+write "k"
+write ${kafka:varint(266)}  # value length
+write ${kafka:randomBytes(266)}
 write [0x00]                # headers (none)
 
 # Live fetch request 2
