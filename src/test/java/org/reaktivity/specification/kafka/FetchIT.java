@@ -253,6 +253,18 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.messages.header.multiple.values/client",
+     "${scripts}/compacted.messages.header.multiple.values/server"})
+    public void shouldReceiveCompactedMessagesFilteredByHeaderWithMultipleValues() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.messages.headers/client",
      "${scripts}/compacted.messages.headers/server"})
     public void shouldReceiveCompactedMessagesFilteredByMultipleHeaders() throws Exception
