@@ -618,6 +618,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/header.zero.offset.repeated/client",
+     "${scripts}/header.zero.offset.repeated/server"})
+    public void shouldReceiveMatchingMessageWithRepeatedHeader() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/live.fetch.abort.and.reconnect/client",
      "${scripts}/live.fetch.abort.and.reconnect/server"})
     public void shouldReconnectWhenLiveFetchReceivesAbort() throws Exception

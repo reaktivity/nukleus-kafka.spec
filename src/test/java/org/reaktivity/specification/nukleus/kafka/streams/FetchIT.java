@@ -523,6 +523,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/header.zero.offset.repeated/client",
+        "${scripts}/header.zero.offset.repeated/server"})
+    public void shouldReceiveMessagesMatchingAnyOccurenceOfARepeatedHeader() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/headers.and.fetch.key.zero.offset.message/client",
         "${scripts}/headers.and.fetch.key.zero.offset.message/server"})
     public void shouldReceiveMessageUsingFetchKeyAndMultipleHeaders() throws Exception
