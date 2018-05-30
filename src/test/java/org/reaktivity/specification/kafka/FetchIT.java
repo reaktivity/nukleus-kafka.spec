@@ -114,6 +114,18 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.header.repeated.tombstone/client",
+     "${scripts}/compacted.header.repeated.tombstone/server"})
+    public void shouldReceiveCompactedMessagesWithRepeatedHeaderThenOneValueUpdated() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/client",
      "${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/server"})
     public void shouldReceiveCompactedMessagesUsingCachedKeyAfterUnsubscribe() throws Exception

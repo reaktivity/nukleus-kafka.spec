@@ -288,6 +288,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.header.repeated.tombstone/client",
+        "${scripts}/compacted.header.repeated.tombstone/server"})
+    public void shouldReceiveCompactedMessagesWithMultipleHeadersAndTombstone() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.messages.multiple.nodes/client",
         "${scripts}/compacted.messages.multiple.nodes/server"})
     public void shouldReceiveCompactedMessagesFromMultipleNodes() throws Exception
