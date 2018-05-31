@@ -114,6 +114,18 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.header.repeated.tombstone/client",
+     "${scripts}/compacted.header.repeated.tombstone/server"})
+    public void shouldReceiveCompactedMessagesWithRepeatedHeaderThenOneValueUpdated() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/client",
      "${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/server"})
     public void shouldReceiveCompactedMessagesUsingCachedKeyAfterUnsubscribe() throws Exception
@@ -168,7 +180,6 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("DELIVER_SECOND_LIVE_RESPONSE");
         k3po.finish();
     }
 
@@ -248,6 +259,18 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.messages.header.multiple.values/client",
+     "${scripts}/compacted.messages.header.multiple.values/server"})
+    public void shouldReceiveCompactedMessagesFilteredByHeaderWithMultipleValues() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -598,6 +621,17 @@ public class FetchIT
     {"${scripts}/header.zero.offset.multiple.matches/client",
      "${scripts}/header.zero.offset.multiple.matches/server"})
     public void shouldReceiveMultipleMessagesMatchingHeader() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/header.zero.offset.repeated/client",
+     "${scripts}/header.zero.offset.repeated/server"})
+    public void shouldReceiveMatchingMessageWithRepeatedHeader() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

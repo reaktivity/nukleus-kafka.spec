@@ -109,6 +109,8 @@ connected
 
 read notify LIVE_FETCH_CONNECTED
 
+
+
 write 65         # size
 write 1s         # ApiKey Fetch
 write 5s         # version
@@ -127,7 +129,7 @@ write 0L
 write -1L
 write ${maximumBytesTest0}
 
-read 199 # Size
+read 148 # Size
 read ${newRequestId}
 read [0..4]
 read 1
@@ -135,24 +137,24 @@ read 4s "test"
 read 1
 read 0          # Partition
 read 0s
-read 4L         # high watermark
+read 1L         # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
-read 139        # length of record batch
+read 88         # length of record batch
 read 0L         # first offset
-read 127        # length
+read 76         # length
 read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 3          # last offset delta
+read 0          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 3          # number of records
+read 1          # number of records
 
 read ${kafka:varint(26)}    # record length
 read [0x00]
@@ -164,10 +166,56 @@ read ${kafka:varint(12)}
 read "Hello, world"
 read [0x00]
 
+# second live fetch request
+write 65         # size
+write 1s         # ApiKey Fetch
+write 5s         # version
+write ${newRequestId}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1
+write 4s "test"
+write 1
+write 0
+write 1L
+write -1L
+write ${maximumBytesTest0}
+
+read 172        # Size
+read ${newRequestId}
+read [0..4]
+read 1
+read 4s "test"
+read 1
+read 0          # Partition
+read 0s
+read 4L         # high watermark
+read -1L
+read 0L         # log start offset
+read -1         # aborted transactions (null)
+read 112        # length of record batch
+read 1L         # first offset
+read 100        # length
+read 0
+read [0x02]
+read 0x4e8723aa
+read 0s
+read 2          # last offset delta
+read (long:timestamp)
+read ${timestamp}
+read -1L
+read -1s
+read -1
+read 2          # number of records
+
 read ${kafka:varint(23)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(1)}     # offset delta
+read ${kafka:varint(0)}     # offset delta
 read ${kafka:varint(5)}     # key length
 read "match"
 read ${kafka:varint(12)}
@@ -177,13 +225,14 @@ read [0x00]
 read ${kafka:varint(26)}    # record length
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(2)}     # offset delta
+read ${kafka:varint(1)}     # offset delta
 read ${kafka:varint(8)}     # key length
 read "no match"
 read ${kafka:varint(12)}
 read "Hello, third"
 read [0x00]
 
+# final live fetch request
 write 65         # size
 write 1s         # ApiKey Fetch
 write 5s         # version
@@ -202,7 +251,7 @@ write 4L         # offset
 write -1L
 write ${maximumBytesTest0}
 
-write notify DELIVER_SECOND_LIVE_RESPONSE
+write notify DELIVER_FINAL_LIVE_RESPONSE
 
 read 145        # Size
 read ${newRequestId}
