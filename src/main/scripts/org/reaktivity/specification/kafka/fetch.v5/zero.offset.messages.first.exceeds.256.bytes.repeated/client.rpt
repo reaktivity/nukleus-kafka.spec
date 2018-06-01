@@ -113,7 +113,7 @@ write -1s
 write -1
 write ${maximumWaitTime}
 write 1
-write 256
+write 355
 write [0x00]
 write 1
 write 4s "test"
@@ -121,9 +121,9 @@ write 1
 write 0
 write 0L
 write -1L
-write 256
+write 355
 
-read 397
+read 415
 read ${newRequestId}
 read [0..4]
 read 0x01
@@ -131,36 +131,44 @@ read 0x04s "test"
 read 1
 read 0
 read 0s
-read 999L      # high watermark
+read 999L       # high watermark
 read -1L
-read 0L        # log start offset
+read 0L         # log start offset
 read -1
-read 337       # length of record set
-read 0L        # first offset
-read 325       # length of record batch
+read 355        # length of record set
+read 0L         # first offset
+read 343        # length of record batch
 read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 0
+read 1          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 1          # number of records
+read 2          # number of records
 
-read ${kafka:varint(274)}
+read ${kafka:varint(273)}
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(1)}     # key length
-read "k"
+read ${kafka:varint(-1)}    # key length
 read ${kafka:varint(266)}   # value length
 read [0..266]               # value
 read [0x00]     # headers
 
-# Live fetch request 2
+read ${kafka:varint(18)}
+read [0x00]
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(1)}     # offset delta
+read ${kafka:varint(-1)}    # key length
+read ${kafka:varint(12)}    # value length
+read "Hello, world"         # value
+read [0x00]     # headers
+
+# Second (repeated) request
 write 65
 write 1s
 write 5s
@@ -169,18 +177,17 @@ write -1s
 write -1
 write ${maximumWaitTime}
 write 1
-write 256
+write 355
 write [0x00]
 write 1
 write 4s "test"
 write 1
 write 0
-write 1L        # fetch offset
+write 0L
 write -1L
-write 256
+write 355
 
-
-read 386
+read 415
 read ${newRequestId}
 read [0..4]
 read 0x01
@@ -188,30 +195,40 @@ read 0x04s "test"
 read 1
 read 0
 read 0s
-read 999L      # high watermark
+read 999L       # high watermark
 read -1L
-read 0L        # log start offset
+read 0L         # log start offset
 read -1
-read 326       # length of record set
-read 1L        # first offset
-read 314       # length of record batch
+read 355        # length of record set
+read 0L         # first offset
+read 343        # length of record batch
 read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 0
+read 1          # last offset delta
 read (long:timestamp)
 read ${timestamp}
 read -1L
 read -1s
 read -1
-read 1          # number of records
+read 2          # number of records
 
-read ${kafka:varint(263)}
+read ${kafka:varint(273)}
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
 read ${kafka:varint(0)}     # offset delta
 read ${kafka:varint(-1)}    # key length
-read ${kafka:varint(256)}   # value length
-read [0..256]               # value
+read ${kafka:varint(266)}   # value length
+read [0..266]               # value
 read [0x00]     # headers
+
+read ${kafka:varint(18)}
+read [0x00]
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(1)}     # offset delta
+read ${kafka:varint(-1)}    # key length
+read ${kafka:varint(12)}    # value length
+read "Hello, world"         # value
+read [0x00]     # headers
+

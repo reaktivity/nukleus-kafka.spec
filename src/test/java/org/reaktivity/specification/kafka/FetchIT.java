@@ -776,13 +776,12 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.first.record.batch.large/client",
-     "${scripts}/zero.offset.first.record.batch.large/server"})
-    public void shouldReceiveRecordBatchExceedingMaximumPartitionBytes() throws Exception
+    {"${scripts}/zero.offset.first.record.batch.large.requires.3.fetches/client",
+     "${scripts}/zero.offset.first.record.batch.large.requires.3.fetches/server"})
+    public void shouldReceiveRecordBatchRequiringRepeatedFetches() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -862,6 +861,28 @@ public class FetchIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.first.exceeds.256.bytes/client",
+     "${scripts}/zero.offset.messages.first.exceeds.256.bytes/server"})
+    public void shouldReceiveLargeThenSmallMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.first.exceeds.256.bytes.repeated/client",
+     "${scripts}/zero.offset.messages.first.exceeds.256.bytes.repeated/server"})
+    public void shouldReceiveLargeFragmentedThenSmallMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
 
