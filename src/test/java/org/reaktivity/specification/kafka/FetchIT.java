@@ -585,6 +585,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/header.first.message.has.empty.header.value/client",
+     "${scripts}/header.first.message.has.empty.header.value/server"})
+    public void shouldReceiveMessagesMatchingEmptyHeaderValue() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/headers.zero.offset.multiple.matches.historical/client",
      "${scripts}/headers.zero.offset.multiple.matches.historical/server"})
     public void shouldReceiveHistoricalMessagesMatchingHeaders() throws Exception
