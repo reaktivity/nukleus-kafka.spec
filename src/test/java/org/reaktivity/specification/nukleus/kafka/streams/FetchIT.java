@@ -512,6 +512,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/header.empty.value.message/client",
+        "${scripts}/header.empty.value.message/server"})
+    public void shouldReceiveMessageUsingHeaderEmptyValueCondition() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/header.zero.offset.message/client",
         "${scripts}/header.zero.offset.message/server"})
     public void shouldReceiveMessageUsingHeader() throws Exception
