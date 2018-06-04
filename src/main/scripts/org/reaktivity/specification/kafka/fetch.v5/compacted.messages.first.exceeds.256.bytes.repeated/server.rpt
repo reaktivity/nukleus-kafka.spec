@@ -73,7 +73,7 @@ read 4s "test"  # topic name
 read 1          # config_names count
 read 14s "cleanup.policy"
 
-write 54        # Size int32
+write 55        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
@@ -83,7 +83,7 @@ write [0x02]    # resource type
 write 4s "test" # topic name
 write 1         # config entries count
 write 14s "cleanup.policy"  # config name
-write 6s "delete"           # config  value
+write 7s "compact"          # config  value
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
@@ -101,7 +101,7 @@ read -1s        # client id
 read -1 
 read [0..4]     # max wait time millis
 read 1
-read 256        # max fetch bytes
+read [0..4]     # max fetch bytes
 read [0x00]
 read 1
 read 4s "test"
@@ -111,12 +111,8 @@ read 0L
 read -1L
 read [0..4]      # max partition bytes
 
-read notify FETCH_REQUEST_RECEIVED
-
-write await WRITE_FETCH_RESPONSE
-
 # Kafka will exceed max fetch bytes to deliver at least one message
-write 397
+write 415
 write ${requestId}
 write 0
 write 1
@@ -128,31 +124,42 @@ write 999L      # high watermark
 write -1L
 write 0L
 write -1
-write 337       # physical length of record batch
+write 355       # physical length of record batch
 write 0L        # first offset
-write 325       # length
+write 343       # length
 write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 0         # last offset delta
+write 1         # last offset delta
 write ${newTimestamp}
 write ${newTimestamp}
 write -1L
 write -1s
 write -1
-write 1         # number of records
+write 2         # number of records
 
-write ${kafka:varint(274)}  # Record length
+write ${kafka:varint(277)}  # Record length
 write [0x00]
 write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(0)}    # offset delta
-write ${kafka:varint(-1)}   # key length
-write ${kafka:varint(267)}  # value length
-write ${kafka:randomBytes(267)}
-write [0x00]                # headers (none)
+write ${kafka:varint(4)}    # key length
+write "key1"
+write ${kafka:varint(266)}  # value length
+write ${kafka:randomBytes(266)}
+write ${kafka:varint(0)}    # headers (none)
 
-# Live fetch request 2
+write ${kafka:varint(14)}   # record length
+write [0x00]    # attributes
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(1)}    # offset delta
+write ${kafka:varint(4)}    # key length
+write "nope"
+write ${kafka:varint(4)}    # value length
+write "nope"
+write ${kafka:varint(0)}    # headers (none)
+
+# Second request (repeat of first)
 read 65
 read 1s         # API key (fetch)
 read 5s         # API version
@@ -161,17 +168,18 @@ read -1s        # client id
 read -1 
 read [0..4]     # max wait time millis
 read 1
-read 256        # max fetch bytes
+read [0..4]     # max fetch bytes
 read [0x00]
 read 1
 read 4s "test"
 read 1
 read 0
-read 1L         # fetch offset
+read 0L
 read -1L
-read [0..4]     # max partition bytes
+read [0..4]      # max partition bytes
 
-write 386
+# Kafka will exceed max fetch bytes to deliver at least one message
+write 415
 write ${requestId}
 write 0
 write 1
@@ -183,26 +191,37 @@ write 999L      # high watermark
 write -1L
 write 0L
 write -1
-write 326       # physical length of record batch
-write 1L        # first offset
-write 314       # length
+write 355       # physical length of record batch
+write 0L        # first offset
+write 343       # length
 write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 0         # last offset delta
+write 1         # last offset delta
 write ${newTimestamp}
 write ${newTimestamp}
 write -1L
 write -1s
 write -1
-write 1         # number of records
+write 2         # number of records
 
-write ${kafka:varint(263)}  # Record length
+write ${kafka:varint(277)}  # Record length
 write [0x00]
 write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(0)}    # offset delta
-write ${kafka:varint(-1)}   # key length
-write ${kafka:varint(256)}  # value length
-write ${kafka:randomBytes(256)}
-write [0x00]                # headers (none)
+write ${kafka:varint(4)}    # key length
+write "key1"
+write ${kafka:varint(266)}  # value length
+write ${kafka:randomBytes(266)}
+write ${kafka:varint(0)}    # headers (none)
+
+write ${kafka:varint(14)}   # record length
+write [0x00]    # attributes
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(1)}    # offset delta
+write ${kafka:varint(4)}    # key length
+write "nope"
+write ${kafka:varint(4)}    # value length
+write "nope"
+write ${kafka:varint(0)}    # headers (none)

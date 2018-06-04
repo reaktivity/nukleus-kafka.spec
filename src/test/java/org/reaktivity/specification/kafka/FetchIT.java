@@ -253,6 +253,28 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.messages.first.exceeds.256.bytes/client",
+     "${scripts}/compacted.messages.first.exceeds.256.bytes/server"})
+    public void shouldReceiveLargeCompactedMessageFilteredByKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.messages.first.exceeds.256.bytes.repeated/client",
+     "${scripts}/compacted.messages.first.exceeds.256.bytes.repeated/server"})
+    public void shouldReceiveLargeCompactedMessageFilteredByKeyFetchRepeated() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.messages.header/client",
      "${scripts}/compacted.messages.header/server"})
     public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
@@ -673,6 +695,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/message.size.exceeds.max.partition.bytes/client",
+     "${scripts}/message.size.exceeds.max.partition.bytes/server"})
+    public void shouldHandleMessageExceedingConfiguredMaximum() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/nonzero.offset/client",
      "${scripts}/nonzero.offset/server"})
     public void shouldRequestMessagesAtNonZeroOffset() throws Exception
@@ -787,9 +820,31 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.first.record.batch.large/client",
-     "${scripts}/zero.offset.first.record.batch.large/server"})
-    public void shouldSkipRecordBatchExceedingMaximumConfiguredSize() throws Exception
+    {"${scripts}/zero.offset.first.record.batch.large.requires.3.fetches/client",
+     "${scripts}/zero.offset.first.record.batch.large.requires.3.fetches/server"})
+    public void shouldReceiveRecordBatchRequiringRepeatedFetches() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.no.messages/client",
+     "${scripts}/zero.offset.no.messages/server"})
+    public void shouldRequestMessagesAtZeroOffsetAndNotSkipEmptyRecordBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.message/client",
+     "${scripts}/zero.offset.message/server"})
+    public void shouldReceiveMessageAtZeroOffset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -799,9 +854,122 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.large.response/client",
-     "${scripts}/zero.offset.large.response/server"})
-    public void shouldHandleLargeResponse() throws Exception
+    {"${scripts}/zero.length.record.batch/client",
+    "${scripts}/zero.length.record.batch/server"})
+    public void shouldReceiveMessageAtZeroOffsetAfterSkippingZeroLengthBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.message.single.partition.multiple.nodes/client",
+    "${scripts}/zero.offset.message.single.partition.multiple.nodes/server"})
+    public void shouldReceiveMessageAtZeroOffsetSinglePartitionMultipleNodes() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages/client",
+     "${scripts}/zero.offset.messages/server"})
+    public void shouldReceiveMessagesAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messagesets/client",
+     "${scripts}/zero.offset.messagesets/server"})
+    public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.fanout/client",
+     "${scripts}/zero.offset.messages.fanout/server"})
+    public void shouldFanoutMessagesAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.first.exceeds.256.bytes/client",
+     "${scripts}/zero.offset.messages.first.exceeds.256.bytes/server"})
+    public void shouldReceiveLargeThenSmallMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.first.exceeds.256.bytes.repeated/client",
+     "${scripts}/zero.offset.messages.first.exceeds.256.bytes.repeated/server"})
+    public void shouldReceiveLargeFragmentedThenSmallMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.group.budget/client",
+     "${scripts}/zero.offset.messages.group.budget/server"})
+    public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudget() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.group.budget.reset/client",
+    "${scripts}/zero.offset.messages.group.budget.reset/server"})
+    public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudgetReset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.multiple.nodes/client",
+     "${scripts}/zero.offset.messages.multiple.nodes/server"})
+    public void shouldReceiveMessagesAtZeroOffsetMultipleNodes() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.multiple.partitions/client",
+    "${scripts}/zero.offset.messages.multiple.partitions/server"})
+    public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitions() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -811,145 +979,19 @@ public class FetchIT
 
     @Test
     @Specification(
-{"${scripts}/zero.offset.no.messages/client",
- "${scripts}/zero.offset.no.messages/server"})
-public void shouldRequestMessagesAtZeroOffsetAndNotSkipEmptyRecordBatch() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.finish();
-}
+    {"${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
+    "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
+    public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitionsPartition1() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 
-@Test
-@Specification(
-{"${scripts}/zero.offset.message/client",
- "${scripts}/zero.offset.message/server"})
-public void shouldReceiveMessageAtZeroOffset() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.length.record.batch/client",
-"${scripts}/zero.length.record.batch/server"})
-public void shouldReceiveMessageAtZeroOffsetAfterSkippingZeroLengthBatch() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.message.single.partition.multiple.nodes/client",
-"${scripts}/zero.offset.message.single.partition.multiple.nodes/server"})
-public void shouldReceiveMessageAtZeroOffsetSinglePartitionMultipleNodes() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.messages/client",
- "${scripts}/zero.offset.messages/server"})
-public void shouldReceiveMessagesAtZeroOffset() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.messagesets/client",
- "${scripts}/zero.offset.messagesets/server"})
-public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.messages.fanout/client",
- "${scripts}/zero.offset.messages.fanout/server"})
-public void shouldFanoutMessagesAtZeroOffset() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.messages.group.budget/client",
- "${scripts}/zero.offset.messages.group.budget/server"})
-public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudget() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.messages.group.budget.reset/client",
-"${scripts}/zero.offset.messages.group.budget.reset/server"})
-public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudgetReset() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.messages.multiple.nodes/client",
- "${scripts}/zero.offset.messages.multiple.nodes/server"})
-public void shouldReceiveMessagesAtZeroOffsetMultipleNodes() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.messages.multiple.partitions/client",
-"${scripts}/zero.offset.messages.multiple.partitions/server"})
-public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitions() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
-"${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
-public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitionsPartition1() throws Exception
-{
-k3po.start();
-k3po.notifyBarrier("ROUTED_SERVER");
-k3po.finish();
-}
-
-@Test
-@Specification(
-{"${scripts}/zero.offset.messagesets.fanout/client",
-"${scripts}/zero.offset.messagesets.fanout/server"})
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messagesets.fanout/client",
+    "${scripts}/zero.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtZeroOffset() throws Exception
     {
         k3po.start();

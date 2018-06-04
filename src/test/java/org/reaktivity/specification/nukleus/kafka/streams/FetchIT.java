@@ -86,6 +86,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.historical.large.message.subscribed.to.key/client",
+        "${scripts}/compacted.historical.large.message.subscribed.to.key/server"})
+    public void shouldReceiveLargeCompactedMessageMatchingKeyOnTwoClients() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/client",
         "${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/server"})
     public void shouldReceiveCompactedMessagesUsingCachedKeyAfterUnsubscribe() throws Exception
@@ -147,6 +158,17 @@ public class FetchIT
         "${scripts}/compacted.historical.uses.cached.key.then.zero.offset/client",
         "${scripts}/compacted.historical.uses.cached.key.then.zero.offset/server"})
     public void shouldReceiveCompactedMessagesUsingCachedKeyThenZerotOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.large.message.subscribed.to.key/client",
+        "${scripts}/compacted.large.message.subscribed.to.key/server"})
+    public void shouldReceiveLargeCompactedMessageMatchingKey() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -758,17 +780,6 @@ public class FetchIT
         "${scripts}/zero.offset.large.message/client",
         "${scripts}/zero.offset.large.message/server"})
     public void shouldReceiveLargeMessage() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/zero.offset.large.response/client",
-        "${scripts}/zero.offset.large.response/server"})
-    public void shouldReceiveLargResponse() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
