@@ -73,7 +73,7 @@ read 4s "test"  # topic name
 read 1          # config_names count
 read 14s "cleanup.policy"
 
-write 54        # Size int32
+write 55        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
@@ -83,7 +83,7 @@ write [0x02]    # resource type
 write 4s "test" # topic name
 write 1         # config entries count
 write 14s "cleanup.policy"  # config name
-write 6s "delete"           # config  value
+write 7s "compact"          # config  value
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
@@ -101,7 +101,7 @@ read -1s        # client id
 read -1 
 read [0..4]     # max wait time millis
 read 1
-read 355        # max fetch bytes
+read [0..4]     # max fetch bytes
 read [0x00]
 read 1
 read 4s "test"
@@ -139,20 +139,22 @@ write -1s
 write -1
 write 2         # number of records
 
-write ${kafka:varint(273)}  # Record length
+write ${kafka:varint(277)}  # Record length
 write [0x00]
 write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(0)}    # offset delta
-write ${kafka:varint(-1)}   # key length
+write ${kafka:varint(4)}    # key length
+write "key1"
 write ${kafka:varint(266)}  # value length
 write ${kafka:randomBytes(266)}
 write ${kafka:varint(0)}    # headers (none)
 
-write ${kafka:varint(18)}   # record length
+write ${kafka:varint(14)}   # record length
 write [0x00]    # attributes
 write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(1)}    # offset delta
-write ${kafka:varint(-1)}   # key length
-write ${kafka:varint(12)}   # value length
-write "Hello, world"
+write ${kafka:varint(4)}    # key length
+write "nope"
+write ${kafka:varint(4)}    # value length
+write "nope"
 write ${kafka:varint(0)}    # headers (none)
