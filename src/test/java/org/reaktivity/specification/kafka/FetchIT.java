@@ -695,6 +695,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/message.size.exceeds.max.partition.bytes/client",
+     "${scripts}/message.size.exceeds.max.partition.bytes/server"})
+    public void shouldHandleMessageExceedingConfiguredMaximum() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/nonzero.offset/client",
      "${scripts}/nonzero.offset/server"})
     public void shouldRequestMessagesAtNonZeroOffset() throws Exception
