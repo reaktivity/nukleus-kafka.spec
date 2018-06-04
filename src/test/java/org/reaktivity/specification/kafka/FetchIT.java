@@ -253,6 +253,28 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.messages.first.exceeds.256.bytes/client",
+     "${scripts}/compacted.messages.first.exceeds.256.bytes/server"})
+    public void shouldReceiveLargeCompactedMessageFilteredByKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.messages.first.exceeds.256.bytes.repeated/client",
+     "${scripts}/compacted.messages.first.exceeds.256.bytes.repeated/server"})
+    public void shouldReceiveLargeCompactedMessageFilteredByKeyFetchRepeated() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.messages.header/client",
      "${scripts}/compacted.messages.header/server"})
     public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
