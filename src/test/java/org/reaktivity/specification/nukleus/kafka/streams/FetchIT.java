@@ -233,6 +233,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.messages.tombstone.repeated/client",
+        "${scripts}/compacted.messages.tombstone.repeated/server"})
+    public void shouldReceiveRepeatedTombstoneMessagesFromCompactedTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("SUBSCRIBE_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.messages.header/client",
         "${scripts}/compacted.messages.header/server"})
     public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
