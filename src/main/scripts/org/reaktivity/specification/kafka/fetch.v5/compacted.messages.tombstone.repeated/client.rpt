@@ -169,3 +169,6 @@ read ${kafka:varint(4)}     # key length
 read "key1"
 read ${kafka:varint(-1)}
 read [0x00]
+
+# size of next FETCH request
+write 65         # size
