@@ -27,6 +27,7 @@ scope kafka
         struct KafkaRouteEx
         {
             string16 topicName;
+            string deltaProperty;
             list<kafka::KafkaHeader> headers;
         }
     }
@@ -46,6 +47,7 @@ scope kafka
 
         struct KafkaDataEx
         {
+            uint8 flags = 0;            // 0x01 DELTA
             int64 timestamp;
             varint64[] fetchOffsets;
             int32 messageKeySize;
