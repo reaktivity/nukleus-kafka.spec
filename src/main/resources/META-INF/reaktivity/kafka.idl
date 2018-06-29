@@ -27,7 +27,7 @@ scope kafka
         struct KafkaRouteEx
         {
             string16 topicName;
-            string deltaProperty;
+            string deltaHeaderName;
             list<kafka::KafkaHeader> headers;
         }
     }
