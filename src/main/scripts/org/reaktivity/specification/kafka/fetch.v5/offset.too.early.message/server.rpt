@@ -74,7 +74,7 @@ read 2          # config_names count
 read 14s "cleanup.policy"
 read 19s "delete.retention.ms"
 
-write 54        # Size int32
+write 88        # Size int32
 write ${describeConfigsRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
@@ -133,7 +133,7 @@ write -1        # aborted transaction count
 write 0         # record set size
 
 # list offsets request
-read 62         # Size int32
+read 41         # Size int32
 read 2s         # ApiKey (ListOffsets)
 read 2s         # ApiVersion 
 read (int:listOffsetsRequestId) # CorrelationId 

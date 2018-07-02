@@ -133,7 +133,7 @@ write -1        # aborted transaction count
 write 0         # record set size
 
 # list offsets request
-read 62         # Size int32
+read 41         # Size int32
 read 2s         # ApiKey (ListOffsets)
 read 2s         # ApiVersion 
 read (int:listOffsetsRequestId) # CorrelationId 

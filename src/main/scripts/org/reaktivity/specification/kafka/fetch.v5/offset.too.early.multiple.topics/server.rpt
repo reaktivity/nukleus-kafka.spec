@@ -64,7 +64,7 @@ write 1         # topic array length
     write -1    # isr array (null)
     write 0     # offline replicas array (empty)
 
-read 42         # Size int32
+read 63         # Size int32
 read 32s        # ApiKey int16 (DescribeConfigs)
 read 0s         # ApiVersion int16
 read (int:describeConfigsRequestId) # CorrelationId int32
@@ -128,7 +128,7 @@ write 1         # topic array length
     write -1    # isr array (null)
     write 0     # offline replicas array (empty)
 
-read 42         # Size int32
+read 63         # Size int32
 read 32s        # ApiKey int16 (DescribeConfigs)
 read 0s         # ApiVersion int16
 read (int:describeConfigsRequestId) # CorrelationId int32

@@ -147,7 +147,7 @@ read -1         # aborted transaction count
 read 0          # record set size
 
 # list offsets request
-write 62        # Size int32
+write 41        # Size int32
 write 2s        # ApiKey (ListOffsets)
 write 2s        # ApiVersion 
 write ${newMetadataRequestId} # CorrelationId 

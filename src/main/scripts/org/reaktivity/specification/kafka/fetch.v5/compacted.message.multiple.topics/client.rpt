@@ -69,7 +69,7 @@ read 1          # topic array length
     read 0      # offline replicas array (empty)
 read notify METADATA_RECEIVED
 
-write 42        # Size int32
+write 63        # Size int32
 write 32s       # ApiKey int16 (DescribeConfigs)
 write 0s        # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
@@ -81,7 +81,7 @@ write 2         # config names count
 write 14s "cleanup.policy"  # config name
 write 19s "delete.retention.ms"  # config name
 
-read 56         # Size int32
+read 90         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
 read 1          # resources count
@@ -133,7 +133,7 @@ read 1          # topic array length
     read -1     # isr array (null)
     read 0      # offline replicas array (empty)
 
-write 42        # Size int32
+write 63        # Size int32
 write 32s       # ApiKey int16 (DescribeConfigs)
 write 0s        # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
@@ -145,7 +145,7 @@ write 2         # config names count
 write 14s "cleanup.policy"  # config name
 write 19s "delete.retention.ms"  # config name
 
-read 56         # Size int32
+read 90         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
 read 1          # resources count
@@ -197,7 +197,7 @@ read 1          # topic array length
     read -1     # isr array (null)
     read 0      # offline replicas array (empty)
 
-write 42        # Size int32
+write 63        # Size int32
 write 32s       # ApiKey int16 (DescribeConfigs)
 write 0s        # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
@@ -209,7 +209,7 @@ write 2         # config names count
 write 14s "cleanup.policy"  # config name
 write 19s "delete.retention.ms"  # config name
 
-read 56         # Size int32
+read 90         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
 read 1          # resources count

@@ -79,7 +79,7 @@ read 2          # config_names count
 read 14s "cleanup.policy"
 read 19s "delete.retention.ms"
 
-write 54        # Size int32
+write 88        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
