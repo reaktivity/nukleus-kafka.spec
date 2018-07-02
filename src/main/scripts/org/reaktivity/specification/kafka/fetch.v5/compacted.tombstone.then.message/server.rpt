@@ -17,7 +17,6 @@
 property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
 
 property newTimestamp ${kafka:timestamp()}
-property tombstoneTimestamp ${kafka:timestamp() - (25 * 3600 * 1000)}
 
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
@@ -133,8 +132,8 @@ write [0x02]
 write 0x4e8723aa
 write 0s
 write 0         # last offset Delta
-write ${tombstoneTimestamp}       # first timestamp
-write ${tombstoneTimestamp}       # maximum timestamp
+write ${newTimestamp}       # first timestamp
+write ${newTimestamp}       # maximum timestamp
 write -1L
 write -1s
 write -1
