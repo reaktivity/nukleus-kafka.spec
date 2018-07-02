@@ -27,7 +27,7 @@ accept ${networkAccept}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-# Metadata stream
+# Metadata connection
 accepted
 connected
 

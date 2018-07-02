@@ -25,7 +25,7 @@ property maximumWaitTime 500
 property maximumBytes 65535
 property maximumBytesTest0 8192
 
-# Metadata stream
+# Metadata connection
 connect await ROUTED_SERVER
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}

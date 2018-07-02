@@ -26,7 +26,7 @@ property maximumWaitTime 500
 property maximumBytes 65535
 property maximumBytesTest0 8192
 
-# Metadata stream
+# Metadata connection
 connect await ROUTED_SERVER
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
@@ -79,7 +79,7 @@ read 1          # topic array length
     read -1     # isr array (null)
     read 0      # offline replicas array (empty)
 
-write 41        # Size int32
+write 62        # Size int32
 write 32s       # ApiKey int16 (DescribeConfigs)
 write 0s        # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
@@ -87,8 +87,9 @@ write -1s       # ClientId string (null)
 write 1         # resources count
 write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
 write 4s "test" # topic name
-write 1         # config names count
+write 2         # config names count
 write 14s "cleanup.policy"  # config name
+write 19s "delete.retention.ms"  # config name
 
 read 54         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
@@ -98,9 +99,14 @@ read 0s         # error code
 read -1s        # error message
 read [0x02]     # resource type (topic)
 read 4s "test"  # topic name
-read 1          # config entries count
+read 2          # config entries count
 read 14s "cleanup.policy"   # config name
 read 6s "delete"            # config value
+read [0x00]     # read_only boolean
+read [0x01]     # is_default boolean
+read [0x00]     # is_sensitive boolean
+read 19s "delete.retention.ms"
+read 8s "86400000"
 read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
@@ -154,7 +160,7 @@ read -1         # aborted transaction count
 read 0          # record set size
 
 # list offsets request
-write 41        # Size int32
+write 62        # Size int32
 write 2s        # ApiKey (ListOffsets)
 write 2s        # ApiVersion 
 write ${newMetadataRequestId} # CorrelationId 
@@ -279,7 +285,7 @@ read -1         # aborted transaction count
 read 0          # record set size
 
 # list offsets request
-write 41        # Size int32
+write 62        # Size int32
 write 2s        # ApiKey (ListOffsets)
 write 2s        # ApiVersion 
 write ${newMetadataRequestId} # CorrelationId 

@@ -27,7 +27,7 @@ accept ${networkAccept}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-# Metadata stream
+# Metadata connection
 accepted
 connected
 
@@ -62,7 +62,7 @@ write 1         # topic array length
     write -1    # isr array (null)
     write 0     # offline replicas array (empty)
 
-read 41         # Size int32
+read 62         # Size int32
 read 32s        # ApiKey int16 (DescribeConfigs)
 read 0s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
@@ -70,10 +70,11 @@ read -1s        # ClientId string (null)
 read 1          # [Resources] array length
 read [0x02]     # resource type int8 (topic) 
 read 4s "test"  # topic name
-read 1          # config_names count
+read 2          # config_names count
 read 14s "cleanup.policy"
+read 19s "delete.retention.ms"
 
-write 55        # Size int32
+write 89        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
@@ -81,9 +82,14 @@ write 0s        # error code
 write -1s       # error message
 write [0x02]    # resource type
 write 4s "test" # topic name
-write 1         # config entries count
+write 2         # config entries count
 write 14s "cleanup.policy"  # config name
 write 7s "compact"          # config  value
+write [0x00]    # read_only boolean
+write [0x01]    # is_default boolean
+write [0x00]    # is_sensitive boolean
+write 19s "delete.retention.ms"
+write 8s "86400000"
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
@@ -127,7 +133,7 @@ write -1        # aborted transaction count
 write 0         # record set size
 
 # list offsets request
-read 41         # Size int32
+read 62         # Size int32
 read 2s         # ApiKey (ListOffsets)
 read 2s         # ApiVersion 
 read (int:listOffsetsRequestId) # CorrelationId 
