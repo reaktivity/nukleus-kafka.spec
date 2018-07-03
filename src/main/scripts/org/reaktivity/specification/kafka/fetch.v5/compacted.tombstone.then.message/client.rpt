@@ -38,8 +38,8 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
 write 21        # Size int32
-write 3s        # ApiKey int16 (Metadata)
-write 5s        # ApiVersion int16
+write 0x03s     # ApiKey int16 (Metadata)
+write 0x05s     # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
 write -1s       # ClientId string (null)
 write 1         # [TopicName] array length
@@ -81,7 +81,7 @@ write 2         # config names count
 write 14s "cleanup.policy"  # config name
 write 19s "delete.retention.ms"  # config name
 
-read 88         # Size int32
+read 84         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
 read 1          # resources count
@@ -91,12 +91,12 @@ read [0x02]     # resource type (topic)
 read 4s "test"  # topic name
 read 2          # config entries count
 read 14s "cleanup.policy"   # config name
-read 6s "delete"            # config value
+read 7s "compact"           # config value
 read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 read 19s "delete.retention.ms"
-read 8s "86400000"
+read 3s "500"
 read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
@@ -113,100 +113,115 @@ write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 
 connected
 
-write 0x41
-write 1s   
-write 5s   
+# First fetch
+write 65        # size
+write 1s        # ApiKey Fetch
+write 5s        # version
 write ${newRequestId}
 write -1s
 write -1
 write ${maximumWaitTime}
-write 0x01
+write 1
 write ${maximumBytes}
 write [0x00]
-write 0x01
+write 1
 write 4s "test"
-write 0x01
-write 0x00
-write 0x00L
+write 1
+write 0         # Partition
+write 0L        # offset
 write -1L
 write ${maximumBytesTest0}
 
-read 287 # Size
+read 132
 read ${newRequestId}
 read [0..4]
-read 0x01
+read 1
 read 4s "test"
-read 1          # Number of partition responses
+read 1
 read 0          # Partition
 read 0s
-read 12L        # high watermark
+read 999L       # high watermark
 read -1L
 read 0L         # log start offset
-read -1         # aborted transactions (null)
-read 227        # length of record set
-
-# First record batch
-read 8L        # first offset
-read 100        # length
-read 0
-read [0x02]
-read 0x4e8723aa
-read 0s
-read 1          # last offset delta
-read (long:timestamp)
-read ${timestamp}
-read -1L
-read -1s
-read -1
-read 2          # number of records
-read ${kafka:varint(23)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(5)}     # key length
-read "match"
-read ${kafka:varint(12)}
-read "Hello, world"
-read [0x00]
-read ${kafka:varint(26)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(1)}     # offset delta
-read ${kafka:varint(8)}     # key length
-read "no match"
-read ${kafka:varint(12)}
-read "Hello, again"
-read [0x00]
-
-# Second record batch
+read -1         # aborted transactions
+read 72         # length of record batch
 read 10L        # first offset
-read 103        # length
-read 0
+read 60         # length     
+read 0x00
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 1          # last offset delta
-read (long:timestamp)
-read ${timestamp}
+read 0          # last offset delta
+read (long:timestamp)       # first timestamp
+read ${timestamp}           # maximum timestamp
 read -1L
 read -1s
 read -1
-read 2          # number of records
-read ${kafka:varint(26)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(0)}     # offset delta
-read ${kafka:varint(8)}     # key length
-read "no match"
-read ${kafka:varint(12)}
+read 1          # number of records
+
+read ${kafka:varint(10)}    # record length
+read [0x00]     # attributes
+read ${kafka:varint(0)}
+read ${kafka:varint(0)}
+read ${kafka:varint(4)}     # key length
+read "key0"
+read ${kafka:varint(-1)}    # value length
+read ${kafka:varint(0)}
+
+# second fetch
+write 65        # size
+write 1s        # ApiKey Fetch
+write 5s        # version
+write ${newRequestId}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1
+write 4s "test"
+write 1
+write 0         # Partition
+write 11L       # offset
+write -1L
+write ${maximumBytesTest0}
+
+write notify DELIVER_SECOND_FETCH_RESPONSE
+
+read 144
+read ${newRequestId}
+read [0..4]
+read 1
+read 4s "test"
+read 1
+read 0          # Partition
+read 0s
+read 999L       # high watermark
+read -1L
+read 0L         # log start offset
+read -1         # aborted transactions
+read 84         # length of record batch
+read 11L        # first offset
+read 72         # length     
+read 0x00
+read [0x02]
+read 0x4e8723aa
+read 0s
+read 0          # last offset delta
+read (long:timestamp)       # first timestamp
+read ${timestamp}           # maximum timestamp
+read -1L
+read -1s
+read -1
+read 1          # number of records
+
+read ${kafka:varint(22)}    # record length
+read [0x00]     # attributes
+read ${kafka:varint(0)}
+read ${kafka:varint(0)}
+read ${kafka:varint(4)}    # key length
+read "key1"
+read ${kafka:varint(12)}   # value length
 read "Hello, world"
-read [0x00]
-read ${kafka:varint(26)}    # record length
-read [0x00]
-read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(1)}     # offset delta
-read ${kafka:varint(8)}     # key length
-read "no match"
-read ${kafka:varint(12)}
-read "Hello, again"
-read [0x00]
+read ${kafka:varint(0)}
