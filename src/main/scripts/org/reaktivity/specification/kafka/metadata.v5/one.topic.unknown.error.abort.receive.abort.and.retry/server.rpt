@@ -38,7 +38,7 @@ read 1 # [TopicName] array length
   read 4s "test"
 read [0x00] # allow_auto_topic_creation (boolean)
 
-write 126 # Size int32
+write 82 # Size int32
 write ${metadataRequestId1} # CorrelationId int32
 write 0 # throttle_time_ms int32
 write 2      # brokers array length
@@ -54,23 +54,10 @@ write 2      # brokers array length
 write 9s "cluster 1"
 write 1 # controller broker id
 write 1 # topic array length
-  write 0s # error code
+  write -1s # error code Unknown
   write 4s "test"
   write byte 0x00 # is_internal
-  write 2 # partition array length
-    write 0s # error code
-    write 0 # partition
-    write 1 # leader
-    write 0 # replicas array (empty)
-    write -1 # isr array (null)
-    write 0 # offline replicas array (empty)
-
-    write -1s # error code Unknown
-    write 1 # partition
-    write -1 # leader
-    write 0 # replicas array (empty)
-    write -1 # isr array (null)
-    write 0 # offline replicas array (empty)
+  write 0 # partition array length
     
 read aborted
 write abort
