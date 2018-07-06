@@ -9,7 +9,7 @@
 #
 # Usage
 # =====
-# ufind src/main/scripts/org/reaktivity/specification/kafka/fetch.v5/ -name "*.rpt"| xargs -L 1 sed -i "~" -f tools/align_comments.sed
+# find src/main/scripts/org/reaktivity/specification/kafka/fetch.v5/ -name "*.rpt"| xargs -L 1 sed -i "" -f tools/align_comments.sed
 #
 
 /^[^#]\{4\}[^#]* * #/s/  *#/ #/
