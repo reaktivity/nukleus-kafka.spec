@@ -25,7 +25,7 @@ connect "agrona://stream/bidirectional"
         option agrona:reader ${agrona:broadcastReceiver(controlRG010101EC.controller)}
         option agrona:writer ${agrona:manyToOneWriter(controlRG010101EC.nukleus)}
 
-connected 
+connected
 
 write 0x00000001
 write ${controlRG010101EC.nextCorrelationId()}
@@ -36,6 +36,7 @@ write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
 write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}
+write [0xff]    # deltaHeaderName
 write 19
 write 7s "header1"
 write 6 "match1"

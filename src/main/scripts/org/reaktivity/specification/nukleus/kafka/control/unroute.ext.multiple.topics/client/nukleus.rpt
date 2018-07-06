@@ -34,6 +34,7 @@ read [0x06] "target"
 read (long:clientConnectRefRG010101N)
 read 0L
 read 5s "test1"
+read [0xff]     # deltaHeaderName
 read 0
 
 write 0x40000002
@@ -49,6 +50,7 @@ read [0x06] "target"
 read (long:clientConnectRefRG010101N)
 read 0L
 read 5s "test2"
+read [0xff]     # deltaHeaderName
 read 0
 
 write 0x40000002
@@ -64,6 +66,7 @@ read [0x06] "target"
 read (long:clientConnectRefRG010101N)
 read 0L
 read 5s "test3"
+read [0xff]     # deltaHeaderName
 read 0
 
 write 0x40000002

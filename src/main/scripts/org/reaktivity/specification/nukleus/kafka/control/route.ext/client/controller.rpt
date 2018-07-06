@@ -37,6 +37,7 @@ write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
 write ${kafka:lengthAsShort(routedTopicName)} ${routedTopicName}
+write [0xff]    # deltaHeaderName
 write 0
 write flush
 

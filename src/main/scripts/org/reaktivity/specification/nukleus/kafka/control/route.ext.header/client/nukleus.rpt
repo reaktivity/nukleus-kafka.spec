@@ -33,6 +33,7 @@ read [0x06] "target"
 read (long:clientConnectRefRG010101N)
 read 0L
 read 4s "test"
+read [0xff]     # deltaHeaderName
 read 19
 read 7s "header1"
 read 6 "match1"

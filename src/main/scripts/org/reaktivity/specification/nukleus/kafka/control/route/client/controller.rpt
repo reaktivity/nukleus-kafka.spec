@@ -34,7 +34,6 @@ write 0L
 write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
-write 0L
 write flush
 
 read 0x40000001

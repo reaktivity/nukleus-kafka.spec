@@ -37,6 +37,7 @@ write [0x06] "target"
 write ${newNetworkRouteRef}
 write 0L
 write 4s "test"
+write [0xff]    # deltaHeaderName
 write 38
 write 7s "header1"
 write 6 "match1"

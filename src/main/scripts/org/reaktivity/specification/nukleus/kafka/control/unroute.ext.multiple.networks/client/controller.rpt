@@ -43,6 +43,7 @@ write [0x07] "target1"
 write ${newNetworkRouteRef1}
 write 0L
 write 4s "test"
+write [0xff]    # deltaHeaderName
 write 0
 write flush
 
@@ -55,6 +56,7 @@ write [0x07] "target2"
 write ${newNetworkRouteRef2}
 write 0L
 write 4s "test"
+write [0xff]    # deltaHeaderName
 write 0
 write flush
 
