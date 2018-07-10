@@ -909,9 +909,21 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.messagesets/client",
-     "${scripts}/zero.offset.messagesets/server"})
-    public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
+    {"${scripts}/zero.offset.messages.fanout/client",
+     "${scripts}/zero.offset.messages.fanout/server"})
+    public void shouldFanoutMessagesAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.fetch.connection.closed.aborted.and.reconnect/client",
+     "${scripts}/zero.offset.messages.fetch.connection.closed.aborted.and.reconnect/server"})
+    public void shouldRefetchMetadataAndReceiveMessagesWhenFetchConnectionIsClosedAbortedAndReconnects() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -920,13 +932,23 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.messages.fanout/client",
-     "${scripts}/zero.offset.messages.fanout/server"})
-    public void shouldFanoutMessagesAtZeroOffset() throws Exception
+    {"${scripts}/zero.offset.messages.fetch.connection.closed.and.reconnect/client",
+     "${scripts}/zero.offset.messages.fetch.connection.closed.and.reconnect/server"})
+    public void shouldReceiveMessagesWhenFetchConnectionIsClosedAndReconnects() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.fetch.connection.closed.reset.and.reconnect/client",
+     "${scripts}/zero.offset.messages.fetch.connection.closed.reset.and.reconnect/server"})
+    public void shouldRefetchMetadataAndReceiveMessagesWhenFetchConnectionIsClosedResetAndReconnects() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
 
@@ -1004,6 +1026,17 @@ public class FetchIT
     {"${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
     "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
     public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitionsPartition1() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messagesets/client",
+     "${scripts}/zero.offset.messagesets/server"})
+    public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
