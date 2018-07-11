@@ -51,7 +51,7 @@ public class MetadataIT
     @Specification({
         "${scripts}/metadata.connection.aborted.and.reconnect/client",
         "${scripts}/metadata.connection.aborted.and.reconnect/server"})
-    public void shouldReconnectAndRedoMetadataQueriesWhenBrokerConnectionIsAborted() throws Exception
+    public void shouldReconnectAndContinueMetadataQueriesWhenMetadataConnectionIsAborted() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -62,7 +62,7 @@ public class MetadataIT
     @Specification({
         "${scripts}/metadata.connection.closed.and.reconnect/client",
         "${scripts}/metadata.connection.closed.and.reconnect/server"})
-    public void shouldReconnectAndContinueMetadataQueriesWhenBrokerIsEnded() throws Exception
+    public void shouldReconnectAndContinueMetadataQueriesWhenMetadataConnectionIsEnded() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -73,7 +73,7 @@ public class MetadataIT
     @Specification({
         "${scripts}/metadata.connection.reset.and.reconnect/client",
         "${scripts}/metadata.connection.reset.and.reconnect/server"})
-    public void shouldReconnectAndRedoMetadataQueriesWhenBrokerConnectionIsReset() throws Exception
+    public void shouldReconnectAndContinueMetadataQueriesWhenMetadataConnectionIsReset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

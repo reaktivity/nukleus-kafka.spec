@@ -63,6 +63,19 @@ read 1 # topic array length
     read 0 # replicas array (empty)
     read -1 # isr array (null)
     read 0 # offline replicas array (empty)
+    
+# DescribeConfigs request
+write 62        # Size int32
+write 32s       # ApiKey int16 (DescribeConfigs)
+write 0s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # resources count
+write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
+write 4s "test" # topic name
+write 2         # config names count
+write 14s "cleanup.policy"  # config name
+write 19s "delete.retention.ms"  # config name
 
 read aborted
 write abort
@@ -77,38 +90,6 @@ connect await CLIENT_ONE_CLOSED
   option nukleus:byteorder "network"
 
 connected
-
-# Metadata request (repeated because the connection was abnormally closed)
-write 21 # Size int32
-write 0x03s # ApiKey int16 (Metadata)
-write 0x05s # ApiVersion int16
-write ${newMetadataRequestId} # CorrelationId int32
-write -1s # ClientId string (null)
-write 1 # [TopicName] array length
-  write 4s "test"
-write [0x00] # allow_auto_topic_creation (boolean)
-
-read 85 # Size (metadata response)
-read ${newMetadataRequestId} # CorrelationId int32
-read [0..4] # throttle_time_ms int32
-read 1      # brokers array length
-  read 1    # broker id
-  read 7s "broker1"
-  read 9093 # port int32
-  read -1s  # rack string (null)
-read 9s "cluster 1"
-read 1 # controller broker id
-read 1 # topic array length
-  read 0s # error code
-  read 4s "test"
-  read [0x00] # is_internal boolean
-  read 1 # partition array length
-    read 0s # error code
-    read 0 # partition
-    read 1 # leader
-    read 0 # replicas array (empty)
-    read -1 # isr array (null)
-    read 0 # offline replicas array (empty)
     
 # DescribeConfigs request
 write 62        # Size int32

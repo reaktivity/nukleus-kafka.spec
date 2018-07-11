@@ -59,6 +59,19 @@ write 1 # topic array length
     write -1 # isr array (null)
     write 0 # offline replicas array (empty)
     
+# DescribeConfigs request
+read 62         # Size int32
+read 32s        # ApiKey int16 (DescribeConfigs)
+read 0s         # ApiVersion int16
+read (int:describeRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [Resources] array length
+read [0x02]     # resource type int8 (topic) 
+read 4s "test"  # topic name
+read 2          # config_names count
+read 14s "cleanup.policy"
+read 19s "delete.retention.ms"
+    
 write close
 read closed
   
