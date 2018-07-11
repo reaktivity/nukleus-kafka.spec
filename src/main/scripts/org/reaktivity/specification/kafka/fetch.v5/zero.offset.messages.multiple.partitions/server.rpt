@@ -140,14 +140,14 @@ write 4s "test"
 write 2         # Number of partition responses
     write 0     # Partition
     write 0s
-    write 1L    # high_watermark
+    write 999L  # high_watermark
     write -1L   # last_stable_offset
     write 0L    # log_start_offset
     write -1    # aborted_transactions (null)
     write 80    # Length of the record set
                 # Start of RecordBatch
-    write 0L # First offset 
-    write 0x44  # Length
+    write 0L    # First offset 
+    write 68    # Length
     write 0     # Partition leader epoque
     write [0x02]            # Magic
     write 0x4e8723aa        # CRC32
@@ -170,14 +170,14 @@ write 2         # Number of partition responses
   
     # Partition 1 response
     write 0s
-    write 1L    # high_watermark
+    write 999L  # high_watermark
     write -1L   # last_stable_offset
     write 0L    # log_start_offset
     write -1    # aborted_transactions (null)
-    write 0x50  # Length of the record batch
+    write 80    # Length of the record batch
                 # Start of RecordBatch
     write 0L    # First offset 
-    write 0x44  # Length
+    write 68    # Length
     write 0     # Partition leader epoque
     write [0x02]            # Magic
     write 0x4e8723aa        # CRC32

@@ -695,9 +695,10 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/live.fetch.abort.and.reconnect/client",
-     "${scripts}/live.fetch.abort.and.reconnect/server"})
-    public void shouldReconnectWhenLiveFetchReceivesAbort() throws Exception
+    {"${scripts}/live.fetch.connection.aborted/client",
+     "${scripts}/live.fetch.connection.aborted/server"})
+    public void shouldReconnectRequeryPartitionMetadataAndContinueReceivingMessagesWhenLiveFetchConnectionIsAborted()
+            throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -706,9 +707,21 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/live.fetch.reset.reconnect.and.message/client",
-     "${scripts}/live.fetch.reset.reconnect.and.message/server"})
-    public void shouldReconnectAndReceiveMessageWhenLiveFetchReceivesReset() throws Exception
+    {"${scripts}/live.fetch.connection.closed/client",
+     "${scripts}/live.fetch.connection.closed/server"})
+    public void shouldReconnectAndReceiveMessagesWhenLiveFetchConnectionIsClosed() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.connection.reset/client",
+     "${scripts}/live.fetch.connection.reset/server"})
+    public void shouldReconnectRequeryPartitionMetadataAndContinueReceivingMessagesWhenLiveFetchConnectionIsReset()
+            throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -916,17 +929,6 @@ public class FetchIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification(
-    {"${scripts}/zero.offset.messages.fetch.connection.closed.aborted.and.reconnect/client",
-     "${scripts}/zero.offset.messages.fetch.connection.closed.aborted.and.reconnect/server"})
-    public void shouldRefetchMetadataAndReceiveMessagesWhenFetchConnectionIsClosedAbortedAndReconnects() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
 
