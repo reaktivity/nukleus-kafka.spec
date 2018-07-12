@@ -438,8 +438,8 @@ read 1L         # offset
 read -1L
 read [0..4]
 
-write abort
-read aborted
+read abort
+write aborted
 write notify FETCH_CONNECTION_TWO_FAILED
 
 # First historical fetch connection

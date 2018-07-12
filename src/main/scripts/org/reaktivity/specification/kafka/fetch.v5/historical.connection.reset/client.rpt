@@ -22,6 +22,7 @@ property networkConnectWindow 8192
 property newMetadataRequestId ${kafka:newRequestId()}
 property newRequestId1 ${kafka:newRequestId()}
 property newRequestId2 ${kafka:newRequestId()}
+property newRequestId3 ${kafka:newRequestId()}
 property maximumWaitTime 500
 property maximumBytes 65535
 property maximumBytesTest0 8192
@@ -33,6 +34,9 @@ connect await ROUTED_SERVER
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+
 connected
 
 write 21        # Size int32
@@ -44,39 +48,28 @@ write 1         # [TopicName] array length
   write 4s "test"
 write [0x00]    # allow_auto_topic_creation (boolean)
 
-read 126        # Size
+read 85         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
-read 2          # brokers array length
+read 1          # brokers array length
   read 1        # broker id
   read 7s "broker1"
   read 9093     # port int32
   read -1s      # rack string (null)
-
-  read 2
-  read 7s "broker2"
-  read 9093
-  read -1s
 read 9s "cluster 1"
 read 1          # controller broker id
 read 1          # topic array length
   read 0s       # error code
   read 4s "test"
   read [0x00]   # is_internal boolean
-  read 2        # partition array length
+  read 1        # partition array length
     read 0s     # error code
     read 0      # partition
     read 1      # leader
     read 0      # replicas array (empty)
     read -1     # isr array (null)
     read 0      # offline replicas array (empty)
-
-    read 0s     # error code
-    read 1      # partition
-    read 2      # leader
-    read 0      # replicas array (empty)
-    read -1     # isr array (null)
-    read 0      # offline replicas array (empty)
+read notify METADATA_RECEIVED
 
 write 62        # Size int32
 write 32s       # ApiKey int16 (DescribeConfigs)
@@ -109,16 +102,17 @@ read 8s "86400000"
 read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
-read notify METADATA_RECEIVED
 
-# Metadata request for topic zest which is only on broker1
+# Impacted metadata is refreshed when historical connection fails
+write await HISTORICAL_CONNECTION_FAILED
+
 write 21        # Size int32
 write 3s        # ApiKey int16 (Metadata)
 write 5s        # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
 write -1s       # ClientId string (null)
 write 1         # [TopicName] array length
-  write 4s "zest"
+  write 4s "test"
 write [0x00]    # allow_auto_topic_creation (boolean)
 
 read 85         # Size int32
@@ -133,7 +127,7 @@ read 9s "cluster 1"
 read 1          # controller broker id
 read 1          # topic array length
   read 0s       # error code
-  read 4s "zest"
+  read 4s "test"
   read [0x00]   # is_internal boolean
   read 1        # partition array length
     read 0s     # error code
@@ -150,83 +144,6 @@ write ${newMetadataRequestId} # CorrelationId int32
 write -1s       # ClientId string (null)
 write 1         # resources count
 write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
-write 4s "zest" # topic name
-write 2         # config names count
-write 14s "cleanup.policy"  # config name
-write 19s "delete.retention.ms" # config name
-
-read 88         # Size int32
-read ${newMetadataRequestId} # CorrelationId int32
-read [0..4]     # throttle_time_ms int32
-read 1          # resources count
-read 0s         # error code
-read -1s        # error message
-read [0x02]     # resource type (topic)
-read 4s "zest"  # topic name
-read 2          # config entries count
-read 14s "cleanup.policy"   # config name
-read 6s "delete"            # config value
-read [0x00]     # read_only boolean
-read [0x01]     # is_default boolean
-read [0x00]     # is_sensitive boolean
-read 19s "delete.retention.ms"
-read 8s "86400000"
-read [0x00]     # read_only boolean
-read [0x01]     # is_default boolean
-read [0x00]     # is_sensitive boolean
-
-write await FETCH_CONNECTION_TWO_FAILURE_DETECTED
-# Impacted metadata is refreshed
-write 21        # Size int32
-write 3s        # ApiKey int16 (Metadata)
-write 5s        # ApiVersion int16
-write ${newMetadataRequestId} # CorrelationId int32
-write -1s       # ClientId string (null)
-write 1         # [TopicName] array length
-  write 4s "test"
-write [0x00]    # allow_auto_topic_creation (boolean)
-
-read 129        # Size
-read ${newMetadataRequestId} # CorrelationId int32
-read [0..4]     # throttle_time_ms int32
-read 2          # brokers array length
-  read 1        # broker id
-  read 7s "broker1"
-  read 9093     # port int32
-  read -1s      # rack string (null)
-
-  read 2
-  read 10s "broker2new"
-  read 9093
-  read -1s
-read 9s "cluster 1"
-read 1          # controller broker id
-read 1          # topic array length
-  read 0s       # error code
-  read 4s "test"
-  read [0x00]   # is_internal boolean
-  read 2        # partition array length
-    read 0s     # error code
-    read 0      # partition
-    read 1      # leader
-    read 0      # replicas array (empty)
-    read -1     # isr array (null)
-    read 0      # offline replicas array (empty)
-
-    read 0s     # error code
-    read 1      # partition
-    read 2      # leader
-    read 0      # replicas array (empty)
-    read -1     # isr array (null)
-    read 0      # offline replicas array (empty)
-
-write 62        # Size int32
-write 32s       # ApiKey int16 (DescribeConfigs)
-write 0s        # ApiVersion int16
-write ${newMetadataRequestId} # CorrelationId int32
-write -1s       # ClientId string (null)
-write 1         # resources count
-write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
 write 4s "test" # topic name
 write 2         # config names count
 write 14s "cleanup.policy"  # config name
@@ -252,9 +169,7 @@ read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 
-write notify METADATA_REFRESH_RESPONSE_RECEIVED
-
-# Fetch stream 1
+# Live fetch connection
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
@@ -263,127 +178,66 @@ connect await METADATA_RECEIVED
   option nukleus:byteorder "network"
 
 write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
-
 connected
+write notify LIVE_CONNECTION_CONNECTED
 
-read notify FETCH_STREAM_ONE_CONNECTED
-
-write 99
-write 1s
+write 65        # Size
+write 1s        # Fetch
 write 5s
 write ${newRequestId1}
-write -1s
+write -1s       # client id
 write -1
 write ${maximumWaitTime}
 write 1
 write ${maximumBytes}
 write [0x00]
-write 2
-
+write 1         # Number of topics
 write 4s "test"
-write 1
+write 1         # Number of partitions
 write 0         # Partition
-write 0L
+write 0L        # offset
 write -1L
 write ${maximumBytesTest0}
 
-write 4s "zest"
-write 1
-write 0         # Partition
-write 0L
-write -1L
-write ${maximumBytesTest0}
-
-read 188
+read 140        # Size
 read ${newRequestId1}
 read [0..4]
-read 2          # Number of topic responses
-
+read 1
 read 4s "test"
 read 1          # Number of partition responses
 read 0          # Partition
 read 0s
-read 999L       # high watermark
-read -1L
-read 0L
-read -1
-read 80         # first offset
-read 0L
-read 68
-read 0
-read [0x02]
-read 0x4e8723aa
-read 0s
-read 0
-read (long:timestamp)
-read ${timestamp}
-read -1L
-read -1s
-read -1
-read 1
-read ${kafka:varint(18)}
-read [0x00]
-read ${kafka:varint(0)}
-read ${kafka:varint(0)}
-read ${kafka:varint(-1)}
-read ${kafka:varint(12)}
-read "Hello, world"
-read ${kafka:varint(0)}
-
-read 4s "zest"
-read 1          # Number of partition responses
-read 0          # Partition
-read 0s         # partition error code
-read 999L       # high_watermark
+read 1L         # high_watermark
 read -1L        # last_stable_offset
 read 0L         # log_start_offset
 read -1         # aborted_transactions (null)
-read 0          # length of record set
-
-write 99
-write 1s
-write 5s
-write ${newRequestId1}
-write -1s
-write -1
-write ${maximumWaitTime}
-write 1
-write ${maximumBytes}
-write [0x00]
-write 2
-
-write 4s "test"
-write 1
-write 0         # Partition
-write 1L
-write -1L
-write ${maximumBytesTest0}
-
-write 4s "zest"
-write 1
-write 0         # Partition
-write 0L
-write -1L
-write ${maximumBytesTest0}
-
-# Fetch stream 2
-connect await FETCH_STREAM_ONE_CONNECTED
-        ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow}
-  option nukleus:transmission "duplex"
-  option nukleus:byteorder "network"
-
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
-
-connected
-
-write notify FETCH_STREAM_TWO_CONNECTED
+read 80         # Length of the record batch
+read 0L         # First offset
+read 68         # Length
+read 0          # Partition leader epoque
+read [0x02]     # Magic
+read 0x4e8723aa # CRC32
+read 0s         # attributes
+read 0          # last offset delta
+read (long:timestamp1)      # first timestamp
+read ${timestamp1}          # maximum timestamp
+read -1L        # producer ID
+read -1s        # producer epoque
+read -1         # first sequence
+read 1          # number of records
+read ${kafka:varint(18)}    # Record length
+read [0x00]     # attributes
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(-1)}    # key length
+read ${kafka:varint(12)}    # value length
+read "Hello, world"
+read [0x00]     # headers array length
 
 write 65
 write 1s
 write 5s
-write ${newRequestId2}
+write ${newRequestId3}
 write -1s
 write -1
 write ${maximumWaitTime}
@@ -392,125 +246,149 @@ write ${maximumBytes}
 write [0x00]
 write 1
 write 4s "test"
-write 1
-write 1         # Partition
-write 0L
+write 1         # Number of partitions
+write 0         # Partition
+write 1L        # offset
 write -1L
 write ${maximumBytesTest0}
 
 read 140
+read ${newRequestId3}
+read [0..4]
+read 1
+read 4s "test"
+read 1
+read 0          # Partition
+read 0s
+read 2L         # high_watermark
+read -1L        # last_stable_offset
+read 0L         #  log_start_offset
+read -1         # aborted_transactions (null)
+read 80         # Length of the record batch
+read 1L         # first offset
+read 0x44       # length
+read 0          # partition leader epoque
+read [0x02]     # magic
+read 0x4e8723aa # CRC32
+read 0s         # attributes
+read 0          # last offset delta
+read (long:timestamp2)      # first timestamp
+read ${timestamp2}          # maximum timestamp
+read -1L        # producer ID
+read -1s        # producer epoque
+read -1         # first sequence
+read 1          # Number of records
+read ${kafka:varint(18)}    # Record length
+read [0x00]     # attributes
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(-1)}    # key length
+read ${kafka:varint(12)}    # value length
+read "Hello, again"
+read [0x00]     # headers array length
+
+# Historical fetch stream
+connect await LIVE_CONNECTION_CONNECTED
+        ${networkConnect}
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+connected
+
+write 65        # Size
+write 1s        # Fetch
+write 5s
+write ${newRequestId2}
+write -1s       # client id
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1         # Number of topics
+write 4s "test"
+write 1         # Number of partitions
+write 0         # Partition
+write 0L        # offset
+write -1L
+write ${maximumBytesTest0}
+
+write aborted
+read abort
+read notify HISTORICAL_CONNECTION_FAILURE_DETECTED
+
+# Historical fetch connection reconnects
+connect await HISTORICAL_CONNECTION_FAILURE_DETECTED
+        ${networkConnect}
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+connected
+
+write 65        # Size
+write 1s        # Fetch
+write 5s
+write ${newRequestId2}
+write -1s       # client id
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1         # Number of topics
+write 4s "test"
+write 1         # Number of partitions
+write 0         # Partition
+write 0L        # offset
+write -1L
+write ${maximumBytesTest0}
+
+read 159        # Size
 read ${newRequestId2}
 read [0..4]
 read 1
 read 4s "test"
-read 1          # Number of partition responses
-read 1          # Partition
-read 0s
-read 999L       # high watermark
-read -1L
-read 0L
-read -1
-read 80
-read 0L         # first offset
-read 68
-read 0
-read [0x02]
-read 0x4e8723aa
-read 0s
-read 0
-read (long:timestamp)
-read ${timestamp}
-read -1L
-read -1s
-read -1
 read 1
-read ${kafka:varint(18)}
-read [0x00]
-read ${kafka:varint(0)}
-read ${kafka:varint(0)}
-read ${kafka:varint(-1)}
-read ${kafka:varint(12)}
+read 0          # Partition
+read 0s
+read 2L         # high_watermark
+read -1L        # last_stable_offset
+read 0L         # log_start_offset
+read -1         # aborted_transactions (null)
+read 0x63       # length of the record batch
+read 0L         # First offset
+read 0x57       # length
+read 0          # partition leader epoque
+read [0x02]     # magic
+read 0x4e8723aa # CRC32
+read 0s         # attributes
+read 1          # Last offset delta
+read ${timestamp1}          # first timestamp
+read (long:timestamp2)      #  maximum timestamp
+read -1L        # producer ID
+read -1s        # producer epoque
+read -1         # first sequence
+read 2          # Number of records
+read ${kafka:varint(18)}    # Record length
+read [0x00]     # attributes
+read ${kafka:varint(0)}     # timestamp delta
+read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(-1)}    # key length
+read ${kafka:varint(12)}    # value
+read "Hello, world"
+read [0x00]     # headers array length
+
+read ${kafka:varint(18)}    # Record length
+read [0x00]     # attributes
+read ${kafka:varint(timestamp2 - timestamp1)} # timestamp delta
+read ${kafka:varint(1)}     # offset delta
+read ${kafka:varint(-1)}    # key length
+read ${kafka:varint(12)}    # value
 read "Hello, again"
-read ${kafka:varint(0)}
+read [0x00]     # headers array length
 
-write 65
-write 1s
-write 5s
-write ${newRequestId2}
-write -1s
-write -1
-write ${maximumWaitTime}
-write 1
-write ${maximumBytes}
-write [0x00]
-write 1
-write 4s "test"
-write 1
-write 1         # Partition
-write 1L        # offset
-write -1L
-write ${maximumBytesTest0}
-
-read aborted
-write abort
-read notify FETCH_CONNECTION_TWO_FAILURE_DETECTED
-
-# Historical Fetch stream 1
-connect await FETCH_STREAM_TWO_CONNECTED
-        ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow}
-  option nukleus:transmission "duplex"
-  option nukleus:byteorder "network"
-
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
-
-connected
-
-read notify HISTORICAL_FETCH_STREAM_ONE_CONNECTED
-
-# Historical Fetch stream 2
-connect await HISTORICAL_FETCH_STREAM_ONE_CONNECTED
-        ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow}
-  option nukleus:transmission "duplex"
-  option nukleus:byteorder "network"
-
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
-
-connected
-
-read notify HISTORICAL_FETCH_STREAM_TWO_CONNECTED
-
-# Fetch stream 2 reconnects
-connect await HISTORICAL_FETCH_STREAM_TWO_CONNECTED
-        ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow}
-  option nukleus:transmission "duplex"
-  option nukleus:byteorder "network"
-
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
-
-connected
-
-write await METADATA_REFRESH_RESPONSE_RECEIVED
-
-write 65
-write 1s
-write 5s
-write ${newRequestId2}
-write -1s
-write -1
-write ${maximumWaitTime}
-write 1
-write ${maximumBytes}
-write [0x00]
-write 1
-write 4s "test"
-write 1
-write 1         # Partition
-write 1L        # offset
-write -1L
-write ${maximumBytesTest0}
+read notify SERVER_DELIVER_LIVE_RESPONSE_TWO

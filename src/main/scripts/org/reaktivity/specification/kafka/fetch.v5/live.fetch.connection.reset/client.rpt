@@ -451,8 +451,8 @@ write 1L        # offset
 write -1L
 write ${maximumBytesTest0}
 
-read aborted
-write abort
+write aborted
+read abort
 read notify FETCH_CONNECTION_TWO_FAILURE_DETECTED
 
 # Historical Fetch stream 1

@@ -695,6 +695,41 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/historical.connection.aborted/client",
+     "${scripts}/historical.connection.aborted/server"})
+    public void shouldReconnectRequeryMetadataAndContinueReceivingMessagesWhenHistoricalFetchConnectionIsAborted()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/historical.connection.closed/client",
+     "${scripts}/historical.connection.closed/server"})
+    public void shouldReconnectAndReceiveMessagesWhenHistoricalFetchConnectionIsClosed() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/historical.connection.reset/client",
+     "${scripts}/historical.connection.reset/server"})
+    public void shouldReconnectRequeryMetadataAndContinueReceivingMessagesWhenHistoricalFetchConnectionIsReset()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/live.fetch.connection.aborted/client",
      "${scripts}/live.fetch.connection.aborted/server"})
     public void shouldReconnectRequeryPartitionMetadataAndContinueReceivingMessagesWhenLiveFetchConnectionIsAborted()
