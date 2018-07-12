@@ -31,9 +31,10 @@ accept ${networkAccept}
 accepted
 connected
 
+# Metadata request for topic test which is on both brokers
 read 21         # Size int32
-read 0x03s      # ApiKey int16 (Metadata)
-read 0x05s      # ApiVersion int16
+read 3s         # ApiKey int16 (Metadata)
+read 5s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [TopicName] array length
@@ -58,7 +59,7 @@ write 1         # controller broker id
 write 1         # topic array length
   write 0s      # error code
   write 4s "test"
-  write byte 0x00           # is_internal
+  write byte 0  # is_internal
   write 2       # partition array length
     write 0s    # error code
     write 0     # partition
@@ -80,7 +81,7 @@ read 0s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
-read [0x02]     # resource type int8 (topic) 
+read [0x02]     # resource type int8 (topic)
 read 4s "test"  # topic name
 read 2          # config_names count
 read 14s "cleanup.policy"
@@ -106,12 +107,76 @@ write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 
-read await FETCH_CONNECTION_FAILED
+# Metadata request for topic zest which is only on broker1
+read 21         # Size int32
+read 3s         # ApiKey int16 (Metadata)
+read 5s         # ApiVersion int16
+read (int:metadataRequestId)
+read -1s        # ClientId string (null)
+read 1          # [TopicName] array length
+  read 4s "zest"
+read [0x00]     # allow_auto_topic_creation (boolean)
+
+write 85        # Size int32
+write ${metadataRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # brokers array length
+  write 1       # broker id
+  write 7s "broker1"
+  write 9093    # port int32
+  write -1s     # rack string (null)
+write 9s "cluster 1"
+write 1         # controller broker id
+write 1         # topic array length
+  write 0s      # error code
+  write 4s "zest"
+  write byte 0  # is_internal
+  write 1       # partition array length
+    write 0s    # error code
+    write 0     # partition
+    write 1     # leader
+    write 0     # replicas array (empty)
+    write -1    # isr array (null)
+    write 0     # offline replicas array (empty)
+
+read 62         # Size int32
+read 32s        # ApiKey int16 (DescribeConfigs)
+read 0s         # ApiVersion int16
+read (int:metadataRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [Resources] array length
+read [0x02]     # resource type int8 (topic)
+read 4s "zest"  # topic name
+read 2          # config_names count
+read 14s "cleanup.policy"
+read 19s "delete.retention.ms"
+
+write 88        # Size int32
+write ${metadataRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # resources count
+write 0s        # error code
+write -1s       # error message
+write [0x02]    # resource type
+write 4s "zest" # topic name
+write 2         # config entries count
+write 14s "cleanup.policy"  # config name
+write 6s "delete"           # config  value
+write [0x00]    # read_only boolean
+write [0x01]    # is_default boolean
+write [0x00]    # is_sensitive boolean
+write 19s "delete.retention.ms"
+write 8s "86400000"
+write [0x00]    # read_only boolean
+write [0x01]    # is_default boolean
+write [0x00]    # is_sensitive boolean
+
+read await FETCH_CONNECTION_TWO_FAILED
 
 # Impacted metadata is refreshed
 read 21         # Size int32
-read 0x03s      # ApiKey int16 (Metadata)
-read 0x05s      # ApiVersion int16
+read 3s         # ApiKey int16 (Metadata)
+read 5s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [TopicName] array length
@@ -136,7 +201,7 @@ write 1         # controller broker id
 write 1         # topic array length
   write 0s      # error code
   write 4s "test"
-  write byte 0x00           # is_internal
+  write byte 0  # is_internal
   write 2       # partition array length
     write 0s    # error code
     write 0     # partition
@@ -158,11 +223,13 @@ read 0s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
-read [0x02]     # resource type int8 (topic) 
+read [0x02]     # resource type int8 (topic)
 read 4s "test"  # topic name
 read 2          # config_names count
 read 14s "cleanup.policy"
 read 19s "delete.retention.ms"
+
+write await WRITE_METADATA_REFRESH_RESPONSE
 
 write 88        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
@@ -191,7 +258,7 @@ accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
-read 65
+read 99
 read 1s
 read 5s
 read (int:requestId1)
@@ -201,7 +268,8 @@ read [0..4]
 read 1
 read [0..4]
 read [0x00]
-read 1
+read 2
+
 read 4s "test"
 read 1
 read 0          # Partition
@@ -209,11 +277,21 @@ read 0L         # offset
 read -1L
 read [0..4]
 
-write 140
+read 4s "zest"
+read 1
+read 0          # Partition
+read 0L         # offset
+read -1L
+read [0..4]
+
+write await FETCH_CONNECTION_TWO_FAILED
+
+write 188
 write ${requestId1}
 write 0
-write 1         # Number of topic responses
-write 0x04s "test"
+write 2         # Number of topic responses
+
+write 4s "test"
 write 1         # Number of partition responses
 write 0         # Partition
 write 0s        # partition error code
@@ -243,6 +321,45 @@ write ${kafka:varint(-1)}   # key length
 write ${kafka:varint(12)}   # value length
 write "Hello, world"
 write ${kafka:varint(0)}
+
+write 4s "zest"
+write 1         # Number of partition responses
+write 0         # Partition
+write 0s        # partition error code
+write 999L      # high_watermark
+write -1L       # last_stable_offset
+write 0L        # log_start_offset
+write -1        # aborted_transactions (null)
+write 0         # length of record set
+
+# Fetching should continue on first fetch connection even though second has failed
+read 99
+read 1s
+read 5s
+read (int:requestId1)
+read -1s
+read -1
+read [0..4]
+read 1
+read [0..4]
+read [0x00]
+read 2
+
+read 4s "test"
+read 1
+read 0          # Partition
+read 1L         # offset
+read -1L
+read [0..4]
+
+read 4s "zest"
+read 1
+read 0          # Partition
+read 0L         # offset
+read -1L
+read [0..4]
+
+read notify WRITE_METADATA_REFRESH_RESPONSE
 
 # Fetch stream 2
 accepted
@@ -322,8 +439,7 @@ read -1L
 read [0..4]
 
 write abort
-
-write notify FETCH_CONNECTION_FAILED
+write notify FETCH_CONNECTION_TWO_FAILED
 
 # First historical fetch connection
 accepted
@@ -335,12 +451,12 @@ accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
 connected
 
-# Second live fetch connection reconnects
+# Fetch stream 2 reconnects
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
 connected
 
-# next fetch request is repeated only after the metadata has been refreshed
+# the fetch request is repeated only after the metadata has been refreshed
 read await METADATA_REFRESH_RESPONSE_WRITTEN
 
 read 65
@@ -360,6 +476,3 @@ read 1          # partition
 read 1L         # offset
 read -1L
 read [0..4]
-
-
-

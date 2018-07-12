@@ -30,7 +30,7 @@ property maximumBytesTest0 8192
 connect await ROUTED_SERVER
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
+  option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 connected
@@ -51,7 +51,7 @@ read 2          # brokers array length
   read 1        # broker id
   read 7s "broker1"
   read 9093     # port int32
-  read -1s      # rack string (null) 
+  read -1s      # rack string (null)
 
   read 2
   read 7s "broker2"
@@ -88,7 +88,7 @@ write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resour
 write 4s "test" # topic name
 write 2         # config names count
 write 14s "cleanup.policy"  # config name
-write 19s "delete.retention.ms"  # config name
+write 19s "delete.retention.ms" # config name
 
 read 88         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
@@ -111,6 +111,71 @@ read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 read notify METADATA_RECEIVED
 
+# Metadata request for topic zest which is only on broker1
+write 21        # Size int32
+write 3s        # ApiKey int16 (Metadata)
+write 5s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # [TopicName] array length
+  write 4s "zest"
+write [0x00]    # allow_auto_topic_creation (boolean)
+
+read 85         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read [0..4]     # throttle_time_ms int32
+read 1          # brokers array length
+  read 1        # broker id
+  read 7s "broker1"
+  read 9093     # port int32
+  read -1s      # rack string (null)
+read 9s "cluster 1"
+read 1          # controller broker id
+read 1          # topic array length
+  read 0s       # error code
+  read 4s "zest"
+  read [0x00]   # is_internal boolean
+  read 1        # partition array length
+    read 0s     # error code
+    read 0      # partition
+    read 1      # leader
+    read 0      # replicas array (empty)
+    read -1     # isr array (null)
+    read 0      # offline replicas array (empty)
+
+write 62        # Size int32
+write 32s       # ApiKey int16 (DescribeConfigs)
+write 0s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # resources count
+write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
+write 4s "zest" # topic name
+write 2         # config names count
+write 14s "cleanup.policy"  # config name
+write 19s "delete.retention.ms" # config name
+
+read 88         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read [0..4]     # throttle_time_ms int32
+read 1          # resources count
+read 0s         # error code
+read -1s        # error message
+read [0x02]     # resource type (topic)
+read 4s "zest"  # topic name
+read 2          # config entries count
+read 14s "cleanup.policy"   # config name
+read 6s "delete"            # config value
+read [0x00]     # read_only boolean
+read [0x01]     # is_default boolean
+read [0x00]     # is_sensitive boolean
+read 19s "delete.retention.ms"
+read 8s "86400000"
+read [0x00]     # read_only boolean
+read [0x01]     # is_default boolean
+read [0x00]     # is_sensitive boolean
+
+write await FETCH_CONNECTION_TWO_FAILURE_DETECTED
 # Impacted metadata is refreshed
 write 21        # Size int32
 write 3s        # ApiKey int16 (Metadata)
@@ -128,7 +193,7 @@ read 2          # brokers array length
   read 1        # broker id
   read 7s "broker1"
   read 9093     # port int32
-  read -1s      # rack string (null) 
+  read -1s      # rack string (null)
 
   read 2
   read 10s "broker2new"
@@ -165,7 +230,7 @@ write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resour
 write 4s "test" # topic name
 write 2         # config names count
 write 14s "cleanup.policy"  # config name
-write 19s "delete.retention.ms"  # config name
+write 19s "delete.retention.ms" # config name
 
 read 88         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
@@ -193,7 +258,7 @@ write notify METADATA_REFRESH_RESPONSE_RECEIVED
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
+  option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -203,7 +268,7 @@ connected
 
 read notify FETCH_STREAM_ONE_CONNECTED
 
-write 65
+write 99
 write 1s
 write 5s
 write ${newRequestId1}
@@ -213,7 +278,8 @@ write ${maximumWaitTime}
 write 1
 write ${maximumBytes}
 write [0x00]
-write 1
+write 2
+
 write 4s "test"
 write 1
 write 0         # Partition
@@ -221,12 +287,20 @@ write 0L
 write -1L
 write ${maximumBytesTest0}
 
-read 140
+write 4s "zest"
+write 1
+write 0         # Partition
+write 0L
+write -1L
+write ${maximumBytesTest0}
+
+read 188
 read ${newRequestId1}
 read [0..4]
-read 1
+read 2          # Number of topic responses
+
 read 4s "test"
-read 1
+read 1          # Number of partition responses
 read 0          # Partition
 read 0s
 read 999L       # high watermark
@@ -256,11 +330,47 @@ read ${kafka:varint(12)}
 read "Hello, world"
 read ${kafka:varint(0)}
 
+read 4s "zest"
+read 1          # Number of partition responses
+read 0          # Partition
+read 0s         # partition error code
+read 999L       # high_watermark
+read -1L        # last_stable_offset
+read 0L         # log_start_offset
+read -1         # aborted_transactions (null)
+read 0          # length of record set
+
+write 99
+write 1s
+write 5s
+write ${newRequestId1}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 2
+
+write 4s "test"
+write 1
+write 0         # Partition
+write 1L
+write -1L
+write ${maximumBytesTest0}
+
+write 4s "zest"
+write 1
+write 0         # Partition
+write 0L
+write -1L
+write ${maximumBytesTest0}
+
 # Fetch stream 2
 connect await FETCH_STREAM_ONE_CONNECTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
+  option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -293,7 +403,7 @@ read ${newRequestId2}
 read [0..4]
 read 1
 read 4s "test"
-read 1
+read 1          # Number of partition responses
 read 1          # Partition
 read 0s
 read 999L       # high watermark
@@ -342,12 +452,13 @@ write -1L
 write ${maximumBytesTest0}
 
 read aborted
+read notify FETCH_CONNECTION_TWO_FAILURE_DETECTED
 
 # Historical Fetch stream 1
 connect await FETCH_STREAM_TWO_CONNECTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
+  option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -357,11 +468,11 @@ connected
 
 read notify HISTORICAL_FETCH_STREAM_ONE_CONNECTED
 
-# Historical Fetch stream 1
+# Historical Fetch stream 2
 connect await HISTORICAL_FETCH_STREAM_ONE_CONNECTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
+  option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -375,7 +486,7 @@ read notify HISTORICAL_FETCH_STREAM_TWO_CONNECTED
 connect await HISTORICAL_FETCH_STREAM_TWO_CONNECTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow} 
+  option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
