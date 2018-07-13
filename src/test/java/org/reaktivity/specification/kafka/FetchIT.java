@@ -1007,28 +1007,6 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.messages.fetch.connection.closed.and.reconnect/client",
-     "${scripts}/zero.offset.messages.fetch.connection.closed.and.reconnect/server"})
-    public void shouldReceiveMessagesWhenFetchConnectionIsClosedAndReconnects() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification(
-    {"${scripts}/zero.offset.messages.fetch.connection.closed.reset.and.reconnect/client",
-     "${scripts}/zero.offset.messages.fetch.connection.closed.reset.and.reconnect/server"})
-    public void shouldRefetchMetadataAndReceiveMessagesWhenFetchConnectionIsClosedResetAndReconnects() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification(
     {"${scripts}/zero.offset.messages.first.exceeds.256.bytes/client",
      "${scripts}/zero.offset.messages.first.exceeds.256.bytes/server"})
     public void shouldReceiveLargeThenSmallMessage() throws Exception

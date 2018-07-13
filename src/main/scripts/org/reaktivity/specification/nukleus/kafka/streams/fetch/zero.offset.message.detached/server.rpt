@@ -26,7 +26,7 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 5s "test1"
+read nukleus:begin.ext 0x04s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
@@ -34,31 +34,16 @@ read nukleus:begin.ext 0
 
 connected
 
-write nukleus:begin.ext 5s "test1"
+write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext ${newTimestamp} 2 ${kafka:varint(1)} ${kafka:varint(0)}
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(1)}
 write nukleus:data.ext -1
 write "Hello, world"
 write flush
 
-accepted
-
-read nukleus:begin.ext 5s "test2"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
-
-connected
-
-write nukleus:begin.ext 5s "test2"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
-write flush
+write abort
