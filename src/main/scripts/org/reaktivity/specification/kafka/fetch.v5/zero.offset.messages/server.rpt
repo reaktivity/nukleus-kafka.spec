@@ -32,8 +32,8 @@ accepted
 connected
 
 read 21         # Size int32
-read 3s      # ApiKey int16 (Metadata)
-read 5s      # ApiVersion int16
+read 3s         # ApiKey int16 (Metadata)
+read 5s         # ApiVersion int16
 read (int:metadataRequestId)
 read -1s        # ClientId string (null)
 read 1          # [TopicName] array length
@@ -53,7 +53,7 @@ write 1         # controller broker id
 write 1         # topic array length
   write 0s      # error code
   write 4s "test"
-  write byte 0           # is_internal
+  write byte 0  # is_internal
   write 1       # partition array length
     write 0s    # error code
     write 0     # partition
@@ -68,7 +68,7 @@ read 0s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
-read [0x02]     # resource type int8 (topic) 
+read [0x02]     # resource type int8 (topic)
 read 4s "test"  # topic name
 read 2          # config_names count
 read 14s "cleanup.policy"
@@ -129,25 +129,25 @@ write 999L      # high water mark
 write -1L       # last stable offset
 write 0L        # log start offset
 write -1        # aborted transaction count
-write 99      # record batch size
+write 99        # record batch size
 write 0L        # first offset
-write 87      # record batch length
-write 0      # leader epoque
+write 87        # record batch length
+write 0         # leader epoque
 write [0x02]    # magic
-write 0x4e8723aa         # crc 
-write 0s     # attributes
+write 0x4e8723aa            # crc
+write 0s        # attributes
 write 1         # last offset delta
-write ${newTimestamp}    # first timestamp
-write ${newTimestamp}    # max timestamp
-write -1L                # producer ID
-write -1s                # producer epoch
-write -1                 # first sequence          
-write 2                  # record count
+write ${newTimestamp}       # first timestamp
+write ${newTimestamp}       # max timestamp
+write -1L       # producer ID
+write -1s       # producer epoch
+write -1        # first sequence
+write 2         # record count
 
 write ${kafka:varint(18)}
 write [0x00]    # attributes
-write ${kafka:varint(0)}     # timestamp delta
-write ${kafka:varint(0)}     # offset delta
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(0)}    # offset delta
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, world"
@@ -155,8 +155,8 @@ write [0x00]
 
 write ${kafka:varint(18)}
 write [0x00]
-write ${kafka:varint(10)}    # timestamp delta
-write ${kafka:varint(1)}     # offset delta
+write ${kafka:varint(10)}   # timestamp delta
+write ${kafka:varint(1)}    # offset delta
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, again"

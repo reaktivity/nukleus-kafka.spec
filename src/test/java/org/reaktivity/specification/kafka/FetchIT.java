@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.rules.DisableOnDebug;
 import org.junit.rules.TestRule;
 import org.junit.rules.Timeout;
+import org.kaazing.k3po.junit.annotation.ScriptProperty;
 import org.kaazing.k3po.junit.annotation.Specification;
 import org.kaazing.k3po.junit.rules.K3poRule;
 
@@ -748,6 +749,43 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.error.recovered/client",
+     "${scripts}/live.fetch.error.recovered/server"})
+    public void shouldContinueReceivingMessagesWhenTopicFetchResponseIsErrorCode3NotFoundButMetadataIsFound() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.error.recovered/client",
+     "${scripts}/live.fetch.error.recovered/server"})
+    @ScriptProperty("errorCode \"6s\"")
+    public void shouldRefetchMetadataAndContinueReceivingMessagesWhenTopicFetchResponseIsErrorCode6NotLeader() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.topic.not.found.permanently/client",
+     "${scripts}/live.fetch.topic.not.found.permanently/server"})
+    public void shouldDetachClientsWhenTopicIsPermanentlyDeleted() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
         k3po.finish();
     }
 
