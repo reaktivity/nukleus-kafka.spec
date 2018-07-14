@@ -68,6 +68,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
         k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
@@ -811,12 +812,14 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message.detached/client",
-        "${scripts}/zero.offset.message.detached/server"})
+        "${scripts}/zero.offset.message.two.topics.one.detached/client",
+        "${scripts}/zero.offset.message.two.topics.one.detached/server"})
     public void shouldReceiveMessageAtZeroOffsetAndBeDetached() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 
@@ -828,6 +831,21 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.message.two.topics.multiple.partitions/client",
+        "${scripts}/zero.offset.message.two.topics.multiple.partitions/server"})
+    public void shouldReceiveMessageAtZeroOffsetMultiplePartitionsTwoTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 

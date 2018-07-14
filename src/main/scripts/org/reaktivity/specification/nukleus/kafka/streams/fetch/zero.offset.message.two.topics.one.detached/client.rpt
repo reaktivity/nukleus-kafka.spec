@@ -40,11 +40,11 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read notify CLIENT_ONE_CONNECTED
-
 read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
 read nukleus:data.ext -1
 read "Hello, world"
+
+read aborted
 
 connect await CONNECT_CLIENT_TWO
         ${applicationConnect}

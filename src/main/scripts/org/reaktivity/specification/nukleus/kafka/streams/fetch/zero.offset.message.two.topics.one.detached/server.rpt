@@ -41,10 +41,12 @@ write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext ${newTimestamp} 2 ${kafka:varint(1)} ${kafka:varint(0)}
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(1)}
 write nukleus:data.ext -1
 write "Hello, world"
 write flush
+
+write abort
 
 accepted
 
