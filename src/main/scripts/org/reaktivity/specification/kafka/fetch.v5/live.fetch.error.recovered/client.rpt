@@ -263,7 +263,7 @@ write -1L
 write ${maximumBytesTest0}
 
 # No messages for test1
-read 65
+read 61
 read ${newRequestId}
 read [0..4]
 read 1
@@ -271,7 +271,7 @@ read 5s "test1"
 read 1
 read 0
 read 0s
-read 999L       # high water mark
+read 0L         # high water mark
 read -1L
 read 0L
 read -1
@@ -313,7 +313,7 @@ read 5s "test1"
 read 1          # Number of partition responses
 read 0          # Partition
 read [0..2]     # partition error code
-read 999L       # high_watermark
+read 0L         # high_watermark
 read -1L        # last_stable_offset
 read 0L         # log_start_offset
 read -1         # aborted_transactions (null)
@@ -323,7 +323,7 @@ read 5s "test2"
 read 1          # Number of partition responses
 read 0          # Partition
 read 0s         # partition error code
-read 999L       # high_watermark
+read 0L         # high_watermark
 read -1L        # last_stable_offset
 read 0L         # log_start_offset
 read -1         # aborted_transactions (null)
@@ -350,7 +350,7 @@ write 0L
 write -1L
 write ${maximumBytesTest0}
 
-read 65
+read 61
 read ${newRequestId}
 read [0..4]
 read 1          # Number of topic responses
@@ -358,7 +358,7 @@ read 5s "test2"
 read 1          # Number of partition responses
 read 0          # Partition
 read 0s         # partition error code
-read 999L       # high_watermark
+read 0L         # high_watermark
 read -1L        # last_stable_offset
 read 0L         # log_start_offset
 read -1         # aborted_transactions (null)
@@ -400,7 +400,7 @@ read 5s "test1"
 read 1          # Number of partition responses
 read 0          # Partition
 read 0s
-read 999L       # high watermark
+read 1L         # high watermark
 read -1L
 read 0L
 read -1
@@ -431,7 +431,7 @@ read 5s "test2"
 read 1          # Number of partition responses
 read 0          # Partition
 read 0s         # partition error code
-read 999L       # high_watermark
+read 0L         # high_watermark
 read -1L        # last_stable_offset
 read 0L         # log_start_offset
 read -1         # aborted_transactions (null)

@@ -253,10 +253,12 @@ read 0L
 read -1L
 read [0..4]
 
+read notify FIRST_FETCH_REQUEST_RECEIVED
+
 write await WRITE_FIRST_FETCH_RESPONSE
 
 # No messages for test1
-write 65
+write 61
 write ${requestId}
 write 0
 write 1
@@ -264,7 +266,7 @@ write 5s "test1"
 write 1         # partition count
 write 0         # partition id
 write 0s
-write 999L      # high water mark
+write 0L        # high water mark
 write -1L       # last stable offset
 write 0L        # log start offset
 write -1        # aborted transaction count
@@ -306,7 +308,7 @@ write 5s "test1"
 write 1         # Number of partition responses
 write 0         # Partition
 write ${errorCode}          # partition error code
-write 999L      # high_watermark
+write 0L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
@@ -316,7 +318,7 @@ write 5s "test2"
 write 1         # Number of partition responses
 write 0         # Partition
 write 0s        # partition error code
-write 999L      # high_watermark
+write 0L       # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
@@ -346,7 +348,7 @@ read [0..4]
 write await METADATA_REFRESH_RESPONSE_WRITTEN
 
 # No messages for test2
-write 65
+write 61
 write ${requestId}
 write 0
 write 1
@@ -354,11 +356,11 @@ write 5s "test2"
 write 1         # partition count
 write 0         # partition id
 write 0s
-write 999L      # high water mark
+write 0L        # high water mark
 write -1L       # last stable offset
 write 0L        # log start offset
 write -1        # aborted transaction count
-write 0         # record batch size
+write 0         # record set size
 
 # Fetch request for topics test1 and test2 gives a message for test1
 read 101
@@ -396,7 +398,7 @@ write 5s "test1"
 write 1         # Number of partition responses
 write 0         # Partition
 write 0s        # partition error code
-write 999L      # high_watermark
+write 1L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
@@ -427,9 +429,10 @@ write 5s "test2"
 write 1         # Number of partition responses
 write 0         # Partition
 write 0s        # partition error code
-write 999L      # high_watermark
+write 0L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
 write 0         # length of record set
+
 
