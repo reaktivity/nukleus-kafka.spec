@@ -15,34 +15,52 @@
 #
 
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
+property newTimestamp ${kafka:timestamp()}
 
-property applicationConnect "nukleus://kafka/streams/source"
-property applicationConnectWindow 8192
+property applicationAccept "nukleus://kafka/streams/source"
+property applicationAcceptWindow 8192
 
-connect await ROUTED_CLIENT
-        ${applicationConnect}
-    option nukleus:route ${newApplicationRouteRef}
-    option nukleus:window ${applicationConnectWindow}
-    option nukleus:transmission "half-duplex"
+accept ${applicationAccept}
+       option nukleus:route ${newApplicationRouteRef}
+       option nukleus:window ${applicationAcceptWindow}
+       option nukleus:transmission "half-duplex"
+accepted
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
-
-connected
-
-read nukleus:begin.ext 4s "test"
+read nukleus:begin.ext 5s "test1"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext (long:timestamp) 2 ${kafka:varint(1)} ${kafka:varint(0)}
-read nukleus:data.ext -1
-read "Hello, world"
+connected
 
-read nukleus:data.ext ${timestamp} 2 ${kafka:varint(1)} ${kafka:varint(1)}
-read nukleus:data.ext -1
-read "Hello, again"
+write nukleus:begin.ext 5s "test1"
+write nukleus:begin.ext 1 ${kafka:varint(0)}
+write nukleus:begin.ext -1
+write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 0
+write flush
+
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(1)}
+write nukleus:data.ext -1
+write "Hello, world"
+write flush
+
+write abort
+
+accepted
+
+read nukleus:begin.ext 5s "test2"
+read nukleus:begin.ext 1 ${kafka:varint(0)}
+read nukleus:begin.ext -1
+read nukleus:begin.ext [0xFF]
+read nukleus:begin.ext 0
+
+connected
+
+write nukleus:begin.ext 5s "test2"
+write nukleus:begin.ext 1 ${kafka:varint(0)}
+write nukleus:begin.ext -1
+write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 0
+write flush

@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.rules.DisableOnDebug;
 import org.junit.rules.TestRule;
 import org.junit.rules.Timeout;
+import org.kaazing.k3po.junit.annotation.ScriptProperty;
 import org.kaazing.k3po.junit.annotation.Specification;
 import org.kaazing.k3po.junit.rules.K3poRule;
 
@@ -695,9 +696,10 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/live.fetch.abort.and.reconnect/client",
-     "${scripts}/live.fetch.abort.and.reconnect/server"})
-    public void shouldReconnectWhenLiveFetchReceivesAbort() throws Exception
+    {"${scripts}/historical.connection.aborted/client",
+     "${scripts}/historical.connection.aborted/server"})
+    public void shouldReconnectRequeryMetadataAndContinueReceivingMessagesWhenHistoricalFetchConnectionIsAborted()
+            throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -706,12 +708,86 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/live.fetch.reset.reconnect.and.message/client",
-     "${scripts}/live.fetch.reset.reconnect.and.message/server"})
-    public void shouldReconnectAndReceiveMessageWhenLiveFetchReceivesReset() throws Exception
+    {"${scripts}/historical.connection.closed/client",
+     "${scripts}/historical.connection.closed/server"})
+    public void shouldReconnectAndReceiveMessagesWhenHistoricalFetchConnectionIsClosed() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/historical.connection.reset/client",
+     "${scripts}/historical.connection.reset/server"})
+    public void shouldReconnectRequeryMetadataAndContinueReceivingMessagesWhenHistoricalFetchConnectionIsReset()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.connection.aborted/client",
+     "${scripts}/live.fetch.connection.aborted/server"})
+    public void shouldReconnectRequeryPartitionMetadataAndContinueReceivingMessagesWhenLiveFetchConnectionIsAborted()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.awaitBarrier("FIRST_FETCH_REQUEST_RECEIVED");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.connection.closed/client",
+     "${scripts}/live.fetch.connection.closed/server"})
+    public void shouldReconnectAndReceiveMessagesWhenLiveFetchConnectionIsClosed() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.connection.reset/client",
+     "${scripts}/live.fetch.connection.reset/server"})
+    public void shouldContinueReceivingMessagesWhenTopicFetchResponseIsErrorCode3NotFoundButMetadataIsFound() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.error.recovered/client",
+     "${scripts}/live.fetch.error.recovered/server"})
+    @ScriptProperty("errorCode \"6s\"")
+    public void shouldContinueReceivingMessagesWhenTopicFetchResponseIsRecoverableError() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.topic.not.found.permanently/client",
+     "${scripts}/live.fetch.topic.not.found.permanently/server"})
+    public void shouldDetachClientsWhenTopicIsPermanentlyDeleted() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -909,17 +985,6 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.messagesets/client",
-     "${scripts}/zero.offset.messagesets/server"})
-    public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification(
     {"${scripts}/zero.offset.messages.fanout/client",
      "${scripts}/zero.offset.messages.fanout/server"})
     public void shouldFanoutMessagesAtZeroOffset() throws Exception
@@ -960,19 +1025,8 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification(
-    {"${scripts}/zero.offset.messages.group.budget.reset/client",
-    "${scripts}/zero.offset.messages.group.budget.reset/server"})
-    public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudgetReset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_ONE");
+        k3po.notifyBarrier("SERVER_DELIVER_RESPONSE_TWO");
         k3po.finish();
     }
 
@@ -1004,6 +1058,17 @@ public class FetchIT
     {"${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
     "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
     public void shouldReceiveMessagesAtZeroOffsetFromMultiplPartitionsPartition1() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messagesets/client",
+     "${scripts}/zero.offset.messagesets/server"})
+    public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
