@@ -27,36 +27,12 @@ connect await ROUTED_SERVER
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
-  option nukleus:byteorder "network"
-
-connected
-
-write aborted
-
-write notify CLIENT_ONE_ABORTED
-
-connect await CLIENT_ONE_ABORTED
-        ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow}
-  option nukleus:byteorder "network"
-
-connected
-
-write aborted
-
-write notify CLIENT_TWO_ABORTED
-
-connect await CLIENT_TWO_ABORTED
-        ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow}
-  option nukleus:correlation ${correlationId}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
 connected
 
+# Metadata request
 write 21 # Size int32
 write 0x03s # ApiKey int16 (Metadata)
 write 0x05s # ApiVersion int16
@@ -88,6 +64,34 @@ read 1 # topic array length
     read -1 # isr array (null)
     read 0 # offline replicas array (empty)
     
+# DescribeConfigs request
+write 62        # Size int32
+write 32s       # ApiKey int16 (DescribeConfigs)
+write 0s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # resources count
+write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
+write 4s "test" # topic name
+write 2         # config names count
+write 14s "cleanup.policy"  # config name
+write 19s "delete.retention.ms"  # config name
+
+read closed
+write close
+
+write notify CLIENT_ONE_CLOSED
+
+connect await CLIENT_ONE_CLOSED
+        ${networkConnect}
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+connected
+    
+# DescribeConfigs request
 write 62        # Size int32
 write 32s       # ApiKey int16 (DescribeConfigs)
 write 0s        # ApiVersion int16

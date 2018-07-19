@@ -49,9 +49,31 @@ public class MetadataIT
 
     @Test
     @Specification({
-        "${scripts}/broker.connection.reset.and.retry/client",
-        "${scripts}/broker.connection.reset.and.retry/server"})
-    public void shouldRetryWhenBrokerNotAvailable() throws Exception
+        "${scripts}/metadata.connection.aborted.and.reconnect/client",
+        "${scripts}/metadata.connection.aborted.and.reconnect/server"})
+    public void shouldReconnectAndContinueMetadataQueriesWhenMetadataConnectionIsAborted() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/metadata.connection.closed.and.reconnect/client",
+        "${scripts}/metadata.connection.closed.and.reconnect/server"})
+    public void shouldReconnectAndContinueMetadataQueriesWhenMetadataConnectionIsEnded() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/metadata.connection.reset.and.reconnect/client",
+        "${scripts}/metadata.connection.reset.and.reconnect/server"})
+    public void shouldReconnectAndContinueMetadataQueriesWhenMetadataConnectionIsReset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

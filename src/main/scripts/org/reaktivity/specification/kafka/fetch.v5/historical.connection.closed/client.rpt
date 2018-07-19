@@ -103,13 +103,14 @@ read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 
-# Live fetch stream
+# Live fetch connection
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
+
 write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 write notify LIVE_CONNECTION_CONNECTED
@@ -221,6 +222,38 @@ read "Hello, again"
 read [0x00]     # headers array length
 
 # Historical fetch stream
+connect await LIVE_CONNECTION_CONNECTED
+        ${networkConnect}
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+connected
+
+write 65        # Size
+write 1s        # Fetch
+write 5s
+write ${newRequestId2}
+write -1s       # client id
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1         # Number of topics
+write 4s "test"
+write 1         # Number of partitions
+write 0         # Partition
+write 0L        # offset
+write -1L
+write ${maximumBytesTest0}
+
+read closed
+write close
+read notify HISTORICAL_CONNECTION_CLOSED
+
+# Historical fetch connection reconnected
 connect await LIVE_CONNECTION_CONNECTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}

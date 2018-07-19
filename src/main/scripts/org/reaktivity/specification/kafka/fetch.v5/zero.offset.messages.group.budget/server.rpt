@@ -117,7 +117,7 @@ read 0x00L
 read -1L
 read [0..4]
 
-write await SERVER_DELIVER_RESPONSE
+write await SERVER_DELIVER_RESPONSE_ONE
 
 write 0x9f
 write ${requestId}
@@ -181,6 +181,8 @@ read 0x00       # partition
 read 1L         # offset
 read -1L
 read [0..4]
+
+write await SERVER_DELIVER_RESPONSE_TWO
 
 write 145       # Size
 write ${requestId}

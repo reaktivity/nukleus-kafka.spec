@@ -103,13 +103,80 @@ read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 
-# Live fetch stream
+# Impacted metadata is refreshed when historical connection fails
+write await HISTORICAL_CONNECTION_FAILED
+
+write 21        # Size int32
+write 3s        # ApiKey int16 (Metadata)
+write 5s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # [TopicName] array length
+  write 4s "test"
+write [0x00]    # allow_auto_topic_creation (boolean)
+
+read 85         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read [0..4]     # throttle_time_ms int32
+read 1          # brokers array length
+  read 1        # broker id
+  read 7s "broker1"
+  read 9093     # port int32
+  read -1s      # rack string (null)
+read 9s "cluster 1"
+read 1          # controller broker id
+read 1          # topic array length
+  read 0s       # error code
+  read 4s "test"
+  read [0x00]   # is_internal boolean
+  read 1        # partition array length
+    read 0s     # error code
+    read 0      # partition
+    read 1      # leader
+    read 0      # replicas array (empty)
+    read -1     # isr array (null)
+    read 0      # offline replicas array (empty)
+
+write 62        # Size int32
+write 32s       # ApiKey int16 (DescribeConfigs)
+write 0s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # resources count
+write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
+write 4s "test" # topic name
+write 2         # config names count
+write 14s "cleanup.policy"  # config name
+write 19s "delete.retention.ms" # config name
+
+read 88         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read [0..4]     # throttle_time_ms int32
+read 1          # resources count
+read 0s         # error code
+read -1s        # error message
+read [0x02]     # resource type (topic)
+read 4s "test"  # topic name
+read 2          # config entries count
+read 14s "cleanup.policy"   # config name
+read 6s "delete"            # config value
+read [0x00]     # read_only boolean
+read [0x01]     # is_default boolean
+read [0x00]     # is_sensitive boolean
+read 19s "delete.retention.ms"
+read 8s "86400000"
+read [0x00]     # read_only boolean
+read [0x01]     # is_default boolean
+read [0x00]     # is_sensitive boolean
+
+# Live fetch connection
 connect await METADATA_RECEIVED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
+
 write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 write notify LIVE_CONNECTION_CONNECTED
@@ -248,6 +315,38 @@ write 0L        # offset
 write -1L
 write ${maximumBytesTest0}
 
+write aborted
+read abort
+read notify HISTORICAL_CONNECTION_FAILURE_DETECTED
+
+# Historical fetch connection reconnects
+connect await HISTORICAL_CONNECTION_FAILURE_DETECTED
+        ${networkConnect}
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+connected
+
+write 65        # Size
+write 1s        # Fetch
+write 5s
+write ${newRequestId2}
+write -1s       # client id
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1         # Number of topics
+write 4s "test"
+write 1         # Number of partitions
+write 0         # Partition
+write 0L        # offset
+write -1L
+write ${maximumBytesTest0}
+
 read 159        # Size
 read ${newRequestId2}
 read [0..4]
@@ -293,4 +392,3 @@ read "Hello, again"
 read [0x00]     # headers array length
 
 read notify SERVER_DELIVER_LIVE_RESPONSE_TWO
-
