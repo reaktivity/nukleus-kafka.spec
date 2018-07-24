@@ -894,6 +894,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/zero.offset.messages.partition.added/client",
+        "${scripts}/zero.offset.messages.partition.added/server"})
+    public void shouldReceiveMessagesByReattachingAfterAPartitionIsAdded() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.messagesets/client",
         "${scripts}/zero.offset.messagesets/server"})
     public void shouldReceiveMessageSetsAtZeroOffset() throws Exception

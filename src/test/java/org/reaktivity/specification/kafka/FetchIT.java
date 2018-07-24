@@ -125,7 +125,6 @@ public class FetchIT
         k3po.finish();
     }
 
-
     @Test
     @Specification(
     {"${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/client",
@@ -792,6 +791,17 @@ public class FetchIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.error.recovered.partition.added/client",
+     "${scripts}/live.fetch.error.recovered.partition.added/server"})
+    public void shouldContinueDeliveringMessagesWhenPartitionIsAdded() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
 
