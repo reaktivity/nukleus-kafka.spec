@@ -121,6 +121,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_FIRST_FETCH_RESPONSE");
         k3po.finish();
     }
 

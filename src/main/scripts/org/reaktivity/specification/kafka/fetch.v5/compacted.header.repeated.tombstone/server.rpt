@@ -117,6 +117,8 @@ read 0L         # offset
 read -1L
 read [0..4]
 
+write await DELIVER_FIRST_FETCH_RESPONSE
+
 write 174       # Size 226
 write ${requestId}
 write 0
@@ -214,7 +216,7 @@ write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(0)}    # offset delta
 write ${kafka:varint(4)}    # key length
 write "key1"
-write ${kafka:varint(12)}   # value is null
+write ${kafka:varint(12)}   # value length
 write "Hello, again"
 write ${kafka:varint(2)}    # number of headers
 write ${kafka:varint(7)}    # header key length
