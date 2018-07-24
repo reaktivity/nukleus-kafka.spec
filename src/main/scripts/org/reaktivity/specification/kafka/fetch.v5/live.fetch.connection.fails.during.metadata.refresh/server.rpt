@@ -291,6 +291,8 @@ read 0L
 read -1L
 read [0..4]
 
+write await CONNECTION_TWO_FETCH_REQUEST_RECEIVED
+
 write 60
 write ${requestId}
 write 0
@@ -384,6 +386,8 @@ read 1          # partition
 read 0L         # offset
 read -1L
 read [0..4]
+
+read notify CONNECTION_TWO_FETCH_REQUEST_RECEIVED
 
 write await ABORT_CONNECTION_TWO
 write abort
