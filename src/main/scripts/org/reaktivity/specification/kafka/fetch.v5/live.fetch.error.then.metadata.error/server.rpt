@@ -21,8 +21,6 @@ property newTimestamp ${kafka:timestamp()}
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
 
-property errorCode 3s       # topic or partition not found
-
 accept ${networkAccept}
   option nukleus:route  ${newNetworkRouteRef}
   option nukleus:window ${networkAcceptWindow}
@@ -71,7 +69,7 @@ read 0s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
-read [0x02]     # resource type int8 (topic)
+read [0x02]     # resource type int8 (topic) 
 read 5s "test1" # topic name
 read 2          # config_names count
 read 14s "cleanup.policy"
@@ -135,8 +133,8 @@ read 0s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
-read [0x02]     # resource type int8 (topic)
-read 5s "test2" # topic name
+read [0x02]     # resource type int8 (topic) 
+read 5s "test2"  # topic name
 read 2          # config_names count
 read 14s "cleanup.policy"
 read 19s "delete.retention.ms"
@@ -162,7 +160,7 @@ write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 
 # Metadata is refreshed for topic test1 after the fetch error 
-# code is processed
+# code is processed, reports an error
 read await FETCH_RESPONSE_WITH_ERROR_WRITTEN
 
 read 22         # Size int32
@@ -174,7 +172,7 @@ read 1          # [TopicName] array length
   read 5s "test1"
 read [0x00]     # allow_auto_topic_creation (boolean)
 
-write 86        # Size int32
+write 64        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # brokers array length
@@ -185,48 +183,10 @@ write 1         # brokers array length
 write 9s "cluster 1"
 write 1         # controller broker id
 write 1         # topic array length
-  write 0s      # error code
+  write 5s      # error code LEADER_NOT_AVAILABLE
   write 5s "test1"
-  write byte 0  # is_internal
-  write 1       # partition array length
-    write 0s    # error code
-    write 0     # partition
-    write 1     # leader
-    write 0     # replicas array (empty)
-    write -1    # isr array (null)
-    write 0     # offline replicas array (empty)
-
-read 63         # Size int32
-read 32s        # ApiKey int16 (DescribeConfigs)
-read 0s         # ApiVersion int16
-read (int:metadataRequestId) # CorrelationId int32
-read -1s        # ClientId string (null)
-read 1          # [Resources] array length
-read [0x02]     # resource type int8 (topic)
-read 5s "test1" # topic name
-read 2          # config_names count
-read 14s "cleanup.policy"
-read 19s "delete.retention.ms"
-
-write 89        # Size int32
-write ${metadataRequestId}  # CorrelationId int32
-write 0         # throttle_time_ms int32
-write 1         # resources count
-write 0s        # error code
-write -1s       # error message
-write [0x02]    # resource type
-write 5s "test1"            # topic name
-write 2         # config entries count
-write 14s "cleanup.policy"  # config name
-write 6s "delete"           # config  value
-write [0x00]    # read_only boolean
-write [0x01]    # is_default boolean
-write [0x00]    # is_sensitive boolean
-write 19s "delete.retention.ms"
-write 8s "86400000"
-write [0x00]    # read_only boolean
-write [0x01]    # is_default boolean
-write [0x00]    # is_sensitive boolean
+  write byte 0           # is_internal
+  write -1      # partition array length (null)
 
 write notify METADATA_REFRESH_RESPONSE_WRITTEN
 
@@ -254,24 +214,44 @@ read 0L
 read -1L
 read [0..4]
 
-read notify FIRST_FETCH_REQUEST_RECEIVED
+write notify FIRST_FETCH_REQUEST_RECEIVED
 
 write await WRITE_FIRST_FETCH_RESPONSE
 
-# No messages for test1
-write 61
+write 141
 write ${requestId}
 write 0
 write 1
 write 5s "test1"
-write 1         # partition count
-write 0         # partition id
+write 1
+write 0          # Partition
 write 0s
-write 0L        # high water mark
-write -1L       # last stable offset
-write 0L        # log start offset
-write -1        # aborted transaction count
-write 0         # record set size
+write 1L         # high watermark
+write -1L
+write 0L         # log start offset
+write -1         # aborted transactions
+write 80         # length of record batch
+write 0L         # first offset
+write 68         # length
+write 0
+write [0x02]
+write 0x4e8723aa
+write 0s
+write 0          # last offset Delta
+write ${newTimestamp}        # first timestamp
+write ${newTimestamp}        # maximum timestamp
+write -1L
+write -1s
+write -1
+write 1
+write ${kafka:varint(18)}
+write [0x00]
+write ${kafka:varint(0)}
+write ${kafka:varint(0)}
+write ${kafka:varint(-1)}
+write ${kafka:varint(12)}
+write "Hello, world"
+write ${kafka:varint(0)}
 
 # Fetch request for topics test1 and test2 gives error code for test1
 read 101
@@ -289,7 +269,7 @@ read 2
 read 5s "test1"
 read 1
 read 0          # Partition
-read 0L         # offset
+read 1L         # offset
 read -1L
 read [0..4]
 
@@ -308,7 +288,7 @@ write 2         # Number of topic responses
 write 5s "test1"
 write 1         # Number of partition responses
 write 0         # Partition
-write ${errorCode}          # partition error code
+write 3s        # partition error code NOT_FOUND
 write 0L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
@@ -319,7 +299,7 @@ write 5s "test2"
 write 1         # Number of partition responses
 write 0         # Partition
 write 0s        # partition error code
-write 0L       # high_watermark
+write 0L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
@@ -361,79 +341,74 @@ write 0L        # high water mark
 write -1L       # last stable offset
 write 0L        # log start offset
 write -1        # aborted transaction count
-write 0         # record set size
+write 0         # record batch size
 
-# Fetch request for topics test1 and test2 gives a message for test1
-read 101
+# Fetch request for topic test2 only
+read 66
 read 1s
 read 5s
-read (int:requestId1)
+read (int:requestId)
 read -1s
 read -1
 read [0..4]
 read 1
 read [0..4]
 read [0x00]
-read 2
-
-read 5s "test1"
 read 1
-read 0          # Partition
-read 0L         # offset
-read -1L
-read [0..4]
-
 read 5s "test2"
 read 1
-read 0          # Partition
-read 0L         # offset
+read 0
+read 0L
 read -1L
 read [0..4]
 
-write 190
-write ${requestId1}
+# No messages for test2
+write 61
+write ${requestId}
 write 0
-write 2         # Number of topic responses
-
-write 5s "test1"
-write 1         # Number of partition responses
-write 0         # Partition
-write 0s        # partition error code
-write 1L        # high_watermark
-write -1L       # last_stable_offset
-write 0L        # log_start_offset
-write -1        # aborted_transactions (null)
-write 80        # length of record set
-write 0L        # first offset
-write 68        # length of record batch
-write 0
-write [0x02]
-write 0x4e8723aa
-write 0s
-write 0         # last offset delta
-write ${newTimestamp}       # first timestamp
-write ${newTimestamp}       # maximum timestamp
-write -1L
-write -1s
-write -1        # first sequence
-write 1         # number of records
-write ${kafka:varint(18)}
-write [0x00]    # attributes
-write ${kafka:varint(0)}    # timestamp delta
-write ${kafka:varint(0)}    # offset delta
-write ${kafka:varint(-1)}   # key length
-write ${kafka:varint(12)}   # value length
-write "Hello, world"
-write ${kafka:varint(0)}
-
+write 1
 write 5s "test2"
-write 1         # Number of partition responses
-write 0         # Partition
-write 0s        # partition error code
-write 0L        # high_watermark
-write -1L       # last_stable_offset
-write 0L        # log_start_offset
-write -1        # aborted_transactions (null)
-write 0         # length of record set
+write 1         # partition count
+write 0         # partition id
+write 0s
+write 0L        # high water mark
+write -1L       # last stable offset
+write 0L        # log start offset
+write -1        # aborted transaction count
+write 0         # record batch size
 
+
+# Fetch request for topic test2 only
+read 66
+read 1s
+read 5s
+read (int:requestId)
+read -1s
+read -1
+read [0..4]
+read 1
+read [0..4]
+read [0x00]
+read 1
+read 5s "test2"
+read 1
+read 0
+read 0L
+read -1L
+read [0..4]
+
+# No messages for test2
+write 61
+write ${requestId}
+write 0
+write 1
+write 5s "test2"
+write 1         # partition count
+write 0         # partition id
+write 0s
+write 0L        # high water mark
+write -1L       # last stable offset
+write 0L        # log start offset
+write -1        # aborted transaction count
+write 0         # record batch size
 
