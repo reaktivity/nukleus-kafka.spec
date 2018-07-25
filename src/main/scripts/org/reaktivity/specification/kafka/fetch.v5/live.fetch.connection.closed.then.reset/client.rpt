@@ -279,6 +279,24 @@ connect await FETCH_CONNECTION_CLOSED
 write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
+write 65
+write 1s
+write 5s
+write ${newRequestId}
+write -1s
+write -1
+write ${maximumWaitTime}
+write 1
+write ${maximumBytes}
+write [0x00]
+write 1
+write 4s "test"
+write 1
+write 0
+write 1L
+write -1L
+write ${maximumBytesTest0}
+
 write aborted
 read abort
 
