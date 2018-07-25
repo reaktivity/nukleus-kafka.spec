@@ -756,6 +756,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/live.fetch.connection.closed.then.reset/client",
+     "${scripts}/live.fetch.connection.closed.then.reset/server"})
+    public void shouldRefreshMetadataAndReceiveMessagesWhenLiveFetchConnectionIsClosedThenResetThenReconnected() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/live.fetch.connection.fails.during.metadata.refresh/client",
      "${scripts}/live.fetch.connection.fails.during.metadata.refresh/server"})
     public void shouldHandleFetchConnectionFailureDuringMetadataRefresh() throws Exception
