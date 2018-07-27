@@ -25,64 +25,48 @@ connect await ROUTED_CLIENT
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 0x04s "test"
+write nukleus:begin.ext 4s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 19
-write nukleus:begin.ext 7s "header1"
-write nukleus:begin.ext 6 "match1"
+write nukleus:begin.ext 0
 
 connected
 
-read nukleus:begin.ext 0x04s "test"
+read nukleus:begin.ext 4s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 19
-read nukleus:begin.ext 7s "header1"
-read nukleus:begin.ext 6 "match1"
+read nukleus:begin.ext 0
 
-read notify CLIENT_ONE_CONNECTED
-
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(11)}
-read nukleus:data.ext 4 "key1"
+read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
+read nukleus:data.ext -1
 read "Hello, world"
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(12)}
-read nukleus:data.ext 4 "key1"
-read "Hello, again"
+read aborted
+write abort
+write notify DETACHED
 
-connect await CLIENT_ONE_CONNECTED
+connect await DETACHED
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
+write nukleus:begin.ext 4s "test"
+write nukleus:begin.ext 1 ${kafka:varint(1)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 19
-write nukleus:begin.ext 7s "header1"
-write nukleus:begin.ext 6 "match2"
+write nukleus:begin.ext 0
 
 connected
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
+read nukleus:begin.ext 4s "test"
+read nukleus:begin.ext 1 ${kafka:varint(1)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 19
-read nukleus:begin.ext 7s "header1"
-read nukleus:begin.ext 6 "match2"
+read nukleus:begin.ext 0
 
-read notify CLIENT_TWO_CONNECTED
-
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(11)}
-read nukleus:data.ext 4 "key1"
-read "Hello, world"
-
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(12)}
-read nukleus:data.ext 4 "key1"
-read nukleus:data.null
+read nukleus:data.ext ${timestamp} 2 ${kafka:varint(1)} ${kafka:varint(1)}
+read nukleus:data.ext -1
+read "Hello, again"
