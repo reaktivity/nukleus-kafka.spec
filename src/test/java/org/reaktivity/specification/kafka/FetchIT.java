@@ -121,9 +121,9 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_FIRST_FETCH_RESPONSE");
         k3po.finish();
     }
-
 
     @Test
     @Specification(
@@ -731,6 +731,18 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/live.fetch.broker.restarted.with.recreated.topic/client",
+     "${scripts}/live.fetch.broker.restarted.with.recreated.topic/server"})
+    public void shouldReceiveMessagesAcrossBrokerRestartWithRecreatedTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SHUTDOWN_BROKER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/live.fetch.connection.aborted/client",
      "${scripts}/live.fetch.connection.aborted/server"})
     public void shouldReconnectRequeryPartitionMetadataAndContinueReceivingMessagesWhenLiveFetchConnectionIsAborted()
@@ -756,6 +768,32 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/live.fetch.connection.closed.then.reset/client",
+     "${scripts}/live.fetch.connection.closed.then.reset/server"})
+    public void shouldRefreshMetadataAndReceiveMessagesWhenLiveFetchConnectionIsClosedThenResetThenReconnected() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.connection.fails.during.metadata.refresh/client",
+     "${scripts}/live.fetch.connection.fails.during.metadata.refresh/server"})
+    public void shouldHandleFetchConnectionFailureDuringMetadataRefresh() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.awaitBarrier("DESCRIBE_CONFIGS_REQUEST_RECEIVED");
+        k3po.notifyBarrier("ABORT_CONNECTION_TWO");
+        k3po.awaitBarrier("CONNECTION_TWO_ABORTED");
+        k3po.notifyBarrier("WRITE_DESCRIBE_CONFIGS_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/live.fetch.connection.reset/client",
      "${scripts}/live.fetch.connection.reset/server"})
     public void shouldContinueReceivingMessagesWhenTopicFetchResponseIsErrorCode3NotFoundButMetadataIsFound() throws Exception
@@ -772,6 +810,29 @@ public class FetchIT
      "${scripts}/live.fetch.error.recovered/server"})
     @ScriptProperty("errorCode \"6s\"")
     public void shouldContinueReceivingMessagesWhenTopicFetchResponseIsRecoverableError() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.error.recovered.partition.added/client",
+     "${scripts}/live.fetch.error.recovered.partition.added/server"})
+    public void shouldContinueDeliveringMessagesWhenPartitionIsAdded() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.error.then.metadata.error/client",
+     "${scripts}/live.fetch.error.then.metadata.error/server"})
+    public void shouldHandleFetchErrorFollowedByMetadataRefreshError() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
