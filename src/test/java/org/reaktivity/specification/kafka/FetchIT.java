@@ -731,6 +731,18 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/live.fetch.broker.restarted.with.recreated.topic/client",
+     "${scripts}/live.fetch.broker.restarted.with.recreated.topic/server"})
+    public void shouldReceiveMessagesAcrossBrokerRestartWithRecreatedTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SHUTDOWN_BROKER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/live.fetch.connection.aborted/client",
      "${scripts}/live.fetch.connection.aborted/server"})
     public void shouldReconnectRequeryPartitionMetadataAndContinueReceivingMessagesWhenLiveFetchConnectionIsAborted()
