@@ -32,7 +32,7 @@ read [0x01]
 read [0x06] "source"
 read 0L
 read [0x06] "target"
-read (long:clientConnectRefRNT01N)
+read (long:clientConnectRefRNT01N1)
 read 0L
 read 5s "test1"
 read 0
@@ -40,6 +40,7 @@ read 0
 write 0x40000001
 write ${correlationIdRNT01N1}
 write ${newRouteRef}
+write ${clientConnectRefRNT01N1}
 write flush
 
 read 0x00000001
@@ -48,7 +49,7 @@ read [0x01]
 read [0x06] "source"
 read ${newRouteRef}
 read [0x06] "target"
-read ${clientConnectRefRNT01N}
+read (long:clientConnectRefRNT01N2)
 read 0L
 read 5s "test2"
 read 0
@@ -59,7 +60,7 @@ read [0x01]
 read [0x06] "source"
 read ${newRouteRef}
 read [0x06] "target"
-read ${clientConnectRefRNT01N}
+read (long:clientConnectRefRNT01N3)
 read 0L
 read 5s "test3"
 read 0
@@ -67,11 +68,13 @@ read 0
 write 0x40000001
 write ${correlationIdRNT01N2}
 write ${newRouteRef}
+write ${clientConnectRefRNT01N2}
 write flush
 
 write 0x40000001
 write ${correlationIdRNT01N3}
 write ${newRouteRef}
+write ${clientConnectRefRNT01N3}
 write flush
 
 close

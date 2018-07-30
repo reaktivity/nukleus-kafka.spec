@@ -45,6 +45,7 @@ write flush
 read 0x40000001
 read ${routeCorrelationId1}
 read (long:newApplicationRouteRef)
+read ${newNetworkRouteRef}
 
 # Parallel requests
 
@@ -75,10 +76,12 @@ write flush
 read 0x40000001
 read ${routeCorrelationId2}
 read ${newApplicationRouteRef}
+read ${newNetworkRouteRef}
 
 read 0x40000001
 read ${routeCorrelationId3}
 read ${newApplicationRouteRef}
+read ${newNetworkRouteRef}
 
 read notify ROUTED_CLIENT
 

@@ -44,6 +44,7 @@ write flush
 read 0x40000001
 read ${controlRMN01C .correlationId()}
 read (long:newApplicationRouteRef1)
+read ${newNetworkRouteRef1}
 
 write 0x00000001
 write ${controlRMN01C .nextCorrelationId()}
@@ -60,6 +61,7 @@ write flush
 read 0x40000001
 read ${controlRMN01C .correlationId()}
 read (long:newApplicationRouteRef2)
+read ${newNetworkRouteRef2}
 
 read notify ROUTED_CLIENT
 

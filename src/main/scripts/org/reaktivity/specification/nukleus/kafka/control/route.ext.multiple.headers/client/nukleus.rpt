@@ -42,6 +42,7 @@ read 6 "match1"
 write 0x40000001
 write ${correlationIdRNT01N1}
 write ${newRouteRef}
+write ${clientConnectRefRNT01N}
 write flush
 
 read 0x00000001
@@ -60,6 +61,7 @@ read 6 "match2"
 write 0x40000001
 write ${correlationIdRNT01N2}
 write ${newRouteRef}
+write ${clientConnectRefRNT01N}
 write flush
 
 close

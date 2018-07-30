@@ -46,6 +46,7 @@ write flush
 read 0x40000001
 read ${routeCorrelationId1}
 read (long:newApplicationRouteRef)
+read ${newNetworkRouteRef}
 
 write 0x00000001
 write ${routeCorrelationId2}
@@ -64,6 +65,7 @@ write flush
 read 0x40000001
 read ${routeCorrelationId2}
 read ${newApplicationRouteRef}
+read ${newNetworkRouteRef}
 
 read notify ROUTED_CLIENT
 
