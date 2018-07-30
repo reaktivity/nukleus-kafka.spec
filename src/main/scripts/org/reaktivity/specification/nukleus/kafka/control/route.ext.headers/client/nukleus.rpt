@@ -42,6 +42,7 @@ read 6 "match2"
 write 0x40000001
 write ${correlationIdRG010101N}
 write ${nuklei:newReferenceId()}
+write ${clientConnectRefRG010101N}
 write flush
 
 close

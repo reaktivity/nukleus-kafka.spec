@@ -39,6 +39,7 @@ write flush
 read 0x40000001
 read ${controlRG010101C.correlationId()}
 read (long:newApplicationRouteRef)
+read ${newNetworkRouteRef}
 
 read notify ROUTED_CLIENT
 

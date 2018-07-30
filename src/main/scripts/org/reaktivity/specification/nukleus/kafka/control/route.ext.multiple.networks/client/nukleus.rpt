@@ -38,6 +38,7 @@ read 0
 write 0x40000001
 write ${correlationIdRMN01N1}
 write ${nuklei:newReferenceId()}
+write ${clientConnectRefRMN01N1}
 write flush
 
 read 0x00000001
@@ -54,6 +55,7 @@ read 0
 write 0x40000001
 write ${correlationIdRMN01N2}
 write ${nuklei:newReferenceId()}
+write ${clientConnectRefRMN01N2}
 write flush
 
 close
