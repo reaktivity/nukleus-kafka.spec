@@ -164,3 +164,8 @@ write "nope"
 write ${kafka:varint(4)}    # value length
 write "nope"
 write ${kafka:varint(0)}    # headers (none)
+
+# Next fetch request
+read 65
+
+read notify BOOTSTRAP_COMPLETE

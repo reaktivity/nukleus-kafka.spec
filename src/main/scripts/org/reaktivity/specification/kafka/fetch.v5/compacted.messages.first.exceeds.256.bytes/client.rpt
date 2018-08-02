@@ -176,3 +176,5 @@ read ${kafka:varint(4)}     # value length
 read "nope"     # value
 read [0x00]     # headers
 
+# Next fetch request
+write 65

@@ -87,6 +87,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.historical.large.message.and.small/client",
+        "${scripts}/compacted.historical.large.message.and.small/server"})
+    public void shouldReceiveLargeAndSmallCompactedMessageOnTwoClients() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.historical.large.message.subscribed.to.key/client",
         "${scripts}/compacted.historical.large.message.subscribed.to.key/server"})
     public void shouldReceiveLargeCompactedMessageMatchingKeyOnTwoClients() throws Exception
