@@ -569,6 +569,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/header.large.then.small.messages.multiple.partitions/client",
+        "${scripts}/header.large.then.small.messages.multiple.partitions/server"})
+    public void shouldReceiveLargeAndSmallMessagesFromMultiplePartitionsMatchingHeaderCondition() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/header.zero.offset.message/client",
         "${scripts}/header.zero.offset.message/server"})
     public void shouldReceiveMessageUsingHeader() throws Exception
@@ -660,6 +671,17 @@ public class FetchIT
         "${scripts}/invalid.topic.name/client",
         "${scripts}/invalid.topic.name/server"})
     public void shouldRejectInvalidTopicName() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/large.then.small.messages.multiple.partitions/client",
+        "${scripts}/large.then.small.messages.multiple.partitions/server"})
+    public void shouldReceiveLargeAndSmallMessagesFromMultiplePartitions() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
