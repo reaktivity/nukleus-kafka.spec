@@ -93,6 +93,28 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.header.first.matches/client",
+     "${scripts}/compacted.header.first.matches/server"})
+    public void shouldReceiveCompactedMessagesMatchingHeader() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.header.first.matches.repeated/client",
+     "${scripts}/compacted.header.first.matches.repeated/server"})
+    public void shouldReceiveCompactedMessagesMatchingHeaderFetchRepeated() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.header.matches.then.updated/client",
      "${scripts}/compacted.header.matches.then.updated/server"})
     public void shouldReceiveCompactedMessagesWithHeaderUpdated() throws Exception
@@ -987,6 +1009,17 @@ public class FetchIT
     {"${scripts}/record.batch.ends.with.deleted.record/client",
      "${scripts}/record.batch.ends.with.deleted.record/server"})
     public void shouldReportLastMessageOffsetFromRecordBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/record.batch.ends.with.truncated.record.length/client",
+     "${scripts}/record.batch.ends.with.truncated.record.length/server"})
+    public void shouldReceiveMessageWithTruncatedRecordLength() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

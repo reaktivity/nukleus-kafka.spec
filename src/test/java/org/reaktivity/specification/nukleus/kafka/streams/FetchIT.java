@@ -323,6 +323,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.header.message.multiple.clients/client",
+        "${scripts}/compacted.header.message.multiple.clients/server"})
+    public void shouldReceiveCompactedMessageMatchingHeader() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.header.messages.and.tombstone/client",
         "${scripts}/compacted.header.messages.and.tombstone/server"})
     public void shouldReceiveCompactedMessagesWithTombstone() throws Exception
@@ -759,6 +770,17 @@ public class FetchIT
         "${scripts}/record.batch.ends.with.deleted.record/client",
         "${scripts}/record.batch.ends.with.deleted.record/server"})
     public void shouldReceiveMessagesWithOffsetGap() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/record.batch.ends.with.truncated.record.length/client",
+        "${scripts}/record.batch.ends.with.truncated.record.length/server"})
+    public void shouldReceiveMessageWithTruncatedRecordLength() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
