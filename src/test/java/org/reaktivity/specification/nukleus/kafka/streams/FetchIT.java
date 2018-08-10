@@ -87,6 +87,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.historical.large.message.and.small/client",
+        "${scripts}/compacted.historical.large.message.and.small/server"})
+    public void shouldReceiveLargeAndSmallCompactedMessageOnTwoClients() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.historical.large.message.subscribed.to.key/client",
         "${scripts}/compacted.historical.large.message.subscribed.to.key/server"})
     public void shouldReceiveLargeCompactedMessageMatchingKeyOnTwoClients() throws Exception
@@ -304,6 +315,17 @@ public class FetchIT
         "${scripts}/compacted.messages.historical/client",
         "${scripts}/compacted.messages.historical/server"})
     public void shouldReceiveCompactedHistoricalMessages() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.header.message.multiple.clients/client",
+        "${scripts}/compacted.header.message.multiple.clients/server"})
+    public void shouldReceiveCompactedMessageMatchingHeader() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -558,6 +580,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/header.large.then.small.messages.multiple.partitions/client",
+        "${scripts}/header.large.then.small.messages.multiple.partitions/server"})
+    public void shouldReceiveLargeAndSmallMessagesFromMultiplePartitionsMatchingHeaderCondition() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/header.zero.offset.message/client",
         "${scripts}/header.zero.offset.message/server"})
     public void shouldReceiveMessageUsingHeader() throws Exception
@@ -657,6 +690,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/large.then.small.messages.multiple.partitions/client",
+        "${scripts}/large.then.small.messages.multiple.partitions/server"})
+    public void shouldReceiveLargeAndSmallMessagesFromMultiplePartitions() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/no.offsets.message/client",
         "${scripts}/no.offsets.message/server"})
     public void shouldReceiveMessageAtZeroOffsetWithEmptyOffsetsArray() throws Exception
@@ -726,6 +770,17 @@ public class FetchIT
         "${scripts}/record.batch.ends.with.deleted.record/client",
         "${scripts}/record.batch.ends.with.deleted.record/server"})
     public void shouldReceiveMessagesWithOffsetGap() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/record.batch.ends.with.truncated.record.length/client",
+        "${scripts}/record.batch.ends.with.truncated.record.length/server"})
+    public void shouldReceiveMessageWithTruncatedRecordLength() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");

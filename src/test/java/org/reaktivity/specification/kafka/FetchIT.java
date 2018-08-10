@@ -93,6 +93,28 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.header.first.matches/client",
+     "${scripts}/compacted.header.first.matches/server"})
+    public void shouldReceiveCompactedMessagesMatchingHeader() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.header.first.matches.repeated/client",
+     "${scripts}/compacted.header.first.matches.repeated/server"})
+    public void shouldReceiveCompactedMessagesMatchingHeaderFetchRepeated() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.header.matches.then.updated/client",
      "${scripts}/compacted.header.matches.then.updated/server"})
     public void shouldReceiveCompactedMessagesWithHeaderUpdated() throws Exception
@@ -652,6 +674,30 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/header.large.equals.window.then.small.messages.multiple.partitions/client",
+     "${scripts}/header.large.equals.window.then.small.messages.multiple.partitions/server"})
+    public void shouldReceiveMatchingLargeEqualsWindowFragmentedAndSmallMessagesFromMultiplePartitions()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/header.large.exceeding.window.then.small.messages.multiple.partitions/client",
+     "${scripts}/header.large.exceeding.window.then.small.messages.multiple.partitions/server"})
+    public void shouldReceiveMatchingLargeExceedsWindowFragmentedAndSmallMessagesFromMultiplePartitions()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/header.zero.offset.first.matches/client",
      "${scripts}/header.zero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingHeaderFirst() throws Exception
@@ -722,6 +768,42 @@ public class FetchIT
     {"${scripts}/historical.connection.reset/client",
      "${scripts}/historical.connection.reset/server"})
     public void shouldReconnectRequeryMetadataAndContinueReceivingMessagesWhenHistoricalFetchConnectionIsReset()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/large.equals.window.then.small.messages.multiple.partitions/client",
+     "${scripts}/large.equals.window.then.small.messages.multiple.partitions/server"})
+    public void shouldDeliverLargeMessageFillingWindowThenSmallMessagesFromMultiplePartitions()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/large.exceeding.window.then.small.messages.multiple.partitions/client",
+     "${scripts}/large.exceeding.window.then.small.messages.multiple.partitions/server"})
+    public void shouldNotDeliverMessageFromPartitionDifferentFromFragmentedMessageUntilFragmentedFullyWritten()
+            throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/large.then.small.other.partition.first.in.next.response/client",
+     "${scripts}/large.then.small.other.partition.first.in.next.response/server"})
+    public void shouldReceiveLargeFragmentedAndSmallMessagesFromMultiplePartitions()
             throws Exception
     {
         k3po.start();
@@ -927,6 +1009,17 @@ public class FetchIT
     {"${scripts}/record.batch.ends.with.deleted.record/client",
      "${scripts}/record.batch.ends.with.deleted.record/server"})
     public void shouldReportLastMessageOffsetFromRecordBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/record.batch.ends.with.truncated.record.length/client",
+     "${scripts}/record.batch.ends.with.truncated.record.length/server"})
+    public void shouldReceiveMessageWithTruncatedRecordLength() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
