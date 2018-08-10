@@ -142,7 +142,7 @@ write ${newTimestamp}
 write -1L
 write -1s
 write -1
-write 0x02
+write 2                      # record count
 write ${kafka:varint(18)}
 write [0x00]    # attributes
 write ${kafka:varint(0)}     # timestamp delta
