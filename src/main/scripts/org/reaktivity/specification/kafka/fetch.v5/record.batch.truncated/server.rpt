@@ -129,7 +129,7 @@ write 999L      # high watermark
 write -1L
 write 0L        # log start offset
 write -1
-write 8        # length of record set (19 too short for missing last record)
+write 8         # length of record set
 write 0L        # first offset
 # rest of record batch (length, leaderEpoque, etc) is missing
 

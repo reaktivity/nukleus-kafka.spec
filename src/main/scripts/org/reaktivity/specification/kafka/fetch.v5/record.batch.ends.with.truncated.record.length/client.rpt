@@ -160,7 +160,7 @@ read 2
 read ${kafka:varint(18)}
 read [0x00]
 read ${kafka:varint(0)}     # timestamp delta
-read ${kafka:varint(0)}     # offset delta
+read ${kafka:varint(9)}     # offset delta
 read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, world"
@@ -201,7 +201,7 @@ read -1L
 read 0L         # log start offset
 read -1
 read 134        # length of record set
-read 10L        # first offset
+read 10L         # first offset
 read 122        # length of record batch
 read 0
 read [0x02]
