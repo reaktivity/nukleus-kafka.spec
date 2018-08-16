@@ -1061,6 +1061,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/record.set.size.zero.record.too.large/client",
+    "${scripts}/record.set.size.zero.record.too.large/server"})
+    public void shouldReceiveMessageAfterSkippingTooLargeRecord() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/zero.offset/client",
      "${scripts}/zero.offset/server"})
     public void shouldRequestMessagesAtZeroOffset() throws Exception
@@ -1101,17 +1112,6 @@ public class FetchIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification(
-    {"${scripts}/zero.length.record.batch/client",
-    "${scripts}/zero.length.record.batch/server"})
-    public void shouldReceiveMessageAtZeroOffsetAfterSkippingZeroLengthBatch() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
 

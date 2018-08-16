@@ -147,7 +147,7 @@ write 2         # record count
 write ${kafka:varint(18)}
 write [0x00]    # attributes
 write ${kafka:varint(0)}     # timestamp delta
-write ${kafka:varint(0)}     # offset delta
+write ${kafka:varint(9)}     # offset delta
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
 write "Hello, world"
@@ -169,7 +169,7 @@ read 1
 read 4s "test"
 read 1
 read 0
-read 10L        # requested offset
+read 10L         # requested offset
 read -1L
 read [0..4]
 
