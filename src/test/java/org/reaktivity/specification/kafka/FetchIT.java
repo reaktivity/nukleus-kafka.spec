@@ -400,6 +400,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.zero.offset/client",
+     "${scripts}/compacted.zero.offset/server"})
+    public void shouldAttachToCompactedTopicAtOffsetZero() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/distinct.offset.messagesets.fanout/client",
      "${scripts}/distinct.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtDistinctOffsets() throws Exception
