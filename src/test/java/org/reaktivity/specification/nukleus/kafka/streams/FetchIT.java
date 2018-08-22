@@ -492,8 +492,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/fetch.key.no.offsets.message/client",
-        "${scripts}/fetch.key.no.offsets.message/server"})
+        "${scripts}/fetch.key.historical.does.not.use.cached.key/client",
+        "${scripts}/fetch.key.historical.does.not.use.cached.key/server"})
     public void shouldReceiveMessagesWithoutUsingKeyOffsetsCache() throws Exception
     {
         k3po.start();
@@ -814,6 +814,17 @@ public class FetchIT
         "${scripts}/unknown.topic.name/client",
         "${scripts}/unknown.topic.name/server"})
     public void shouldRejectUnknownTopicName() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unspecified.offset/client",
+        "${scripts}/unspecified.offset/server"})
+    public void shouldRequestMessagesAtUnspecifiedOffset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
