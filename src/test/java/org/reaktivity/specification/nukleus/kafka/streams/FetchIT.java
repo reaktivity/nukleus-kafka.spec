@@ -503,8 +503,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/fetch.key.no.offsets.message/client",
-        "${scripts}/fetch.key.no.offsets.message/server"})
+        "${scripts}/fetch.key.unspecified.offset.message/client",
+        "${scripts}/fetch.key.unspecified.offset.message/server"})
     public void shouldReceiveMessageUsingFetchKeyWithEmptyOffsetsArray() throws Exception
     {
         k3po.start();

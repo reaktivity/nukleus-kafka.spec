@@ -586,6 +586,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/fetch.key.unspecified.offset.first.matches/client",
+     "${scripts}/fetch.key.unspecified.offset.first.matches/server"})
+    public void shouldReceiveLiveMessageMatchingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/fetch.key.zero.offset.first.matches/client",
      "${scripts}/fetch.key.zero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyFirst() throws Exception
