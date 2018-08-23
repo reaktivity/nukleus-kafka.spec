@@ -99,39 +99,65 @@ accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
+# list offsets request
+read 41         # Size int32
+read 2s         # ApiKey (ListOffsets)
+read 2s         # ApiVersion 
+read (int:listOffsetsRequestId) # CorrelationId 
+read -1s        # ClientId string (null)
+read -1         # replicaId
+read [0x00]     # isolation level (0=READ_UNCOMMITTED)
+read 1          # topic count 
+read 4s "test"  # topic name
+read 1          # partition count
+read 0          # partition
+read -1L        # timestamp (high water mark offset)
+
+write 44        # Size int32
+write ${listOffsetsRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # topic count
+write 4s "test" # topic name 
+write 1         # partition count
+write 0         # partition
+write 0s        # error code
+write -1L       # timestamp (from a real example)
+write 15L        # offset
+
+# fetch is done using reported offset
 read 65         # Size
-read 0x01s      # Fetch
-read 0x05s
+read 1s      # Fetch
+read 5s
 read (int:requestId)
 read -1s
 read -1
 read [0..4]
-read 0x01
+read 1
 read [0..4]
 read [0x00]
-read 0x01
-read 0x04s "test"
+read 1
+read 4s "test"
 read 1
 read 0          # Partition
-read 0L         # offset
+read 15L        # offset
 read -1L
 read [0..4]
 
-write 175       # Size
+write 172       # Size
 write ${requestId}
 write 0
 write 1
 write 0x04s "test"
 write 1
 write 0         # Partition
-write 0s        # partition error code
-write 12L       # high_watermark
+write 0x00s     # partition error code
+write 999L      # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
-write 115       # length of record set
-write 10L       # first offset
-write 103       # length
+write 112       # length of record batch
+write 15L       # first offset
+write 100       # length
 write 0
 write [0x02]
 write 0x4e8723aa
@@ -143,12 +169,12 @@ write -1L
 write -1s
 write -1        # first sequence
 write 2         # number of records
-write ${kafka:varint(26)}   # Record length
+write ${kafka:varint(23)}   # Record length
 write [0x00]    # attributes
 write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(0)}    # offset delta
-write ${kafka:varint(8)}    # key length
-write "no match"
+write ${kafka:varint(5)}    # key length
+write "match"
 write ${kafka:varint(12)}   # value length
 write "Hello, world"
 write [0x00]

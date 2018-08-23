@@ -597,8 +597,8 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/fetch.key.unspecified.offset.first.matches/client",
-     "${scripts}/fetch.key.unspecified.offset.first.matches/server"})
+    {"${scripts}/fetch.key.high.water.mark.offset.first.matches/client",
+     "${scripts}/fetch.key.high.water.mark.offset.first.matches/server"})
     public void shouldReceiveLiveMessageMatchingFetchKey() throws Exception
     {
         k3po.start();
@@ -760,6 +760,29 @@ public class FetchIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/high.water.mark.offset/client",
+     "${scripts}/high.water.mark.offset/server"})
+    public void shouldRequestMessagesAtHighWatermarkOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/high.water.mark.offset.multiple.topics/client",
+     "${scripts}/high.water.mark.offset.multiple.topics/server"})
+    public void shouldRequestMessagesAtHighWatermarkOffsetFromMultipleTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
         k3po.finish();
     }
 
