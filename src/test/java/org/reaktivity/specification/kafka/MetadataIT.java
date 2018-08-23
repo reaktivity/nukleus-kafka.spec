@@ -148,6 +148,17 @@ public class MetadataIT
 
     @Test
     @Specification({
+        "${scripts}/configs.response.unknown.error.abort.receive.abort.and.retry/client",
+        "${scripts}/configs.response.unknown.error.abort.receive.abort.and.retry/server"})
+    public void shouldReconnectAndRetryWhenAbortAndAbortReceivedWhenConfigsResponseGivesUnknownError() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/one.topic.multiple.nodes/client",
         "${scripts}/one.topic.multiple.nodes/server"})
     public void shouldRequestMetadataForOneTopicOnMultipleNodes() throws Exception
