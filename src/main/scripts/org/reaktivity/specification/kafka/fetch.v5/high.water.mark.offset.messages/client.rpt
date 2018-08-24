@@ -138,7 +138,7 @@ read 0s         # error code
 read -1L        # timestamp
 read 15L         # offset
 
-# fetch request
+# first fetch request
 write 65
 write 1s
 write 5s
@@ -155,4 +155,40 @@ write 1
 write 0
 write 15L       # offset
 write -1L
-write ${maximumBytesTest0}
+write ${maximumBytesT
+
+read 140
+read ${newRequestId}
+read [0..4]
+read 1
+read 4s "test"
+read 1
+read 0
+read 0s
+read 16L       # high watermark
+read -1L
+read 0L        # log start offset
+read -1
+read 80
+read 15L        # first offset
+read 68
+read 0
+read [0x02]
+read 0x4e8723aa
+read 0s
+read 0
+read (long:timestamp)
+read ${timestamp}
+read -1L
+read -1s
+read -1
+read 1
+read ${kafka:varint(18)}
+read [0x00]
+read ${kafka:varint(0)}
+read ${kafka:varint(0)}
+read ${kafka:varint(-1)}
+read ${kafka:varint(12)}
+read "Hello, world"
+read ${kafka:varint(0)}
+
