@@ -141,7 +141,7 @@ read 2          # config_names count
 read 14s "cleanup.policy"
 read 19s "delete.retention.ms"
 
-write 90        # Size int32
+write 89        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
@@ -151,7 +151,7 @@ write [0x02]    # resource type
 write 5s "test1"            # topic name
 write 2         # config entries count
 write 14s "cleanup.policy"  # config name
-write 7s "compact"          # config  value
+write 6s "delete"           # config  value
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
@@ -206,7 +206,7 @@ read 2          # config_names count
 read 14s "cleanup.policy"
 read 19s "delete.retention.ms"
 
-write 90        # Size int32
+write 89        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
@@ -216,7 +216,7 @@ write [0x02]    # resource type
 write 5s "test2"            # topic name
 write 2         # config entries count
 write 14s "cleanup.policy"  # config name
-write 7s "compact"          # config  value
+write 6s "delete"           # config  value
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
@@ -277,11 +277,11 @@ read -1s        # ClientId string (null)
 read -1         # replicaId
 read [0x00]     # isolation level (0=READ_UNCOMMITTED)
 read 2          # topic count 
-read 5s "test1"  # topic name
+read 5s [0..5]  # topic name
 read 1          # partition count
 read 0          # partition
 read -1L        # timestamp (high water mark offset)
-read 5s "test2"  # topic name
+read 5s [0..5]  # topic name
 read 1          # partition count
 read 0          # partition
 read -1L        # timestamp (high water mark offset)

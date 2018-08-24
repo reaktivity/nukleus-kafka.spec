@@ -43,6 +43,10 @@ read nukleus:begin.ext 0
 
 read notify CLIENT_ONE_CONNECTED
 
+write await UNSUBSCRIBE_CLIENT_ONE
+read abort
+write aborted
+
 # Second client attaches to test1 at unspecified offset
 connect await CONNECT_CLIENT_TWO
         ${applicationConnect}

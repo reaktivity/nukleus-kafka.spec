@@ -842,6 +842,7 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
         k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.notifyBarrier("UNSUBSCRIBE_CLIENT_ONE");
         k3po.finish();
     }
 
