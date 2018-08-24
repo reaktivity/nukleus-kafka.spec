@@ -1108,11 +1108,24 @@ public class FetchIT
     @Test
     @Specification(
     {"${scripts}/record.set.size.zero.record.too.large/client",
-    "${scripts}/record.set.size.zero.record.too.large/server"})
+     "${scripts}/record.set.size.zero.record.too.large/server"})
     public void shouldReceiveMessageAfterSkippingTooLargeRecord() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/specified.offset.then.high.water.mark.messages/client",
+     "${scripts}/specified.offset.then.high.water.mark.messages/server"})
+    public void shouldReceiveHistoricalThenLiveMessagesFromStreamingTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.notifyBarrier("WRITE_HISTORICAL_FETCH_RESPONSE");
         k3po.finish();
     }
 

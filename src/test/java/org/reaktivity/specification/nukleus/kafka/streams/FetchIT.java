@@ -789,6 +789,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/specified.then.unspecified.offset.messages/client",
+        "${scripts}/specified.then.unspecified.offset.messages/server"})
+    public void shouldReceiveHistoricalAndLiveMessagesFromStreamingTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/topic.name.not.equals.route.ext/client",
         "${scripts}/topic.name.not.equals.route.ext/server"})
     public void shouldRejectTopicNameNutEqualToRoutedTopic() throws Exception
