@@ -1118,8 +1118,21 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/specified.offset.then.high.water.mark.messages/client",
-     "${scripts}/specified.offset.then.high.water.mark.messages/server"})
+    {"${scripts}/live.then.specified.offset.then.live.messages/client",
+     "${scripts}/live.then.specified.offset.then.live.messages/server"})
+    public void shouldReceiveLiveHistoricalThenLiveMessagesFromStreamingTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.notifyBarrier("WRITE_HISTORICAL_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/specified.offset.then.live.messages/client",
+     "${scripts}/specified.offset.then.live.messages/server"})
     public void shouldReceiveHistoricalThenLiveMessagesFromStreamingTopic() throws Exception
     {
         k3po.start();

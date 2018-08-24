@@ -789,8 +789,21 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/specified.then.unspecified.offset.messages/client",
-        "${scripts}/specified.then.unspecified.offset.messages/server"})
+        "${scripts}/live.then.specified.offset.then.live.messages/client",
+        "${scripts}/live.then.specified.offset.then.live.messages/server"})
+    public void shouldReceiveLiveHistoricalThenLiveMessagesFromStreamingTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.notifyBarrier("CONNECT_CLIENT_THREE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/specified.offset.then.live.messages/client",
+        "${scripts}/specified.offset.then.live.messages/server"})
     public void shouldReceiveHistoricalAndLiveMessagesFromStreamingTopic() throws Exception
     {
         k3po.start();
