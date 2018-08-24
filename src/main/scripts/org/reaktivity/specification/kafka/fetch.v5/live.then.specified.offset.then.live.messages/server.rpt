@@ -254,7 +254,7 @@ write -1L       # last stable offest
 write 0L        # log start offset
 write -1
 write 80        # record batch size
-write 1L        # first offset
+write 2L        # first offset
 write 68        # length
 write 0
 write [0x02]
@@ -273,7 +273,7 @@ write ${kafka:varint(0)}
 write ${kafka:varint(0)}
 write ${kafka:varint(-1)}
 write ${kafka:varint(12)}
-write "Hello, world"
+write "Hello, again"
 write ${kafka:varint(0)}
 
 # Second list offsets request
@@ -328,7 +328,7 @@ write 4s "test"
 write 1
 write 0
 write 0s
-write 16L       # high watermark
+write 17L       # high watermark
 write -1L       # last stable offest
 write 0L        # log start offset
 write -1

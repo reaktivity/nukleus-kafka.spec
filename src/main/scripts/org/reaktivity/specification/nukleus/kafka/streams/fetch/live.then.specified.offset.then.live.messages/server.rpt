@@ -48,6 +48,9 @@ write nukleus:data.ext -1
 write "Hello, live1"
 write flush
 
+write aborted
+read abort
+
 # Client 2 explicit offset
 accepted
 
