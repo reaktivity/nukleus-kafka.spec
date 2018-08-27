@@ -492,8 +492,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/fetch.key.no.offsets.message/client",
-        "${scripts}/fetch.key.no.offsets.message/server"})
+        "${scripts}/fetch.key.historical.does.not.use.cached.key/client",
+        "${scripts}/fetch.key.historical.does.not.use.cached.key/server"})
     public void shouldReceiveMessagesWithoutUsingKeyOffsetsCache() throws Exception
     {
         k3po.start();
@@ -503,8 +503,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/fetch.key.no.offsets.message/client",
-        "${scripts}/fetch.key.no.offsets.message/server"})
+        "${scripts}/fetch.key.unspecified.offset.message/client",
+        "${scripts}/fetch.key.unspecified.offset.message/server"})
     public void shouldReceiveMessageUsingFetchKeyWithEmptyOffsetsArray() throws Exception
     {
         k3po.start();
@@ -701,17 +701,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/no.offsets.message/client",
-        "${scripts}/no.offsets.message/server"})
-    public void shouldReceiveMessageAtZeroOffsetWithEmptyOffsetsArray() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/nonzero.offset/client",
         "${scripts}/nonzero.offset/server"})
     public void shouldRequestMessagesAtNonZeroOffset() throws Exception
@@ -800,6 +789,31 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/live.then.specified.offset.then.live.messages/client",
+        "${scripts}/live.then.specified.offset.then.live.messages/server"})
+    public void shouldReceiveLiveHistoricalThenLiveMessagesFromStreamingTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.notifyBarrier("CONNECT_CLIENT_THREE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/specified.offset.then.live.messages/client",
+        "${scripts}/specified.offset.then.live.messages/server"})
+    public void shouldReceiveHistoricalAndLiveMessagesFromStreamingTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/topic.name.not.equals.route.ext/client",
         "${scripts}/topic.name.not.equals.route.ext/server"})
     public void shouldRejectTopicNameNutEqualToRoutedTopic() throws Exception
@@ -817,6 +831,42 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unspecified.offset/client",
+        "${scripts}/unspecified.offset/server"})
+    public void shouldRequestMessagesAtUnspecifiedOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unspecified.offset.fanout.messages/client",
+        "${scripts}/unspecified.offset.fanout.messages/server"})
+    public void shouldReceiveStreamingMessagesOnMultipleConnections() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unspecified.offset.multiple.topics/client",
+        "${scripts}/unspecified.offset.multiple.topics/server"})
+    public void shouldRequestMessagesAtUnspecifiedOffsetFromMultipleTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.notifyBarrier("UNSUBSCRIBE_CLIENT_ONE");
         k3po.finish();
     }
 
