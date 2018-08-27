@@ -400,6 +400,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.zero.offset/client",
+     "${scripts}/compacted.zero.offset/server"})
+    public void shouldAttachToCompactedTopicAtOffsetZero() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/distinct.offset.messagesets.fanout/client",
      "${scripts}/distinct.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtDistinctOffsets() throws Exception
@@ -586,6 +597,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/fetch.key.high.water.mark.offset.first.matches/client",
+     "${scripts}/fetch.key.high.water.mark.offset.first.matches/server"})
+    public void shouldReceiveLiveMessageMatchingFetchKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/fetch.key.zero.offset.first.matches/client",
      "${scripts}/fetch.key.zero.offset.first.matches/server"})
     public void shouldReceiveMessageMatchingFetchKeyFirst() throws Exception
@@ -738,6 +760,29 @@ public class FetchIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/high.water.mark.offset/client",
+     "${scripts}/high.water.mark.offset/server"})
+    public void shouldRequestMessagesAtHighWatermarkOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/high.water.mark.offset.multiple.topics/client",
+     "${scripts}/high.water.mark.offset.multiple.topics/server"})
+    public void shouldRequestMessagesAtHighWatermarkOffsetFromMultipleTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -1063,11 +1108,39 @@ public class FetchIT
     @Test
     @Specification(
     {"${scripts}/record.set.size.zero.record.too.large/client",
-    "${scripts}/record.set.size.zero.record.too.large/server"})
+     "${scripts}/record.set.size.zero.record.too.large/server"})
     public void shouldReceiveMessageAfterSkippingTooLargeRecord() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.then.specified.offset.then.live.messages/client",
+     "${scripts}/live.then.specified.offset.then.live.messages/server"})
+    public void shouldReceiveLiveHistoricalThenLiveMessagesFromStreamingTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.notifyBarrier("WRITE_HISTORICAL_RESPONSE");
+        k3po.notifyBarrier("WRITE_SECOND_FETCH_RESPONSE");
+        k3po.notifyBarrier("WRITE_THIRD_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/specified.offset.then.live.messages/client",
+     "${scripts}/specified.offset.then.live.messages/server"})
+    public void shouldReceiveHistoricalThenLiveMessagesFromStreamingTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.notifyBarrier("WRITE_HISTORICAL_FETCH_RESPONSE");
         k3po.finish();
     }
 
