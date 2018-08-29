@@ -234,12 +234,13 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/compacted.message.tombstone.repeated.same.key/client",
-        "${scripts}/compacted.message.tombstone.repeated.same.key/server"})
-    public void shouldReceiveRepeatedMessageAndTombstoneForSameKey() throws Exception
+        "${scripts}/compacted.message.tombstone.message.same.key/client",
+        "${scripts}/compacted.message.tombstone.message.same.key/server"})
+    public void shouldReceiveMessageFollowingTombstoneForSameKey() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 

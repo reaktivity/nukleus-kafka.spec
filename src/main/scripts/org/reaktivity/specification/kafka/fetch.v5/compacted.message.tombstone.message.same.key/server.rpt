@@ -183,7 +183,7 @@ read 2L         # offset
 read -1L
 read [0..4]
 
-write 155
+write 144
 write ${requestId}
 write 0
 write 1
@@ -195,20 +195,20 @@ write 999L      # high watermark
 write -1L
 write 0L        # log start offset
 write -1        # aborted transactions
-write 95        # length of record batch
+write 84        # length of record batch
 write 2L        # first offset
-write 83        # length
+write 72        # length
 write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 1         # last offset Delta
+write 0         # last offset Delta
 write ${newTimestamp}       # first timestamp
 write ${newTimestamp}       # maximum timestamp
 write -1L
 write -1s
 write -1
-write 2         # number of records
+write 1         # number of records
 
 write ${kafka:varint(22)}   # record length
 write [0x00]    # attributes
@@ -218,15 +218,6 @@ write ${kafka:varint(4)}    # key length
 write "key1"
 write ${kafka:varint(12)}   # value length
 write "Hello, again"
-write ${kafka:varint(0)}
-
-write ${kafka:varint(10)}   # record length
-write [0x00]    # attributes
-write ${kafka:varint(0)}    # timestamp delta
-write ${kafka:varint(1)}    # offset delta
-write ${kafka:varint(4)}    # key length
-write "key1"
-write ${kafka:varint(-1)}   # value length (-1 = null value)
 write ${kafka:varint(0)}
 
 # Live fetches continue
@@ -244,7 +235,7 @@ read 1
 read 4s "test"
 read 1
 read 0          # Partition
-read 4L         # offset
+read 3L         # offset
 read -1L
 read [0..4]
 
@@ -267,13 +258,13 @@ read 1
 read 4s "test"
 read 1
 read 0          # Partition
-read 3L         # offset
+read 2L         # offset
 read -1L
 read [0..4]
 
 write await DELIVER_HISTORICAL_RESPONSE
 
-write 132
+write 144
 write ${requestId}
 write 0
 write 1
@@ -285,9 +276,9 @@ write 999L      # high watermark
 write -1L
 write 0L        # log start offset
 write -1        # aborted transactions
-write 72        # length of record batch
-write 3L       # first offset
-write 60        # length
+write 84        # length of record batch
+write 2L       # first offset
+write 72        # length
 write 0
 write [0x02]
 write 0x4e8723aa
@@ -300,12 +291,13 @@ write -1s
 write -1
 write 1         # number of records
 
-write ${kafka:varint(10)}   # record length
+write ${kafka:varint(22)}   # record length
 write [0x00]    # attributes
-write ${kafka:varint(0)}    # timestamp delta
-write ${kafka:varint(0)}    # offset delta
+write ${kafka:varint(0)}
+write ${kafka:varint(0)}
 write ${kafka:varint(4)}    # key length
 write "key1"
-write ${kafka:varint(-1)}   # value length
+write ${kafka:varint(12)}   # value length
+write "Hello, again"
 write ${kafka:varint(0)}
 

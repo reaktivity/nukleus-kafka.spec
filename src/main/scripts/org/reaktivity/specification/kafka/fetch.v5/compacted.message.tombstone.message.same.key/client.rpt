@@ -199,7 +199,7 @@ write ${maximumBytesTest0}
 
 write notify DELIVER_SECOND_FETCH_RESPONSE
 
-read 155
+read 144
 read ${newRequestId}
 read [0..4]
 read 1
@@ -211,20 +211,20 @@ read 999L       # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions
-read 95         # length of record batch
+read 84         # length of record batch
 read 2L         # first offset
-read 83         # length
+read 72         # length
 read 0
 read [0x02]
 read 0x4e8723aa
 read 0s
-read 1          # last offset delta
+read 0          # last offset delta
 read (long:timestamp)       # first timestamp
 read ${timestamp}           # maximum timestamp
 read -1L
 read -1s
 read -1
-read 2          # number of records
+read 1          # number of records
 
 read ${kafka:varint(22)}    # record length
 read [0x00]     # attributes
@@ -234,15 +234,6 @@ read ${kafka:varint(4)}     # key length
 read "key1"
 read ${kafka:varint(12)}    # value length
 read "Hello, again"
-read ${kafka:varint(0)}
-
-read ${kafka:varint(10)}    # record length
-read [0x00]     # attributes
-read ${kafka:varint(0)}
-read ${kafka:varint(1)}     # offset delta
-read ${kafka:varint(4)}     # key length
-read "key1"
-read ${kafka:varint(-1)}    # value length
 read ${kafka:varint(0)}
 
 # Live fetches continue
@@ -260,7 +251,7 @@ write 1
 write 4s "test"
 write 1
 write 0         # Partition
-write 4L        # offset
+write 3L        # offset
 write -1L
 write ${maximumBytesTest0}
 
@@ -290,11 +281,11 @@ write 1
 write 4s "test"
 write 1
 write 0         # Partition
-write 3L        # offset
+write 2L        # offset
 write -1L
 write ${maximumBytesTest0}
 
-read 132
+read 144
 read ${newRequestId}
 read [0..4]
 read 1
@@ -306,9 +297,9 @@ read 999L       # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions
-read 72         # length of record batch
-read 3L         # first offset
-read 60         # length
+read 84         # length of record batch
+read 2L         # first offset
+read 72         # length
 read 0
 read [0x02]
 read 0x4e8723aa
@@ -321,12 +312,12 @@ read -1s
 read -1
 read 1          # number of records
 
-read ${kafka:varint(10)}    # record length
+read ${kafka:varint(22)}    # record length
 read [0x00]     # attributes
 read ${kafka:varint(0)}
 read ${kafka:varint(0)}     # offset delta
 read ${kafka:varint(4)}     # key length
 read "key1"
-read ${kafka:varint(-1)}    # value length
+read ${kafka:varint(12)}    # value length
+read "Hello, again"
 read ${kafka:varint(0)}
-
