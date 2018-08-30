@@ -201,4 +201,14 @@ public class MetadataIT
         k3po.finish();
     }
 
+    @Test
+    @Specification({
+        "${scripts}/describe.configs.incomplete.response.aborts/client",
+        "${scripts}/describe.configs.incomplete.response.aborts/server"})
+    public void shouldAbortWhenDescribeConfigsWhenResponseIncomplete() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 }
