@@ -201,4 +201,91 @@ public class MetadataIT
         k3po.finish();
     }
 
+    @Test
+    @Specification({
+        "${scripts}/metadata.incomplete.response.aborts/client",
+        "${scripts}/metadata.incomplete.response.aborts/server"})
+    public void shouldAbortWhenMetadataResponseIsIncomplete() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/metadata.incomplete.response.broker.aborts/client",
+        "${scripts}/metadata.incomplete.response.broker.aborts/server"})
+    public void shouldAbortWhenMetadataResponseBrokerIsIncomplete() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/metadata.incomplete.response.after.brokers.aborts/client",
+        "${scripts}/metadata.incomplete.response.after.brokers.aborts/server"})
+    public void shouldAbortWhenMetadataResponseAfterBrokersIsIncomplete() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/metadata.incomplete.response.topic.aborts/client",
+        "${scripts}/metadata.incomplete.response.topic.aborts/server"})
+    public void shouldAbortWhenMetadataResponseTopicIsIncomplete() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/metadata.incomplete.response.topic.partition.aborts/client",
+        "${scripts}/metadata.incomplete.response.topic.partition.aborts/server"})
+    public void shouldAbortWhenMetadataResponseTopicPartitionIsIncomplete() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/describe.configs.incomplete.response.aborts/client",
+        "${scripts}/describe.configs.incomplete.response.aborts/server"})
+    public void shouldAbortWhenDescribeConfigsResponseIsIncomplete() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/describe.configs.incomplete.response.resource.aborts/client",
+        "${scripts}/describe.configs.incomplete.response.resource.aborts/server"})
+    public void shouldAbortWhenDescribeConfigsResponseResourceIsIncomplete() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/describe.configs.incomplete.response.resource.config.aborts/client",
+        "${scripts}/describe.configs.incomplete.response.resource.config.aborts/server"})
+    public void shouldAbortWhenDescribeConfigsResponseResourceConfigIsIncomplete() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 }
