@@ -37,55 +37,9 @@ read 1 # [TopicName] array length
   read 4s "test"
 read [0x00]                                 # allow_auto_topic_creation (boolean)
 
-write 126                                   # size int32
-write ${metadataRequestId2}                 # correlationId int32
-write 0                                     # throttle_time_ms int32
-write 2                                         # brokers array length
-  write 1                                       # broker id
-  write 7s "broker1"
-  write 9093                                    # port int32
-  write -1s                                     # rack string (null)
-
-  write 2
-  write 7s "broker2"
-  write 9093
-  write -1s
-write 9s "cluster 1"
-write 1                                     # controller broker id
-write 1                                     # topic array length
-  write 0s                                      # error code
-  write 4s "test"
-  write byte 0x00                               # is_internal
-  write 2                                       # partition array length
-    write 0s                                        # error code
-    write 0                                         # partition
-    write 1                                         # leader
-    write 0                                         # replicas array (empty)
-    write -1                                        # isr array (null)
-    write 0                                         # offline replicas array (empty)
-
-    write 0s                                        # error code
-    write 1                                         # partition
-    write 2                                         # leader
-    write 0                                         # replicas array (empty)
-    write -1                                        # isr array (null)
-    write 0                                         # offline replicas array (empty)
-
-# DescribeConfigs request #1 is incomplete
-read 62                                     # size int32
-read 32s                                    # apiKey int16 (DescribeConfigs)
-read 0s                                     # apiVersion int16
-read (int:describeRequestId)                # correlationId int32
-read -1s                                    # clientId string (null)
-read 1                                      # [Resources] array length
-read [0x02]                                 # resource type int8 (topic) 
-read 4s "test"                              # topic name
-read 2                                      # config_names count
-read 14s "cleanup.policy"
-read 19s "delete.retention.ms"
-
+# Metadata request #1 is incomplete
 write 8                                     # size int32
-write ${describeRequestId}                  # correlationId int32
+write ${metadataRequestId2}                 # correlationId int32
 write 0                                     # throttle_time_ms int32
 
 read aborted
@@ -103,6 +57,7 @@ read 1 # [TopicName] array length
   read 4s "test"
 read [0x00]                                 # allow_auto_topic_creation (boolean)
 
+# Metadata request #2 succeeds
 write 126                                   # size int32
 write ${metadataRequestId2}                 # correlationId int32
 write 0                                     # throttle_time_ms int32
@@ -137,7 +92,6 @@ write 1                                     # topic array length
     write -1                                        # isr array (null)
     write 0                                         # offline replicas array (empty)
 
-# DescribeConfigs request #2 succeeds
 read 62                                     # size int32
 read 32s                                    # apiKey int16 (DescribeConfigs)
 read 0s                                     # apiVersion int16

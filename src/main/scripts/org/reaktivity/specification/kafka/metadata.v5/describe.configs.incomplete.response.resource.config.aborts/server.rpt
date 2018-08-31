@@ -84,9 +84,18 @@ read 2                                      # config_names count
 read 14s "cleanup.policy"
 read 19s "delete.retention.ms"
 
-write 8                                     # size int32
+write 52                                    # size int32
 write ${describeRequestId}                  # correlationId int32
 write 0                                     # throttle_time_ms int32
+write 1                                     # resources count
+write 0s                                    # error code
+write -1s                                   # error message
+write [0x02]                                # resource type
+write 4s "test"                             # topic name
+write 2                                     # config entries count
+  write 14s "cleanup.policy"                  # config name
+  write 6s "delete"                           # config  value
+  write [0x00]                                # read_only boolean
 
 read aborted
 write abort
