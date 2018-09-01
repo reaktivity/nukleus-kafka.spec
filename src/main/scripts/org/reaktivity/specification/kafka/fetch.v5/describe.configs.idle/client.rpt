@@ -25,39 +25,8 @@ property maximumWaitTime 500
 property maximumBytes 65535
 property maximumBytesTest0 8192
 
-
 # Metadata connection
 connect await ROUTED_SERVER
-        ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
-  option nukleus:window ${networkConnectWindow}
-  option nukleus:transmission "duplex"
-  option nukleus:byteorder "network"
-
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
-
-connected
-
-write 21        # Size int32
-write 0x03s     # ApiKey int16 (Metadata)
-write 0x05s     # ApiVersion int16
-write ${newMetadataRequestId} # CorrelationId int32
-write -1s       # ClientId string (null)
-write 1         # [TopicName] array length
-  write 4s "test"
-write [0x00]    # allow_auto_topic_creation (boolean)
-
-read 85         # Size int32
-read ${newMetadataRequestId} # CorrelationId int32
-read [0..4]     # throttle_time_ms int32
-
-write abort
-
-write notify METADATA_RESPONSE_IDLE
-
-
-# Metadata connection
-connect await METADATA_RESPONSE_IDLE
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
@@ -98,6 +67,40 @@ read 1          # topic array length
     read 0      # replicas array (empty)
     read -1     # isr array (null)
     read 0      # offline replicas array (empty)
+
+write 62        # Size int32
+write 32s       # ApiKey int16 (DescribeConfigs)
+write 0s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # resources count
+write [0x02]    # resource type (topic is 2, from org/apache/kafka/common/resource/ResourceType.java)
+write 4s "test" # topic name
+write 2         # config names count
+write 14s "cleanup.policy"  # config name
+write 19s "delete.retention.ms"  # config name
+
+read 88         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32
+read [0..4]     # throttle_time_ms int32
+read 1          # resources count
+
+write abort
+
+write notify DESCRIBE_CONFIGS_RESPONSE_IDLE
+
+
+# Metadata connection
+connect await DESCRIBE_CONFIGS_RESPONSE_IDLE
+        ${networkConnect}
+  option nukleus:route ${newNetworkRouteRef}
+  option nukleus:window ${networkConnectWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+
+connected
 
 write 62        # Size int32
 write 32s       # ApiKey int16 (DescribeConfigs)

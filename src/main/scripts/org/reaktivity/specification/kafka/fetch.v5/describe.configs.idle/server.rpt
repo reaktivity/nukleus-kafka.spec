@@ -41,27 +41,6 @@ read [0x00]     # allow_auto_topic_creation (boolean)
 write 85        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
-
-# idle metadata connection (idle metadata response)
-read aborted
-
-
-# Metadata connection after idle
-accepted
-connected
-
-read 21         # Size int32
-read 0x03s      # ApiKey int16 (Metadata)
-read 0x05s      # ApiVersion int16
-read (int:metadataRequestId)
-read -1s        # ClientId string (null)
-read 1          # [TopicName] array length
-  read 4s "test"
-read [0x00]     # allow_auto_topic_creation (boolean)
-
-write 85        # Size int32
-write ${metadataRequestId}  # CorrelationId int32
-write 0         # throttle_time_ms int32
 write 1         # brokers array length
   write 1       # broker id
   write 7s "broker1"
@@ -97,6 +76,33 @@ write 88        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
+
+# idle metadata connection (idle DescribeConfigs response)
+read aborted
+
+
+
+
+# Metadata connection
+accepted
+connected
+
+read 62         # Size int32
+read 32s        # ApiKey int16 (DescribeConfigs)
+read 0s         # ApiVersion int16
+read (int:metadataRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [Resources] array length
+read [0x02]     # resource type int8 (topic)
+read 4s "test"  # topic name
+read 2          # config_names count
+read 14s "cleanup.policy"
+read 19s "delete.retention.ms"
+
+write 88        # Size int32
+write ${metadataRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # resources count
 write 0s        # error code
 write -1s       # error message
 write [0x02]    # resource type
@@ -112,6 +118,7 @@ write 8s "86400000"
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
+
 
 
 # Fetch stream

@@ -1205,7 +1205,18 @@ public class FetchIT
     @Specification({
         "${scripts}/metadata.idle/client",
         "${scripts}/metadata.idle/server"})
-    public void shouldTimeoutIdleMetadataConnection() throws Exception
+    public void shouldTimeoutIdleMetadataResponse() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/describe.configs.idle/client",
+        "${scripts}/describe.configs.idle/server"})
+    public void shouldTimeoutIdleDescribeConfigsResponse() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -1216,7 +1227,7 @@ public class FetchIT
     @Specification({
         "${scripts}/fetch.idle/client",
         "${scripts}/fetch.idle/server"})
-    public void shouldTimeoutIdleFetchConnection() throws Exception
+    public void shouldTimeoutIdleFetchResponse() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
