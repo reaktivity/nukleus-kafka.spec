@@ -51,13 +51,14 @@ read 85         # Size int32
 read ${newMetadataRequestId} # CorrelationId int32
 read [0..4]     # throttle_time_ms int32
 
+# idle
 write abort
 
-write notify METADATA_RESPONSE_IDLE
+write notify METADATA_RESPONSE_ABORTED
 
 
 # Metadata connection
-connect await METADATA_RESPONSE_IDLE
+connect await METADATA_RESPONSE_ABORTED
         ${networkConnect}
   option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
