@@ -41,7 +41,7 @@ read nukleus:begin.ext 0
 
 # Make sure the repeated metadata queries for test1 
 # do not stop clients from subscribing to existing topics
-connect await CONNECT_CLIENT_ONE
+connect await CONNECT_CLIENT_TWO
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
     option nukleus:window ${applicationConnectWindow}
@@ -61,3 +61,4 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
+read notify CLIENT_TWO_CONNECTED
