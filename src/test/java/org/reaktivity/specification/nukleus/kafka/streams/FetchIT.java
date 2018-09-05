@@ -917,18 +917,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message.two.topics.one.detached/client",
-        "${scripts}/zero.offset.message.two.topics.one.detached/server"})
-    public void shouldReceiveMessageAtZeroOffsetAndBeDetached() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/zero.offset.message.two.topics/client",
         "${scripts}/zero.offset.message.two.topics/server"})
     public void shouldReceiveMessageAtZeroOffsetWithClientSubscribedToSecondTopic() throws Exception
