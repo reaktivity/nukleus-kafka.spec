@@ -825,17 +825,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/unknown.topic.name/client",
-        "${scripts}/unknown.topic.name/server"})
-    public void shouldRejectUnknownTopicName() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/unspecified.offset/client",
         "${scripts}/unspecified.offset/server"})
     public void shouldRequestMessagesAtUnspecifiedOffset() throws Exception
@@ -1071,6 +1060,18 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.two.topics/client",
+        "${scripts}/zero.offset.two.topics/server"})
+    public void shouldSubscribeToTwoTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
         k3po.finish();
     }
 }

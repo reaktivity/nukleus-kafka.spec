@@ -51,5 +51,10 @@ scope kafka
             int32 messageKeySize;
             octets[messageKeySize] messageKey = null;
         }
+        
+        struct KafkaEndEx
+        {
+            varint64[] fetchOffsets;
+        }
     }
 }
