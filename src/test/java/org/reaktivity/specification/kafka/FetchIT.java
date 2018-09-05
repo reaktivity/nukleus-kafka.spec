@@ -972,7 +972,19 @@ public class FetchIT
     @Specification(
     {"${scripts}/live.fetch.topic.not.found.permanently/client",
      "${scripts}/live.fetch.topic.not.found.permanently/server"})
-    public void shouldDetachClientsWhenTopicIsPermanentlyDeleted() throws Exception
+    public void shouldKeepTryingToFindMetadataWhenTopicIsPermanentlyDeleted() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.topic.not.found.recovered/client",
+     "${scripts}/live.fetch.topic.not.found.recovered/server"})
+    public void shouldEndWithOffsetZeroWhenTopicIsDeletedThenRecreated() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
