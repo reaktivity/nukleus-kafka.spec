@@ -265,6 +265,18 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.message.tombstone.message.same.key/client",
+     "${scripts}/compacted.message.tombstone.message.same.key/server"})
+    public void shouldReceiveMessageFollowingTombstoneForSameKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_HISTORICAL_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.messages/client",
      "${scripts}/compacted.messages/server"})
     public void shouldReceiveMessagesFromCompactedTopic() throws Exception
@@ -1194,6 +1206,40 @@ public class FetchIT
     {"${scripts}/zero.offset.message/client",
      "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/metadata.idle/client",
+        "${scripts}/metadata.idle/server"})
+    public void shouldTimeoutIdleMetadataResponse() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/describe.configs.idle/client",
+        "${scripts}/describe.configs.idle/server"})
+    public void shouldTimeoutIdleDescribeConfigsResponse() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/fetch.idle/client",
+        "${scripts}/fetch.idle/server"})
+    public void shouldTimeoutIdleFetchResponse() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
