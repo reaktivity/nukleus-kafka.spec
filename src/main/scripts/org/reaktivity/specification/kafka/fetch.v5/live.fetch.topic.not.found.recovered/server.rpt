@@ -31,7 +31,7 @@ accept ${networkAccept}
 accepted
 connected
 
-# Metadata request topic test1
+# Metadata request topic test
 read 21         # Size int32
 read 3s      # ApiKey int16 (Metadata)
 read 5s      # ApiVersion int16
@@ -223,7 +223,7 @@ accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
-# Fetch request for topic test1
+# Fetch request for topic test
 read 65
 read 1s
 read 5s
