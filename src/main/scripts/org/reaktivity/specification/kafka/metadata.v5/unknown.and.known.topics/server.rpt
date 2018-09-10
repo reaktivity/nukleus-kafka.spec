@@ -49,7 +49,7 @@ write 1         # brokers array length
 write 9s "cluster 1"        # 125
 write 1         # controller broker id
 write 1         # topic array length
-  write 3s      # UnknownTopic
+  write 3s      # error code NOT FOUND
   write 5s "test1"
   write byte 0  # is_internal
   write -1      # partition array length (null)

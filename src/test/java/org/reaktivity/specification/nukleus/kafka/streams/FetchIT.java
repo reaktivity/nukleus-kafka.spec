@@ -155,9 +155,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.early.and.null.message/client",
-        "${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.early.and.null.message/server"})
-    public void shouldReceiveCompactedMessagesFromLiveStreamAfterOffsetTooEarlyAndCachedKeyRemovedByNullMessage()
+        "${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.low.and.null.message/client",
+        "${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.low.and.null.message/server"})
+    public void shouldReceiveCompactedMessagesFromLiveStreamAfterOffsetTooLowAndCachedKeyRemovedByNullMessage()
             throws Exception
     {
         k3po.start();
@@ -263,7 +263,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("SUBSCRIBE_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 
@@ -746,8 +746,19 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/offset.too.early.message/client",
-        "${scripts}/offset.too.early.message/server"})
+        "${scripts}/nonzero.offset.reattach.message/client",
+        "${scripts}/nonzero.offset.reattach.message/server"})
+    public void shouldReattachAtOffsetZeroAndReceiveMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/offset.too.low.message/client",
+        "${scripts}/offset.too.low.message/server"})
     public void shouldRefetchUsingReportedFirstOffset() throws Exception
     {
         k3po.start();
@@ -757,8 +768,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/offset.too.early.multiple.topics/client",
-        "${scripts}/offset.too.early.multiple.topics/server"})
+        "${scripts}/offset.too.low.multiple.topics/client",
+        "${scripts}/offset.too.low.multiple.topics/server"})
     public void shouldRefetchUsingReportedFirstOffsetOnMultipleTopics() throws Exception
     {
         k3po.start();
@@ -918,8 +929,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message.end.with.offset.zero.message/client",
-        "${scripts}/zero.offset.message.end.with.offset.zero.message/server"})
+        "${scripts}/zero.offset.message.reattach.message/client",
+        "${scripts}/zero.offset.message.reattach.message/server"})
     public void shouldReceiveEndAtZeroOffsetWhenTopicIsRecreatedAndReconnectToNewTopic() throws Exception
     {
         k3po.start();
@@ -1010,8 +1021,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.topic.recreated/client",
-        "${scripts}/zero.offset.messages.topic.recreated/server"})
+        "${scripts}/zero.offset.message.reattach.message/client",
+        "${scripts}/zero.offset.message.reattach.message/server"})
     public void shouldReceiveMessagesWhenTopicRecreated() throws Exception
     {
         k3po.start();

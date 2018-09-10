@@ -27,7 +27,7 @@ connect await ROUTED_CLIENT
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
+write nukleus:begin.ext 1 ${kafka:varint(10)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
@@ -35,14 +35,10 @@ write nukleus:begin.ext 0
 connected
 
 read nukleus:begin.ext 4s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
+read nukleus:begin.ext 1 ${kafka:varint(10)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
-
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
-read nukleus:data.ext -1
-read "Hello, world"
 
 read nukleus:end.ext 1 ${kafka:varint(0)}
 read closed
@@ -71,4 +67,4 @@ read nukleus:begin.ext 0
 
 read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
 read nukleus:data.ext -1
-read "Hello, again"
+read "Hello, world"
