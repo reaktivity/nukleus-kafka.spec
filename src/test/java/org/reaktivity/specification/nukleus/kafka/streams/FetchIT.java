@@ -884,6 +884,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/unspecified.offset.multiple.streaming.topics/client",
+        "${scripts}/unspecified.offset.multiple.streaming.topics/server"})
+    public void shouldRequestMessagesAtUnspecifiedOffsetFromMultipleStreamingTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset/client",
         "${scripts}/zero.offset/server"})
     public void shouldRequestMessagesAtZeroOffset() throws Exception
