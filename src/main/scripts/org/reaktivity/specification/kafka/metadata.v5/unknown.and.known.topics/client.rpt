@@ -146,7 +146,7 @@ read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
 
-# Metadata requests for unknown topics (test1) continue until found
+# Metadata requests for unknown topic test1 continue client detaches
 write 22        # Size int32
 write 3s        # ApiKey int16 (Metadata)
 write 5s        # ApiVersion int16
@@ -172,13 +172,14 @@ read 1          # topic array length
   read [0x00]   # is_internal boolean
   read -1       # partition array length (null)
 
+# Third client attaches to unknown topic test3
 write 22        # Size int32
 write 3s        # ApiKey int16 (Metadata)
 write 5s        # ApiVersion int16
 write ${newMetadataRequestId} # CorrelationId int32
 write -1s       # ClientId string (null)
 write 1         # [TopicName] array length
-  write 5s "test1"
+  write 5s "test3"
 write [0x00]    # allow_auto_topic_creation (boolean)
 
 read 64         # Size int32
@@ -193,7 +194,59 @@ read 9s "cluster 1"         # 125
 read 1          # controller broker id
 read 1          # topic array length
   read 3s       # UnknownTopic
-  read 5s "test1"
+  read 5s "test3"
   read [0x00]   # is_internal boolean
   read -1       # partition array length (null)
+  
+  # Metadata requests continue for unknown topics (now only test3)
+write 22        # Size int32
+write 3s        # ApiKey int16 (Metadata)
+write 5s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # [TopicName] array length
+  write 5s "test3"
+write [0x00]    # allow_auto_topic_creation (boolean)
+
+read 64         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32 # 151
+read [0..4]     # throttle_time_ms int32
+read 1          # brokers array length
+  read 1        # broker id # 12 + 127 = 139
+  read 7s "broker1"
+  read 9093     # port int32
+  read -1s      # rack string (null)
+read 9s "cluster 1"         # 125
+read 1          # controller broker id
+read 1          # topic array length
+  read 3s       # UnknownTopic
+  read 5s "test3"
+  read [0x00]   # is_internal boolean
+  read -1       # partition array length (null)
+  
+  write 22        # Size int32
+write 3s        # ApiKey int16 (Metadata)
+write 5s        # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s       # ClientId string (null)
+write 1         # [TopicName] array length
+  write 5s "test3"
+write [0x00]    # allow_auto_topic_creation (boolean)
+
+read 64         # Size int32
+read ${newMetadataRequestId} # CorrelationId int32 # 151
+read [0..4]     # throttle_time_ms int32
+read 1          # brokers array length
+  read 1        # broker id # 12 + 127 = 139
+  read 7s "broker1"
+  read 9093     # port int32
+  read -1s      # rack string (null)
+read 9s "cluster 1"         # 125
+read 1          # controller broker id
+read 1          # topic array length
+  read 3s       # UnknownTopic
+  read 5s "test3"
+  read [0x00]   # is_internal boolean
+  read -1       # partition array length (null)
+
 

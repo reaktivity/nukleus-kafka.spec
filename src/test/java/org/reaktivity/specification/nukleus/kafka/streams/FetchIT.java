@@ -1087,13 +1087,15 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.two.topics/client",
-        "${scripts}/zero.offset.two.topics/server"})
+        "${scripts}/zero.offset.multiple.topics/client",
+        "${scripts}/zero.offset.multiple.topics/server"})
     public void shouldSubscribeToTwoTopics() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.notifyBarrier("DISCONNECT_CLIENT_ONE");
+        k3po.notifyBarrier("CONNECT_CLIENT_THREE");
         k3po.finish();
     }
 }

@@ -15,16 +15,23 @@
 #
 
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
-property newTimestamp ${kafka:timestamp()}
 
-property applicationAccept "nukleus://kafka/streams/source"
-property applicationAcceptWindow 8192
+property applicationConnect "nukleus://kafka/streams/source"
+property applicationConnectWindow 8192
 
-accept ${applicationAccept}
-       option nukleus:route ${newApplicationRouteRef}
-       option nukleus:window ${applicationAcceptWindow}
-       option nukleus:transmission "half-duplex"
-accepted
+connect await ROUTED_CLIENT
+        ${applicationConnect}
+    option nukleus:route ${newApplicationRouteRef}
+    option nukleus:window ${applicationConnectWindow}
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext 5s "test1"
+write nukleus:begin.ext 1 ${kafka:varint(0)}
+write nukleus:begin.ext -1
+write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 0
+
+connected
 
 read nukleus:begin.ext 5s "test1"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
@@ -32,16 +39,22 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-connected
+write await DISCONNECT_CLIENT_ONE
+read abort
 
-write nukleus:begin.ext 5s "test1"
+connect await CONNECT_CLIENT_TWO
+        ${applicationConnect}
+    option nukleus:route ${newApplicationRouteRef}
+    option nukleus:window ${applicationConnectWindow}
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext 5s "test2"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
-write flush
 
-accepted
+connected
 
 read nukleus:begin.ext 5s "test2"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
@@ -49,12 +62,26 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-connected
+read notify CLIENT_TWO_CONNECTED
 
-write nukleus:begin.ext 5s "test2"
+connect await CONNECT_CLIENT_THREE
+        ${applicationConnect}
+    option nukleus:route ${newApplicationRouteRef}
+    option nukleus:window ${applicationConnectWindow}
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext 5s "test3"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
-write flush
 
+connected
+
+read nukleus:begin.ext 5s "test3"
+read nukleus:begin.ext 1 ${kafka:varint(0)}
+read nukleus:begin.ext -1
+read nukleus:begin.ext [0xFF]
+read nukleus:begin.ext 0
+
+read notify CLIENT_THREE_CONNECTED

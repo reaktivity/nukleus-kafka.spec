@@ -151,7 +151,7 @@ write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 
-# Metadata requests for unknown topics (test1) continue until found
+# Metadata requests for unknown topic test1 continue client detaches
 read 22         # Size int32
 read 3s         # ApiKey int16 (Metadata)
 read 5s         # ApiVersion int16
@@ -160,6 +160,10 @@ read -1s        # ClientId string (null)
 read 1          # [TopicName] array length
   read 5s "test1"
 read [0x00]     # allow_auto_topic_creation (boolean)
+
+read notify THIRD_UNKNOWN_TOPIC_METADATA_REQUEST_RECEIVED
+
+write await WRITE_THIRD_UNKNOWN_TOPIC_METADATA_RESPONSE
 
 write 64        # Size int32
 write ${metadataRequestId}  # CorrelationId int32 # 151
@@ -176,14 +180,43 @@ write 1         # topic array length
   write 5s "test1"
   write byte 0  # is_internal
   write -1      # partition array length (null)
-
+  
+# Third client attaches to topic test3
 read 22         # Size int32
 read 3s         # ApiKey int16 (Metadata)
 read 5s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [TopicName] array length
-  read 5s "test1"
+  read 5s "test3"
+read [0x00]     # allow_auto_topic_creation (boolean)
+  
+read notify TEST_THREE_METADATA_REQUEST_RECEIVED
+
+write 64        # Size int32
+write ${metadataRequestId}  # CorrelationId int32 # 151
+write 0         # throttle_time_ms int32
+write 1         # brokers array length
+  write 1       # broker id # 12 + 127 = 139
+  write 7s "broker1"
+  write 9093    # port int32
+  write -1s     # rack string (null)
+write 9s "cluster 1"        # 125
+write 1         # controller broker id
+write 1         # topic array length
+  write 3s      # UnknownTopic
+  write 5s "test3"
+  write byte 0  # is_internal
+  write -1      # partition array length (null)
+  
+# Metadata requests continue for unknown topics (now only test3) 
+read 22         # Size int32
+read 3s         # ApiKey int16 (Metadata)
+read 5s         # ApiVersion int16
+read (int:metadataRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [TopicName] array length
+  read 5s "test3"
 read [0x00]     # allow_auto_topic_creation (boolean)
 
 write 64        # Size int32
@@ -198,6 +231,31 @@ write 9s "cluster 1"        # 125
 write 1         # controller broker id
 write 1         # topic array length
   write 3s      # UnknownTopic
-  write 5s "test1"
+  write 5s "test3"
+  write byte 0  # is_internal
+  write -1      # partition array length (null)
+ 
+read 22         # Size int32
+read 3s         # ApiKey int16 (Metadata)
+read 5s         # ApiVersion int16
+read (int:metadataRequestId) # CorrelationId int32
+read -1s        # ClientId string (null)
+read 1          # [TopicName] array length
+  read 5s "test3"
+read [0x00]     # allow_auto_topic_creation (boolean)
+
+write 64        # Size int32
+write ${metadataRequestId}  # CorrelationId int32 # 151
+write 0         # throttle_time_ms int32
+write 1         # brokers array length
+  write 1       # broker id # 12 + 127 = 139
+  write 7s "broker1"
+  write 9093    # port int32
+  write -1s     # rack string (null)
+write 9s "cluster 1"        # 125
+write 1         # controller broker id
+write 1         # topic array length
+  write 3s      # UnknownTopic
+  write 5s "test3"
   write byte 0  # is_internal
   write -1      # partition array length (null)
