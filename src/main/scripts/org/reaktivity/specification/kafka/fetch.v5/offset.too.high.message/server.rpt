@@ -311,10 +311,6 @@ read 0L         # offset
 read -1L
 read [0..4]
 
-read notify FETCH_REQUEST_RECEIVED
-
-write await WRITE_FETCH_RESPONSE
-
 write 216
 write ${requestId}
 write 0
@@ -355,7 +351,7 @@ write 1         # partition
 write 0s        # errCode
 write 0L        # high watermark
 write -1L       # last stable offset
-write -1L       # log start offset
+write 0L       # log start offset
 write -1        # aborted transaction count
 write 0         # record set size
 
@@ -363,6 +359,6 @@ write 2         # partition
 write 0s        # errCode
 write 0L        # high watermark
 write -1L       # last stable offset
-write -1L       # log start offset
+write 0L       # log start offset
 write -1        # aborted transaction count
 write 0         # record set size

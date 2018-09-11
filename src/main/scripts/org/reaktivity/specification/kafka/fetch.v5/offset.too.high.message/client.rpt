@@ -250,7 +250,7 @@ read 0          # record set size
 
 read 1          # partition
 read 0s         # errCode OK
-read -1L        # high watermark
+read 0L         # high watermark
 read -1L        # last stable offset
 read -1L        # log start offset
 read -1         # aborted transaction count
