@@ -800,6 +800,19 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/high.water.mark.offset.multiple.streaming.topics/client",
+     "${scripts}/high.water.mark.offset.multiple.streaming.topics/server"})
+    public void shouldRequestMessagesAtHighWatermarkOffsetFromMultipleStreamingTopics() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.awaitBarrier("SENT_DESCRIBE_CONFIGS_RESPONSE_TWO");
+        k3po.notifyBarrier("SEND_FETCH_RESPONSE_ONE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/historical.connection.aborted/client",
      "${scripts}/historical.connection.aborted/server"})
     public void shouldReconnectRequeryMetadataAndContinueReceivingMessagesWhenHistoricalFetchConnectionIsAborted()
