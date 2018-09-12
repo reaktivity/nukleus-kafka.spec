@@ -18,7 +18,6 @@ property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 
 property applicationConnect "nukleus://kafka/streams/source"
 property applicationConnectWindow 8192
-property messageOffset 1
 
 connect await ROUTED_CLIENT
         ${applicationConnect}
@@ -40,11 +39,8 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
-read nukleus:data.ext -1
-read "Hello, world"
-
-read aborted
+write await DISCONNECT_CLIENT_ONE
+read abort
 
 connect await CONNECT_CLIENT_TWO
         ${applicationConnect}
@@ -67,3 +63,25 @@ read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
 read notify CLIENT_TWO_CONNECTED
+
+connect await CONNECT_CLIENT_THREE
+        ${applicationConnect}
+    option nukleus:route ${newApplicationRouteRef}
+    option nukleus:window ${applicationConnectWindow}
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext 5s "test3"
+write nukleus:begin.ext 1 ${kafka:varint(0)}
+write nukleus:begin.ext -1
+write nukleus:begin.ext [0xFF]
+write nukleus:begin.ext 0
+
+connected
+
+read nukleus:begin.ext 5s "test3"
+read nukleus:begin.ext 1 ${kafka:varint(0)}
+read nukleus:begin.ext -1
+read nukleus:begin.ext [0xFF]
+read nukleus:begin.ext 0
+
+read notify CLIENT_THREE_CONNECTED

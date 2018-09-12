@@ -219,9 +219,9 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.early.and.null.message/client",
-     "${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.early.and.null.message/server"})
-    public void shouldReceiveCompactedMessagesFromLiveStreamAfterOffsetTooEarlyAndCachedKeyRemovedByNullMessage()
+    {"${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.low.and.null.message/client",
+     "${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.low.and.null.message/server"})
+    public void shouldReceiveCompactedMessagesFromLiveStreamAfterOffsetTooLowAndCachedKeyRemovedByNullMessage()
             throws Exception
     {
         k3po.start();
@@ -997,11 +997,22 @@ public class FetchIT
     @Specification(
     {"${scripts}/live.fetch.topic.not.found.permanently/client",
      "${scripts}/live.fetch.topic.not.found.permanently/server"})
-    public void shouldDetachClientsWhenTopicIsPermanentlyDeleted() throws Exception
+    public void shouldKeepTryingToFindMetadataWhenTopicIsPermanentlyDeleted() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.topic.not.found.recovered/client",
+     "${scripts}/live.fetch.topic.not.found.recovered/server"})
+    public void shouldEndWithOffsetZeroWhenTopicIsDeletedThenRecreated() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
 
@@ -1051,8 +1062,19 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/offset.too.early.message/client",
-     "${scripts}/offset.too.early.message/server"})
+    {"${scripts}/offset.too.high.message/client",
+     "${scripts}/offset.too.high.message/server"})
+    public void shouldRefetchUsingReportedLowerFirstOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/offset.too.low.message/client",
+     "${scripts}/offset.too.low.message/server"})
     public void shouldRefetchUsingReportedFirstOffset() throws Exception
     {
         k3po.start();
@@ -1063,8 +1085,8 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/offset.too.early.multiple.topics/client",
-     "${scripts}/offset.too.early.multiple.topics/server"})
+    {"${scripts}/offset.too.low.multiple.topics/client",
+     "${scripts}/offset.too.low.multiple.topics/server"})
     public void shouldRefetchUsingReportedFirstOffsetOnMultipleTopics() throws Exception
     {
         k3po.start();
@@ -1207,6 +1229,18 @@ public class FetchIT
     {"${scripts}/zero.offset.message/client",
      "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.message.topic.not.found.initially/client",
+     "${scripts}/zero.offset.message.topic.not.found.initially/server"})
+    public void shouldRequeryMetadataUntilFoundThenReceiveMessageAtZeroOffset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
