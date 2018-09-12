@@ -200,7 +200,6 @@ public class MetadataIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
-
     @Test
     @Specification({
         "${scripts}/metadata.incomplete.response.aborts/client",
@@ -288,4 +287,18 @@ public class MetadataIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/unknown.and.known.topics/client",
+        "${scripts}/unknown.and.known.topics/server"})
+    public void shouldRepeatedlyRequestMetadataForTopicsWhichAreNotFound() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_SECOND_UNKNOWN_TOPIC_METADATA_RESPONSE");
+        k3po.notifyBarrier("WRITE_THIRD_UNKNOWN_TOPIC_METADATA_RESPONSE");
+        k3po.finish();
+    }
+
 }
