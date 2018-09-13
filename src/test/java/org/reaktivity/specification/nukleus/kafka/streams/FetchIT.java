@@ -940,6 +940,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/zero.offset.message.connect.await/client",
+        "${scripts}/zero.offset.message.connect.await/server"})
+    public void shouldReceiveMessageAtZeroOffsetWithConnectAwait() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT");
+        k3po.finish();
+    }
+
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message.reattach.message/client",
         "${scripts}/zero.offset.message.reattach.message/server"})
     public void shouldReceiveEndAtZeroOffsetWhenTopicIsRecreatedAndReconnectToNewTopic() throws Exception
