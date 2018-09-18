@@ -159,3 +159,26 @@ write 8s "86400000"
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
+
+# Fetch stream
+accepted
+read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+connected
+
+read 66
+read 1s
+read 5s
+read (int:requestId)
+read -1s
+read -1
+read [0..4]
+read 1
+read [0..4]
+read [0x00]
+read 1
+read 5s "test2"
+read 1
+read 0
+read 0L
+read -1L
+read [0..4]
