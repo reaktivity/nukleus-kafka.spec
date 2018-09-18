@@ -949,7 +949,21 @@ public class FetchIT
     @Specification(
     {"${scripts}/live.fetch.connection.reset/client",
      "${scripts}/live.fetch.connection.reset/server"})
-    public void shouldContinueReceivingMessagesWhenTopicFetchResponseIsErrorCode3NotFoundButMetadataIsFound() throws Exception
+    public void shouldHandleLiveFetchConnectionReset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("FAIL_FETCH_CONNECTION_TWO");
+        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.notifyBarrier("WRITE_METADATA_REFRESH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/live.fetch.connection.reset.two.topics/client",
+     "${scripts}/live.fetch.connection.reset.two.topics/server"})
+    public void shouldHandleLiveFetchConnectionResetTwoTopics() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -1188,6 +1202,17 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
         k3po.notifyBarrier("WRITE_HISTORICAL_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/two.topics.single.partition.one.fetched/client",
+     "${scripts}/two.topics.single.partition.one.fetched/server"})
+    public void shouldSubscribeToTwoPartitionsAndFetchFromSecond() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
 
