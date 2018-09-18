@@ -949,6 +949,17 @@ public class FetchIT
         k3po.finish();
     }
 
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.message.multiple.partitions/client",
+        "${scripts}/zero.offset.message.multiple.partitions/server"})
+    public void shouldReceiveMessageAtZeroOffsetWithTwoPartitions() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.finish();
+    }
 
     @Test
     @Specification({
@@ -1119,6 +1130,18 @@ public class FetchIT
         k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.notifyBarrier("DISCONNECT_CLIENT_ONE");
         k3po.notifyBarrier("CONNECT_CLIENT_THREE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.two.topics.one.reset/client",
+        "${scripts}/zero.offset.two.topics.one.reset/server"})
+    public void shouldSubscribeUnsubscribeAndSubscribeToAnotherTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("DO_RESET");
         k3po.finish();
     }
 }
