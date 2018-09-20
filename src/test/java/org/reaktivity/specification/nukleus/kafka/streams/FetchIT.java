@@ -918,8 +918,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.large.message/client",
-        "${scripts}/zero.offset.large.message/server"})
+        "${scripts}/zero.offset.messages.large.and.small/client",
+        "${scripts}/zero.offset.messages.large.and.small/server"})
     public void shouldReceiveLargeMessage() throws Exception
     {
         k3po.start();
