@@ -920,10 +920,22 @@ public class FetchIT
     @Specification({
         "${scripts}/zero.offset.messages.large.and.small/client",
         "${scripts}/zero.offset.messages.large.and.small/server"})
-    public void shouldReceiveLargeMessage() throws Exception
+    public void shouldReceiveLargeAndSmallMessages() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.messages.large.and.small.fanout/client",
+        "${scripts}/zero.offset.messages.large.and.small.fanout/server"})
+    public void shouldReceiveLargeAndSmallMessagesTwoClients() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 
