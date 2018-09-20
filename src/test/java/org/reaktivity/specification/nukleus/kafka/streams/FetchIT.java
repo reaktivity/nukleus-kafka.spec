@@ -1121,6 +1121,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/zero.offset.partial.message.aborted/client",
+        "${scripts}/zero.offset.partial.message.aborted/server"})
+    public void shouldReceivePartialMessageThenAbort() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.multiple.topics/client",
         "${scripts}/zero.offset.multiple.topics/server"})
     public void shouldSubscribeToTwoTopics() throws Exception
