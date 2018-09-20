@@ -53,8 +53,8 @@ write 1         # controller broker id
 write 1         # topic array length
   write 0s      # error code
   write 4s "test"
-  write byte 0  # is_internal
-  write 1       # partition array length
+  write byte 0           # is_internal
+  write 1       # partition count
     write 0s    # error code
     write 0     # partition
     write 1     # leader
@@ -65,17 +65,17 @@ write 1         # topic array length
 read 62         # Size int32
 read 32s        # ApiKey int16 (DescribeConfigs)
 read 0s         # ApiVersion int16
-read (int:metadataRequestId) # CorrelationId int32
+read (int:describeConfigsRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
-read [0x02]     # resource type int8 (topic)
+read [0x02]     # resource type int8 (topic) 
 read 4s "test"  # topic name
 read 2          # config_names count
 read 14s "cleanup.policy"
 read 19s "delete.retention.ms"
 
-write 88        # Size int32
-write ${metadataRequestId}  # CorrelationId int32
+write 89        # Size int32
+write ${describeConfigsRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
 write 1         # resources count
 write 0s        # error code
@@ -84,7 +84,7 @@ write [0x02]    # resource type
 write 4s "test" # topic name
 write 2         # config entries count
 write 14s "cleanup.policy"  # config name
-write 6s "delete"           # config  value
+write 7s "compact"          # config  value
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
@@ -99,6 +99,7 @@ accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
+# First fetch request fails with errcode 1
 read 65
 read 1s
 read 5s
@@ -112,16 +113,70 @@ read [0x00]
 read 1
 read 4s "test"
 read 1
-read 0
-read 0L
+read 0          # partition
+read 0L         # offset
 read -1L
 read [0..4]
 
-read notify FETCH_REQUEST_RECEIVED
+write 60
+write ${requestId}
+write 0
+write 1
+write 4s "test"
+write 1         # partition count
+write 0         # partition
+write 1s        # errCode 1 (offset too early)
+write -1L       # high watermark
+write -1L       # last stable offset
+write -1L       # log start offset
+write -1        # aborted transaction count
+write 0         # record set size
 
-write await WRITE_FETCH_RESPONSE
+# list offsets request
+read 41         # Size int32
+read 2s         # ApiKey (ListOffsets)
+read 2s         # ApiVersion 
+read (int:listOffsetsRequestId) # CorrelationId 
+read -1s        # ClientId string (null)
+read -1         # replicaId
+read [0x00]     # isolation level (0=READ_UNCOMMITTED)
+read 1          # topic count 
+read 4s "test"  # topic name
+read 1          # partition count
+read 0          # partition
+read -2L        # timestamp (earliest available offset)
 
-write 140
+write 44        # Size int32
+write ${listOffsetsRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # topic count
+write 4s "test" # topic name 
+write 1         # partition count
+write 0         # partition
+write 0s        # error code
+write -1L       # timestamp (from a real example)
+write 13L       # offset
+
+# second fetch is done using reported log start offset
+read 65
+read 1s
+read 5s
+read (int:requestId)
+read -1s
+read -1
+read [0..4]
+read 1
+read [0..4]
+read [0x00]
+read 1
+read 4s "test"
+read 1
+read 0          # partition
+read 13L        # offset
+read -1L
+read [0..4]
+
+write 144
 write ${requestId}
 write 0
 write 1
@@ -129,30 +184,30 @@ write 4s "test"
 write 1
 write 0
 write 0s
-write 1L
-write -1L
-write 0L
+write 999L      # high watermark
+write -1L       # last stable offest
+write 13L       # log start offset
 write -1
-write 80        # physical length of record batch
-write 0L        # first offset
-write 68        # length
+write 84        # record set size
+write 13L       # first offset
+write 72        # length record batch
 write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 0         # last offset delta
+write 0
 write ${newTimestamp}
 write ${newTimestamp}
 write -1L
 write -1s
-write -1
+write -1 
 write 1         # number of records
-
-write ${kafka:varint(18)}
-write [0x00]
+write ${kafka:varint(22)}    # record length
+write [0x00]     # attributes
 write ${kafka:varint(0)}
 write ${kafka:varint(0)}
-write ${kafka:varint(-1)}
-write ${kafka:varint(12)}
+write ${kafka:varint(4)}     # key length
+write "key1"
+write ${kafka:varint(12)}    # value length
 write "Hello, world"
 write ${kafka:varint(0)}
