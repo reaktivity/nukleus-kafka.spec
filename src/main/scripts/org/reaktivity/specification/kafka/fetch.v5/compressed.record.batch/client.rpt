@@ -131,37 +131,85 @@ write 0L
 write -1L
 write ${maximumBytesTest0}
 
-read 140
+read 319
 read ${newRequestId}
 read [0..4]
 read 1
 read 4s "test"
-read 1
-read 0
-read 0s
-read 1L
-read -1L
-read 0L
-read -1
-read 80
-read 0L
-read 68
-read 0
-read [0x02]
-read 0x4e8723aa
-read 0s
-read 0
-read (long:timestamp)
-read ${timestamp}
-read -1L
-read -1s
-read -1
-read 1
-read ${kafka:varint(18)}
-read [0x00]
-read ${kafka:varint(0)}
-read ${kafka:varint(0)}
-read ${kafka:varint(-1)}
-read ${kafka:varint(12)}
-read "Hello, world"
-read ${kafka:varint(0)}
+    1                                   # partition count
+        0                               # partition id
+        0s                              # error code
+        1L                              # high watermark
+        -1L                             # last stable offset
+        0L                              # log start offset
+        -1                              # aborted transaction count
+        259                             # record set size
+            #
+            # first record batch
+            #
+            0L                          # first offset
+            68                          # length
+            0                           # leader epoch
+            [0x02]                      # magic
+            0x4e8723aa                  # crc
+            0s                          # attributes
+            0                           # last offset delta
+            (long:timestamp)            # first timestamp
+            ${timestamp}                # max timestamp
+            -1L                         # producer id
+            -1s                         # producer epoch
+            -1                          # first sequence
+            1                           # record count
+                ${kafka:varint(18)}     # record length
+                [0x00]                  # attributes
+                ${kafka:varint(0)}      # timestamp delta
+                ${kafka:varint(0)}      # offset delta
+                ${kafka:varint(-1)}     # key len
+                ${kafka:varint(12)}     # value len
+                "Hello, world"          # value
+                ${kafka:varint(0)}      # header count
+            #
+            # second record batch
+            #
+            1L                          # first offset
+            87                          # length
+            0                           # leader epoch
+            [0x02]                      # magic
+            0x4e8723aa                  # crc
+            2s                          # attributes (gzip)
+            0                           # last offset delta
+            (long:timestamp)            # first timestamp
+            ${timestamp}                # max timestamp
+            -1L                         # producer id
+            -1s                         # producer epoch
+            -1                          # first sequence
+            1                           # record count
+                # gzipped record (22 00 00 00 01 16 "Hello, gzip" 00)
+                [0x1f 0x8b 0x08 0x00 0x00 0x00 0x00 0x00 0x00 0x00]
+                [0x53 0x62 0x60 0x60 0x60 0x14 0xf3 0x48 0xcd 0xc9]
+                [0xc9 0xd7 0x51 0x48 0xaf 0xca 0x2c 0x60 0x00 0x00]
+                [0x80 0x6f 0xd7 0x91 0x12 0x00 0x00 0x00]
+            #
+            # third record batch
+            #
+            2L                          # first offset
+            68                          # length
+            0                           # leader epoch
+            [0x02]                      # magic
+            0x4e8723aa                  # crc
+            0s                          # attributes
+            0                           # last offset delta
+            (long:timestamp)            # first timestamp
+            ${timestamp}                # max timestamp
+            -1L                         # producer id
+            -1s                         # producer epoch
+            -1                          # first sequence
+            1                           # record count
+                ${kafka:varint(18)}     # record length
+                [0x00]                  # attributes
+                ${kafka:varint(0)}      # timestamp delta
+                ${kafka:varint(0)}      # offset delta
+                ${kafka:varint(-1)}     # key len
+                ${kafka:varint(12)}     # value len
+                "Hello, again"          # value
+                ${kafka:varint(0)}      # header count

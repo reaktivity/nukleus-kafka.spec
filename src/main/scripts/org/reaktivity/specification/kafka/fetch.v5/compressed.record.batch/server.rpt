@@ -121,113 +121,87 @@ read notify FETCH_REQUEST_RECEIVED
 
 write await WRITE_FETCH_RESPONSE
 
-
-#write [0x00 0x00 0x01 0x55]
-#    ${requestId}
-#    0
-#    1                               # topic count
-#    4s "test"                       # topic name
-#    1                               # partition count
-#    0                               # partition id
-#    0s                              # error code
-#    1L                              # high watermark
-#    -1L                             # last stable offset
-#    0L                              # log start offset
-#    -1                              # aborted transaction count
-#    [0x00 0x00 0x01 0x19]           # record set size
-#        0L                          # first offset
-#        [0x00 0x00 0x00 0x4b]           # length
-#        0                           # leader epoch
-#        0x02                        # magic
-#        0x1c70a87a                  # crc
-#        0s              # attributes
-#        0               # last offset delta
-#        ${newTimestamp} # first timestamp
-#        ${newTimestamp} # max timestamp
-#        -1L             # producer id
-#        -1s             # producer epoch
-#        -1              # first sequence
-#        1               # record count
-#            0x32        # record length
-#            0x00        # attributes
-#            0x00        # timestamp delta
-#            0x00        # offset delta
-#            ${kafka:varint(1)}        # key len
-#            0x31        # key
-#            ${kafka:varint(18)}         # value len
-#            "1,compression=none" #value
-#            [0x00 0x00 0x00 0x00 ]
-#    [0x00 0x00 0x00 0x00 0x01 0x00 0x00 0x00  0x5f 0x00 0x00 0x00 0x00 0x02 0xc0 0xa5 ]
-#    [0x7f 0x7b 0x00 0x01 0x00 0x00 0x00 0x00  0x00 0x00 0x01 0x65 0xf9 0x14 0x5c 0x65 ]
-#    [0x00 0x00 0x01 0x65 0xf9 0x14 0x5c 0x65  0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ]
-#    [0xff 0xff 0xff 0xff 0xff 0xff 0x00 0x00  0x00 0x01 0x1f 0x8b 0x08 0x00 0x00 0x00 ]
-#    [0x00 0x00 0x00 0x00 0x33 0x62 0x60 0x60  0x60 0x32 0x52 0x31 0xd2 0x49 0xce 0xcf ]
-#    [0x2d 0x28 0x4a 0x2d 0x2e 0xce 0xcc 0xcf  0xb3 0x4d 0xaf 0xca 0x2c 0x60 0x00 0x00 ]
-#    [0x26 0xae 0xe6 0xd3 0x1a 0x00 0x00 0x00  0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x02 ]
-#    [0x00 0x00 0x00 0x4b 0x00 0x00 0x00 0x00  0x02 0xc8 0xcd 0x91 0xd9 0x00 0x00 0x00 ]
-#    [0x00 0x00 0x00 0x00 0x00 0x01 0x65 0xf9  0x14 0x63 0x17 0x00 0x00 0x01 0x65 0xf9 ]
-#    [0x14 0x63 0x17 0xff 0xff 0xff 0xff 0xff  0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ]
-#    [0xff 0x00 0x00 0x00 0x01 0x32 0x00 0x00  0x00 0x02 0x33 0x24 0x33 0x2c ]
-#    "3,compressio n=none" [0x00]
-
-
-
-write 220
-write ${requestId}
-write 0
-write 1
-write 4s "test"
-    write 1               # partition count
-        write 0               # partition id
-        write 0s              # error code
-        write 1L              # high watermark
-        write -1L             # last stable offset
-        write 0L              # log start offset
-        write -1              # aborted transaction count
-        write 160              # record set size
+write 319
+${requestId}
+0
+1
+4s "test"                               # topic name
+    1                                   # partition count
+        0                               # partition id
+        0s                              # error code
+        1L                              # high watermark
+        -1L                             # last stable offset
+        0L                              # log start offset
+        -1                              # aborted transaction count
+        259                             # record set size
+            #
             # first record batch
-            write 0L              # first offset
-            write 68              # length
-            write 0               # leader epoch
-            write [0x02]          # magic
-            write 0x4e8723aa      # crc
-            write 0s              # attributes
-            write 0               # last offset delta
-            write ${newTimestamp} # first timestamp
-            write ${newTimestamp} # max timestamp
-            write -1L             # producer id
-            write -1s             # producer epoch
-            write -1              # first sequence
-            write 1               # record count
-                write ${kafka:varint(18)}    # record length
-                write [0x00]                 # attributes
-                write ${kafka:varint(0)}     # timestamp delta
-                write ${kafka:varint(0)}     # offset delta
-                write ${kafka:varint(-1)}    # key len
-                write ${kafka:varint(12)}    # value len
-                write "Hello, world"         # value
-                write ${kafka:varint(0)}     # header count
-            # second record batch
-            write 2L              # first offset
-            write 68              # length
-            write 0               # leader epoch
-            write [0x02]          # magic
-            write 0x4e8723aa      # crc
-            write 0s              # attributes
-            write 0               # last offset delta
-            write ${newTimestamp} # first timestamp
-            write ${newTimestamp} # max timestamp
-            write -1L             # producer id
-            write -1s             # producer epoch
-            write -1              # first sequence
-            write 1               # record count
-                write ${kafka:varint(18)}    # record length
-                write [0x00]                 # attributes
-                write ${kafka:varint(0)}     # timestamp delta
-                write ${kafka:varint(0)}     # offset delta
-                write ${kafka:varint(-1)}    # key len
-                write ${kafka:varint(12)}    # value len
-                write "Hello, again"         # value
-                write ${kafka:varint(0)}     # header count
+            #
+            0L                          # first offset
+            68                          # length
+            0                           # leader epoch
+            [0x02]                      # magic
+            0x4e8723aa                  # crc
+            0s                          # attributes
+            0                           # last offset delta
+            ${newTimestamp}             # first timestamp
+            ${newTimestamp}             # max timestamp
+            -1L                         # producer id
+            -1s                         # producer epoch
+            -1                          # first sequence
+            1                           # record count
+                ${kafka:varint(18)}     # record length
+                [0x00]                  # attributes
+                ${kafka:varint(0)}      # timestamp delta
+                ${kafka:varint(0)}      # offset delta
+                ${kafka:varint(-1)}     # key len
+                ${kafka:varint(12)}     # value len
+                "Hello, world"          # value
+                ${kafka:varint(0)}      # header count
+            #
+            # second record batch (gzip compressed)
+            #
+            1L                          # first offset
+            87                          # length
+            0                           # leader epoch
+            [0x02]                      # magic
+            0x4e8723aa                  # crc
+            2s                          # attributes (gzip)
+            0                           # last offset delta
+            ${newTimestamp}             # first timestamp
+            ${newTimestamp}             # max timestamp
+            -1L                         # producer id
+            -1s                         # producer epoch
+            -1                          # first sequence
+            1                           # record count
+                # gzipped record (22 00 00 00 01 16 "Hello, gzip" 00)
+                [0x1f 0x8b 0x08 0x00 0x00 0x00 0x00 0x00 0x00 0x00]
+                [0x53 0x62 0x60 0x60 0x60 0x14 0xf3 0x48 0xcd 0xc9]
+                [0xc9 0xd7 0x51 0x48 0xaf 0xca 0x2c 0x60 0x00 0x00]
+                [0x80 0x6f 0xd7 0x91 0x12 0x00 0x00 0x00]
+            #
+            # third record batch
+            #
+            2L                          # first offset
+            68                          # length
+            0                           # leader epoch
+            [0x02]                      # magic
+            0x4e8723aa                  # crc
+            0s                          # attributes
+            0                           # last offset delta
+            ${newTimestamp}             # first timestamp
+            ${newTimestamp}             # max timestamp
+            -1L                         # producer id
+            -1s                         # producer epoch
+            -1                          # first sequence
+            1                           # record count
+                ${kafka:varint(18)}     # record length
+                [0x00]                  # attributes
+                ${kafka:varint(0)}      # timestamp delta
+                ${kafka:varint(0)}      # offset delta
+                ${kafka:varint(-1)}     # key len
+                ${kafka:varint(12)}     # value len
+                "Hello, again"          # value
+                ${kafka:varint(0)}      # header count
 
 write flush

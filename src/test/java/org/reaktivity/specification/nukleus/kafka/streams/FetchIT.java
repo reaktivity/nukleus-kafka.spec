@@ -940,6 +940,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compressed.record.batch/client",
+        "${scripts}/compressed.record.batch/server"})
+    public void shouldReceiveCompressedRecordBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/zero.offset.message.connect.await/client",
         "${scripts}/zero.offset.message.connect.await/server"})
     public void shouldReceiveMessageAtZeroOffsetWithConnectAwait() throws Exception

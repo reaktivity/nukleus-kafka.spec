@@ -41,7 +41,18 @@ write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(1)}
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(2)}
 write nukleus:data.ext -1
 write "Hello, world"
+write flush
+
+# skipping compressed record batches for now (need to adjust fetch offsets
+# above and below once compression is supported)
+# write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(2)}
+# write nukleus:data.ext -1
+# write "Hello, gzip"
+
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(3)}
+write nukleus:data.ext -1
+write "Hello, again"
 write flush
