@@ -310,8 +310,8 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/compacted.messages.first.exceeds.256.bytes/client",
-     "${scripts}/compacted.messages.first.exceeds.256.bytes/server"})
+    {"${scripts}/compacted.messages.large.and.small/client",
+     "${scripts}/compacted.messages.large.and.small/server"})
     public void shouldReceiveLargeCompactedMessageFilteredByKey() throws Exception
     {
         k3po.start();
@@ -321,8 +321,8 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/compacted.messages.first.exceeds.256.bytes.repeated/client",
-     "${scripts}/compacted.messages.first.exceeds.256.bytes.repeated/server"})
+    {"${scripts}/compacted.messages.large.and.small.repeated/client",
+     "${scripts}/compacted.messages.large.and.small.repeated/server"})
     public void shouldReceiveLargeCompactedMessageFilteredByKeyFetchRepeated() throws Exception
     {
         k3po.start();
@@ -409,6 +409,18 @@ public class FetchIT
         k3po.notifyBarrier("WRITE_SECOND_FETCH_RESPONSE");
         k3po.finish();
     }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.offset.too.low.message/client",
+     "${scripts}/compacted.offset.too.low.message/server"})
+    public void shouldReceiveCompactedMessageAtFirstAvailableOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
 
     @Test
     @Specification(
@@ -1087,6 +1099,18 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/two.topics.one.offset.too.low/client",
+     "${scripts}/two.topics.one.offset.too.low/server"})
+    public void shouldQueryEarliestOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_LIST_OFFSETS_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/offset.too.low.message/client",
      "${scripts}/offset.too.low.message/server"})
     public void shouldRefetchUsingReportedFirstOffset() throws Exception
@@ -1355,8 +1379,8 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.messages.first.exceeds.256.bytes/client",
-     "${scripts}/zero.offset.messages.first.exceeds.256.bytes/server"})
+    {"${scripts}/zero.offset.messages.large.and.small/client",
+     "${scripts}/zero.offset.messages.large.and.small/server"})
     public void shouldReceiveLargeThenSmallMessage() throws Exception
     {
         k3po.start();
@@ -1366,8 +1390,19 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/zero.offset.messages.first.exceeds.256.bytes.repeated/client",
-     "${scripts}/zero.offset.messages.first.exceeds.256.bytes.repeated/server"})
+    {"${scripts}/zero.offset.messages.large.and.small.then.large.missing/client",
+     "${scripts}/zero.offset.messages.large.and.small.then.large.missing/server"})
+    public void shouldFetchLargeAndSmallMessageThenSmallOnly() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.large.and.small.repeated/client",
+     "${scripts}/zero.offset.messages.large.and.small.repeated/server"})
     public void shouldReceiveLargeFragmentedThenSmallMessage() throws Exception
     {
         k3po.start();

@@ -912,7 +912,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("FETCH_REQUEST_RECEIVED");
+        k3po.notifyBarrier("DO_CLIENT_RESET");
         k3po.finish();
     }
 
@@ -1124,6 +1124,17 @@ public class FetchIT
         "${scripts}/zero.offset.messagesets.fanout/client",
         "${scripts}/zero.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.partial.message.aborted/client",
+        "${scripts}/zero.offset.partial.message.aborted/server"})
+    public void shouldReceivePartialMessageThenAbort() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
