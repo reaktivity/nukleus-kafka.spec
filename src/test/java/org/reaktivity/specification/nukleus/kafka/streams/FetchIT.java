@@ -912,7 +912,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("FETCH_REQUEST_RECEIVED");
+        k3po.notifyBarrier("DO_CLIENT_RESET");
         k3po.finish();
     }
 

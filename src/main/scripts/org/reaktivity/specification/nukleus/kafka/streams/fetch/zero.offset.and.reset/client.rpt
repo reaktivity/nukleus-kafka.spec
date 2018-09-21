@@ -39,8 +39,6 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read notify SUBSCRIBED
-
-write await FETCH_REQUEST_RECEIVED
+write await DO_CLIENT_RESET
 
 read abort
