@@ -1287,9 +1287,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/compressed.record.batch/client",
-        "${scripts}/compressed.record.batch/server"})
-    public void shouldReceiveCompressedRecordBatch() throws Exception
+        "${scripts}/gzip.compressed.record.batch/client",
+        "${scripts}/gzip.compressed.record.batch/server"})
+    public void shouldReceiveGzipCompressedRecordBatch() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
