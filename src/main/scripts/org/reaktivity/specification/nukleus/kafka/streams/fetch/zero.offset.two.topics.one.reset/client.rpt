@@ -22,7 +22,7 @@ property applicationConnectWindow 8192
 connect await ROUTED_CLIENT
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
-    option nukleus:window 0
+    option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext 5s "test1"

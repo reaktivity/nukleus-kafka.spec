@@ -1099,6 +1099,18 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/two.topics.one.offset.too.low/client",
+     "${scripts}/two.topics.one.offset.too.low/server"})
+    public void shouldQueryEarliestOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_LIST_OFFSETS_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/offset.too.low.message/client",
      "${scripts}/offset.too.low.message/server"})
     public void shouldRefetchUsingReportedFirstOffset() throws Exception
