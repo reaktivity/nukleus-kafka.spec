@@ -1286,6 +1286,30 @@ public class FetchIT
     }
 
     @Test
+    @Specification({
+        "${scripts}/gzip.compressed.record.batch/client",
+        "${scripts}/gzip.compressed.record.batch/server"})
+    public void shouldReceiveGzipCompressedRecordBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/snappy.compressed.record.batch/client",
+        "${scripts}/snappy.compressed.record.batch/server"})
+    public void shouldReceiveSnappyCompressedRecordBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
     @Specification(
     {"${scripts}/zero.offset.message.topic.not.found.initially/client",
      "${scripts}/zero.offset.message.topic.not.found.initially/server"})
