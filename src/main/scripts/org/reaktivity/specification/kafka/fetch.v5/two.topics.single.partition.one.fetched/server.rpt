@@ -40,6 +40,7 @@ read [0x00]     # allow_auto_topic_creation (boolean)
 
 read notify KNOWN_TOPIC_METADATA_REQUEST_RECEIVED
 
+write await SEND_METADATA_RESPONSE
 write 86        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
