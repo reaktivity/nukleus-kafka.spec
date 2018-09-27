@@ -20,7 +20,7 @@ property newTimestamp ${kafka:timestamp()}
 
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
-property maxPartitionBytes ${networkAcceptWindow}
+property secondMessageKey "nope"
 
 accept ${networkAccept}
   option nukleus:route  ${newNetworkRouteRef}
@@ -87,7 +87,7 @@ write 2         # config entries count
 write 14s "cleanup.policy"  # config name
 write 7s "compact"          # config  value
 write [0x00]    # read_only boolean
-write [0x00]    # is_default boolean
+write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 write 19s "delete.retention.ms"
 write 8s "86400000"
@@ -101,24 +101,84 @@ read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
 read 65
-read 1s
-read 5s
+read 1s         # API key (fetch)
+read 5s         # API version
 read (int:requestId)
-read -1s
-read -1
-read [0..4]
+read -1s        # client id
+read -1 
+read [0..4]     # max wait time millis
 read 1
-read [0..4]
+read [0..4]     # max fetch bytes
 read [0x00]
 read 1
-read 0x04s "test"
+read 4s "test"
 read 1
 read 0
 read 0L
 read -1L
-read ${maxPartitionBytes}
+read [0..4]      # max partition bytes
 
-write 144
+# Kafka will exceed max fetch bytes to deliver at least one message
+write 400
+write ${requestId}
+write 0
+write 1
+write 4s "test"
+write 1         # number of partition responses
+write 0         # partition
+write 0s
+write 1L      # high watermark
+write -1L
+write 0L
+write -1
+write 340       # physical length of record batch
+write 0L        # first offset
+write 328       # length
+write 0
+write [0x02]
+write 0x4e8723aa
+write 0s
+write 0         # last offset delta
+write ${newTimestamp}
+write ${newTimestamp}
+write -1L
+write -1s
+write -1
+write 1         # number of records
+
+write ${kafka:varint(277)}  # Record length
+write [0x00]
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(0)}    # offset delta
+write ${kafka:varint(4)}    # key length
+write "key1"
+write ${kafka:varint(266)}  # value length
+write ${kafka:randomBytes(266)}
+write ${kafka:varint(0)}    # headers (none)
+
+# Next fetch request
+read 65
+read 1s         # API key (fetch)
+read 5s         # API version
+read (int:requestId)
+read -1s        # client id
+read -1 
+read [0..4]     # max wait time millis
+read 1
+read [0..4]     # max fetch bytes
+read [0x00]
+read 1
+read 4s "test"
+read 1
+read 0
+read 1L
+read -1L
+read [0..4]      # max partition bytes
+
+read notify BOOTSTRAP_COMPLETE
+write await WRITE_SECOND_FETCH_RESPONSE
+
+write 132
 write ${requestId}
 write 0
 write 1
@@ -130,9 +190,9 @@ write 1L         # high watermark
 write -1L
 write 0L         # log start offset
 write -1         # aborted transactions
-write 84         # length of record batch
-write 0L         # first offset
-write 72         # length
+write 72         # length of record batch
+write 1L         # first offset
+write 60         # length
 write 0
 write [0x02]
 write 0x4e8723aa
@@ -145,12 +205,11 @@ write -1s
 write -1
 write 1          # number of records
 
-write ${kafka:varint(22)}    # record length
+write ${kafka:varint(10)}    # record length
 write [0x00]     # attributes
 write ${kafka:varint(0)}
 write ${kafka:varint(0)}
 write ${kafka:varint(4)}     # key length
 write "key1"
-write ${kafka:varint(12)}    # value length
-write "Hello, world"
+write ${kafka:varint(-1)}    # value length
 write ${kafka:varint(0)}

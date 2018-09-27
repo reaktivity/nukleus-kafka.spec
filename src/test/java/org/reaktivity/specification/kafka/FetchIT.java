@@ -69,6 +69,18 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.delivers.compacted.messages/client",
+     "${scripts}/compacted.delivers.compacted.messages/server"})
+    public void shouldReceiveCompactedMessages() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.delivers.deleted.messages/client",
      "${scripts}/compacted.delivers.deleted.messages/server"})
     public void shouldReceiveompactedDeletedMessages() throws Exception
@@ -81,13 +93,12 @@ public class FetchIT
 
     @Test
     @Specification(
-    {"${scripts}/compacted.delivers.compacted.messages/client",
-     "${scripts}/compacted.delivers.compacted.messages/server"})
-    public void shouldReceiveCompactedMessages() throws Exception
+    {"${scripts}/compacted.empty.message/client",
+     "${scripts}/compacted.empty.message/server"})
+    public void shouldReceiveEmptyCompactedMessage() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -327,6 +338,30 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.messages.large.then.small/client",
+     "${scripts}/compacted.messages.large.then.small/server"})
+    public void shouldHandleLargeCompactedMessageFollowedBySmall() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_SECOND_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.messages.large.then.tombstone/client",
+     "${scripts}/compacted.messages.large.then.tombstone/server"})
+    public void shouldHandleLargeCompactedMessageFollowedByTompstone() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_SECOND_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -1237,6 +1272,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("SEND_METADATA_RESPONSE");
         k3po.finish();
     }
 

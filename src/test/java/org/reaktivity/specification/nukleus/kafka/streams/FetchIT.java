@@ -87,6 +87,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.historical.empty.message/client",
+        "${scripts}/compacted.historical.empty.message/server"})
+    public void shouldReceiveCompactedEmptyMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.historical.large.message.and.small/client",
         "${scripts}/compacted.historical.large.message.and.small/server"})
     public void shouldReceiveLargeAndSmallCompactedMessageOnTwoClients() throws Exception
@@ -374,6 +385,17 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.partial.message.aborted/client",
+        "${scripts}/compacted.partial.message.aborted/server"})
+    public void shouldReceivePartialCompactedMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT");
         k3po.finish();
     }
 
