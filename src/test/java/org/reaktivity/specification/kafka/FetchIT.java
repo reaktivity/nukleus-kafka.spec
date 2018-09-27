@@ -343,6 +343,30 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.messages.large.then.small/client",
+     "${scripts}/compacted.messages.large.then.small/server"})
+    public void shouldHandleLargeCompactedMessageFollowedBySmall() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_SECOND_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.messages.large.then.tombstone/client",
+     "${scripts}/compacted.messages.large.then.tombstone/server"})
+    public void shouldHandleLargeCompactedMessageFollowedByTompstone() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.notifyBarrier("WRITE_SECOND_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.messages.header/client",
      "${scripts}/compacted.messages.header/server"})
     public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
