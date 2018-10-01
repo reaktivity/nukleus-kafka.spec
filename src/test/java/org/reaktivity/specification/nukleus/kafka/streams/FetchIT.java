@@ -401,6 +401,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.partial.message.aborted.with.key/client",
+        "${scripts}/compacted.partial.message.aborted.with.key/server"})
+    public void shouldReceivePartialCompactedMessageWithKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/distinct.offset.messagesets.fanout/client",
         "${scripts}/distinct.offset.messagesets.fanout/server"})
     public void shouldFanoutMessageSetsAtDistinctOffsets() throws Exception
