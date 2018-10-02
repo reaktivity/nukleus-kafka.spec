@@ -299,6 +299,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.messages.advance.log.start.offset/client",
+     "${scripts}/compacted.messages.advance.log.start.offset/server"})
+    public void shouldReceiveMessagesAndAdvanceLogOffsetFromCompactedTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.messages.tombstone.repeated/client",
      "${scripts}/compacted.messages.tombstone.repeated/server"})
     public void shouldReceiveRepeatedTombstoneMessagesFromCompactedTopic() throws Exception
