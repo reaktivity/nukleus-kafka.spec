@@ -299,6 +299,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.messages.advance.log.start.offset/client",
+     "${scripts}/compacted.messages.advance.log.start.offset/server"})
+    public void shouldReceiveMessagesAndAdvanceLogOffsetFromCompactedTopic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.messages.tombstone.repeated/client",
      "${scripts}/compacted.messages.tombstone.repeated/server"})
     public void shouldReceiveRepeatedTombstoneMessagesFromCompactedTopic() throws Exception
@@ -1000,9 +1011,10 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("FAIL_FETCH_CONNECTION_TWO");
-        k3po.notifyBarrier("WRITE_FIRST_FETCH_RESPONSE");
+        k3po.notifyBarrier("FAIL_LIVE_TWO");
         k3po.notifyBarrier("WRITE_METADATA_REFRESH_RESPONSE");
+        k3po.notifyBarrier("WRITE_LIVE_ONE_FETCH_RESPONSE");
+        k3po.notifyBarrier("WRITE_RECONNECTED_HISTORICAL_TWO_FETCH_RESPONSE");
         k3po.finish();
     }
 
