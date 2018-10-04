@@ -17,13 +17,14 @@
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 
 property applicationConnect "nukleus://kafka/streams/source"
-property applicationConnectWindow 8192
+property applicationConnectWindow 10
 
 connect await ROUTED_CLIENT
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
+    option nukleus:group 3
 
 write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
