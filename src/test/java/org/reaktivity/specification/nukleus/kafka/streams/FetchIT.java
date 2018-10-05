@@ -402,6 +402,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.messages.multiple.nodes.historical/client",
+        "${scripts}/compacted.messages.multiple.nodes.historical/server"})
+    public void shouldReceiveCompactedHistoricalMessagesFromMultipleNodes() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.partial.message.aborted/client",
         "${scripts}/compacted.partial.message.aborted/server"})
     public void shouldReceivePartialCompactedMessage() throws Exception
