@@ -20,7 +20,6 @@ property newTimestamp ${kafka:timestamp()}
 
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
-property maxPartitionBytes ${networkAcceptWindow}
 
 accept ${networkAccept}
   option nukleus:route  ${newNetworkRouteRef}
@@ -87,7 +86,7 @@ write 2         # config entries count
 write 14s "cleanup.policy"  # config name
 write 7s "compact"          # config  value
 write [0x00]    # read_only boolean
-write [0x00]    # is_default boolean
+write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 write 19s "delete.retention.ms"
 write 8s "86400000"
@@ -99,6 +98,8 @@ write [0x00]    # is_sensitive boolean
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
+
+
 
 read 65
 read 1s
@@ -116,7 +117,7 @@ read 1
 read 0
 read 0L
 read -1L
-read ${maxPartitionBytes}
+read [0..4]
 
 write 144
 write ${requestId}
@@ -126,12 +127,12 @@ write 0x04s "test"
 write 1
 write 0          # Partition
 write 0s
-write 1L         # high watermark
+write 11L         # high watermark
 write -1L
 write 0L         # log start offset
 write -1         # aborted transactions
 write 84         # length of record batch
-write 0L         # first offset
+write 10L         # first offset
 write 72         # length
 write 0
 write [0x02]
@@ -150,7 +151,88 @@ write [0x00]     # attributes
 write ${kafka:varint(0)}
 write ${kafka:varint(0)}
 write ${kafka:varint(4)}     # key length
-write "key1"
+write "key0"
 write ${kafka:varint(12)}    # value length
 write "Hello, world"
 write ${kafka:varint(0)}
+
+# second fetch request
+read 65         # Size
+read 1s      # Fetch
+read 5s
+read (int:requestId)
+read -1s
+read -1
+read [0..4]
+read 0x01
+read [0..4]
+read [0x00]
+read 1
+read 4s "test"
+read 1
+read 0          # Partition
+read 11L         # offset
+read -1L
+read [0..4]
+
+write 197       # Size
+write ${requestId}
+write 0
+write 1
+write 4s "test"
+write 1
+write 0         # Partition
+write 0s        # partition error code
+write 999L      # high_watermark
+write -1L       # last_stable_offset
+write 11L       # log_start_offset
+write -1        # aborted_transactions (null)
+write 137       # length of record set
+write 11L       # first offset
+write 125       # length of record batch
+write 0
+write [0x02]
+write 0x4e8723aa
+write 0s
+write 2         # last offset delta
+write ${newTimestamp}       # first timestamp
+write ${newTimestamp}       # maximum timestamp
+write -1L
+write -1s
+write -1        # first sequence
+write 3         # number of records
+
+write ${kafka:varint(22)}    # record length
+write [0x00]     # attributes
+write ${kafka:varint(0)}
+write ${kafka:varint(0)}
+write ${kafka:varint(4)}     # key length
+write "key1"
+write ${kafka:varint(12)}    # value length
+write "Hello, again"
+write ${kafka:varint(0)}
+
+write ${kafka:varint(29)}   # Record length
+write [0x00]    # attributes
+write ${kafka:varint(20)}   # timestamp delta
+write ${kafka:varint(1)}    # offset delta
+write ${kafka:varint(4)}    # key length
+write "key2"
+write ${kafka:varint(19)}   # value length
+write "Hello, longer value"
+write [0x00]
+
+write ${kafka:varint(22)}   # Record length
+write [0x00]    # attributes
+write ${kafka:varint(30)}   # timestamp delta
+write ${kafka:varint(2)}    # offset delta
+write ${kafka:varint(4)}    # key length
+write "key3"
+write ${kafka:varint(12)}   # value length
+write "Hello, third"
+write [0x00]
+
+# third fetch request
+read [0..4]         # Size
+
+write notify LOG_START_OFFSET_UPDATED

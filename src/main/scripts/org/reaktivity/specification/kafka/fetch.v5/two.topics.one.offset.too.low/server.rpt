@@ -38,9 +38,6 @@ read 1          # [TopicName] array length
   read 5s "test1"
 read [0x00]     # allow_auto_topic_creation (boolean)
 
-read notify KNOWN_TOPIC_METADATA_REQUEST_RECEIVED
-
-write await SEND_METADATA_RESPONSE
 write 86        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
 write 0         # throttle_time_ms int32
@@ -74,8 +71,6 @@ read 5s "test1" # topic name
 read 2          # config_names count
 read 14s "cleanup.policy"
 read 19s "delete.retention.ms"
-
-read notify DESCRIBE_CONFIGS_REQUEST_RECEIVED
 
 write 89        # Size int32
 write ${metadataRequestId}  # CorrelationId int32
@@ -166,6 +161,70 @@ accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
+# First fetch request on topic test1 fails with errcode 1 offset out of range
+read 66
+read 1s
+read 5s
+read (int:requestId)
+read -1s
+read -1
+read [0..4]
+read 1
+read [0..4]
+read [0x00]
+read 1
+read 5s "test1"
+read 1
+read 0          # partition
+read 0L         # offset
+read -1L
+read [0..4]
+
+write 61
+write ${requestId}
+write 0
+write 1
+write 5s "test1"
+write 1         # partition count
+write 0         # partition
+write 1s        # errCode 1 (offset too early)
+write -1L       # high watermark
+write -1L       # last stable offset
+write -1L       # log start offset
+write -1        # aborted transaction count
+write 0         # record set size
+
+# list offsets request topic test1
+read 42         # Size int32
+read 2s         # ApiKey (ListOffsets)
+read 2s         # ApiVersion 
+read (int:listOffsetsRequestId) # CorrelationId 
+read -1s        # ClientId string (null)
+read -1         # replicaId
+read [0x00]     # isolation level (0=READ_UNCOMMITTED)
+read 1          # topic count 
+read 5s "test1"  # topic name
+read 1          # partition count
+read 0          # partition
+read -2L        # timestamp (earliest available offset)
+
+read notify LIST_OFFSETS_REQUEST_RECEIVED
+
+write await WRITE_LIST_OFFSETS_RESPONSE
+
+write 45        # Size int32
+write ${listOffsetsRequestId}  # CorrelationId int32
+write 0         # throttle_time_ms int32
+write 1         # topic count
+write 5s "test1" # topic name 
+write 1         # partition count
+write 0         # partition
+write 0s        # error code
+write -1L       # timestamp (from a real example)
+write 13L       # offset
+
+
+# Fetch for second topic
 read 66
 read 1s
 read 5s

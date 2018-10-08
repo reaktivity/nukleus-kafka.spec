@@ -87,6 +87,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.historical.empty.message/client",
+        "${scripts}/compacted.historical.empty.message/server"})
+    public void shouldReceiveCompactedEmptyMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.historical.large.message.and.small/client",
         "${scripts}/compacted.historical.large.message.and.small/server"})
     public void shouldReceiveLargeAndSmallCompactedMessageOnTwoClients() throws Exception
@@ -257,6 +268,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.messages.advance.log.start.offset/client",
+        "${scripts}/compacted.messages.advance.log.start.offset/server"})
+    public void shouldReceiveMessagesAfterLogStartOffsetFromCompactedTopic() throws Exception
+    {
+        k3po.start();
+        // k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.messages.tombstone.repeated/client",
         "${scripts}/compacted.messages.tombstone.repeated/server"})
     public void shouldReceiveRepeatedTombstoneMessagesFromCompactedTopic() throws Exception
@@ -374,6 +397,40 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.messages.multiple.nodes.historical/client",
+        "${scripts}/compacted.messages.multiple.nodes.historical/server"})
+    public void shouldReceiveCompactedHistoricalMessagesFromMultipleNodes() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.partial.message.aborted/client",
+        "${scripts}/compacted.partial.message.aborted/server"})
+    public void shouldReceivePartialCompactedMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.partial.message.aborted.with.key/client",
+        "${scripts}/compacted.partial.message.aborted.with.key/server"})
+    public void shouldReceivePartialCompactedMessageWithKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT");
         k3po.finish();
     }
 
@@ -912,7 +969,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("FETCH_REQUEST_RECEIVED");
+        k3po.notifyBarrier("DO_CLIENT_RESET");
         k3po.finish();
     }
 
@@ -944,6 +1001,28 @@ public class FetchIT
         "${scripts}/zero.offset.message/client",
         "${scripts}/zero.offset.message/server"})
     public void shouldReceiveMessageAtZeroOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/gzip.compressed.record.batch/client",
+        "${scripts}/gzip.compressed.record.batch/server"})
+    public void shouldReceiveGzipCompressedRecordBatch() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/snappy.compressed.record.batch/client",
+        "${scripts}/snappy.compressed.record.batch/server"})
+    public void shouldReceiveSnappyCompressedRecordBatch() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");

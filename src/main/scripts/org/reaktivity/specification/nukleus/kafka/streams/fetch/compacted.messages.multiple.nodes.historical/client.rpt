@@ -17,15 +17,17 @@
 property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 
 property applicationConnect "nukleus://kafka/streams/source"
-property applicationConnectWindow 8192
+property applicationConnectWindow1 8192
+property applicationConnectWindow2 8192
 
-connect await ROUTED_CLIENT
+connect await CONNECT_CLIENT_ONE
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
-    option nukleus:window ${applicationConnectWindow}
+    option nukleus:window ${applicationConnectWindow1}
+    option nukleus:update "none"
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 5s "test1"
+write nukleus:begin.ext 4s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
@@ -33,26 +35,30 @@ write nukleus:begin.ext 0
 
 connected
 
-read nukleus:begin.ext 5s "test1"
+read nukleus:begin.ext 4s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-write await DO_RESET
+read nukleus:data.ext (long:timestamp) 2 ${kafka:varint(1)} ${kafka:varint(0)}
+read nukleus:data.ext 4 "key1"
+read "Hello, world"
 
-read abort
-write aborted
+read nukleus:data.ext ${timestamp} 2 ${kafka:varint(2)} ${kafka:varint(0)}
+read nukleus:data.ext 4 "key2"
+read [0..1]
+read notify CLIENT_ONE_DATA_RECEIVED
 
-read notify CONNECT_CLIENT_TWO
+# Rest of messages are not received because of the connect option nukleus:update "none"
 
 connect await CONNECT_CLIENT_TWO
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
-    option nukleus:window ${applicationConnectWindow}
+    option nukleus:window ${applicationConnectWindow2}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 5s "test2"
+write nukleus:begin.ext 4s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext -1
 write nukleus:begin.ext [0xFF]
@@ -60,8 +66,24 @@ write nukleus:begin.ext 0
 
 connected
 
-read nukleus:begin.ext 5s "test2"
+read nukleus:begin.ext 4s "test"
 read nukleus:begin.ext 1 ${kafka:varint(0)}
 read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
+
+read nukleus:data.ext (long:timestamp) 2 ${kafka:varint(1)} ${kafka:varint(0)}
+read nukleus:data.ext 4 "key1"
+read "Hello, world"
+
+read nukleus:data.ext ${timestamp} 2 ${kafka:varint(2)} ${kafka:varint(0)}
+read nukleus:data.ext 4 "key2"
+read [0..266]
+
+read nukleus:data.ext ${timestamp} 2 ${kafka:varint(2)} ${kafka:varint(1)}
+read nukleus:data.ext 4 "key3"
+read "Hello, again"
+
+read nukleus:data.ext ${timestamp} 2 ${kafka:varint(2)} ${kafka:varint(2)}
+read nukleus:data.ext 4 "key4"
+read [0..266]

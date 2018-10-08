@@ -20,6 +20,7 @@ property newTimestamp ${kafka:timestamp()}
 
 property networkAccept "nukleus://kafka/streams/source"
 property networkAcceptWindow 8192
+property secondMessageKey "nope"
 
 accept ${networkAccept}
   option nukleus:route  ${newNetworkRouteRef}
@@ -160,7 +161,7 @@ write [0x00]    # attributes
 write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(1)}    # offset delta
 write ${kafka:varint(4)}    # key length
-write "nope"
+write ${secondMessageKey}
 write ${kafka:varint(4)}    # value length
 write "nope"
 write ${kafka:varint(0)}    # headers (none)
