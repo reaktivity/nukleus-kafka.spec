@@ -32,8 +32,8 @@ accepted
 connected
 
 read 21         # Size int32
-read 0x03s      # ApiKey int16 (Metadata)
-read 0x05s      # ApiVersion int16
+read 3s         # ApiKey int16 (Metadata)
+read 5s         # ApiVersion int16
 read (int:metadataRequestId)
 read -1s        # ClientId string (null)
 read 1          # [TopicName] array length
@@ -53,7 +53,7 @@ write 1         # controller broker id
 write 1         # topic array length
   write 0s      # error code
   write 4s "test"
-  write byte 0x00           # is_internal
+  write byte 0  # is_internal
   write 1       # partition array length
     write 0s    # error code
     write 0     # partition
@@ -68,7 +68,7 @@ read 0s         # ApiVersion int16
 read (int:metadataRequestId) # CorrelationId int32
 read -1s        # ClientId string (null)
 read 1          # [Resources] array length
-read [0x02]     # resource type int8 (topic) 
+read [0x02]     # resource type int8 (topic)
 read 4s "test"  # topic name
 read 2          # config_names count
 read 14s "cleanup.policy"
@@ -104,7 +104,7 @@ read 1s         # API key (fetch)
 read 5s         # API version
 read (int:requestId)
 read -1s        # client id
-read -1 
+read -1
 read [0..4]     # max wait time millis
 read 1
 read 355        # max fetch bytes
@@ -161,7 +161,7 @@ read 1s         # API key (fetch)
 read 5s         # API version
 read (int:requestId)
 read -1s        # client id
-read -1 
+read -1
 read [0..4]     # max wait time millis
 read 1
 read 355        # max fetch bytes
@@ -185,7 +185,7 @@ read 1s         # API key (fetch)
 read 5s         # API version
 read (int:requestId)
 read -1s        # client id
-read -1 
+read -1
 read [0..4]     # max wait time millis
 read 1
 read 355        # max fetch bytes
@@ -249,7 +249,7 @@ read 1s         # API key (fetch)
 read 5s         # API version
 read (int:requestId)
 read -1s        # client id
-read -1 
+read -1
 read [0..4]     # max wait time millis
 read 1
 read 355        # max fetch bytes

@@ -143,9 +143,9 @@ read 1L         # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions
-read 84         # length of record batch
+read 80         # length of record batch
 read 0L         # first offset
-read 72         # length     
+read 68         # length     
 read 0x00
 read [0x02]
 read 0x4e8723aa
