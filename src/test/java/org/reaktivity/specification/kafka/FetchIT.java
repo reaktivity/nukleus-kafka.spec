@@ -1334,6 +1334,17 @@ public class FetchIT
     }
 
     @Test
+    @Specification({
+        "${scripts}/zero.offset.no.messages.fragmented/client",
+        "${scripts}/zero.offset.no.messages.fragmented/server" })
+    public void shouldDecodeWhenResponseHeaderFragmented() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
     @Specification(
     {"${scripts}/zero.offset.message/client",
      "${scripts}/zero.offset.message/server"})
