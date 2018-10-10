@@ -1462,6 +1462,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/zero.offset.messages.large.and.small.historical/client",
+     "${scripts}/zero.offset.messages.large.and.small.historical/server"})
+    public void shouldReceiveLargeThenSmallMessageFromHistoricalStream() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/zero.offset.messages.large.and.small.then.large.missing/client",
      "${scripts}/zero.offset.messages.large.and.small.then.large.missing/server"})
     public void shouldFetchLargeAndSmallMessageThenSmallOnly() throws Exception
