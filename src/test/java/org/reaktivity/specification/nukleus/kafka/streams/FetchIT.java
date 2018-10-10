@@ -402,6 +402,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/compacted.messages.multiple.nodes.historical/client",
+        "${scripts}/compacted.messages.multiple.nodes.historical/server"})
+    public void shouldReceiveCompactedHistoricalMessagesFromMultipleNodes() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compacted.partial.message.aborted/client",
         "${scripts}/compacted.partial.message.aborted/server"})
     public void shouldReceivePartialCompactedMessage() throws Exception
@@ -963,12 +975,24 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.large.message/client",
-        "${scripts}/zero.offset.large.message/server"})
-    public void shouldReceiveLargeMessage() throws Exception
+        "${scripts}/zero.offset.messages.large.and.small/client",
+        "${scripts}/zero.offset.messages.large.and.small/server"})
+    public void shouldReceiveLargeAndSmallMessages() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.messages.large.and.small.fanout/client",
+        "${scripts}/zero.offset.messages.large.and.small.fanout/server"})
+    public void shouldReceiveLargeAndSmallMessagesTwoClients() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 

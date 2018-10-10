@@ -94,7 +94,7 @@ write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
 
-# Fetch stream
+# Live Fetch stream
 accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
@@ -113,11 +113,161 @@ read 1
 read 4s "test"
 read 1
 read 0
-read 0L
+read 10L        # Fetch offset
 read -1L
 read [0..4]     # max partition bytes
 
-# Kafka will exceed max fetch bytes to deliver at least one message
+read notify LIVE_FETCH_REQUEST_ONE_RECEIVED
+write await WRITE_LIVE_FETCH_RESPONSE_ONE
+
+write 140
+write ${requestId}
+write 0
+write 1
+write 4s "test"
+write 1
+write 0         # Partition
+write 0s        # partition error code
+write 999L      # high_watermark
+write -1L       # last_stable_offset
+write 0L        # log_start_offset
+write -1        # aborted_transactions (null)
+write 80        # length of record set
+write 10L       # first offset
+write 68        # length of record batch
+write 0
+write [0x02]
+write 0x4e8723aa
+write 0s
+write 0         # last offset delta
+write ${newTimestamp}
+write ${newTimestamp}
+write -1L
+write -1s
+write -1
+write 1         # number of records
+
+write ${kafka:varint(18)}
+write [0x00]
+write ${kafka:varint(0)}
+write ${kafka:varint(0)}
+write ${kafka:varint(-1)}
+write ${kafka:varint(12)}
+write "Hello, again"
+write ${kafka:varint(0)}
+
+read 65
+read 1s         # API key (fetch)
+read 5s         # API version
+read (int:requestId)
+read -1s        # client id
+read -1
+read [0..4]     # max wait time millis
+read 1
+read 355        # max fetch bytes
+read [0x00]
+read 1
+read 4s "test"
+read 1
+read 0
+read 11L        # Fetch offset
+read -1L
+read [0..4]     # max partition bytes
+read notify LIVE_FETCH_REQUEST_TWO_RECEIVED
+
+# Historical Fetch stream
+accepted
+read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+connected
+
+read 65
+read 1s         # API key (fetch)
+read 5s         # API version
+read (int:requestId)
+read -1s        # client id
+read -1
+read [0..4]     # max wait time millis
+read 1
+read 355        # max fetch bytes
+read [0x00]
+read 1
+read 4s "test"
+read 1
+read 0
+read 0L         # Fetch offset
+read -1L
+read [0..4]     # max partition bytes
+
+write 415
+write ${requestId}
+write 0
+write 1
+write 4s "test"
+write 1         # number of partition responses
+write 0         # partition
+write 0s
+write 999L      # high watermark
+write -1L
+write 0L
+write -1
+write 355       # physical length of record batch
+write 0L        # first offset
+write 343       # length
+write 0
+write [0x02]
+write 0x4e8723aa
+write 0s
+write 1         # last offset delta
+write ${newTimestamp}
+write ${newTimestamp}
+write -1L
+write -1s
+write -1
+write 2         # number of records
+
+write ${kafka:varint(273)}  # Record length
+write [0x00]
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(0)}    # offset delta
+write ${kafka:varint(-1)}   # key length
+write ${kafka:varint(266)}  # value length
+write ${kafka:randomBytes(266)}
+write ${kafka:varint(0)}    # headers (none)
+
+write ${kafka:varint(18)}   # record length
+write [0x00]    # attributes
+write ${kafka:varint(0)}    # timestamp delta
+write ${kafka:varint(1)}    # offset delta
+write ${kafka:varint(-1)}   # key length
+write ${kafka:varint(12)}   # value length
+write "Hello, world"
+write ${kafka:varint(0)}    # headers (none)
+
+# request and response is repeated to deliver rest of large message and the small one
+read 65
+read 1s         # API key (fetch)
+read 5s         # API version
+read (int:requestId)
+read -1s        # client id
+read -1
+read [0..4]     # max wait time millis
+read 1
+read 355        # max fetch bytes
+read [0x00]
+read 1
+read 4s "test"
+read 1
+read 0
+read 0L         # Fetch offset
+read -1L
+read [0..4]     # max partition bytes
+
+# Force the dispatching of the live message to occur after the first historical response has been
+# processed and before the processing of the next historical response. This should not cause
+# the client to be detached.
+read notify WRITE_LIVE_FETCH_RESPONSE_ONE
+read await LIVE_FETCH_REQUEST_TWO_RECEIVED
+
 write 415
 write ${requestId}
 write 0
