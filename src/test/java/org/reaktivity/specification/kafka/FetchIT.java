@@ -1,5 +1,5 @@
 /**
- * Copyright 2016-2017 The Reaktivity Project
+ * Copyright 2016-2018 The Reaktivity Project
  *
  * The Reaktivity Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -1334,6 +1334,17 @@ public class FetchIT
     }
 
     @Test
+    @Specification({
+        "${scripts}/zero.offset.no.messages.fragmented/client",
+        "${scripts}/zero.offset.no.messages.fragmented/server" })
+    public void shouldDecodeWhenResponseHeaderFragmented() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
     @Specification(
     {"${scripts}/zero.offset.message/client",
      "${scripts}/zero.offset.message/server"})
@@ -1454,6 +1465,17 @@ public class FetchIT
     {"${scripts}/zero.offset.messages.large.and.small/client",
      "${scripts}/zero.offset.messages.large.and.small/server"})
     public void shouldReceiveLargeThenSmallMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/zero.offset.messages.large.and.small.historical/client",
+     "${scripts}/zero.offset.messages.large.and.small.historical/server"})
+    public void shouldReceiveLargeThenSmallMessageFromHistoricalStream() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

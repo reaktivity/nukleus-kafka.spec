@@ -1,5 +1,5 @@
 /**
- * Copyright 2016-2017 The Reaktivity Project
+ * Copyright 2016-2018 The Reaktivity Project
  *
  * The Reaktivity Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -975,12 +975,24 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.large.message/client",
-        "${scripts}/zero.offset.large.message/server"})
-    public void shouldReceiveLargeMessage() throws Exception
+        "${scripts}/zero.offset.messages.large.and.small/client",
+        "${scripts}/zero.offset.messages.large.and.small/server"})
+    public void shouldReceiveLargeAndSmallMessages() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/zero.offset.messages.large.and.small.fanout/client",
+        "${scripts}/zero.offset.messages.large.and.small.fanout/server"})
+    public void shouldReceiveLargeAndSmallMessagesTwoClients() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 
