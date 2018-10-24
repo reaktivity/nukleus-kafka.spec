@@ -378,6 +378,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.messages.live/client",
+     "${scripts}/compacted.messages.live/server"})
+    public void shouldReceiveCompactedMessagesLive() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.messages.header/client",
      "${scripts}/compacted.messages.header/server"})
     public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
