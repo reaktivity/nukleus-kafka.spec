@@ -297,6 +297,18 @@ public class FetchIT
         k3po.finish();
     }
 
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.messages.with.null.key/client",
+        "${scripts}/compacted.messages.with.null.key/server" })
+    public void shouldReceiveCompactedMessagesWithNullKey() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
     @Test
     @Specification(
     {"${scripts}/compacted.messages.advance.log.start.offset/client",
