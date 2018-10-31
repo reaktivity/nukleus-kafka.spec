@@ -253,6 +253,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.historical.uses.zero.offset/client",
+     "${scripts}/compacted.historical.uses.zero.offset/server"})
+    public void shouldReceiveCompactedMessagesUsingZerotOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.message/client",
      "${scripts}/compacted.message/server"})
     public void shouldReceiveCompactedMessage() throws Exception
