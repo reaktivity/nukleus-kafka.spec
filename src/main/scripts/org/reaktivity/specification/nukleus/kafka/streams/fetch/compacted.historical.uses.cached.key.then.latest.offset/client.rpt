@@ -53,7 +53,7 @@ connect await CLIENT_ONE_RECEIVED_FIRST_MESSAGE
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 0x04s "test"
+write nukleus:begin.ext 4s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext 6 "match1"
 write nukleus:begin.ext [0xFF]
@@ -79,7 +79,7 @@ connect await CLIENT_TWO_RECEIVED_FIRST_MESSAGE
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 0x04s "test"
+write nukleus:begin.ext 4s "test"
 write nukleus:begin.ext 1 ${kafka:varint(0)}
 write nukleus:begin.ext 6 "match2"
 write nukleus:begin.ext [0xFF]
