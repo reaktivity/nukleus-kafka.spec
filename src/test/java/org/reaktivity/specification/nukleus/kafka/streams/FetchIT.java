@@ -927,6 +927,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/unspecified.offset.detached/client",
+        "${scripts}/unspecified.offset.detached/server"})
+    public void shouldRequestMessagesAtUnspecifiedOffsetDetached() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CLIENT_DETACH_NOW");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/unspecified.offset.fanout.messages/client",
         "${scripts}/unspecified.offset.fanout.messages/server"})
     public void shouldReceiveStreamingMessagesOnMultipleConnections() throws Exception
