@@ -160,7 +160,7 @@ write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(1)}    # offset delta
 write ${kafka:varint(5)}    # key length
 write "match"
-write ${kafka:varint(-1)}   # value length
+write ${kafka:varint(-1)}   # value NULL
 write [0x00]                # headers
 
 write ${kafka:varint(26)}   # Record length

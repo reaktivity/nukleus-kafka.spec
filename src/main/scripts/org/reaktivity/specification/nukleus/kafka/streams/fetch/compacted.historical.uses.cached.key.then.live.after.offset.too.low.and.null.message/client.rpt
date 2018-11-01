@@ -41,7 +41,11 @@ read nukleus:begin.ext 5 "match"
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(13)}
+read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(11)}
+read nukleus:data.ext 5 "match"
+read "Hello second"
+
+read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(12)}
 read nukleus:data.ext 5 "match"
 read nukleus:data.null
 

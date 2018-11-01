@@ -75,7 +75,6 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -83,11 +82,10 @@ public class FetchIT
     @Specification(
     {"${scripts}/compacted.delivers.deleted.messages/client",
      "${scripts}/compacted.delivers.deleted.messages/server"})
-    public void shouldReceiveompactedDeletedMessages() throws Exception
+    public void shouldReceiveCompactedDeletedMessages() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
         k3po.finish();
     }
 

@@ -257,17 +257,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/compacted.messages/client",
-        "${scripts}/compacted.messages/server"})
-    public void shouldReceiveMessagesFromCompactedTopic() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/compacted.messages.with.null.key/client",
         "${scripts}/compacted.messages.with.null.key/server"})
     public void shouldReceiveCompactedMessagesWithNullKey() throws Exception
