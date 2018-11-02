@@ -139,12 +139,12 @@ read 0x04s "test"
 read 1
 read 0          # Partition
 read 0x00s
-read 12L        # high watermark
+read 9L         # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
 read 112
-read 10L        # first offset
+read 7L         # first offset
 read 100        # length
 read 0
 read [0x02]

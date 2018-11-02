@@ -139,12 +139,12 @@ read 4s "test"
 read 1
 read 0          # Partition
 read 0s
-read 1L         # high watermark
+read 11L        # high watermark
 read -1L
 read 0L         # log start offset
 read -1         # aborted transactions
 read 84         # length of record batch
-read 10L         # first offset
+read 10L        # first offset
 read 72         # length     
 read 0x00
 read [0x02]
@@ -200,7 +200,7 @@ read -1L
 read 0L         # log start offset
 read -1         # aborted transactions (null)
 read 125
-read 10L        # first offset
+read 11L        # first offset
 read 113        # length
 read 0
 read [0x02]

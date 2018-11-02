@@ -70,6 +70,6 @@ read nukleus:begin.ext [0xFF]
 
 read notify CLIENT_TWO_CONNECTED
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(3)}
+read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(2)}
 read nukleus:data.ext 5 "match"
 read "Hello second"

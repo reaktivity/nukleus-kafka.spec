@@ -125,12 +125,12 @@ write 0x04s "test"
 write 1
 write 0         # Partition
 write 0x00s     # partition error code
-write 12L       # high_watermark
+write 9L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
 write 112       # length of record batch
-write 10L       # first offset
+write 7L        # first offset
 write 100       # length
 write 0
 write [0x02]
