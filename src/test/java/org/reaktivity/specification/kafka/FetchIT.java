@@ -75,7 +75,6 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -83,11 +82,10 @@ public class FetchIT
     @Specification(
     {"${scripts}/compacted.delivers.deleted.messages/client",
      "${scripts}/compacted.delivers.deleted.messages/server"})
-    public void shouldReceiveompactedDeletedMessages() throws Exception
+    public void shouldReceiveCompactedDeletedMessages() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("DELIVER_SECOND_LIVE_FETCH_RESPONSE");
         k3po.finish();
     }
 
@@ -253,6 +251,17 @@ public class FetchIT
 
     @Test
     @Specification(
+    {"${scripts}/compacted.historical.uses.zero.offset/client",
+     "${scripts}/compacted.historical.uses.zero.offset/server"})
+    public void shouldReceiveCompactedMessagesUsingZerotOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
     {"${scripts}/compacted.message/client",
      "${scripts}/compacted.message/server"})
     public void shouldReceiveCompactedMessage() throws Exception
@@ -385,6 +394,17 @@ public class FetchIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.notifyBarrier("WRITE_SECOND_FETCH_RESPONSE");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification(
+    {"${scripts}/compacted.messages.live/client",
+     "${scripts}/compacted.messages.live/server"})
+    public void shouldReceiveCompactedMessagesLive() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
 

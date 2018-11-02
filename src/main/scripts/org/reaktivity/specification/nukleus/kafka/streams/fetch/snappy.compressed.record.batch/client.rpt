@@ -39,12 +39,11 @@ read nukleus:begin.ext -1
 read nukleus:begin.ext [0xFF]
 read nukleus:begin.ext 0
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(2)}
+read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
 read nukleus:data.ext -1
 read "Hello, world"
 
-# skipping compressed record batches for now (need to adjust fetch offsets
-# above and below once compression is supported)
+# skipping compressed record batches for now
 # read nukleus:data.ext ${timestamp} 1 ${kafka:varint(2)}
 # read nukleus:data.ext -1
 # read "Hello, snappy"

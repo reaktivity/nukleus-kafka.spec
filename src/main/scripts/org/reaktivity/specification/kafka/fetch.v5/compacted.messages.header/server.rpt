@@ -191,7 +191,7 @@ write ${kafka:varint(20)}   # timestamp delta
 write ${kafka:varint(3)}    # offset delta
 write ${kafka:varint(4)}    # key length
 write "key1"
-write ${kafka:varint(2)}    # value is null
+write ${kafka:varint(2)}    # value
 write "vv"
 write ${kafka:varint(1)}    # number of headers
 write ${kafka:varint(7)}    # header key length

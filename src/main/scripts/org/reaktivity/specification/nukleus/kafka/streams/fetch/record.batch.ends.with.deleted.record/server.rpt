@@ -47,7 +47,7 @@ write nukleus:data.ext -1
 write "Hello, world"
 write flush
 
-write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(3)}
+write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(2)}
 write nukleus:data.ext -1
 write "Hello, again"
 write flush

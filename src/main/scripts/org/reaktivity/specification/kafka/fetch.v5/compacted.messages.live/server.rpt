@@ -99,8 +99,6 @@ accepted
 read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
 connected
 
-
-
 read 65
 read 1s
 read 5s
@@ -125,29 +123,29 @@ write 0
 write 1
 write 0x04s "test"
 write 1
-write 0          # Partition
+write 0         # Partition
 write 0s
-write 11L         # high watermark
+write 11L       # high watermark
 write -1L
-write 0L         # log start offset
-write -1         # aborted transactions
-write 84         # length of record batch
-write 10L         # first offset
-write 72         # length
+write 0L        # log start offset
+write -1        # aborted transactions
+write 84        # length of record batch
+write 10L       # first offset
+write 72        # length
 write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 0          # last offset Delta
+write 0         # last offset Delta
 write ${newTimestamp}        # first timestamp
 write ${newTimestamp}        # maximum timestamp
 write -1L
 write -1s
 write -1
-write 1          # number of records
+write 1         # number of records
 
 write ${kafka:varint(22)}    # record length
-write [0x00]     # attributes
+write [0x00]    # attributes
 write ${kafka:varint(0)}
 write ${kafka:varint(0)}
 write ${kafka:varint(4)}     # key length
@@ -158,7 +156,7 @@ write ${kafka:varint(0)}
 
 # second fetch request
 read 65         # Size
-read 1s      # Fetch
+read 1s         # Fetch
 read 5s
 read (int:requestId)
 read -1s
@@ -171,7 +169,7 @@ read 1
 read 4s "test"
 read 1
 read 0          # Partition
-read 11L         # offset
+read 11L        # offset
 read -1L
 read [0..4]
 

@@ -41,7 +41,7 @@ write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(4)}
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(2)}
 write nukleus:data.ext 5 "match"
 write "Hello second"
 write flush
@@ -68,7 +68,7 @@ write nukleus:begin.ext [0xFF]
 write nukleus:begin.ext 0
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(4)}
+write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(2)}
 write nukleus:data.ext 5 "match"
 write "Hello second"
 write flush
