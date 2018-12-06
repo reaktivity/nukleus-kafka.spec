@@ -23,7 +23,7 @@ connect await ROUTED_CLIENT
         ${applicationConnect}
     option nukleus:route ${newApplicationRouteRef}
     option nukleus:window ${applicationConnectWindow}
-    option nukleus:transmission "half-duplex"
+    option nukleus:transmission "simplex"
 
 write nukleus:begin.ext 0x04s "test"
 write nukleus:begin.ext 2 ${kafka:varint(1)} ${kafka:varint(0)}
