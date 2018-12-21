@@ -14,16 +14,13 @@
 # under the License.
 #
 
-property newNetworkRouteRef  ${nuklei:newReferenceId()} # external
-
-property networkConnect "nukleus://kafka/streams/source"
+property networkConnect "nukleus://streams/kafka#0"
 property networkConnectWindow 8192
 
 property newRequestId ${kafka:newRequestId()}
 
 connect await ROUTED_SERVER
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -89,7 +86,3 @@ read 2 # topic array length
     read 0 # replicas array (empty)
     read -1 # isr array (null)
     read 0 # offline replicas array (empty)
-
-
-
-

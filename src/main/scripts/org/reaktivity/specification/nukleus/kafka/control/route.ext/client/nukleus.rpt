@@ -26,19 +26,17 @@ connected
 
 read 0x00000001
 read (long:correlationIdRG010101N)
+read ${core:string("kafka")}
 read [0x01]
-read [0x06] "source"
-read 0L
-read [0x06] "target"
-read (long:clientConnectRefRG010101N)
-read 0L
-read 4s "test"
+read [0..8] # authorization
+read ${core:string("kafka#0")}
+read ${core:string("target#0")}
+read ${core:string16("test")}
 read 0
 
 write 0x40000001
 write ${correlationIdRG010101N}
-write ${nuklei:newReferenceId()}
-write ${clientConnectRefRG010101N}
+write ${nukleus:newClientRouteId("kafka#0", "target#0")}
 write flush
 
 close

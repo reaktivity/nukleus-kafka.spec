@@ -14,8 +14,7 @@
 # under the License.
 #
 
-property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
-property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
+property newClientRouteId ${nukleus:newClientRouteId("kafka#0", "target#0")} # external
 
 property nukleiUR020101C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
@@ -30,18 +29,8 @@ connected
 
 write 0x00000002
 write ${controlUR020101C.nextCorrelationId()}
-write [0x01]
-write [0x06] "source"
-write ${newApplicationRouteRef}
-write [0x06] "target"
-write ${newNetworkRouteRef}
-write 0L
-write 4s "test"
-write 38
-write 7s "header1"
-write 6 "match1"
-write 7s "header2"
-write 6 "match2"
+write ${core:string("kafka")}
+write ${newClientRouteId}
 write flush
 
 read 0x40000002

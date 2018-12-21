@@ -14,16 +14,14 @@
 # under the License.
 #
 
-property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
 property newTimestamp ${kafka:timestamp()}
 
-property applicationAccept "nukleus://kafka/streams/source"
+property applicationAccept "nukleus://streams/kafka#0"
 property applicationAcceptWindow 8192
 
 property offset 0
 
 accept ${applicationAccept}
-       option nukleus:route ${newApplicationRouteRef}
        option nukleus:window ${applicationAcceptWindow}
        option nukleus:transmission "half-duplex"
 accepted

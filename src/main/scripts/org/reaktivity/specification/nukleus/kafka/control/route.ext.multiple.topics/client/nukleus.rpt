@@ -18,8 +18,6 @@ property nukleusRMT01N ${nuklei:directory("target/nukleus-itests").controlCapaci
 
 property controlRMT01N ${nukleusRMT01N.controlNew("kafka")}
 
-property newRouteRef ${nuklei:newReferenceId()}
-
 connect "agrona://stream/bidirectional"
         option agrona:reader ${agrona:manyToOneReader(controlRMT01N.nukleus)}
         option agrona:writer ${agrona:broadcastTransmitter(controlRMT01N.controller)}
@@ -28,53 +26,47 @@ connected
 
 read 0x00000001
 read (long:correlationIdRNT01N1)
+read ${core:string("kafka")}
 read [0x01]
-read [0x06] "source"
-read 0L
-read [0x06] "target"
-read (long:clientConnectRefRNT01N1)
-read 0L
-read 5s "test1"
+read [0..8] # authorization
+read ${core:string("kafka#0")}
+read ${core:string("target#0")}
+read ${core:string16("test1")}
 read 0
 
 write 0x40000001
 write ${correlationIdRNT01N1}
-write ${newRouteRef}
-write ${clientConnectRefRNT01N1}
+write ${nukleus:newClientRouteId("kafka#0", "target#0")}
 write flush
 
 read 0x00000001
 read (long:correlationIdRNT01N2)
+read ${core:string("kafka")}
 read [0x01]
-read [0x06] "source"
-read ${newRouteRef}
-read [0x06] "target"
-read (long:clientConnectRefRNT01N2)
-read 0L
-read 5s "test2"
+read [0..8] # authorization
+read ${core:string("kafka#0")}
+read ${core:string("target#0")}
+read ${core:string16("test2")}
 read 0
 
 read 0x00000001
 read (long:correlationIdRNT01N3)
+read ${core:string("kafka")}
 read [0x01]
-read [0x06] "source"
-read ${newRouteRef}
-read [0x06] "target"
-read (long:clientConnectRefRNT01N3)
-read 0L
-read 5s "test3"
+read [0..8] # authorization
+read ${core:string("kafka#0")}
+read ${core:string("target#0")}
+read ${core:string16("test3")}
 read 0
 
 write 0x40000001
 write ${correlationIdRNT01N2}
-write ${newRouteRef}
-write ${clientConnectRefRNT01N2}
+write ${nukleus:newClientRouteId("kafka#0", "target#0")}
 write flush
 
 write 0x40000001
 write ${correlationIdRNT01N3}
-write ${newRouteRef}
-write ${clientConnectRefRNT01N3}
+write ${nukleus:newClientRouteId("kafka#0", "target#0")}
 write flush
 
 close

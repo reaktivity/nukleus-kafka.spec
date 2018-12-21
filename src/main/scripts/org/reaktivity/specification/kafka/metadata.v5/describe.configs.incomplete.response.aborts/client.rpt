@@ -14,9 +14,7 @@
 # under the License.
 #
 
-property newNetworkRouteRef  ${nuklei:newReferenceId()} # external
-
-property networkConnect "nukleus://kafka/streams/source"
+property networkConnect "nukleus://streams/kafka#0"
 property networkConnectWindow 8192
 
 property newMetadataRequestId1 ${kafka:newRequestId()}
@@ -25,7 +23,6 @@ property newDescribeRequestId ${kafka:newRequestId()}
 
 connect await ROUTED_SERVER
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -98,7 +95,6 @@ read notify ABORTED_DESCRIBE_CONFIGS
 
 connect await ABORTED_DESCRIBE_CONFIGS
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"

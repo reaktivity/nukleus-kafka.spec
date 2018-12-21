@@ -14,15 +14,12 @@
 # under the License.
 #
 
-property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
-
-property applicationConnect "nukleus://kafka/streams/source"
+property applicationConnect "nukleus://streams/kafka#0"
 property applicationConnectPadding 894
 property applicationConnectWindow 8192
 
 connect await ROUTED_CLIENT
         ${applicationConnect}
-    option nukleus:route ${newApplicationRouteRef}
     option nukleus:padding ${applicationConnectPadding}
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
@@ -57,7 +54,6 @@ read notify CLIENT_ONE_RECEIVED_MESSAGES
 
 connect await CLIENT_ONE_RECEIVED_MESSAGES
         ${applicationConnect}
-    option nukleus:route ${newApplicationRouteRef}
     option nukleus:padding 100
     option nukleus:window 112
     option nukleus:transmission "half-duplex"

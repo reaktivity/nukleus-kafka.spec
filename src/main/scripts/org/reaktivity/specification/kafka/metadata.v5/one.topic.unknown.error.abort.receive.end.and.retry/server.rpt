@@ -14,13 +14,10 @@
 # under the License.
 #
 
-property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
-
-property networkAccept "nukleus://kafka/streams/source"
+property networkAccept "nukleus://streams/kafka#0"
 property networkAcceptWindow 8192
 
 accept ${networkAccept}
-  option nukleus:route  ${newNetworkRouteRef}
   option nukleus:window ${networkAcceptWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -154,4 +151,3 @@ write 8s "86400000"
 write [0x00]    # read_only boolean
 write [0x01]    # is_default boolean
 write [0x00]    # is_sensitive boolean
-

@@ -27,16 +27,8 @@ connected
 
 read 0x00000002
 read (long:correlationIdUR020101N)
-read [0x01]
-read [0x06] "source"
-read (long:clientAcceptRefUR020101N)
-read [0x06] "target"
-read (long:clientConnectRefRG010101N)
-read 0L
-read 0x0004s "test"
-read 19
-read 7s "header1"
-read 6 "match1"
+read ${core:string("kafka")}
+read [0..8] # routeId
 
 write 0x40000002
 write ${correlationIdUR020101N}

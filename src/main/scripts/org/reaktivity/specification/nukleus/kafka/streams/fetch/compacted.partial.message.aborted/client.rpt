@@ -14,16 +14,13 @@
 # under the License.
 #
 
-property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
-
-property applicationConnect "nukleus://kafka/streams/source"
+property applicationConnect "nukleus://streams/kafka#0"
 
 property offset 0
 property messageOffset ${offset + 1}
 
 connect await CONNECT_CLIENT
         ${applicationConnect}
-    option nukleus:route ${newApplicationRouteRef}
     option nukleus:window 10
     option nukleus:transmission "half-duplex"
 

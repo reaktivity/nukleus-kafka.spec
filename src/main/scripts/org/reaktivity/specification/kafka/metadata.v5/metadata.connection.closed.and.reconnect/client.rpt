@@ -14,18 +14,15 @@
 # under the License.
 #
 
-property newNetworkRouteRef  ${nuklei:newReferenceId()} # external
 property correlationId ${nukleus:newCorrelationId()}
 
-property networkConnect "nukleus://kafka/streams/source"
-property networkConnectReply "nukleus://source/streams/kafka"
+property networkConnect "nukleus://streams/kafka#0"
 property networkConnectWindow 8192
 
 property newMetadataRequestId ${kafka:newRequestId()}
 
 connect await ROUTED_SERVER
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -84,7 +81,6 @@ write notify CLIENT_ONE_CLOSED
 
 connect await CLIENT_ONE_CLOSED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -123,4 +119,3 @@ read 8s "86400000"
 read [0x00]     # read_only boolean
 read [0x01]     # is_default boolean
 read [0x00]     # is_sensitive boolean
-
