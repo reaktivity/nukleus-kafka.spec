@@ -14,17 +14,14 @@
 # under the License.
 #
 
-property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
-
 property newTimestamp1 ${kafka:timestamp()}
 property newTimestamp2 ${kafka:timestamp()}
 property newTimestamp3 ${kafka:timestamp()}
 
-property networkAccept "nukleus://kafka/streams/source"
+property networkAccept "nukleus://streams/kafka#0"
 property networkAcceptWindow 8192
 
 accept ${networkAccept}
-  option nukleus:route  ${newNetworkRouteRef}
   option nukleus:window ${networkAcceptWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"

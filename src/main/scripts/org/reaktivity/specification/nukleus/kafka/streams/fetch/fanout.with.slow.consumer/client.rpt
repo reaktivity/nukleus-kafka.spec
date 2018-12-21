@@ -14,14 +14,11 @@
 # under the License.
 #
 
-property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
-
-property applicationConnect "nukleus://kafka/streams/source"
+property applicationConnect "nukleus://streams/kafka#0"
 property applicationConnectWindow 8192
 
 connect await ROUTED_CLIENT
         ${applicationConnect}
-    option nukleus:route ${newApplicationRouteRef}
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
@@ -56,7 +53,6 @@ read "Hello, third"
 
 connect await CLIENT_ONE_CONNECTED
         ${applicationConnect}
-    option nukleus:route ${newApplicationRouteRef}
     option nukleus:window 15
     option nukleus:transmission "half-duplex"
 
@@ -87,4 +83,3 @@ read notify CLIENT_TWO_RECEIVED_SECOND_MESSAGE
 read nukleus:data.ext ${timestamp1 + 22} 1 ${kafka:varint(3)}
 read nukleus:data.ext -1
 read "Hello, third"
-

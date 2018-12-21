@@ -14,9 +14,7 @@
 # under the License.
 #
 
-property newNetworkRouteRef  ${nuklei:newReferenceId()} # external
-
-property networkConnect "nukleus://kafka/streams/source"
+property networkConnect "nukleus://streams/kafka#0"
 property networkConnectWindow 8192
 
 property newMetadataRequestId ${kafka:newRequestId()}
@@ -29,7 +27,6 @@ property maximumBytesTest0 8192
 # Metadata connection
 connect await ROUTED_SERVER
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -115,7 +112,6 @@ read notify METADATA_RECEIVED
 # Fetch stream 1
 connect await METADATA_RECEIVED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -183,7 +179,6 @@ read ${kafka:varint(0)}
 # Fetch stream 2
 connect await FETCH_STREAM_ONE_CONNECTED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"

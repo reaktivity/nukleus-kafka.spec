@@ -14,55 +14,37 @@
 # under the License.
 #
 
-property newApplicationRouteRef1 ${nuklei:newReferenceId()} # external scope
-property newApplicationRouteRef2 ${nuklei:newReferenceId()} # external scope
+property newClientRouteId1 ${nukleus:newClientRouteId("kafka#0", "target#0")} # external
+property newClientRouteId2 ${nukleus:newClientRouteId("kafka#0", "target#0")} # external
 
-property newNetworkRouteRef1 ${nuklei:newReferenceId()} # external scope
-property newNetworkRouteRef2 ${nuklei:newReferenceId()} # external scope
+property nukleiUR020101C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property nukleiURMN01C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
-
-property controlURMN01C ${nukleiURMN01C.control("kafka")}
-
-property unrouteCorrelationId1 ${controlURMN01C.nextCorrelationId()}
-property unrouteCorrelationId2 ${controlURMN01C.nextCorrelationId()}
+property controlUR020101C ${nukleiUR020101C.control("kafka")}
 
 connect await ROUTED_CLIENT
         "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:broadcastReceiver(controlURMN01C.controller)}
-        option agrona:writer ${agrona:manyToOneWriter(controlURMN01C.nukleus)}
+        option agrona:reader ${agrona:broadcastReceiver(controlUR020101C.controller)}
+        option agrona:writer ${agrona:manyToOneWriter(controlUR020101C.nukleus)}
 
 connected
 
 write 0x00000002
-write ${unrouteCorrelationId1}
-write [0x01]
-write [0x06] "source"
-write ${newApplicationRouteRef1}
-write [0x07] "target1"
-write ${newNetworkRouteRef1}
-write 0L
-write 4s "test"
-write 0
+write ${controlUR020101C.nextCorrelationId()}
+write ${core:string("kafka")}
+write ${newClientRouteId1}
 write flush
+
+read 0x40000002
+read ${controlUR020101C.correlationId()}
 
 write 0x00000002
-write ${unrouteCorrelationId2}
-write [0x01]
-write [0x06] "source"
-write ${newApplicationRouteRef2}
-write [0x07] "target2"
-write ${newNetworkRouteRef2}
-write 0L
-write 4s "test"
-write 0
+write ${controlUR020101C.nextCorrelationId()}
+write ${core:string("kafka")}
+write ${newClientRouteId2}
 write flush
 
 read 0x40000002
-read ${unrouteCorrelationId1}
-
-read 0x40000002
-read ${unrouteCorrelationId2}
+read ${controlUR020101C.correlationId()}
 
 close
 closed

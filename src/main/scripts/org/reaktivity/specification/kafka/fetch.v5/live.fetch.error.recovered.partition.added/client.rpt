@@ -14,9 +14,7 @@
 # under the License.
 #
 
-property newNetworkRouteRef  ${nuklei:newReferenceId()} # external
-
-property networkConnect "nukleus://kafka/streams/source"
+property networkConnect "nukleus://streams/kafka#0"
 property networkConnectWindow 8192
 
 property newMetadataRequestId ${kafka:newRequestId()}
@@ -29,7 +27,6 @@ property maximumBytesTest0 8192
 # Metadata connection
 connect await ROUTED_SERVER
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -226,7 +223,6 @@ read [0x00]     # is_sensitive boolean
 # Fetch stream 1
 connect await METADATA_RECEIVED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -346,7 +342,6 @@ write ${maximumBytesTest0}
 # First historical fetch connection
 connect await FETCH_CONNECTION_ONE_CONNECTED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -358,7 +353,6 @@ read notify HISTORICAL_CONNECTION_ONE_CONNECTED
 # Second fetch connection
 connect await HISTORICAL_CONNECTION_ONE_CONNECTED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -441,10 +435,8 @@ write ${maximumBytesTest0}
 # Second historical fetch connection
 connect await FETCH_CONNECTION_TWO_CONNECTED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
 connected
-

@@ -27,14 +27,8 @@ connected
 
 read 0x00000002
 read (long:correlationIdUR020101N)
-read [0x01]
-read [0x06] "source"
-read (long:clientAcceptRefUR020101N)
-read [0x06] "target"
-read (long:clientConnectRefRG010101N)
-read 0L
-read 5s "test1"
-read 0
+read ${core:string("kafka")}
+read [0..8] # routeId
 
 write 0x40000002
 write ${correlationIdUR020101N}
@@ -42,14 +36,8 @@ write flush
 
 read 0x00000002
 read (long:correlationIdUR020101N)
-read [0x01]
-read [0x06] "source"
-read (long:clientAcceptRefUR020101N)
-read [0x06] "target"
-read (long:clientConnectRefRG010101N)
-read 0L
-read 5s "test2"
-read 0
+read ${core:string("kafka")}
+read [0..8] # routeId
 
 write 0x40000002
 write ${correlationIdUR020101N}
@@ -57,14 +45,8 @@ write flush
 
 read 0x00000002
 read (long:correlationIdUR020101N)
-read [0x01]
-read [0x06] "source"
-read (long:clientAcceptRefUR020101N)
-read [0x06] "target"
-read (long:clientConnectRefRG010101N)
-read 0L
-read 5s "test3"
-read 0
+read ${core:string("kafka")}
+read [0..8] # routeId
 
 write 0x40000002
 write ${correlationIdUR020101N}

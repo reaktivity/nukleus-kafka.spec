@@ -14,9 +14,7 @@
 # under the License.
 #
 
-property newNetworkRouteRef  ${nuklei:newReferenceId()} # external
-
-property networkConnect "nukleus://kafka/streams/source"
+property networkConnect "nukleus://streams/kafka#0"
 property networkConnectWindow 8192
 
 property newMetadataRequestId ${kafka:newRequestId()}
@@ -28,7 +26,6 @@ property maximumBytesTest0 8192
 # Metadata connection
 connect await ROUTED_SERVER
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -105,7 +102,6 @@ write close
 # Fetch connection
 connect await METADATA_RECEIVED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -194,7 +190,6 @@ write close
 # Historical connection
 connect await FETCH_CONNECTION_CONNECTED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -208,7 +203,6 @@ write close
 # Live connection reconnect fails to reconnect
 connect await FETCH_CONNECTION_CLOSED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -239,7 +233,6 @@ read abort
 # Historical connection fails to reconnect
 connect await FETCH_CONNECTION_FAILED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -255,7 +248,6 @@ read notify HISTORICAL_CONNECTION_FAILED
 # Metadata connection reconnects
 connect await HISTORICAL_CONNECTION_FAILED
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -394,7 +386,6 @@ read [0x00]     # is_sensitive boolean
 # Live connection reconnects again, this time succeeds
 connect await METADATA_REFRESH_RESPONSE_READ
         ${networkConnect}
-  option nukleus:route ${newNetworkRouteRef}
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -513,4 +504,3 @@ read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, again"
 read [0x00]
-

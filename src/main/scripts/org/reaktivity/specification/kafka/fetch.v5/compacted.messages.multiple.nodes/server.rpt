@@ -14,15 +14,12 @@
 # under the License.
 #
 
-property newNetworkRouteRef ${nuklei:newReferenceId()} # external scope
-
 property newTimestamp ${kafka:timestamp()}
 
-property networkAccept "nukleus://kafka/streams/source"
+property networkAccept "nukleus://streams/kafka#0"
 property networkAcceptWindow 8192
 
 accept ${networkAccept}
-  option nukleus:route  ${newNetworkRouteRef}
   option nukleus:window ${networkAcceptWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
@@ -233,5 +230,3 @@ write "key1"
 write ${kafka:varint(12)}   # value length
 write "Hello, third"
 write ${kafka:varint(0)}
-
-

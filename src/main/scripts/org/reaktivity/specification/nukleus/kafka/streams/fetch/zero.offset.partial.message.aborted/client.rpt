@@ -14,13 +14,10 @@
 # under the License.
 #
 
-property newApplicationRouteRef ${nuklei:newReferenceId()} # external scope
-
-property applicationConnect "nukleus://kafka/streams/source"
+property applicationConnect "nukleus://streams/kafka#0"
 
 connect await ROUTED_CLIENT
         ${applicationConnect}
-    option nukleus:route ${newApplicationRouteRef}
     option nukleus:window 100
     option nukleus:transmission "half-duplex"
 
@@ -42,6 +39,3 @@ read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
 read [0..100]
 
 read aborted
-
-
-
