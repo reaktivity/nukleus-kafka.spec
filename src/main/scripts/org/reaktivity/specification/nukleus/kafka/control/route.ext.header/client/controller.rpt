@@ -16,7 +16,7 @@
 
 property nukleiRG010101EC ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRG010101EC ${nukleiRG010101EC.control("kafka")}
+property controlRG010101EC ${nukleiRG010101EC.control()}
 
 property routedTopicName "test"
 connect "agrona://stream/bidirectional"

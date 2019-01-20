@@ -16,7 +16,7 @@
 
 property nukleiRMT01C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRMT01C ${nukleiRMT01C.control("kafka")}
+property controlRMT01C ${nukleiRMT01C.control()}
 
 property routeCorrelationId1 ${controlRMT01C.nextCorrelationId()}
 property routeCorrelationId2 ${controlRMT01C.nextCorrelationId()}

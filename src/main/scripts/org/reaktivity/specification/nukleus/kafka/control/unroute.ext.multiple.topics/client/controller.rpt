@@ -20,7 +20,7 @@ property newClientRouteId3 ${nukleus:newClientRouteId("kafka#0", "target#0")} # 
 
 property nukleiUR020101C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlUR020101C ${nukleiUR020101C.control("kafka")}
+property controlUR020101C ${nukleiUR020101C.control()}
 
 connect await ROUTED_CLIENT
         "agrona://stream/bidirectional"

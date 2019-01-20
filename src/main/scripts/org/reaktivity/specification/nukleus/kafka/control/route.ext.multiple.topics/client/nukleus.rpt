@@ -16,7 +16,7 @@
 
 property nukleusRMT01N ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRMT01N ${nukleusRMT01N.controlNew("kafka")}
+property controlRMT01N ${nukleusRMT01N.controlNew()}
 
 connect "agrona://stream/bidirectional"
         option agrona:reader ${agrona:manyToOneReader(controlRMT01N.nukleus)}

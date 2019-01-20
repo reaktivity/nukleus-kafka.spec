@@ -16,7 +16,7 @@
 
 property nukleiRMN01C  ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRMN01C  ${nukleiRMN01C .control("kafka")}
+property controlRMN01C  ${nukleiRMN01C .control()}
 
 property routedTopicName "test"
 
