@@ -115,6 +115,17 @@ public class MetadataIT
 
     @Test
     @Specification({
+        "${scripts}/one.topic.error.partition.count.changed/client",
+        "${scripts}/one.topic.error.partition.count.changed/server"})
+    public void shouldHandleErrorPartitionCountChangedFromMetadataResponse() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/one.topic.leader.not.available.and.retry/client",
         "${scripts}/one.topic.leader.not.available.and.retry/server"})
     public void shouldRetryWhenLeaderNotAvailable() throws Exception

@@ -768,6 +768,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/partition.count.changed/client",
+        "${scripts}/partition.count.changed/server"})
+    public void shouldRejectPartitionCountChanged() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/large.then.small.messages.multiple.partitions/client",
         "${scripts}/large.then.small.messages.multiple.partitions/server"})
     public void shouldReceiveLargeAndSmallMessagesFromMultiplePartitions() throws Exception
