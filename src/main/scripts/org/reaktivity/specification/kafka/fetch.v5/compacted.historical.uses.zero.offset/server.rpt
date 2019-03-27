@@ -151,10 +151,6 @@ write ${kafka:varint(12)}   # value length
 write "Hello second"
 write [0x00]                # headers
 
-# Historical fetch connection
-accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
-connected
 
 read 65         # Size
 read 1s         # Fetch
@@ -170,11 +166,11 @@ read 1
 read 4s "test"
 read 1
 read 0          # Partition
-read 0L         # offset
+read 2L         # offset
 read -1L
 read [0..4]
 
-write 198      # Size
+write 146      # Size
 write ${requestId}
 write 0
 write 1
@@ -182,49 +178,29 @@ write 4s "test"
 write 1
 write 0         # Partition
 write 0s        # partition error code
-write 3L        # high_watermark
+write 2L        # high_watermark
 write -1L       # last_stable_offset
 write 0L        # log_start_offset
 write -1        # aborted_transactions (null)
-write 138       # length of record set
-write 0L        # first offset
-write 126       # length
+write 86        # length of record set
+write 2L        # first offset
+write 74        # length
 write 0
 write [0x02]
 write 0x4e8723aa
 write 0s
-write 2         # last offset delta
+write 0         # last offset delta
 write ${newTimestamp}       # first timestamp
 write ${newTimestamp}       # maximum timestamp
 write -1L
 write -1s
 write -1        # first sequence
-write 3         # number of records
+write 1         # number of records
 
-write ${kafka:varint(26)}   # Record length
+write ${kafka:varint(24)}   # Record length
 write [0x00]    # attributes
 write ${kafka:varint(0)}    # timestamp delta
 write ${kafka:varint(0)}    # offset delta
-write ${kafka:varint(8)}    # key length
-write "no match"
-write ${kafka:varint(12)}   # value length
-write "Hello, world"
-write [0x00]                # headers
-
-write ${kafka:varint(24)}   # Record length
-write [0x00]    # attributes
-write ${kafka:varint(0)}    # timestamp delta
-write ${kafka:varint(1)}    # offset delta
-write ${kafka:varint(6)}    # key length 
-write "match1"
-write ${kafka:varint(12)}   # value length
-write "Hello second"
-write [0x00]                # headers
-
-write ${kafka:varint(24)}   # Record length
-write [0x00]    # attributes
-write ${kafka:varint(0)}    # timestamp delta
-write ${kafka:varint(2)}    # offset delta
 write ${kafka:varint(6)}    # key length
 write "match2"
 write ${kafka:varint(12)}   # value length
