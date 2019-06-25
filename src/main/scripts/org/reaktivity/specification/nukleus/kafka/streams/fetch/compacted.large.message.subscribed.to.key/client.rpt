@@ -23,20 +23,25 @@ connect await ROUTED_CLIENT
     option nukleus:transmission "half-duplex"
     option nukleus:alignment "message"
 
-write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext 4 "key1"
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .fetchKey("key1")
+                               .build()}
 
 connected
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext 4 "key1"
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .fetchKey("key1")
+                              .build()}
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(1)}
-read nukleus:data.ext 4 "key1"
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(1)
+                             .messageKey("key1")
+                             .build()}
 read [0..266]

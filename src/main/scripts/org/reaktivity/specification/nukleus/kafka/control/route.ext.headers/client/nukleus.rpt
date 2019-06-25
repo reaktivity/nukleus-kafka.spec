@@ -31,12 +31,11 @@ read [0x01]
 read [0..8] # authorization
 read ${core:string("kafka#0")}
 read ${core:string("target#0")}
-read ${core:string16("test")}
-read 38
-read 7s "header1"
-read 6 "match1"
-read 7s "header2"
-read 6 "match2"
+read ${kafka:routeEx()
+            .topicName("test")
+            .header("header1", "match1")
+            .header("header2", "match2")
+            .build()}
 
 write 0x40000001
 write ${correlationIdRG010101N}

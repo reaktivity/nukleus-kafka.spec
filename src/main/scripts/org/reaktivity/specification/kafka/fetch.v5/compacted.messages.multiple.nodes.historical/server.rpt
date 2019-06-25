@@ -106,7 +106,13 @@ write [0x00]    # is_sensitive boolean
 
 # Live fetch connection partition 0
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65         # size
@@ -181,7 +187,14 @@ read notify BOOTSTRAP_COMPLETE_PARTITION_ZERO
 
 # Live fetch connection partition 1
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2")
+                            .remotePort(9093)
+                            .build()}
+
 connected
 
 read 65
@@ -256,7 +269,13 @@ read notify BOOTSTRAP_COMPLETE_PARTITION_ONE
 
 # Historical fetch connection partition 0
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65         # size
@@ -326,7 +345,13 @@ write ${kafka:varint(0)}    # headers (none)
 
 # Historical fetch connection partition 1
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65

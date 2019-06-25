@@ -22,32 +22,38 @@ connect await ROUTED_CLIENT
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .build()}
 
 connected
 
 write notify CLIENT_ONE_CONNECTED
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .build()}
 
-read nukleus:data.ext (long:timestamp1) 1 ${kafka:varint(1)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(1)
+                             .build()}
 read "Hello, world"
 
-read nukleus:data.ext ${timestamp1 + 11} 1 ${kafka:varint(2)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(2)
+                             .build()}
 read "Hello, again"
 
-read nukleus:data.ext ${timestamp1 + 22} 1 ${kafka:varint(3)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(3)
+                             .build()}
 read "Hello, third"
 
 
@@ -56,30 +62,36 @@ connect await CLIENT_ONE_CONNECTED
     option nukleus:window 15
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .build()}
 
 connected
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .build()}
 
-read nukleus:data.ext (long:timestamp1) 1 ${kafka:varint(1)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(1)
+                             .build()}
 read "Hello, world"
 
-read nukleus:data.ext ${timestamp1 + 11} 1 ${kafka:varint(2)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(2)
+                             .build()}
 read "Hello, again"
 
 read notify CLIENT_TWO_RECEIVED_SECOND_MESSAGE
 
-read nukleus:data.ext ${timestamp1 + 22} 1 ${kafka:varint(3)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(3)
+                             .build()}
 read "Hello, third"

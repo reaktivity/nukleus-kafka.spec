@@ -24,26 +24,29 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(10)}
-read nukleus:begin.ext 17
-read nukleus:begin.ext "hazOddDefaultHash"
-read nukleus:begin.ext [0x01]
-read nukleus:begin.ext ${evenHashCode}
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(10)
+                              .fetchKey("hazOddDefaultHash")
+                              .fetchKeyHash(evenHashCode)
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 1 ${kafka:varint(10)}
-write nukleus:begin.ext 17
-write nukleus:begin.ext "hazOddDefaultHash"
-write nukleus:begin.ext [0x01]
-write nukleus:begin.ext ${evenHashCode}
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(10)
+                               .fetchKey("hazOddDefaultHash")
+                               .fetchKeyHash(evenHashCode)
+                               .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(11)}
-write nukleus:data.ext -1
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(11)
+                              .build()}
 write "Hello, world"
 write flush

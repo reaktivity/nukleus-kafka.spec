@@ -26,23 +26,29 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(offset)}
-read nukleus:begin.ext 4 "key1"
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(offset)
+                              .fetchKey("key1")
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(offset)}
-write nukleus:begin.ext 4 "key1"
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(offset)
+                               .fetchKey("key1")
+                               .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(offset + 1)}
-write nukleus:data.ext 4 "key1"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(offset + 1)
+                              .messageKey("key1")
+                              .build()}
 write ${kafka:randomBytes(100)}
 write flush
 
@@ -52,9 +58,10 @@ write abort
 accepted
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(offset)}
-write nukleus:begin.ext 4 "key2"
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(offset)
+                               .fetchKey("key2")
+                               .build()}
 write flush

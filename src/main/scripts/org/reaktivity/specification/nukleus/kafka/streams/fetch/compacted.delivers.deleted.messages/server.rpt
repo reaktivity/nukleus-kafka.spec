@@ -24,64 +24,88 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 4s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(1)}
-write nukleus:data.ext 6 "match1"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(1)
+                              .messageKey("match1")
+                              .build()}
 write "match1 first"
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(10)}
-write nukleus:data.ext 6 "match1"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(10)
+                              .messageKey("match1")
+                              .build()}
 write "match1 second"
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(11)}
-write nukleus:data.ext 6 "match2"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(11)
+                              .messageKey("match2")
+                              .build()}
 write "match2 first"
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(12)}
-write nukleus:data.ext 6 "match2"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(12)
+                              .messageKey("match2")
+                              .build()}
 write flush
 
 write aborted
 
 accepted
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(10)}
-write nukleus:data.ext 6 "match1"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(10)
+                              .messageKey("match1")
+                              .build()}
 write "match1 second"
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(12)}
-write nukleus:data.ext 6 "match2"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(12)
+                              .messageKey("match2")
+                              .build()}
 write flush

@@ -98,7 +98,13 @@ write [0x00]    # is_sensitive boolean
 
 # Fetch stream node 1
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 write await BROKER_TWO_FETCH_REQUEST_RECEIVED
@@ -107,7 +113,13 @@ closed
 
 # Fetch stream node 2
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65         # Size

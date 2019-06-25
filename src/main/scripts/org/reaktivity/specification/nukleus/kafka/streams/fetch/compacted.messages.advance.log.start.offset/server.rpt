@@ -24,32 +24,44 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(12)}
-write nukleus:data.ext 4 "key1"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(12)
+                              .messageKey("key1")
+                              .build()}
 write "Hello, again"
 write flush
 
-write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(13)}
-write nukleus:data.ext 4 "key2"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp + 10)
+                              .fetchOffset(13)
+                              .messageKey("key2")
+                              .build()}
 write "Hello, longer value"
 write flush
 
-write nukleus:data.ext ${newTimestamp + 20} 1 ${kafka:varint(14)}
-write nukleus:data.ext 4 "key3"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp + 20)
+                              .fetchOffset(14)
+                              .messageKey("key3")
+                              .build()}
 write "Hello, third"
 write flush

@@ -190,7 +190,13 @@ write notify METADATA_REFRESH_RESPONSE_WRITTEN
 
 # Live fetch connection broker1
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 # Fetch request for topic test1
@@ -254,7 +260,13 @@ read [0..4]
 
 # Fetch stream 2
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65
@@ -340,12 +352,24 @@ write notify LIVE_TWO_FAILED
 
 # First historical fetch connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
  # Second historical fetch connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65
@@ -374,7 +398,13 @@ write abort
 
 # Live fetch connection 2 reconnects
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2new")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 # the fetch request is repeated only after the metadata has been refreshed
@@ -403,7 +433,13 @@ read notify RECONNECTED_LIVE_TWO_FETCH_REQUEST_RECEIVED
 
 # Historical Fetch connection 2 reconnects
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2new")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 # the fetch request is repeated only after the metadata has been refreshed

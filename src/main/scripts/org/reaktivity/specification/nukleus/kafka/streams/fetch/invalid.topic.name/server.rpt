@@ -24,11 +24,11 @@ accept ${applicationAccept}
        option nukleus:transmission "simplex"
 accepted
 
-read nukleus:begin.ext 0x08s "bad#name"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("bad#name")
+                              .fetchOffset(0)
+                              .build()}
 
 connected
 

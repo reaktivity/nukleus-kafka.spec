@@ -266,7 +266,13 @@ write notify METADATA_REFRESH_RESPONSE_TWO_WRITTEN
 
 # Fetch stream 1
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 # Fetch request results in an error
@@ -363,7 +369,13 @@ write ${kafka:varint(0)}
 
 # Fetch stream 2
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65
@@ -394,17 +406,35 @@ read notify CONNECTION_TWO_ABORTED
 
 # First historical fetch connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
  # Second historical fetch connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 # Fetch stream 2 reconnects
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2new")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 # Recovery complete: fetch results in message

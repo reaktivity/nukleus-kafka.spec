@@ -25,35 +25,31 @@ accept ${applicationAccept}
 
 accepted
 
-read nukleus:begin.ext 4s "test"
-read nukleus:begin.ext 0
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 0
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .build()}
 write flush
 
 
 accepted
 
-read nukleus:begin.ext 5s "test2"
-read nukleus:begin.ext 0
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test2")
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 5s "test2"
-write nukleus:begin.ext 0
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test2")
+                               .build()}
 write flush

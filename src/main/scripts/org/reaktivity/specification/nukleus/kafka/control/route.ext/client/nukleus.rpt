@@ -31,8 +31,9 @@ read [0x01]
 read [0..8] # authorization
 read ${core:string("kafka#0")}
 read ${core:string("target#0")}
-read ${core:string16("test")}
-read 0
+read ${kafka:routeEx()
+            .topicName("test")
+            .build()}
 
 write 0x40000001
 write ${correlationIdRG010101N}

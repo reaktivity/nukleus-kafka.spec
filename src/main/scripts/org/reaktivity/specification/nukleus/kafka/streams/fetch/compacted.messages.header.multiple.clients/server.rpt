@@ -25,71 +25,91 @@ accept ${applicationAccept}
 
 accepted
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 19
-read nukleus:begin.ext 7s "header1"
-read nukleus:begin.ext 6 "match1"
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .header("header1", "match1")
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 19
-write nukleus:begin.ext 7s "header1"
-write nukleus:begin.ext 6 "match1"
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .header("header1", "match1")
+                               .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(11)}
-write nukleus:data.ext 4 "key1"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(11)
+                              .messageKey("key1")
+                              .build()}
 write "Hello, world"
 write flush
 
-write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(12)}
-write nukleus:data.ext 4 "key2"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp + 10)
+                              .fetchOffset(12)
+                              .messageKey("key2")
+                              .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp + 20} 1 ${kafka:varint(13)}
-write nukleus:data.ext 4 "key1"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp + 20)
+                              .fetchOffset(13)
+                              .messageKey("key1")
+                              .build()}
 write "vv"
 write flush
 
-write nukleus:data.ext ${newTimestamp + 30} 1 ${kafka:varint(14)}
-write nukleus:data.ext 4 "key1"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp + 30)
+                              .fetchOffset(14)
+                              .messageKey("key1")
+                              .build()}
 write "Hello, third"
 write flush
 
 accepted
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 19
-read nukleus:begin.ext 7s "header1"
-read nukleus:begin.ext 6 "match1"
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .header("header1", "match1")
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 19
-write nukleus:begin.ext 7s "header1"
-write nukleus:begin.ext 6 "match1"
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .header("header1", "match1")
+                               .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp + 10} 1 ${kafka:varint(12)}
-write nukleus:data.ext 4 "key2"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp + 10)
+                              .fetchOffset(12)
+                              .messageKey("key2")
+                              .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp + 20} 1 ${kafka:varint(14)}
-write nukleus:data.ext 4 "key1"
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp + 20)
+                              .fetchOffset(14)
+                              .messageKey("key1")
+                              .build()}
 write "Hello, third"
 write flush
 

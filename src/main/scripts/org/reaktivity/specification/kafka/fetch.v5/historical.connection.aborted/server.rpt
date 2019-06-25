@@ -162,7 +162,13 @@ write notify METADATA_REFRESH_RESPONSE_WRITTEN
 
 # Live Fetch stream
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65         # Size
@@ -275,7 +281,13 @@ write [0x00]
 
 # Historical Fetch Connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65         # Size
@@ -302,7 +314,13 @@ write notify HISTORICAL_CONNECTION_FAILED
 
 # Historical Fetch Connection reconnects
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 # Fetching only resumes when the impacted metadata has been refreshed
