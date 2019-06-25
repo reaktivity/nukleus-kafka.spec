@@ -22,11 +22,14 @@ connect await ROUTED_CLIENT
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "simplex"
 
-write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext 9 "fetchkey1"
-write nukleus:begin.ext [0x02] 123498 2345980
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .fetchKey("fetchkey1")
+                               .fetchKeyHash(123498)
+                               .fetchKeyHash(2345980)
+                               .build()}
 
 connected
 

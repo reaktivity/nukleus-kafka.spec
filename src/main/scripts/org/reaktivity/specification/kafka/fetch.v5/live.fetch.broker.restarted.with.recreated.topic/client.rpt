@@ -106,7 +106,14 @@ connect await METADATA_RECEIVED
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
 connected
 
 write notify FETCH_CONNECTION_CONNECTED
@@ -194,7 +201,14 @@ connect await FETCH_CONNECTION_CONNECTED
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
 connected
 
 read closed
@@ -206,7 +220,14 @@ connect await FETCH_CONNECTION_CLOSED
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
 connected
 
 write 65
@@ -237,7 +258,14 @@ connect await FETCH_CONNECTION_FAILED
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
 connected
 
 write aborted
@@ -389,7 +417,13 @@ connect await METADATA_REFRESH_RESPONSE_READ
   option nukleus:window ${networkConnectWindow} 
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1new", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1new")
+                             .remotePort(9093)
+                             .build()}
 connected
 
 # Second fetch request repeated, gets error because topic was recreated so offset 1 does not exist

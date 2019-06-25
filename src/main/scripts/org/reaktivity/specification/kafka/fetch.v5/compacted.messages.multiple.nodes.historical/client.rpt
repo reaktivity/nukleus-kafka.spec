@@ -117,7 +117,14 @@ connect await METADATA_WRITTEN
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
 
 connected
 
@@ -198,7 +205,14 @@ connect await LIVE_ZERO_CONNECTED
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker2")
+                             .remotePort(9093)
+                             .build()}
+
 
 connected
 
@@ -280,7 +294,14 @@ connect await LIVE_ONE_CONNECTED
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
 
 connected
 
@@ -361,7 +382,14 @@ connect await HISTORICAL_ZERO_CONNECTED
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker2")
+                             .remotePort(9093)
+                             .build()}
+
 
 connected
 

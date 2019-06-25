@@ -21,7 +21,7 @@ scope kafka
         int32 valueLen;
         octets[valueLen] value = null;
     }
-    
+
     scope control
     {
         struct KafkaRouteEx
@@ -33,7 +33,7 @@ scope kafka
 
     scope stream
     {
-        struct KafkaBeginEx
+        struct KafkaBeginEx extends core::stream::Extension
         {
             string16 topicName;
             varint64[] fetchOffsets;
@@ -44,15 +44,15 @@ scope kafka
             list<kafka::KafkaHeader> headers;
         }
 
-        struct KafkaDataEx
+        struct KafkaDataEx extends core::stream::Extension
         {
             int64 timestamp;
             varint64[] fetchOffsets;
             int32 messageKeySize;
             octets[messageKeySize] messageKey = null;
         }
-        
-        struct KafkaEndEx
+
+        struct KafkaEndEx extends core::stream::Extension
         {
             varint64[] fetchOffsets;
         }

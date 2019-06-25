@@ -24,19 +24,19 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 1s "t"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("t")
+                              .fetchOffset(0)
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 1s "t"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("t")
+                               .fetchOffset(0)
+                               .build()}
 write flush
 
 write aborted
@@ -44,34 +44,30 @@ read abort
 
 accepted
 
-read nukleus:begin.ext 5s "test1"
-read nukleus:begin.ext 0
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test1")
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 5s "test1"
-write nukleus:begin.ext 0
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test1")
+                               .build()}
 write flush
 
 accepted
 
-read nukleus:begin.ext 5s "test2"
-read nukleus:begin.ext 0
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test2")
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 5s "test2"
-write nukleus:begin.ext 0
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test2")
+                               .build()}
 write flush

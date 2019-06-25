@@ -193,7 +193,14 @@ connect await METADATA_RECEIVED
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
 
 connected
 
@@ -259,7 +266,14 @@ connect await FETCH_STREAM_ONE_CONNECTED
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker2")
+                             .remotePort(9093)
+                             .build()}
+
 
 connected
 
@@ -346,7 +360,14 @@ connect await FETCH_STREAM_TWO_CONNECTED
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
 connected
 
 read notify HISTORICAL_FETCH_STREAM_ONE_CONNECTED
@@ -357,7 +378,14 @@ connect await HISTORICAL_FETCH_STREAM_ONE_CONNECTED
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker2")
+                             .remotePort(9093)
+                             .build()}
+
 connected
 
 read notify HISTORICAL_FETCH_STREAM_TWO_CONNECTED
@@ -389,7 +417,13 @@ connect await HISTORICAL_FETCH_STREAM_TWO_CONNECTED
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker2new")
+                             .remotePort(9093)
+                             .build()}
 connected
 
 read notify LIVE_TWO_RECONNECTED
@@ -420,7 +454,13 @@ connect await LIVE_TWO_RECONNECTED
   option nukleus:window ${networkConnectWindow}
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
-write nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker2new")
+                             .remotePort(9093)
+                             .build()}
 connected
 
 

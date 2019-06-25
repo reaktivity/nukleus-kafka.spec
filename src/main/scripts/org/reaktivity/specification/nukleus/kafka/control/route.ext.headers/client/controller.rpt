@@ -33,12 +33,11 @@ write [0x01]
 write 0L
 write ${core:string("kafka#0")}
 write ${core:string("target#0")}
-write ${core:string16(routedTopicName)}
-write 38
-write 7s "header1"
-write 6 "match1"
-write 7s "header2"
-write 6 "match2"
+write ${kafka:routeEx()
+             .topicName(routedTopicName)
+             .header("header1", "match1")
+             .header("header2", "match2")
+             .build()}
 write flush
 
 read 0x40000001

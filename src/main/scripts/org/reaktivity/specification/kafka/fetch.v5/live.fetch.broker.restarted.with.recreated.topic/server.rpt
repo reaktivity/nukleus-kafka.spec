@@ -99,7 +99,13 @@ read notify METADATA_CONNECTION_CLOSED
 
 # Fetch connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 # First fetch request
@@ -183,7 +189,13 @@ read notify FETCH_CONNECTION_CLOSED
 
 #  Historical connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 write await SHUTDOWN_BROKER
@@ -193,7 +205,13 @@ read closed
 
 # Live connection fails to reconnect
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65
@@ -221,7 +239,13 @@ write notify FETCH_CONNECTION_FAILED
 
 # Historical connection fails to reconnect
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read abort
@@ -361,7 +385,13 @@ write [0x00]    # is_sensitive boolean
 
 # Live connection reconnects again, this time succeeds
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1new", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1new")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 # Second fetch request repeated, gets error because topic was recreated so offset 1 does not exist

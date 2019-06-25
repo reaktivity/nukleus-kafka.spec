@@ -23,28 +23,30 @@ connect await ROUTED_CLIENT
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 0
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .build()}
 
 connected
 
-read nukleus:begin.ext 4s "test"
-read nukleus:begin.ext 0
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .build()}
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(16)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(16)
+                             .build()}
 read "Hello, world"
 
 read notify CLIENT_ONE_RECEIVED_FIRST_MESSAGE
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(17)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(17)
+                             .build()}
 read "Hello, again"
 
 connect await CLIENT_ONE_RECEIVED_FIRST_MESSAGE
@@ -52,22 +54,22 @@ connect await CLIENT_ONE_RECEIVED_FIRST_MESSAGE
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 0
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .build()}
 
 connected
 
-read nukleus:begin.ext 4s "test"
-read nukleus:begin.ext 0
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .build()}
 
 read notify CLIENT_TWO_CONNECTED
 
-read nukleus:data.ext (long:timestamp) 1 ${kafka:varint(17)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(17)
+                             .build()}
 read "Hello, again"

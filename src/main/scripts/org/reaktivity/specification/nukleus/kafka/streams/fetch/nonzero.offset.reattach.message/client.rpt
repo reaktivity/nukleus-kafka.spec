@@ -23,21 +23,24 @@ connect await ROUTED_CLIENT
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 3 ${kafka:varint(10)} ${kafka:varint(0)} ${kafka:varint(5)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(10, 0, 5)
+                               .build()}
 
 connected
 
-read nukleus:begin.ext 4s "test"
-read nukleus:begin.ext 3 ${kafka:varint(10)} ${kafka:varint(0)} ${kafka:varint(5)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(10, 0, 5)
+                              .build()}
 
-read nukleus:end.ext 1 ${kafka:varint(0)}
+read nukleus:end.ext ${kafka:endEx()
+                            .typeId(nukleus:id("kafka"))
+                            .fetchOffset(0)
+                            .build()}
 read closed
 
 read notify ENDED
@@ -47,20 +50,22 @@ connect await ENDED
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .build()}
 
 connected
 
-read nukleus:begin.ext 4s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .build()}
 
-read nukleus:data.ext (long:timestamp) 3 ${kafka:varint(1)} ${kafka:varint(0)} ${kafka:varint(0)}
-read nukleus:data.ext -1
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(1, 0, 0)
+                             .build()}
 read "Hello, world"

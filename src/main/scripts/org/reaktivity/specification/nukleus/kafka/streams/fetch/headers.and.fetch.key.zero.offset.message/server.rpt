@@ -24,32 +24,31 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 0x04s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext 5
-read nukleus:begin.ext "match"
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 38
-read nukleus:begin.ext 7s "header1"
-read nukleus:begin.ext 6 "match1"
-read nukleus:begin.ext 7s "header2"
-read nukleus:begin.ext 6 "match2"
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .fetchKey("match")
+                              .header("header1", "match1")
+                              .header("header2", "match2")
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 0x04s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext 5
-write nukleus:begin.ext "match"
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 38
-write nukleus:begin.ext 7s "header1"
-write nukleus:begin.ext 6 "match1"
-write nukleus:begin.ext 7s "header2"
-write nukleus:begin.ext 6 "match2"
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .fetchKey("match")
+                               .header("header1", "match1")
+                               .header("header2", "match2")
+                               .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp} 1 ${kafka:varint(11)}
-write nukleus:data.ext -1
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(11)
+                              .build()}
 write "Hello, world"
 write flush

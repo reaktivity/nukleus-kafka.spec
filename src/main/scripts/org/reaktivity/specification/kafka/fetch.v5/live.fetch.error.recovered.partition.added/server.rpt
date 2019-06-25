@@ -221,7 +221,13 @@ write notify METADATA_REFRESH_RESPONSE_THREE_WRITTEN
 
 # Fetch connection 1
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65
@@ -336,13 +342,25 @@ read [0..4]
 
 # First historical fetch connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker1", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 
 # Second fetch connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2new")
+                            .remotePort(9093)
+                            .build()}
 connected
 
 read 65
@@ -419,5 +437,11 @@ read [0..4]
 
 # Second historical fetch connection
 accepted
-read nukleus:begin.ext ${tcp:beginExtRemoteHost("broker2new", 9093)}
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2new")
+                            .remotePort(9093)
+                            .build()}
 connected

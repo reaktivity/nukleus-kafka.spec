@@ -24,42 +24,48 @@ accept ${applicationAccept}
        option nukleus:transmission "half-duplex"
 accepted
 
-read nukleus:begin.ext 4s "test"
-read nukleus:begin.ext 3 ${kafka:varint(10)} ${kafka:varint(0)} ${kafka:varint(5)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(10, 0, 5)
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 3 ${kafka:varint(10)} ${kafka:varint(0)} ${kafka:varint(5)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(10, 0, 5)
+                               .build()}
 write flush
 
-write nukleus:end.ext 1 ${kafka:varint(0)}
+write nukleus:end.ext ${kafka:endEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(0)
+                             .build()}
 write close
 
 accepted
 
-read nukleus:begin.ext 4s "test"
-read nukleus:begin.ext 1 ${kafka:varint(0)}
-read nukleus:begin.ext -1
-read nukleus:begin.ext [0xFF]
-read nukleus:begin.ext 0
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .build()}
 
 connected
 
-write nukleus:begin.ext 4s "test"
-write nukleus:begin.ext 1 ${kafka:varint(0)}
-write nukleus:begin.ext -1
-write nukleus:begin.ext [0xFF]
-write nukleus:begin.ext 0
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .build()}
 write flush
 
-write nukleus:data.ext ${newTimestamp} 3 ${kafka:varint(1)} ${kafka:varint(0)} ${kafka:varint(0)}
-write nukleus:data.ext -1
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .timestamp(newTimestamp)
+                              .fetchOffset(1, 0, 0)
+                              .build()}
 write "Hello, world"
 write flush
