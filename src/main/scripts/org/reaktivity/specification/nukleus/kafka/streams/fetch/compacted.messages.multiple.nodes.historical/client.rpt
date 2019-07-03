@@ -21,7 +21,7 @@ property applicationConnectWindow2 8192
 connect await CONNECT_CLIENT_ONE
         ${applicationConnect}
     option nukleus:window ${applicationConnectWindow1}
-    option nukleus:update "none"
+    option nukleus:update "handshake"
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext ${kafka:beginEx()
@@ -53,7 +53,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
 read [0..1]
 read notify CLIENT_ONE_DATA_RECEIVED
 
-# Rest of messages are not received because of the connect option nukleus:update "none"
+# Rest of messages are not received because of the connect option nukleus:update "handshake"
 
 connect await CONNECT_CLIENT_TWO
         ${applicationConnect}
