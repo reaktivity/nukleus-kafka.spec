@@ -280,3 +280,15 @@ write "match"
 write ${kafka:varint(12)}   # value length
 write "Hello second"
 write [0x00]                # headers
+
+
+# historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
+connected

@@ -174,3 +174,15 @@ write ${kafka:varint(7)}    # header key length
 write "header1" # header key
 write ${kafka:varint(8)}    # header value length
 write "no match"            # header value
+
+
+# historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
+connected

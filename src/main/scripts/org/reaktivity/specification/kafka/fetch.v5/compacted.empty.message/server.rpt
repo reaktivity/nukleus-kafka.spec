@@ -156,3 +156,15 @@ write ${kafka:varint(4)}     # key length
 write "key1"
 write ${kafka:varint(0)}    # value length
 write ${kafka:varint(0)}
+
+
+# historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
+connected

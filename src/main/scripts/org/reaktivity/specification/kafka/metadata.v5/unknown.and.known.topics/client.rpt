@@ -245,3 +245,21 @@ read 1          # topic array length
   read 5s "test3"
   read [0x00]   # is_internal boolean
   read -1       # partition array length (null)
+
+# fetch connection
+connect await ROUTED_SERVER
+        ${networkConnect}
+  option nukleus:window ${networkConnectWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+connected
+
+# fetch connection
+connect await ROUTED_SERVER
+        ${networkConnect}
+  option nukleus:window ${networkConnectWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+connected

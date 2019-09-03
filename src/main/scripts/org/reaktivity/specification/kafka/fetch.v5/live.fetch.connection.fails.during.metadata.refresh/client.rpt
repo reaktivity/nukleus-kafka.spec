@@ -535,3 +535,22 @@ write 1         # Partition
 write 1L        # offset
 write -1L
 write ${maximumBytesTest0}
+
+
+# historical fetch connection
+connect await HISTORICAL_FETCH_STREAM_TWO_CONNECTED
+        ${networkConnect}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker2new")
+                             .remotePort(9093)
+                             .build()}
+
+
+connected

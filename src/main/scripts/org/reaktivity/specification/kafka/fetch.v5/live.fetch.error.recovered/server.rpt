@@ -440,3 +440,13 @@ write -1        # aborted_transactions (null)
 write 0         # length of record set
 
 
+# historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
+connected

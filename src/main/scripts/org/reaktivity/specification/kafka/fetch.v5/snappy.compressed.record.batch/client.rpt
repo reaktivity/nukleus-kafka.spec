@@ -225,3 +225,22 @@ read 4s "test"
                 ${kafka:varint(12)}     # value len
                 "Hello, again"          # value
                 ${kafka:varint(0)}      # header count
+
+
+# historical fetch connection
+connect await METADATA_RECEIVED
+        ${networkConnect}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
+
+connected

@@ -173,3 +173,15 @@ write ${kafka:varint(0)}    # headers (none)
 read 65
 
 read notify BOOTSTRAP_COMPLETE
+
+
+# historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
+connected

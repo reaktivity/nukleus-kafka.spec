@@ -256,3 +256,11 @@ write 1         # topic array length
   write 5s "test3"
   write byte 0  # is_internal
   write -1      # partition array length (null)
+
+# fetch connection
+accepted
+connected
+
+# fetch connection
+accepted
+connected
