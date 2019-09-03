@@ -509,3 +509,15 @@ read 1          # partition
 read 1L         # offset
 read -1L
 read [0..4]
+
+
+# historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker2new")
+                            .remotePort(9093)
+                            .build()}
+connected

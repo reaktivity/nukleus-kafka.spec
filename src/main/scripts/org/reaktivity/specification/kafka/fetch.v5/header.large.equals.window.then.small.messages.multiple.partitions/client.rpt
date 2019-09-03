@@ -336,3 +336,22 @@ read ${kafka:varint(7)}     # header key length
 read "header1"              # header key
 read ${kafka:varint(6)}     # header value length
 read "match2"               # header value
+
+
+# historical fetch connection
+connect await METADATA_RECEIVED
+        ${networkConnect}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
+
+connected

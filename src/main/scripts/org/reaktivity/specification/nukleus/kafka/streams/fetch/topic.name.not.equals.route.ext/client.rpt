@@ -28,6 +28,4 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .fetchOffset(0)
                                .build()}
 
-connected
-
-write aborted
+connect aborted

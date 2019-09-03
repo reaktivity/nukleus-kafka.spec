@@ -239,3 +239,15 @@ write [0x00]
 read [0..4]         # Size
 
 write notify LOG_START_OFFSET_UPDATED
+
+
+# historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
+connected

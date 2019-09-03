@@ -356,3 +356,15 @@ write 2         # Number of partition responses
     write ${kafka:varint(12)} # value length
     write "Hello, again"    # value
     write ${kafka:varint(0)} # headers array length
+
+
+# historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
+connected

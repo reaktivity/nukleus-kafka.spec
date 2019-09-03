@@ -421,3 +421,22 @@ read -1L        # last_stable_offset
 read 0L         # log_start_offset
 read -1         # aborted_transactions (null)
 read 0          # length of record set
+
+
+# historical fetch connection
+connect await METADATA_RECEIVED
+        ${networkConnect}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1")
+                             .remotePort(9093)
+                             .build()}
+
+
+connected

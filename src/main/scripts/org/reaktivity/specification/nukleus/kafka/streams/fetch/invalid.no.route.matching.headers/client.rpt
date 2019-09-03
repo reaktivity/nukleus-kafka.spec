@@ -30,6 +30,4 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .header("unknown header", "match1")
                                .build()}
 
-connected
-
-write aborted
+connect aborted

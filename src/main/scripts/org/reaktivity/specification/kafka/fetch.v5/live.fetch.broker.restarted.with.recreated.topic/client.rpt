@@ -538,3 +538,22 @@ read ${kafka:varint(-1)}
 read ${kafka:varint(12)}
 read "Hello, again"
 read [0x00]
+
+
+# historical fetch connection
+connect await METADATA_REFRESH_RESPONSE_READ
+        ${networkConnect}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+write nukleus:begin.ext ${tcp:beginEx()
+                             .typeId(nukleus:id("tcp"))
+                             .localAddress("0.0.0.0")
+                             .localPort(0)
+                             .remoteHost("broker1new")
+                             .remotePort(9093)
+                             .build()}
+
+
+connected

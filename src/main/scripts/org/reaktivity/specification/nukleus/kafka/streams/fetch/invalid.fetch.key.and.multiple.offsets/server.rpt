@@ -22,15 +22,11 @@ property applicationAcceptWindow 8192
 accept ${applicationAccept}
        option nukleus:window ${applicationAcceptWindow}
        option nukleus:transmission "simplex"
-accepted
 
+rejected
 read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .topicName("test")
                               .fetchOffset(1, 0)
                               .fetchKey("fetchkey1")
                               .build()}
-
-connected
-
-read abort

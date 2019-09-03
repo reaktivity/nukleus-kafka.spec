@@ -234,3 +234,15 @@ write "nope"
 write ${kafka:varint(4)}    # value length
 write "nope"
 write ${kafka:varint(0)}    # headers (none)
+
+
+# historical fetch connection
+accepted
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1")
+                            .remotePort(9093)
+                            .build()}
+connected

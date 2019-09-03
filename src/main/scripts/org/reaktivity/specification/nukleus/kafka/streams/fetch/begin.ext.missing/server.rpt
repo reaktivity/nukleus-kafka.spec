@@ -23,7 +23,4 @@ accept ${applicationAccept}
        option nukleus:window ${applicationAcceptWindow}
        option nukleus:transmission "simplex"
 
-accepted
-connected
-
-read abort
+rejected
