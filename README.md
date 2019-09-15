@@ -3,7 +3,7 @@
 [![Build Status][build-status-image]][build-status]
 [![Code Coverage][code-coverage-image]][code-coverage]
 
-[Kafka Protocol Guide](http://kafka.apache.org/protocol.html).
+[Kafka Protocol Guide](http://kafka.apache.org/protocol.html)
 
 #### Build
 ```bash
