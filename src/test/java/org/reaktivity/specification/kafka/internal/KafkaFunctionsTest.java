@@ -21,6 +21,7 @@ import static java.util.stream.StreamSupport.intStream;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.kaazing.k3po.lang.internal.el.ExpressionFactoryUtils.newExpressionFactory;
 
@@ -266,6 +267,19 @@ public class KafkaFunctionsTest
                 .build();
 
         matcher.match(byteBuf);
+    }
+
+    @Test
+    public void shouldNotBuildMatcher() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1);
+
+        Object matched = matcher.match(byteBuf);
+
+        assertNull(matched);
     }
 
     @Test(expected = Exception.class)
