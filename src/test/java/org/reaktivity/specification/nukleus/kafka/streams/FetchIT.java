@@ -1211,9 +1211,9 @@ public class FetchIT
 
     @Test
     @Specification({
-            "${scripts}/zero.offset.messages.group.budget/client",
-            "${scripts}/zero.offset.messages.group.budget/server"})
-    public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudget() throws Exception
+            "${scripts}/zero.offset.messages.shared.budget/client",
+            "${scripts}/zero.offset.messages.shared.budget/server"})
+    public void shouldFanoutMessagesAtZeroOffsetUsingSharedBudget() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1222,9 +1222,9 @@ public class FetchIT
 
     @Test
     @Specification({
-            "${scripts}/zero.offset.messages.group.budget.reset/client",
-            "${scripts}/zero.offset.messages.group.budget.reset/server"})
-    public void shouldFanoutMessagesAtZeroOffsetUsingGroupBudgetReset() throws Exception
+            "${scripts}/zero.offset.messages.shared.budget.reset/client",
+            "${scripts}/zero.offset.messages.shared.budget.reset/server"})
+    public void shouldFanoutMessagesAtZeroOffsetUsingSharedBudgetReset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
