@@ -21,7 +21,7 @@ connect await ROUTED_CLIENT
         ${applicationConnect}
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
-    option nukleus:group 5
+    option nukleus:budgetId 5
     option nukleus:update "handshake"
 
 write nukleus:begin.ext ${kafka:beginEx()
@@ -60,7 +60,7 @@ connect await ROUTED_CLIENT
         ${applicationConnect}
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
-    option nukleus:group 5
+    option nukleus:budgetId 5
     option nukleus:update "handshake"
 
 write nukleus:begin.ext ${kafka:beginEx()

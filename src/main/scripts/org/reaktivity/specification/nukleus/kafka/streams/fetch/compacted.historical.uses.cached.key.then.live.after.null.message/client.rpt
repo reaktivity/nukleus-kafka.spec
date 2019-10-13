@@ -21,7 +21,6 @@ connect await ROUTED_CLIENT
         ${applicationConnect}
     option nukleus:window ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
-    option nukleus:group 3
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
