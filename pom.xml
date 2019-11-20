@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.reaktivity</groupId>
   <artifactId>nukleus-kafka.spec</artifactId>
-  <version>0.119</version>
+  <version>0.120</version>
   <name>Kafka Nukleus Specification</name>
   <description>Kafka Nukleus Specification</description>
   <url>https://github.com/reaktivity/nukleus-kafka.spec</url>
@@ -48,9 +48,9 @@
     <junit.version>4.12</junit.version>
 
     <k3po.version>3.0.0-alpha-103</k3po.version>
-    <reaktor.version>0.104</reaktor.version>
+    <reaktor.version>0.112</reaktor.version>
 
-    <nukleus.plugin.version>0.42</nukleus.plugin.version>
+    <nukleus.plugin.version>0.44</nukleus.plugin.version>
     <nukleus.tcp.spec.version>0.57</nukleus.tcp.spec.version>
   </properties>
 
@@ -228,6 +228,11 @@
             <artifactId>reaktor</artifactId>
             <version>${reaktor.version}</version>
             <type>test-jar</type>
+          </dependency>
+          <dependency>
+            <groupId>org.reaktivity</groupId>
+            <artifactId>reaktor</artifactId>
+            <version>${reaktor.version}</version>
           </dependency>
         </dependencies>
       </plugin>
