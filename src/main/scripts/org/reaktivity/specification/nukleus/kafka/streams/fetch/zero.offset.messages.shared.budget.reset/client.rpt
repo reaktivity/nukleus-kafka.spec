@@ -20,6 +20,7 @@ property applicationConnectWindow 8192
 connect await ROUTED_CLIENT
         ${applicationConnect}
     option nukleus:window ${applicationConnectWindow}
+    option nukleus:sharedWindow ${applicationConnectWindow}
     option nukleus:transmission "half-duplex"
     option nukleus:budgetId 5
     option nukleus:update "handshake"
