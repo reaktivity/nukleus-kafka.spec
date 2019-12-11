@@ -57,4 +57,15 @@ public class DescribeIT
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/topic.config.info.changed/client",
+        "${scripts}/topic.config.info.changed/server"})
+    public void shouldReceiveTopicConfigInfoChanged() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
 }

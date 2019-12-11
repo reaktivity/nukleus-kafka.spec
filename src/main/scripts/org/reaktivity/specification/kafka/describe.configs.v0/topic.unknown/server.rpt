@@ -37,7 +37,7 @@ connected
 read 41                                 # size
      32s                                # describe configs
      0s                                 # v0
-     ${newRequestId}
+     (int:requestId)
      -1s                                # no client id
      1                                  # resources
        [0x02]                           # topic resource
@@ -46,7 +46,7 @@ read 41                                 # size
          14s "cleanup.policy"             # name
 
 write 27                                # size
-      ${newRequestId}
+      ${requestId}
       0
       1                                 # resources
         3s                                # topic unknown

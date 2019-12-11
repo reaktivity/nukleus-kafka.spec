@@ -37,14 +37,14 @@ connected
 read 21                                 # size
      3s                                 # metadata
      5s                                 # v5
-     ${newRequestId}
+     (int:requestId)
      -1s                                # no client id
      1                                  # topics
        4s "test"                        #   "test" topic
      [0x00]                             # allow_auto_topic_creation
 
 write 106                               # size
-      ${newRequestId}
+      ${requestId}
       0
       2                                 # brokers
         1                                   # broker id
