@@ -57,16 +57,6 @@ public class ControlIT
 
     @Test
     @Specification({
-        "route.ext.multiple.topics/client/nukleus",
-        "route.ext.multiple.topics/client/controller"
-    })
-    public void shouldRouteClientWithMultipleTopics() throws Exception
-    {
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "unroute/client/nukleus",
         "unroute/client/controller"
     })
