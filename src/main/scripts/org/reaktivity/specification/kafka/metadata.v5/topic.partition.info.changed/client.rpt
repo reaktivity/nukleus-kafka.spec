@@ -18,6 +18,8 @@ property networkConnect "nukleus://streams/kafka#0"
 property networkConnectWindow 8192
 
 property newRequestId ${kafka:newRequestId()}
+property newRequestId2 ${kafka:newRequestId()}
+
 property fetchWaitMax 500
 property fetchBytesMax 65535
 property partitionBytesMax 8192
@@ -83,14 +85,14 @@ read 150                                # size
 write 21                                # size
       3s                                # metadata
       5s                                # v5
-      ${newRequestId}
+      ${newRequestId2}
       -1s                               # no client id
       1                                 # topics
         4s "test"                       #   "test" topic
       [0x00]                            # allow_auto_topic_creation
 
 read 203                                # size
-     ${newRequestId}
+     ${newRequestId2}
      [0..4]
      2                                  # brokers
        1                                    # broker id
