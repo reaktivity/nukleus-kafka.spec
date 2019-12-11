@@ -1,0 +1,67 @@
+#
+# Copyright 2016-2019 The Reaktivity Project
+#
+# The Reaktivity Project licenses this file to you under the Apache License,
+# version 2.0 (the "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at:
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+property networkAccept "nukleus://streams/kafka#0"
+property networkAcceptWindow 8192
+
+accept ${networkAccept}
+  option nukleus:window ${networkAcceptWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+accepted
+
+read nukleus:begin.ext ${tcp:beginEx()
+                            .typeId(nukleus:id("tcp"))
+                            .localAddress("0.0.0.0")
+                            .localPort(0)
+                            .remoteHost("broker1.example.com")
+                            .remotePort(9092)
+                            .build()}
+
+connected
+
+read 65
+     1s
+     5s
+     (int:requestId)
+     -1s
+     -1
+     [0..4]
+     1
+     [0..4]
+     [0x00]
+     1
+     4s "test"
+     1
+     0
+     0L
+     -1L
+     [0..4]
+
+write 58
+      ${requestId}
+      0
+      1
+      4s "test"
+      1                                 # partitions
+      0                                 # partition 0
+      6s                                # not-leader-for-partition
+      -1L                               # no high water mark
+      -1L                               # no last stable offset
+      -1L                               # no log start offset
+      -1                                # no aborted transaction count
+      0                                 # no record set

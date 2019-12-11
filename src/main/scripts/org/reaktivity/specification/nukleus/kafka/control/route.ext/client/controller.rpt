@@ -18,8 +18,6 @@ property nukleiRG010101EC ${nuklei:directory("target/nukleus-itests").controlCap
 
 property controlRG010101EC ${nukleiRG010101EC.control()}
 
-property routedTopicName "test" 
-
 connect "agrona://stream/bidirectional"
         option agrona:reader ${agrona:broadcastReceiver(controlRG010101EC.controller)}
         option agrona:writer ${agrona:manyToOneWriter(controlRG010101EC.nukleus)}
@@ -34,7 +32,7 @@ write 0L
 write ${core:string("kafka#0")}
 write ${core:string("target#0")}
 write ${kafka:routeEx()
-             .topicName(routedTopicName)
+             .topicName("test")
              .build()}
 write flush
 

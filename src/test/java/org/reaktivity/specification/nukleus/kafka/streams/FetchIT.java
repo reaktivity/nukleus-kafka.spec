@@ -18,6 +18,7 @@ package org.reaktivity.specification.nukleus.kafka.streams;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.rules.RuleChain.outerRule;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.DisableOnDebug;
@@ -38,9 +39,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/begin.ext.missing/client",
-        "${scripts}/begin.ext.missing/server"})
-    public void shouldRejectWhenBeginExtMissing() throws Exception
+        "${scripts}/topic.missing/client",
+        "${scripts}/topic.missing/server"})
+    public void shouldRejectWhenTopicMissing() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -49,967 +50,31 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/compacted.bootstrap.historical.uses.cached.key.then.live/client",
-        "${scripts}/compacted.bootstrap.historical.uses.cached.key.then.live/server"})
-    public void shouldReceiveCompactedMessagesAfterBootstrapUsingCachedKeyThenLive() throws Exception
+        "${scripts}/topic.not.routed/client",
+        "${scripts}/topic.not.routed/server"})
+    public void shouldRejectWhenTopicNotRouted() throws Exception
     {
         k3po.start();
-        k3po.notifyBarrier("CONNECT_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.delivers.deleted.messages/client",
-        "${scripts}/compacted.delivers.deleted.messages/server"})
-    public void shouldReceiveCompactedDeletedMessages() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.delivers.compacted.messages/client",
-        "${scripts}/compacted.delivers.compacted.messages/server"})
-    public void shouldReceiveCompactedMessages() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.historical.empty.message/client",
-        "${scripts}/compacted.historical.empty.message/server"})
-    public void shouldReceiveCompactedEmptyMessage() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.historical.large.message.and.small/client",
-        "${scripts}/compacted.historical.large.message.and.small/server"})
-    public void shouldReceiveLargeAndSmallCompactedMessageOnTwoClients() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.historical.large.message.subscribed.to.key/client",
-        "${scripts}/compacted.historical.large.message.subscribed.to.key/server"})
-    public void shouldReceiveLargeCompactedMessageMatchingKeyOnTwoClients() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/client",
-        "${scripts}/compacted.historical.uses.cached.key.after.unsubscribe/server"})
-    public void shouldReceiveCompactedMessagesUsingCachedKeyAfterUnsubscribe() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.historical.uses.cached.key.then.latest.offset/client",
-        "${scripts}/compacted.historical.uses.cached.key.then.latest.offset/server"})
-    public void shouldReceiveCompactedMessagesUsingCachedKeyThenLatestOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.historical.uses.cached.key.then.live/client",
-        "${scripts}/compacted.historical.uses.cached.key.then.live/server"})
-    public void shouldReceiveCompactedMessagesUsingCachedKeyThenLive() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.historical.uses.cached.key.then.live.after.null.message/client",
-        "${scripts}/compacted.historical.uses.cached.key.then.live.after.null.message/server"})
-    public void shouldReceiveCompactedMessagesFromLiveStreamAfterCachedKeyRemovedByNullMessage() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.low.and.null.message/client",
-        "${scripts}/compacted.historical.uses.cached.key.then.live.after.offset.too.low.and.null.message/server"})
-    public void shouldReceiveCompactedMessagesFromLiveStreamAfterOffsetTooLowAndCachedKeyRemovedByNullMessage()
-            throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.historical.uses.cached.key.then.zero.offset/client",
-        "${scripts}/compacted.historical.uses.cached.key.then.zero.offset/server"})
-    public void shouldReceiveCompactedMessagesUsingCachedKeyThenZerotOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.large.message.subscribed.to.key/client",
-        "${scripts}/compacted.large.message.subscribed.to.key/server"})
-    public void shouldReceiveLargeCompactedMessageMatchingKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.message/client",
-        "${scripts}/compacted.message/server"})
-    public void shouldReceiveCompactedMessage() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("CONNECT_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.message.fanout/client",
-        "${scripts}/compacted.message.fanout/server"})
-    public void shouldReceiveCompactedMessageWithFanout() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.message.multiple.topics/client",
-        "${scripts}/compacted.message.multiple.topics/server"})
-    public void shouldReceiveCompactedMessagesFromMultipleTopics() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.message.subscribed.to.key/client",
-        "${scripts}/compacted.message.subscribed.to.key/server"})
-    public void shouldReceiveCompactedMessageWhenSubscribedToKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.message.tombstone.message.same.key/client",
-        "${scripts}/compacted.message.tombstone.message.same.key/server"})
-    public void shouldReceiveMessageFollowingTombstoneForSameKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.slow.consumer/client",
-        "${scripts}/compacted.messages.slow.consumer/server"})
-    public void shouldReceiveCompactedMessagesWithLimitedWindow() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.with.null.key/client",
-        "${scripts}/compacted.messages.with.null.key/server"})
-    public void shouldReceiveCompactedMessagesWithNullKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.advance.log.start.offset/client",
-        "${scripts}/compacted.messages.advance.log.start.offset/server"})
-    public void shouldReceiveMessagesAfterLogStartOffsetFromCompactedTopic() throws Exception
-    {
-        k3po.start();
-        // k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.tombstone.repeated/client",
-        "${scripts}/compacted.messages.tombstone.repeated/server"})
-    public void shouldReceiveRepeatedTombstoneMessagesFromCompactedTopic() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.header/client",
-        "${scripts}/compacted.messages.header/server"})
-    public void shouldReceiveCompactedMessagesFilteredByHeader() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.header.multiple.clients/client",
-        "${scripts}/compacted.messages.header.multiple.clients/server"})
-    public void shouldReceiveCompactedMessagesFilteredByHeaderOnMultipleClients() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.header.multiple.routes/client",
-        "${scripts}/compacted.messages.header.multiple.routes/server"})
-    public void shouldReceiveCompactedMessagesFilteredByHeaderOnMultipleRoutes() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.headers/client",
-        "${scripts}/compacted.messages.headers/server"})
-    public void shouldReceiveCompactedMessagesFilteredByMultipleHeaders() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.one.per.key/client",
-        "${scripts}/compacted.messages.one.per.key/server"})
-    public void shouldReceiveMessagesFromCompactedTopicUltraCompacted() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.historical/client",
-        "${scripts}/compacted.messages.historical/server"})
-    public void shouldReceiveCompactedHistoricalMessages() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.header.message.multiple.clients/client",
-        "${scripts}/compacted.header.message.multiple.clients/server"})
-    public void shouldReceiveCompactedMessageMatchingHeader() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.header.messages.and.tombstone/client",
-        "${scripts}/compacted.header.messages.and.tombstone/server"})
-    public void shouldReceiveCompactedMessagesWithTombstone() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.header.repeated.tombstone/client",
-        "${scripts}/compacted.header.repeated.tombstone/server"})
-    public void shouldReceiveCompactedMessagesWithMultipleHeadersAndTombstone() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.multiple.nodes/client",
-        "${scripts}/compacted.messages.multiple.nodes/server"})
-    public void shouldReceiveCompactedMessagesFromMultipleNodes() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.messages.multiple.nodes.historical/client",
-        "${scripts}/compacted.messages.multiple.nodes.historical/server"})
-    public void shouldReceiveCompactedHistoricalMessagesFromMultipleNodes() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("CONNECT_CLIENT_ONE");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.partial.message.aborted/client",
-        "${scripts}/compacted.partial.message.aborted/server"})
-    public void shouldReceivePartialCompactedMessage() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("CONNECT_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/compacted.partial.message.aborted.with.key/client",
-        "${scripts}/compacted.partial.message.aborted.with.key/server"})
-    public void shouldReceivePartialCompactedMessageWithKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("CONNECT_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/distinct.offset.messagesets.fanout/client",
-        "${scripts}/distinct.offset.messagesets.fanout/server"})
-    public void shouldFanoutMessageSetsAtDistinctOffsets() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/distinct.offsets.message.fanout/client",
-        "${scripts}/distinct.offsets.message.fanout/server"})
-    public void shouldHandleParallelSubscribesAtDistinctOffsets() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.awaitBarrier("CLIENT_TWO_CONNECTED");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fanout.with.historical.message/client",
-        "${scripts}/fanout.with.historical.message/server"})
-    public void shouldFanoutUsingHistoricalConnection() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fanout.with.historical.messages/client",
-        "${scripts}/fanout.with.historical.messages/server"})
-    public void shouldFanoutDiscardingHistoricalMessageToJoinLiveStream() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fanout.with.slow.consumer/client",
-        "${scripts}/fanout.with.slow.consumer/server"})
-    public void shouldFanoutWithSlowConsumer() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.and.no.key.messages/client",
-        "${scripts}/fetch.key.and.no.key.messages/server"})
-    public void shouldFanoutToConsumersWithAndWithoutFetchKeys() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.and.no.key.unsubscribe/client",
-        "${scripts}/fetch.key.and.no.key.unsubscribe/server"})
-    public void shouldHandleSubscribeWithAndWithoutKeyAndUnsubscribe() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("PARTITION_ONE_FETCH_REQUEST_RECEIVED");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/client",
-        "${scripts}/fetch.key.and.hash.code.picks.partition.zero/server"})
-    public void shouldReceiveMessageUsingFetchKeyAndExplicitHashCode() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.default.partitioner.picks.partition.one/client",
-        "${scripts}/fetch.key.default.partitioner.picks.partition.one/server"})
-    public void shouldReceiveMessageUsingFetchKeyWithDefaultHashCode() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.nonzero.offset.message/client",
-        "${scripts}/fetch.key.nonzero.offset.message/server"})
-    public void shouldReceiveMessageUsingFetchKeyAndNonZeroOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.message/client",
-        "${scripts}/fetch.key.zero.offset.message/server"})
-    public void shouldReceiveMessageUsingFetchKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.historical.does.not.use.cached.key/client",
-        "${scripts}/fetch.key.historical.does.not.use.cached.key/server"})
-    public void shouldReceiveMessagesWithoutUsingKeyOffsetsCache() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.unspecified.offset.message/client",
-        "${scripts}/fetch.key.unspecified.offset.message/server"})
-    public void shouldReceiveMessageUsingFetchKeyWithEmptyOffsetsArray() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.messages/client",
-        "${scripts}/fetch.key.zero.offset.messages/server"})
-    public void shouldReceiveMessagesUsingFetchKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.messages.historical/client",
-        "${scripts}/fetch.key.zero.offset.messages.historical/server"})
-    public void shouldReceiveHistoricalMessagesUsingFetchKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.no.messages/client",
-        "${scripts}/fetch.key.zero.offset.no.messages/server"})
-    public void shouldReceiveNoMessagesUsingFetchKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/fetch.key.zero.offset.three.messages/client",
-        "${scripts}/fetch.key.zero.offset.three.messages/server"})
-    public void shouldReceiveThreeMessagesUsingFetchKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/header.and.fetch.key.zero.offset.message/client",
-        "${scripts}/header.and.fetch.key.zero.offset.message/server"})
-    public void shouldReceiveMessageUsingFetchKeyAndHeader() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/header.empty.value.message/client",
-        "${scripts}/header.empty.value.message/server"})
-    public void shouldReceiveMessageUsingHeaderEmptyValueCondition() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/header.large.then.small.messages.multiple.partitions/client",
-        "${scripts}/header.large.then.small.messages.multiple.partitions/server"})
-    public void shouldReceiveLargeAndSmallMessagesFromMultiplePartitionsMatchingHeaderCondition() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/header.zero.offset.message/client",
-        "${scripts}/header.zero.offset.message/server"})
-    public void shouldReceiveMessageUsingHeader() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/header.zero.offset.messages/client",
-        "${scripts}/header.zero.offset.messages/server"})
-    public void shouldReceiveMessagesUsingHeader() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/header.zero.offset.repeated/client",
-        "${scripts}/header.zero.offset.repeated/server"})
-    public void shouldReceiveMessagesMatchingAnyOccurenceOfARepeatedHeader() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/headers.and.fetch.key.zero.offset.message/client",
-        "${scripts}/headers.and.fetch.key.zero.offset.message/server"})
-    public void shouldReceiveMessageUsingFetchKeyAndMultipleHeaders() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/headers.zero.offset.messages.historical/client",
-        "${scripts}/headers.zero.offset.messages.historical/server"})
-    public void shouldReceiveHistoricalMessagesUsingHeaders() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/invalid.fetch.key.and.multiple.offsets/client",
-        "${scripts}/invalid.fetch.key.and.multiple.offsets/server"})
-    public void shouldRejectInvalidBeginExWithFetchKeyAndMultipleOffsets() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/invalid.missing.fetch.key/client",
-        "${scripts}/invalid.missing.fetch.key/server"})
-    public void shouldRejectInvalidBeginExWithMissingFetchKey() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/invalid.more.than.one.fetch.key.hash/client",
-        "${scripts}/invalid.more.than.one.fetch.key.hash/server"})
-    public void shouldRejectInvalidBeginExWithMoreThanOneFetchKeyHash() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/invalid.topic.name/client",
-        "${scripts}/invalid.topic.name/server"})
-    public void shouldRejectInvalidTopicName() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/partition.count.changed/client",
-        "${scripts}/partition.count.changed/server"})
-    public void shouldRejectPartitionCountChanged() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/large.then.small.messages.multiple.partitions/client",
-        "${scripts}/large.then.small.messages.multiple.partitions/server"})
-    public void shouldReceiveLargeAndSmallMessagesFromMultiplePartitions() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/nonzero.offset/client",
-        "${scripts}/nonzero.offset/server"})
-    public void shouldRequestMessagesAtNonZeroOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/nonzero.offset.message/client",
-        "${scripts}/nonzero.offset.message/server"})
-    public void shouldReceiveMessageAtNonZeroOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/nonzero.offset.messages/client",
-        "${scripts}/nonzero.offset.messages/server"})
-    public void shouldReceiveMessagesAtNonZeroOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/nonzero.offset.reattach.message/client",
-        "${scripts}/nonzero.offset.reattach.message/server"})
-    public void shouldReattachAtOffsetZeroAndReceiveMessage() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/offset.too.low.message/client",
-        "${scripts}/offset.too.low.message/server"})
-    public void shouldRefetchUsingReportedFirstOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/offset.too.low.multiple.topics/client",
-        "${scripts}/offset.too.low.multiple.topics/server"})
-    public void shouldRefetchUsingReportedFirstOffsetOnMultipleTopics() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/record.batch.ends.with.deleted.record/client",
-        "${scripts}/record.batch.ends.with.deleted.record/server"})
-    public void shouldReceiveMessagesWithOffsetGap() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/record.batch.ends.with.truncated.record.length/client",
-        "${scripts}/record.batch.ends.with.truncated.record.length/server"})
-    public void shouldReceiveMessageWithTruncatedRecordLength() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/record.batch.truncated/client",
-        "${scripts}/record.batch.truncated/server"})
-    public void shouldReceiveMessageWithTruncatedRecord() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/live.then.specified.offset.then.live.messages/client",
-        "${scripts}/live.then.specified.offset.then.live.messages/server"})
-    public void shouldReceiveLiveHistoricalThenLiveMessagesFromStreamingTopic() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.notifyBarrier("CONNECT_CLIENT_THREE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/specified.offset.then.live.messages/client",
-        "${scripts}/specified.offset.then.live.messages/server"})
-    public void shouldReceiveHistoricalAndLiveMessagesFromStreamingTopic() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/topic.name.not.equals.route.ext/client",
-        "${scripts}/topic.name.not.equals.route.ext/server"})
-    public void shouldRejectTopicNameNutEqualToRoutedTopic() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/unspecified.offset/client",
-        "${scripts}/unspecified.offset/server"})
-    public void shouldRequestMessagesAtUnspecifiedOffset() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/unspecified.offset.detached/client",
-        "${scripts}/unspecified.offset.detached/server"})
-    public void shouldRequestMessagesAtUnspecifiedOffsetDetached() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CLIENT_DETACH_NOW");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/unspecified.offset.fanout.messages/client",
-        "${scripts}/unspecified.offset.fanout.messages/server"})
-    public void shouldReceiveStreamingMessagesOnMultipleConnections() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/unspecified.offset.multiple.topics/client",
-        "${scripts}/unspecified.offset.multiple.topics/server"})
-    public void shouldRequestMessagesAtUnspecifiedOffsetFromMultipleTopics() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.notifyBarrier("UNSUBSCRIBE_CLIENT_ONE");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/unspecified.offset.multiple.streaming.topics/client",
-        "${scripts}/unspecified.offset.multiple.streaming.topics/server"})
-    public void shouldRequestMessagesAtUnspecifiedOffsetFromMultipleStreamingTopics() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/zero.offset/client",
-        "${scripts}/zero.offset/server"})
-    public void shouldRequestMessagesAtZeroOffset() throws Exception
-    {
-        k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.and.reset/client",
-        "${scripts}/zero.offset.and.reset/server"})
-    public void shouldUnsubscribe() throws Exception
+        "${scripts}/partition.offset.missing/client",
+        "${scripts}/partition.offset.missing/server"})
+    public void shouldRejectWhenPartitionOffsetMissing() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("DO_CLIENT_RESET");
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.large.and.small/client",
-        "${scripts}/zero.offset.messages.large.and.small/server"})
-    public void shouldReceiveLargeAndSmallMessages() throws Exception
+        "${scripts}/partition.offset.repeated/client",
+        "${scripts}/partition.offset.repeated/server"})
+    public void shouldRejectWhenPartitionOffsetRepeated() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1018,21 +83,20 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.large.and.small.fanout/client",
-        "${scripts}/zero.offset.messages.large.and.small.fanout/server"})
-    public void shouldReceiveLargeAndSmallMessagesTwoClients() throws Exception
+        "${scripts}/partition.unknown/client",
+        "${scripts}/partition.unknown/server"})
+    public void shouldRejectWhenPartitionUnknown() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message/client",
-        "${scripts}/zero.offset.message/server"})
-    public void shouldReceiveMessageAtZeroOffset() throws Exception
+        "${scripts}/partition.not.leader/client",
+        "${scripts}/partition.not.leader/server"})
+    public void shouldRejectPartitionNotLeader() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1041,9 +105,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/gzip.compressed.record.batch/client",
-        "${scripts}/gzip.compressed.record.batch/server"})
-    public void shouldReceiveGzipCompressedRecordBatch() throws Exception
+        "${scripts}/partition.offset/client",
+        "${scripts}/partition.offset/server"})
+    public void shouldRequestPartitionOffset() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1052,43 +116,31 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/snappy.compressed.record.batch/client",
-        "${scripts}/snappy.compressed.record.batch/server"})
-    public void shouldReceiveSnappyCompressedRecordBatch() throws Exception
+        "${scripts}/partition.offset.earliest/client",
+        "${scripts}/partition.offset.earliest/server"})
+    public void shouldRequestPartitionOffsetEarliest() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/zero.offset.message.connect.await/client",
-        "${scripts}/zero.offset.message.connect.await/server"})
-    public void shouldReceiveMessageAtZeroOffsetWithConnectAwait() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("CONNECT_CLIENT");
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message.multiple.partitions/client",
-        "${scripts}/zero.offset.message.multiple.partitions/server"})
-    public void shouldReceiveMessageAtZeroOffsetWithTwoPartitions() throws Exception
+        "${scripts}/partition.offset.zero/client",
+        "${scripts}/partition.offset.zero/server"})
+    public void shouldRequestPartitionOffsetZero() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message.reattach.message/client",
-        "${scripts}/zero.offset.message.reattach.message/server"})
-    public void shouldReceiveEndAtZeroOffsetWhenTopicIsRecreatedAndReconnectToNewTopic() throws Exception
+        "${scripts}/message.key/client",
+        "${scripts}/message.key/server"})
+    public void shouldReceiveMessageKey() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1097,35 +149,31 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message.two.topics/client",
-        "${scripts}/zero.offset.message.two.topics/server"})
-    public void shouldReceiveMessageAtZeroOffsetWithClientSubscribedToSecondTopic() throws Exception
+        "${scripts}/message.key.null/client",
+        "${scripts}/message.key.null/server"})
+    public void shouldReceiveMessageKeyNull() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message.two.topics.multiple.partitions/client",
-        "${scripts}/zero.offset.message.two.topics.multiple.partitions/server"})
-    public void shouldReceiveMessageAtZeroOffsetMultiplePartitionsTwoTopics() throws Exception
+        "${scripts}/message.key.with.value.null/client",
+        "${scripts}/message.key.with.value.null/server"})
+    public void shouldReceiveMessageKeyWithValueNull() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.awaitBarrier("CLIENT_ONE_CONNECTED");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages/client",
-        "${scripts}/zero.offset.messages/server"})
-    public void shouldReceiveMessagesAtZeroOffset() throws Exception
+        "${scripts}/message.key.with.value.distinct/client",
+        "${scripts}/message.key.with.value.distinct/server"})
+    public void shouldReceiveMessageKeyWithValueDistinct() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1134,9 +182,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.multiple.partitions/client",
-        "${scripts}/zero.offset.messages.multiple.partitions/server"})
-    public void shouldReceiveMessagesAtZeroOffsetMultiplePartitions() throws Exception
+        "${scripts}/message.key.with.header/client",
+        "${scripts}/message.key.with.header/server"})
+    public void shouldReceiveMessageKeyWithHeader() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1145,9 +193,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/client",
-        "${scripts}/zero.offset.messages.multiple.partitions.partition.1/server"})
-    public void shouldReceiveMessagesAtZeroOffsetMultiplePartitionsPartition1() throws Exception
+        "${scripts}/message.key.distinct/client",
+        "${scripts}/message.key.distinct/server"})
+    public void shouldReceiveMessageKeyDistinct() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1156,9 +204,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/client",
-        "${scripts}/zero.offset.messages.multiple.partitions.max.bytes.256/server"})
-    public void shouldReceiveMessagesAtZeroOffsetMultiplePartitionsMaxBytes256() throws Exception
+        "${scripts}/message.value/client",
+        "${scripts}/message.value/server"})
+    public void shouldReceiveMessageValue() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1167,9 +215,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.partition.added/client",
-        "${scripts}/zero.offset.messages.partition.added/server"})
-    public void shouldReceiveMessagesByReattachingAfterAPartitionIsAdded() throws Exception
+        "${scripts}/message.value.null/client",
+        "${scripts}/message.value.null/server"})
+    public void shouldReceiveMessageValueNull() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1178,42 +226,45 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.message.reattach.message/client",
-        "${scripts}/zero.offset.message.reattach.message/server"})
-    public void shouldReceiveMessagesWhenTopicRecreated() throws Exception
+        "${scripts}/message.value.10k/client",
+        "${scripts}/message.value.10k/server"})
+    public void shouldReceiveMessageValue10k() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
 
+    @Ignore("TODO")
     @Test
     @Specification({
-        "${scripts}/zero.offset.messagesets/client",
-        "${scripts}/zero.offset.messagesets/server"})
-    public void shouldReceiveMessageSetsAtZeroOffset() throws Exception
+        "${scripts}/message.value.gzip/client",
+        "${scripts}/message.value.gzip/server"})
+    public void shouldReceiveMessageValueGzip() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
 
+    @Ignore("TODO")
     @Test
     @Specification({
-        "${scripts}/zero.offset.messages.fanout/client",
-        "${scripts}/zero.offset.messages.fanout/server"})
-    public void shouldFanoutMessagesAtZeroOffset() throws Exception
+        "${scripts}/message.value.snappy/client",
+        "${scripts}/message.value.snappy/server"})
+    public void shouldReceiveMessageValueSnappy() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
 
+    @Ignore("TODO")
     @Test
     @Specification({
-            "${scripts}/zero.offset.messages.shared.budget/client",
-            "${scripts}/zero.offset.messages.shared.budget/server"})
-    public void shouldFanoutMessagesAtZeroOffsetUsingSharedBudget() throws Exception
+        "${scripts}/message.value.lz4/client",
+        "${scripts}/message.value.lz4/server"})
+    public void shouldReceiveMessageValueLz4() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1222,9 +273,9 @@ public class FetchIT
 
     @Test
     @Specification({
-            "${scripts}/zero.offset.messages.shared.budget.reset/client",
-            "${scripts}/zero.offset.messages.shared.budget.reset/server"})
-    public void shouldFanoutMessagesAtZeroOffsetUsingSharedBudgetReset() throws Exception
+        "${scripts}/message.value.distinct/client",
+        "${scripts}/message.value.distinct/server"})
+    public void shouldReceiveMessageValueDistinct() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1233,9 +284,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.messagesets.fanout/client",
-        "${scripts}/zero.offset.messagesets.fanout/server"})
-    public void shouldFanoutMessageSetsAtZeroOffset() throws Exception
+        "${scripts}/message.header/client",
+        "${scripts}/message.header/server"})
+    public void shouldReceiveMessageHeader() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1244,9 +295,9 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.partial.message.aborted/client",
-        "${scripts}/zero.offset.partial.message.aborted/server"})
-    public void shouldReceivePartialMessageThenAbort() throws Exception
+        "${scripts}/message.header/client",
+        "${scripts}/message.header/server"})
+    public void shouldReceiveMessageHeaderNull() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -1255,27 +306,23 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.multiple.topics/client",
-        "${scripts}/zero.offset.multiple.topics/server"})
-    public void shouldSubscribeToTwoTopics() throws Exception
+        "${scripts}/message.headers.distinct/client",
+        "${scripts}/message.headers.distinct/server"})
+    public void shouldReceiveMessageHeadersDistinct() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("CONNECT_CLIENT_TWO");
-        k3po.notifyBarrier("DISCONNECT_CLIENT_ONE");
-        k3po.notifyBarrier("CONNECT_CLIENT_THREE");
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "${scripts}/zero.offset.two.topics.one.reset/client",
-        "${scripts}/zero.offset.two.topics.one.reset/server"})
-    public void shouldSubscribeUnsubscribeAndSubscribeToAnotherTopic() throws Exception
+        "${scripts}/message.headers.repeated/client",
+        "${scripts}/message.headers.repeated/server"})
+    public void shouldReceiveMessageHeadersRepeated() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.notifyBarrier("DO_RESET");
         k3po.finish();
     }
 }

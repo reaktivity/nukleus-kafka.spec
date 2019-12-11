@@ -21,8 +21,8 @@ import static java.lang.System.currentTimeMillis;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 
 import org.agrona.DirectBuffer;
 import org.agrona.MutableDirectBuffer;
@@ -31,12 +31,22 @@ import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 import org.reaktivity.specification.kafka.internal.types.ArrayFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaHeaderFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaKeyFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
 import org.reaktivity.specification.kafka.internal.types.OctetsFW;
-import org.reaktivity.specification.kafka.internal.types.Varint64FW;
 import org.reaktivity.specification.kafka.internal.types.control.KafkaRouteExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaApi;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaBeginExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaDataExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaDescribeBeginExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaDescribeDataExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaEndExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaFetchBeginExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaFetchDataExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaFetchEndExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaMetaBeginExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaMetaDataExFW;
 
 public final class KafkaFunctions
 {
@@ -71,13 +81,15 @@ public final class KafkaFunctions
     }
 
     @Function
-    public static int length(String value)
+    public static int length(
+        String value)
     {
         return value.length();
     }
 
     @Function
-    public static short lengthAsShort(String value)
+    public static short lengthAsShort(
+        String value)
     {
         return (short) value.length();
     }
@@ -89,7 +101,8 @@ public final class KafkaFunctions
     }
 
     @Function
-    public static byte[] randomBytes(int length)
+    public static byte[] randomBytes(
+        int length)
     {
         byte[] bytes = new byte[length];
         for (int i = 0; i < length; i++)
@@ -213,8 +226,6 @@ public final class KafkaFunctions
 
     public static final class KafkaRouteExBuilder
     {
-        private final DirectBuffer bufferRO = new UnsafeBuffer();
-
         private final KafkaRouteExFW.Builder routeExRW;
 
         private KafkaRouteExBuilder()
@@ -230,15 +241,6 @@ public final class KafkaFunctions
             return this;
         }
 
-        public KafkaRouteExBuilder header(
-            String name,
-            String value)
-        {
-            bufferRO.wrap(value.getBytes(UTF_8));
-            routeExRW.headersItem(b -> b.key(name).value(bufferRO, 0, bufferRO.capacity()));
-            return this;
-        }
-
         public byte[] build()
         {
             final KafkaRouteExFW routeEx = routeExRW.build();
@@ -250,14 +252,15 @@ public final class KafkaFunctions
 
     public static final class KafkaBeginExBuilder
     {
-        private final DirectBuffer bufferRO = new UnsafeBuffer();
+        private final MutableDirectBuffer writeBuffer = new UnsafeBuffer(new byte[1024 * 8]);
 
-        private final KafkaBeginExFW.Builder beginExRW;
+        private final KafkaBeginExFW beginExRO = new KafkaBeginExFW();
+
+        private final KafkaBeginExFW.Builder beginExRW = new KafkaBeginExFW.Builder();
 
         private KafkaBeginExBuilder()
         {
-            MutableDirectBuffer writeBuffer = new UnsafeBuffer(new byte[1024 * 8]);
-            this.beginExRW = new KafkaBeginExFW.Builder().wrap(writeBuffer, 0, writeBuffer.capacity());
+            beginExRW.wrap(writeBuffer, 0, writeBuffer.capacity());
         }
 
         public KafkaBeginExBuilder typeId(
@@ -267,60 +270,167 @@ public final class KafkaFunctions
             return this;
         }
 
-        public KafkaBeginExBuilder topicName(
-            String topicName)
+        public KafkaFetchBeginExBuilder fetch()
         {
-            beginExRW.topicName(topicName);
-            return this;
+            beginExRW.kind(KafkaApi.FETCH.value());
+
+            return new KafkaFetchBeginExBuilder();
         }
 
-        public KafkaBeginExBuilder fetchOffset(
-            long... fetchOffsets)
+        public KafkaMetaBeginExBuilder meta()
         {
-            beginExRW.fetchOffsets(m -> Arrays.stream(fetchOffsets).forEach(o -> m.item(i -> i.set(o))));
-            return this;
+            beginExRW.kind(KafkaApi.META.value());
+
+            return new KafkaMetaBeginExBuilder();
         }
 
-        public KafkaBeginExBuilder fetchKey(
-            String fetchKey)
+        public KafkaDescribeBeginExBuilder describe()
         {
-            beginExRW.fetchKey(m -> m.set(fetchKey.getBytes(UTF_8)));
-            return this;
-        }
+            beginExRW.kind(KafkaApi.DESCRIBE.value());
 
-        public KafkaBeginExBuilder fetchKeyHash(
-            int... fetchKeyHash)
-        {
-            beginExRW.fetchKeyHash(Arrays.stream(fetchKeyHash).iterator());
-            return this;
-        }
-
-        public KafkaBeginExBuilder header(
-            String name,
-            String value)
-        {
-            bufferRO.wrap(value.getBytes(UTF_8));
-            beginExRW.headersItem(b -> b.key(name).value(bufferRO, 0, bufferRO.capacity()));
-            return this;
+            return new KafkaDescribeBeginExBuilder();
         }
 
         public byte[] build()
         {
-            final KafkaBeginExFW beginEx = beginExRW.build();
+            final KafkaBeginExFW beginEx = beginExRO;
             final byte[] array = new byte[beginEx.sizeof()];
             beginEx.buffer().getBytes(beginEx.offset(), array);
             return array;
+        }
+
+        public final class KafkaFetchBeginExBuilder
+        {
+            private final KafkaFetchBeginExFW.Builder fetchBeginExRW = new KafkaFetchBeginExFW.Builder();
+
+            private KafkaFetchBeginExBuilder()
+            {
+                fetchBeginExRW.wrap(writeBuffer, KafkaBeginExFW.FIELD_OFFSET_FETCH, writeBuffer.capacity());
+            }
+
+            public KafkaFetchBeginExBuilder topic(
+                String topic)
+            {
+                fetchBeginExRW.topic(topic);
+                return this;
+            }
+
+            public KafkaFetchBeginExBuilder progress(
+                int partitionId,
+                long offset)
+            {
+                fetchBeginExRW.progressItem(p -> p.partitionId(partitionId).offset$(offset));
+                return this;
+            }
+
+            public KafkaFetchBeginExBuilder key(
+                String key)
+            {
+                if (key != null)
+                {
+                    fetchBeginExRW.filtersItem(f -> f.conditionsItem(c -> c.key(k -> k.value(v -> v.set(key.getBytes(UTF_8))))));
+                }
+                else
+                {
+                    fetchBeginExRW.filtersItem(f -> f.conditionsItem(c -> c.key(k -> k.value((OctetsFW) null))));
+                }
+                return this;
+            }
+
+            public KafkaFetchBeginExBuilder header(
+                String name,
+                String value)
+            {
+                if (value == null)
+                {
+                    fetchBeginExRW.filtersItem(
+                        f -> f.conditionsItem(c -> c.header(h -> h.name(name)
+                                                                  .value((OctetsFW) null))));
+                }
+                else
+                {
+                    fetchBeginExRW.filtersItem(
+                        f -> f.conditionsItem(c -> c.header(h -> h.name(name)
+                                                                  .value(v -> v.set(value.getBytes(UTF_8))))));
+                }
+                return this;
+            }
+
+            public KafkaBeginExBuilder build()
+            {
+                final KafkaFetchBeginExFW fetchBeginEx = fetchBeginExRW.build();
+                beginExRO.wrap(writeBuffer, 0, fetchBeginEx.limit());
+                return KafkaBeginExBuilder.this;
+            }
+        }
+
+        public final class KafkaMetaBeginExBuilder
+        {
+            private final KafkaMetaBeginExFW.Builder metaBeginExRW = new KafkaMetaBeginExFW.Builder();
+
+            private KafkaMetaBeginExBuilder()
+            {
+                metaBeginExRW.wrap(writeBuffer, KafkaBeginExFW.FIELD_OFFSET_META, writeBuffer.capacity());
+            }
+
+            public KafkaMetaBeginExBuilder topic(
+                String topic)
+            {
+                metaBeginExRW.topic(topic);
+                return this;
+            }
+
+            public KafkaBeginExBuilder build()
+            {
+                final KafkaMetaBeginExFW metaBeginEx = metaBeginExRW.build();
+                beginExRO.wrap(writeBuffer, 0, metaBeginEx.limit());
+                return KafkaBeginExBuilder.this;
+            }
+        }
+
+        public final class KafkaDescribeBeginExBuilder
+        {
+            private final KafkaDescribeBeginExFW.Builder describeBeginExRW = new KafkaDescribeBeginExFW.Builder();
+
+            private KafkaDescribeBeginExBuilder()
+            {
+                describeBeginExRW.wrap(writeBuffer, KafkaBeginExFW.FIELD_OFFSET_DESCRIBE, writeBuffer.capacity());
+            }
+
+            public KafkaDescribeBeginExBuilder topic(
+                String name)
+            {
+                describeBeginExRW.topic(name);
+                return this;
+            }
+
+            public KafkaDescribeBeginExBuilder config(
+                String name)
+            {
+                describeBeginExRW.configsItem(c -> c.set(name, UTF_8));
+                return this;
+            }
+
+            public KafkaBeginExBuilder build()
+            {
+                final KafkaDescribeBeginExFW describeBeginEx = describeBeginExRW.build();
+                beginExRO.wrap(writeBuffer, 0, describeBeginEx.limit());
+                return KafkaBeginExBuilder.this;
+            }
         }
     }
 
     public static final class KafkaDataExBuilder
     {
-        private final KafkaDataExFW.Builder dataExRW;
+        private final MutableDirectBuffer writeBuffer = new UnsafeBuffer(new byte[1024 * 8]);
+
+        private final KafkaDataExFW dataExRO = new KafkaDataExFW();
+
+        private final KafkaDataExFW.Builder dataExRW = new KafkaDataExFW.Builder();
 
         private KafkaDataExBuilder()
         {
-            MutableDirectBuffer writeBuffer = new UnsafeBuffer(new byte[1024 * 8]);
-            this.dataExRW = new KafkaDataExFW.Builder().wrap(writeBuffer, 0, writeBuffer.capacity());
+            dataExRW.wrap(writeBuffer, 0, writeBuffer.capacity());
         }
 
         public KafkaDataExBuilder typeId(
@@ -330,44 +440,160 @@ public final class KafkaFunctions
             return this;
         }
 
-        public KafkaDataExBuilder timestamp(
-            long timestamp)
+        public KafkaFetchDataExBuilder fetch()
         {
-            dataExRW.timestamp(timestamp);
-            return this;
+            dataExRW.kind(KafkaApi.FETCH.value());
+
+            return new KafkaFetchDataExBuilder();
         }
 
-        public KafkaDataExBuilder fetchOffset(
-            long... fetchOffsets)
+        public KafkaMetaDataExBuilder meta()
         {
-            dataExRW.fetchOffsets(m -> Arrays.stream(fetchOffsets).forEach(o -> m.item(i -> i.set(o))));
-            return this;
+            dataExRW.kind(KafkaApi.META.value());
+
+            return new KafkaMetaDataExBuilder();
         }
 
-        public KafkaDataExBuilder messageKey(
-            String messageKey)
+        public KafkaDescribeDataExBuilder describe()
         {
-            dataExRW.messageKey(m -> m.set(messageKey.getBytes(UTF_8)));
-            return this;
+            dataExRW.kind(KafkaApi.DESCRIBE.value());
+
+            return new KafkaDescribeDataExBuilder();
         }
 
         public byte[] build()
         {
-            final KafkaDataExFW dataEx = dataExRW.build();
+            final KafkaDataExFW dataEx = dataExRO;
             final byte[] array = new byte[dataEx.sizeof()];
             dataEx.buffer().getBytes(dataEx.offset(), array);
             return array;
+        }
+
+        public final class KafkaFetchDataExBuilder
+        {
+            private final KafkaFetchDataExFW.Builder fetchDataExRW = new KafkaFetchDataExFW.Builder();
+
+            private KafkaFetchDataExBuilder()
+            {
+                fetchDataExRW.wrap(writeBuffer, KafkaDataExFW.FIELD_OFFSET_FETCH, writeBuffer.capacity());
+            }
+
+            public KafkaFetchDataExBuilder timestamp(
+                long timestamp)
+            {
+                fetchDataExRW.timestamp(timestamp);
+                return this;
+            }
+
+            public KafkaFetchDataExBuilder key(
+                String key)
+            {
+                if (key == null)
+                {
+                    fetchDataExRW.key(m -> m.value((OctetsFW) null));
+                }
+                else
+                {
+                    fetchDataExRW.key(m -> m.value(v -> v.set(key.getBytes(UTF_8))));
+                }
+                return this;
+            }
+
+            public KafkaFetchDataExBuilder header(
+                String name,
+                String value)
+            {
+                if (value == null)
+                {
+                    fetchDataExRW.headersItem(h -> h.name(name)
+                                                    .value((OctetsFW) null));
+                }
+                else
+                {
+                    fetchDataExRW.headersItem(h -> h.name(name)
+                                                    .value(v -> v.set(value.getBytes(UTF_8))));
+                }
+                return this;
+            }
+
+            public KafkaFetchDataExBuilder progress(
+                int partitionId,
+                long offset)
+            {
+                fetchDataExRW.progressItem(p -> p.partitionId(partitionId).offset$(offset));
+                return this;
+            }
+
+            public KafkaDataExBuilder build()
+            {
+                final KafkaFetchDataExFW fetchDataEx = fetchDataExRW.build();
+                dataExRO.wrap(writeBuffer, 0, fetchDataEx.limit());
+                return KafkaDataExBuilder.this;
+            }
+        }
+
+        public final class KafkaMetaDataExBuilder
+        {
+            private final KafkaMetaDataExFW.Builder metaDataExRW = new KafkaMetaDataExFW.Builder();
+
+            private KafkaMetaDataExBuilder()
+            {
+                metaDataExRW.wrap(writeBuffer, KafkaDataExFW.FIELD_OFFSET_META, writeBuffer.capacity());
+            }
+
+            public KafkaMetaDataExBuilder partition(
+                int partitionId,
+                int leaderId)
+            {
+                metaDataExRW.partitionsItem(p -> p.partitionId(partitionId).leaderId(leaderId));
+                return this;
+            }
+
+            public KafkaDataExBuilder build()
+            {
+                final KafkaMetaDataExFW metaDataEx = metaDataExRW.build();
+                dataExRO.wrap(writeBuffer, 0, metaDataEx.limit());
+                return KafkaDataExBuilder.this;
+            }
+        }
+
+        public final class KafkaDescribeDataExBuilder
+        {
+            private final KafkaDescribeDataExFW.Builder describeDataExRW = new KafkaDescribeDataExFW.Builder();
+
+            private KafkaDescribeDataExBuilder()
+            {
+                describeDataExRW.wrap(writeBuffer, KafkaDataExFW.FIELD_OFFSET_DESCRIBE, writeBuffer.capacity());
+            }
+
+            public KafkaDescribeDataExBuilder config(
+                String name,
+                String value)
+            {
+                describeDataExRW.configsItem(c -> c.name(name).value(value));
+                return this;
+            }
+
+            public KafkaDataExBuilder build()
+            {
+                final KafkaDescribeDataExFW describeDataEx = describeDataExRW.build();
+                dataExRO.wrap(writeBuffer, 0, describeDataEx.limit());
+                return KafkaDataExBuilder.this;
+            }
         }
     }
 
     public static final class KafkaEndExBuilder
     {
-        private final KafkaEndExFW.Builder endExRW;
+        private final MutableDirectBuffer writeBuffer = new UnsafeBuffer(new byte[1024 * 8]);
+
+        private final KafkaEndExFW endExRO = new KafkaEndExFW();
+
+        private final KafkaEndExFW.Builder endExRW = new KafkaEndExFW.Builder();
 
         private KafkaEndExBuilder()
         {
-            MutableDirectBuffer writeBuffer = new UnsafeBuffer(new byte[1024 * 8]);
-            this.endExRW = new KafkaEndExFW.Builder().wrap(writeBuffer, 0, writeBuffer.capacity());
+            endExRW.wrap(writeBuffer, 0, writeBuffer.capacity());
         }
 
         public KafkaEndExBuilder typeId(
@@ -377,34 +603,64 @@ public final class KafkaFunctions
             return this;
         }
 
-        public KafkaEndExBuilder fetchOffset(
-            long... fetchOffsets)
+        public KafkaFetchEndExBuilder fetch()
         {
-            endExRW.fetchOffsets(m -> Arrays.stream(fetchOffsets).forEach(o -> m.item(i -> i.set(o))));
-            return this;
+            endExRW.kind(KafkaApi.FETCH.value());
+
+            return new KafkaFetchEndExBuilder();
         }
 
         public byte[] build()
         {
-            final KafkaEndExFW endEx = endExRW.build();
+            final KafkaEndExFW endEx = endExRO;
             final byte[] array = new byte[endEx.sizeof()];
             endEx.buffer().getBytes(endEx.offset(), array);
             return array;
+        }
+
+        public final class KafkaFetchEndExBuilder
+        {
+            private final KafkaFetchEndExFW.Builder fetchEndExRW = new KafkaFetchEndExFW.Builder();
+
+            private KafkaFetchEndExBuilder()
+            {
+                fetchEndExRW.wrap(writeBuffer, KafkaEndExFW.FIELD_OFFSET_FETCH, writeBuffer.capacity());
+            }
+
+            public KafkaFetchEndExBuilder progress(
+                int partitionId,
+                long offset)
+            {
+                fetchEndExRW.progressItem(p -> p.partitionId(partitionId).offset$(offset));
+                return this;
+            }
+
+            public KafkaEndExBuilder build()
+            {
+                final KafkaFetchEndExFW fetchEndEx = fetchEndExRW.build();
+                endExRO.wrap(writeBuffer, 0, fetchEndEx.limit());
+                return KafkaEndExBuilder.this;
+            }
         }
     }
 
     public static final class KafkaDataExMatcherBuilder
     {
-        private final KafkaDataExFW dataExRO = new KafkaDataExFW();
         private final DirectBuffer bufferRO = new UnsafeBuffer();
 
-        private Integer typeId;
-        private Long timestamp;
-        private ArrayFW.Builder<Varint64FW.Builder, Varint64FW> fetchOffsetsRW;
-        private OctetsFW.Builder messageKeyRW;
+        private final KafkaDataExFW dataExRO = new KafkaDataExFW();
 
-        private KafkaDataExMatcherBuilder()
+        private Integer typeId;
+        private Short kind;
+        private Predicate<KafkaDataExFW> caseMatcher;
+
+        public KafkaFetchDataExMatcherBuilder fetch()
         {
+            final KafkaFetchDataExMatcherBuilder matcherBuilder = new KafkaFetchDataExMatcherBuilder();
+
+            this.kind = KafkaApi.FETCH.value();
+            this.caseMatcher = matcherBuilder::match;
+            return matcherBuilder;
         }
 
         public KafkaDataExMatcherBuilder typeId(
@@ -414,55 +670,26 @@ public final class KafkaFunctions
             return this;
         }
 
-        public KafkaDataExMatcherBuilder timestamp(
-            long timestamp)
-        {
-            this.timestamp = timestamp;
-            return this;
-        }
-
-        public KafkaDataExMatcherBuilder fetchOffset(
-            long... fetchOffsets)
-        {
-            fetchOffsetsRW = new ArrayFW.Builder<>(new Varint64FW.Builder(), new Varint64FW())
-                    .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
-            Arrays.stream(fetchOffsets).forEach(o -> fetchOffsetsRW.item(i -> i.set(o)));
-            return this;
-        }
-
-        public KafkaDataExMatcherBuilder messageKey(
-            String messageKey)
-        {
-            messageKeyRW = new OctetsFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
-            messageKeyRW.set(messageKey.getBytes(UTF_8));
-            return this;
-        }
-
         public BytesMatcher build()
         {
-            return this::match;
+            return typeId != null || kind != null ? this::match : buf -> null;
         }
 
-        private Object match(
+        private KafkaDataExFW match(
             ByteBuffer byteBuf) throws Exception
         {
             bufferRO.wrap(byteBuf);
             final KafkaDataExFW dataEx = dataExRO.tryWrap(bufferRO, byteBuf.position(), byteBuf.capacity());
 
-            if (dataEx != null)
+            if (dataEx != null &&
+                matchTypeId(dataEx) &&
+                matchKind(dataEx) &&
+                matchCase(dataEx))
             {
-                byteBuf.position(dataEx.limit());
-
-                if (!matchTypeId(dataEx) ||
-                    !matchTimestamp(dataEx) ||
-                    !matchFetchOffsets(dataEx) ||
-                    !matchMessageKey(dataEx))
-                {
-                    throw new Exception(dataEx.toString());
-                }
+                return dataEx;
             }
 
-            return dataEx;
+            throw new Exception(dataEx.toString());
         }
 
         private boolean matchTypeId(
@@ -471,22 +698,127 @@ public final class KafkaFunctions
             return typeId == null || typeId == dataEx.typeId();
         }
 
-        private boolean matchTimestamp(
+        private boolean matchKind(
             final KafkaDataExFW dataEx)
         {
-            return timestamp == null || timestamp == dataEx.timestamp();
+            return kind == null || kind == dataEx.kind();
         }
 
-        private boolean matchFetchOffsets(
-            final KafkaDataExFW dataEx)
+        private boolean matchCase(
+            final KafkaDataExFW dataEx) throws Exception
         {
-            return fetchOffsetsRW == null || fetchOffsetsRW.build().equals(dataEx.fetchOffsets());
+            return caseMatcher == null || caseMatcher.test(dataEx);
         }
 
-        private boolean matchMessageKey(
-            final KafkaDataExFW dataEx)
+        public final class KafkaFetchDataExMatcherBuilder
         {
-            return messageKeyRW == null || messageKeyRW.build().equals(dataEx.messageKey());
+            private Long timestamp;
+            private KafkaKeyFW.Builder keyRW;
+            private ArrayFW.Builder<KafkaOffsetFW.Builder, KafkaOffsetFW> progressRW;
+            private ArrayFW.Builder<KafkaHeaderFW.Builder, KafkaHeaderFW> headersRW;
+
+            private KafkaFetchDataExMatcherBuilder()
+            {
+            }
+
+            public KafkaFetchDataExMatcherBuilder timestamp(
+                long timestamp)
+            {
+                this.timestamp = timestamp;
+                return this;
+            }
+
+            public KafkaFetchDataExMatcherBuilder key(
+                String key)
+            {
+                assert keyRW == null;
+                keyRW = new KafkaKeyFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
+
+                if (key == null)
+                {
+                    keyRW.value((OctetsFW) null);
+                }
+                else
+                {
+                    keyRW.value(v -> v.set(key.getBytes(UTF_8)));
+                }
+
+                return this;
+            }
+
+            public KafkaFetchDataExMatcherBuilder header(
+                String name,
+                String value)
+            {
+                if (headersRW == null)
+                {
+                    this.headersRW = new ArrayFW.Builder<>(new KafkaHeaderFW.Builder(), new KafkaHeaderFW())
+                                                .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
+                }
+
+                if (value == null)
+                {
+                    headersRW.item(i -> i.name(name).value((OctetsFW) null));
+                }
+                else
+                {
+                    headersRW.item(i -> i.name(name).value(v -> v.set(value.getBytes(UTF_8))));
+                }
+
+                return this;
+            }
+
+            public KafkaFetchDataExMatcherBuilder progress(
+                int partitionId,
+                long offset)
+            {
+                if (progressRW == null)
+                {
+                    this.progressRW = new ArrayFW.Builder<>(new KafkaOffsetFW.Builder(), new KafkaOffsetFW())
+                                                 .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
+                }
+                progressRW.item(i -> i.partitionId(partitionId).offset$(offset));
+                return this;
+            }
+
+            public KafkaDataExMatcherBuilder build()
+            {
+                return KafkaDataExMatcherBuilder.this;
+            }
+
+            private boolean match(
+                KafkaDataExFW dataEx)
+            {
+                final KafkaFetchDataExFW fetchDataEx = dataEx.fetch();
+                return matchTimestamp(fetchDataEx) &&
+                    matchKey(fetchDataEx) &&
+                    matchHeaders(fetchDataEx) &&
+                    matchProgress(fetchDataEx);
+            }
+
+            private boolean matchTimestamp(
+                final KafkaFetchDataExFW fetchDataEx)
+            {
+                return timestamp == null || timestamp == fetchDataEx.timestamp();
+            }
+
+            private boolean matchKey(
+                    final KafkaFetchDataExFW fetchDataEx)
+            {
+                return keyRW == null || keyRW.build().equals(fetchDataEx.key());
+            }
+
+            private boolean matchHeaders(
+                final KafkaFetchDataExFW fetchDataEx)
+            {
+                return headersRW == null || headersRW.build().equals(fetchDataEx.headers());
+            }
+
+            private boolean matchProgress(
+                final KafkaFetchDataExFW fetchDataEx)
+            {
+                return progressRW == null || progressRW.build().equals(fetchDataEx.progress());
+            }
         }
     }
 

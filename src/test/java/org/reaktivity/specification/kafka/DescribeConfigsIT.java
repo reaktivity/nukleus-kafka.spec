@@ -38,9 +38,9 @@ public class DescribeConfigsIT
 
     @Test
     @Specification({
-        "${scripts}/topic.with.log.compaction/client",
-        "${scripts}/topic.with.log.compaction/server"})
-    public void shouldRequestConfigForTopicWithLogCompaction() throws Exception
+        "${scripts}/topic.unknown/client",
+        "${scripts}/topic.unknown/server"})
+    public void shouldErrorWhenTopicUnkown() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -49,9 +49,9 @@ public class DescribeConfigsIT
 
     @Test
     @Specification({
-        "${scripts}/topic.with.no.log.compaction/client",
-        "${scripts}/topic.with.no.log.compaction/server"})
-    public void shouldRequestConfigForTopicWithoutLogCompaction() throws Exception
+        "${scripts}/topic.config.info/client",
+        "${scripts}/topic.config.info/server"})
+    public void shouldReceiveTopicConfigInfo() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

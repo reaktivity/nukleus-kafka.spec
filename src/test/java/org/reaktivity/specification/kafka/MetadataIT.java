@@ -38,9 +38,9 @@ public class MetadataIT
 
     @Test
     @Specification({
-        "${scripts}/all.topics/client",
-        "${scripts}/all.topics/server"})
-    public void shouldRequestMetadataForAllTopics() throws Exception
+        "${scripts}/topic.unknown/client",
+        "${scripts}/topic.unknown/server"})
+    public void shouldErrorWhenTopicUnknown() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -49,9 +49,9 @@ public class MetadataIT
 
     @Test
     @Specification({
-        "${scripts}/metadata.connection.aborted.and.reconnect/client",
-        "${scripts}/metadata.connection.aborted.and.reconnect/server"})
-    public void shouldReconnectAndContinueMetadataQueriesWhenMetadataConnectionIsAborted() throws Exception
+        "${scripts}/topic.invalid/client",
+        "${scripts}/topic.invalid/server"})
+    public void shouldErrorWhenTopicInvalid() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -60,9 +60,9 @@ public class MetadataIT
 
     @Test
     @Specification({
-        "${scripts}/metadata.connection.closed.and.reconnect/client",
-        "${scripts}/metadata.connection.closed.and.reconnect/server"})
-    public void shouldReconnectAndContinueMetadataQueriesWhenMetadataConnectionIsEnded() throws Exception
+        "${scripts}/topic.partition.info/client",
+        "${scripts}/topic.partition.info/server"})
+    public void shouldReceiveTopicPartitionInfo() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -71,245 +71,12 @@ public class MetadataIT
 
     @Test
     @Specification({
-        "${scripts}/metadata.connection.reset.and.reconnect/client",
-        "${scripts}/metadata.connection.reset.and.reconnect/server"})
-    public void shouldReconnectAndContinueMetadataQueriesWhenMetadataConnectionIsReset() throws Exception
+        "${scripts}/topic.partition.info.changed/client",
+        "${scripts}/topic.partition.info.changed/server"})
+    public void shouldReceiveTopicPartitionInfoChanged() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
-
-    @Test
-    @Specification({
-        "${scripts}/multiple.topics.and.nodes/client",
-        "${scripts}/multiple.topics.and.nodes/server"})
-    public void shouldRequestMetadataForMultipleTopicsAndNodes() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.error.invalid.topic/client",
-        "${scripts}/one.topic.error.invalid.topic/server"})
-    public void shouldHandleErrorInvalidTopicNameFromSingleTopicMetadataRequest() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.error.unknown.topic/client",
-        "${scripts}/one.topic.error.unknown.topic/server"})
-    public void shouldHandleErrorUnknownTopicFromSingleTopicMetadataRequest() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.error.partition.count.changed/client",
-        "${scripts}/one.topic.error.partition.count.changed/server"})
-    public void shouldHandleErrorPartitionCountChangedFromMetadataResponse() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.leader.not.available.and.retry/client",
-        "${scripts}/one.topic.leader.not.available.and.retry/server"})
-    public void shouldRetryWhenLeaderNotAvailable() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.unknown.error.abort.receive.abort.and.retry/client",
-        "${scripts}/one.topic.unknown.error.abort.receive.abort.and.retry/server"})
-    public void shouldReconnectAndRetryWhenAbortAndAbortReceivedWhenMetadataQueryGivesUnknownError() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.unknown.error.abort.receive.end.and.retry/client",
-        "${scripts}/one.topic.unknown.error.abort.receive.end.and.retry/server"})
-    public void shouldReconnectAndRetryWhenAbortAndEndReceivedWhenMetadataQueryGivesUnknownError() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/configs.response.unknown.error.abort.receive.abort.and.retry/client",
-        "${scripts}/configs.response.unknown.error.abort.receive.abort.and.retry/server"})
-    public void shouldReconnectAndRetryWhenAbortAndAbortReceivedWhenConfigsResponseGivesUnknownError() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.multiple.nodes/client",
-        "${scripts}/one.topic.multiple.nodes/server"})
-    public void shouldRequestMetadataForOneTopicOnMultipleNodes() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.multiple.nodes.and.replicas/client",
-        "${scripts}/one.topic.multiple.nodes.and.replicas/server"})
-    public void shouldHandleMetadataResponseOneTopicMultipleNodesAndReplicas() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.multiple.partitions/client",
-        "${scripts}/one.topic.multiple.partitions/server"})
-    public void shouldRequestMetadataForOneTopicMultiplePartitionsSingleNode() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/one.topic.single.partition/client",
-        "${scripts}/one.topic.single.partition/server"})
-    public void shouldRequestMetadataForOneTopicSinglePartition() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-    @Test
-    @Specification({
-        "${scripts}/metadata.incomplete.response.aborts/client",
-        "${scripts}/metadata.incomplete.response.aborts/server"})
-    public void shouldAbortWhenMetadataResponseIsIncomplete() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/metadata.incomplete.response.broker.aborts/client",
-        "${scripts}/metadata.incomplete.response.broker.aborts/server"})
-    public void shouldAbortWhenMetadataResponseBrokerIsIncomplete() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/metadata.incomplete.response.after.brokers.aborts/client",
-        "${scripts}/metadata.incomplete.response.after.brokers.aborts/server"})
-    public void shouldAbortWhenMetadataResponseAfterBrokersIsIncomplete() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/metadata.incomplete.response.topic.aborts/client",
-        "${scripts}/metadata.incomplete.response.topic.aborts/server"})
-    public void shouldAbortWhenMetadataResponseTopicIsIncomplete() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/metadata.incomplete.response.topic.partition.aborts/client",
-        "${scripts}/metadata.incomplete.response.topic.partition.aborts/server"})
-    public void shouldAbortWhenMetadataResponseTopicPartitionIsIncomplete() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/describe.configs.incomplete.response.aborts/client",
-        "${scripts}/describe.configs.incomplete.response.aborts/server"})
-    public void shouldAbortWhenDescribeConfigsResponseIsIncomplete() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/describe.configs.incomplete.response.resource.aborts/client",
-        "${scripts}/describe.configs.incomplete.response.resource.aborts/server"})
-    public void shouldAbortWhenDescribeConfigsResponseResourceIsIncomplete() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/describe.configs.incomplete.response.resource.config.aborts/client",
-        "${scripts}/describe.configs.incomplete.response.resource.config.aborts/server"})
-    public void shouldAbortWhenDescribeConfigsResponseResourceConfigIsIncomplete() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/unknown.and.known.topics/client",
-        "${scripts}/unknown.and.known.topics/server"})
-    public void shouldRepeatedlyRequestMetadataForTopicsWhichAreNotFound() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_SERVER");
-        k3po.notifyBarrier("WRITE_SECOND_UNKNOWN_TOPIC_METADATA_RESPONSE");
-        k3po.notifyBarrier("WRITE_THIRD_UNKNOWN_TOPIC_METADATA_RESPONSE");
-        k3po.finish();
-    }
-
 }

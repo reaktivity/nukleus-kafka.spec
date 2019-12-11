@@ -57,46 +57,6 @@ public class ControlIT
 
     @Test
     @Specification({
-        "route.ext.header/client/nukleus",
-        "route.ext.header/client/controller"
-    })
-    public void shouldRouteClientWithHeaderCondition() throws Exception
-    {
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "route.ext.headers/client/nukleus",
-        "route.ext.headers/client/controller"
-    })
-    public void shouldRouteClientWithHeaderConditions() throws Exception
-    {
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "route.ext.multiple.headers/client/nukleus",
-        "route.ext.multiple.headers/client/controller"
-    })
-    public void shouldRouteClientWithMultipleRoutesDifferingOnlyInHeaders() throws Exception
-    {
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "route.ext.multiple.networks/client/nukleus",
-        "route.ext.multiple.networks/client/controller"
-    })
-    public void shouldRouteClientWithMultipleNetworks() throws Exception
-    {
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "route.ext.multiple.topics/client/nukleus",
         "route.ext.multiple.topics/client/controller"
     })
