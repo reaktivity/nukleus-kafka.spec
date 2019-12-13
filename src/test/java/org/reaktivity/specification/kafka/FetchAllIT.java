@@ -38,9 +38,9 @@ public class FetchAllIT
 
     @Test
     @Specification({
-        "${scripts}/merged.partition.offsets.earliest/client",
-        "${scripts}/merged.partition.offsets.earliest/server"})
-    public void shouldRequestMergedPartitionOffsetsEarliest() throws Exception
+        "${scripts}/unmerged.partition.offsets.earliest/client",
+        "${scripts}/unmerged.partition.offsets.earliest/server"})
+    public void shouldRequestUnmergedPartitionOffsetsEarliest() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
