@@ -24,14 +24,6 @@ accept ${networkAccept}
 
 accepted
 
-read nukleus:begin.ext ${tcp:beginEx()
-                            .typeId(nukleus:id("tcp"))
-                            .localAddress("0.0.0.0")
-                            .localPort(0)
-                            .remoteHost("broker1.example.com")
-                            .remotePort(9092)
-                            .build()}
-
 connected
 
 read 21                                 # size
@@ -106,7 +98,7 @@ write 203                               # size
         0s                                # no error
         4s "test"                         #   "test" topic
         [0x00]                            # not internal
-        2                                 # partitions
+        3                                 # partitions
           0s                                # no error
           0                                 # partition
           1                                 # leader

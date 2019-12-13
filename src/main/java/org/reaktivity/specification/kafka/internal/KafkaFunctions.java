@@ -686,6 +686,7 @@ public final class KafkaFunctions
                 matchKind(dataEx) &&
                 matchCase(dataEx))
             {
+                byteBuf.position(byteBuf.position() + dataEx.sizeof());
                 return dataEx;
             }
 

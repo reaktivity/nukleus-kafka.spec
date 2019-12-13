@@ -24,14 +24,6 @@ accept ${networkAccept}
 
 accepted
 
-read nukleus:begin.ext ${tcp:beginEx()
-                            .typeId(nukleus:id("tcp"))
-                            .localAddress("0.0.0.0")
-                            .localPort(0)
-                            .remoteHost("broker1.example.com")
-                            .remotePort(9092)
-                            .build()}
-
 connected
 
 read 41                                 # size
