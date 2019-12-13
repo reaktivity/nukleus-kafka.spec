@@ -31,6 +31,8 @@ import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 import org.reaktivity.specification.kafka.internal.types.ArrayFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaConditionFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaFilterFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaHeaderFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaKeyFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
@@ -323,37 +325,9 @@ public final class KafkaFunctions
                 return this;
             }
 
-            public KafkaFetchBeginExBuilder key(
-                String key)
+            public KafkaFilterBuilder filter()
             {
-                if (key != null)
-                {
-                    fetchBeginExRW.filtersItem(f -> f.conditionsItem(c -> c.key(k -> k.value(v -> v.set(key.getBytes(UTF_8))))));
-                }
-                else
-                {
-                    fetchBeginExRW.filtersItem(f -> f.conditionsItem(c -> c.key(k -> k.value((OctetsFW) null))));
-                }
-                return this;
-            }
-
-            public KafkaFetchBeginExBuilder header(
-                String name,
-                String value)
-            {
-                if (value == null)
-                {
-                    fetchBeginExRW.filtersItem(
-                        f -> f.conditionsItem(c -> c.header(h -> h.name(name)
-                                                                  .value((OctetsFW) null))));
-                }
-                else
-                {
-                    fetchBeginExRW.filtersItem(
-                        f -> f.conditionsItem(c -> c.header(h -> h.name(name)
-                                                                  .value(v -> v.set(value.getBytes(UTF_8))))));
-                }
-                return this;
+                return new KafkaFilterBuilder();
             }
 
             public KafkaBeginExBuilder build()
@@ -361,6 +335,87 @@ public final class KafkaFunctions
                 final KafkaFetchBeginExFW fetchBeginEx = fetchBeginExRW.build();
                 beginExRO.wrap(writeBuffer, 0, fetchBeginEx.limit());
                 return KafkaBeginExBuilder.this;
+            }
+
+            public final class KafkaFilterBuilder
+            {
+                private final KafkaFilterFW.Builder filterRW = new KafkaFilterFW.Builder();
+
+                private KafkaFilterBuilder()
+                {
+                    MutableDirectBuffer buffer = new UnsafeBuffer(new byte[1024]);
+                    filterRW.wrap(buffer, 0, buffer.capacity());
+                }
+
+                public KafkaFilterBuilder key(
+                    String key)
+                {
+                    if (key != null)
+                    {
+                        filterRW.conditionsItem(c -> c.key(k -> k.value(v -> v.set(key.getBytes(UTF_8)))));
+                    }
+                    else
+                    {
+                        filterRW.conditionsItem(c -> c.key(k -> k.value((OctetsFW) null)));
+                    }
+                    return this;
+                }
+
+                public KafkaFilterBuilder header(
+                    String name,
+                    String value)
+                {
+                    if (value == null)
+                    {
+                        filterRW.conditionsItem(c -> c.header(h -> h.name(name)
+                                                                    .value((OctetsFW) null)));
+                    }
+                    else
+                    {
+                        filterRW.conditionsItem(c -> c.header(h -> h.name(name)
+                                                                    .value(v -> v.set(value.getBytes(UTF_8)))));
+                    }
+                    return this;
+                }
+
+                public KafkaFetchBeginExBuilder build()
+                {
+                    final KafkaFilterFW filter = filterRW.build();
+                    fetchBeginExRW.filtersItem(fb -> set(fb, filter));
+                    return KafkaFetchBeginExBuilder.this;
+                }
+
+                private void set(
+                    KafkaFilterFW.Builder builder,
+                    KafkaFilterFW filter)
+                {
+                    final ArrayFW<KafkaConditionFW> conditions = filter.conditions();
+                    builder.conditions(csb -> set(csb, conditions));
+                }
+
+                private void set(
+                    ArrayFW.Builder<KafkaConditionFW.Builder, KafkaConditionFW> builder,
+                    ArrayFW<KafkaConditionFW> conditions)
+                {
+                    conditions.forEach(c -> builder.item(ib -> set(ib, c)));
+                }
+
+                private void set(
+                    KafkaConditionFW.Builder builder,
+                    KafkaConditionFW condition)
+                {
+                    switch (condition.kind())
+                    {
+                    case KafkaConditionFW.KIND_KEY:
+                        final KafkaKeyFW key = condition.key();
+                        builder.key(kb -> kb.value(key.value()));
+                        break;
+                    case KafkaConditionFW.KIND_HEADER:
+                        final KafkaHeaderFW header = condition.header();
+                        builder.header(hb -> hb.name(header.name()).value(header.value()));
+                        break;
+                    }
+                }
             }
         }
 

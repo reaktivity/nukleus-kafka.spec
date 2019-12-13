@@ -325,4 +325,81 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.none/client",
+        "${scripts}/filter.none/server"})
+    public void shouldReceiveMessagesWithNoFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.key/client",
+        "${scripts}/filter.key/server"})
+    public void shouldReceiveMessagesWithKeyFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.key.and.header/client",
+        "${scripts}/filter.key.and.header/server"})
+    public void shouldReceiveMessagesWithKeyAndHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.key.or.header/client",
+        "${scripts}/filter.key.or.header/server"})
+    public void shouldReceiveMessagesWithKeyOrHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.header/client",
+        "${scripts}/filter.header/server"})
+    public void shouldReceiveMessagesWithHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.header.and.header/client",
+        "${scripts}/filter.header.and.header/server"})
+    public void shouldReceiveMessagesWithHeaderAndHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.header.or.header/client",
+        "${scripts}/filter.header.or.header/server"})
+    public void shouldReceiveMessagesWithHeaderOrHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
 }

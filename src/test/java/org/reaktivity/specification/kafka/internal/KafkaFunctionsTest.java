@@ -180,8 +180,12 @@ public class KafkaFunctionsTest
                                      .fetch()
                                          .topic("topic")
                                          .progress(0, 1L)
-                                         .key("match")
-                                         .header("name", "value")
+                                         .filter()
+                                             .key("match")
+                                             .build()
+                                         .filter()
+                                             .header("name", "value")
+                                             .build()
                                          .build()
                                      .build();
 
@@ -225,8 +229,12 @@ public class KafkaFunctionsTest
                                      .fetch()
                                          .topic("topic")
                                          .progress(0, 1L)
-                                         .key(null)
-                                         .header("name", null)
+                                         .filter()
+                                             .key(null)
+                                             .build()
+                                         .filter()
+                                             .header("name", null)
+                                             .build()
                                          .build()
                                      .build();
 
