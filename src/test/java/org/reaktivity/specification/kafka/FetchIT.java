@@ -281,4 +281,15 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.none/client",
+        "${scripts}/filter.none/server"})
+    public void shouldReceiveMessagesWithNoFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 }
