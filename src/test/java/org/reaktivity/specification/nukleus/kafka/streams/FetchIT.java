@@ -402,4 +402,92 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/compact.message.with.message/client",
+        "${scripts}/compact.message.with.message/server"})
+    public void shouldCompactMessageWithMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compact.message.with.tombstone/client",
+        "${scripts}/compact.message.with.tombstone/server"})
+    public void shouldCompactMessageWithTombstone() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compact.tombstone.with.message/client",
+        "${scripts}/compact.tombstone.with.message/server"})
+    public void shouldCompactTombstoneWithMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compact.tombstone.with.tombstone/client",
+        "${scripts}/compact.tombstone.with.tombstone/server"})
+    public void shouldCompactTombstoneWithTombstone() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.message.with.message/client",
+        "${scripts}/compacted.message.with.message/server"})
+    public void shouldReceiveMessageAfterCompactedMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.message.with.tombstone/client",
+        "${scripts}/compacted.message.with.tombstone/server"})
+    public void shouldReceiveTombstoneAfterCompactedMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.tombstone.with.message/client",
+        "${scripts}/compacted.tombstone.with.message/server"})
+    public void shouldReceiveMessageAfterCompactedTombstone() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/compacted.tombstone.with.tombstone/client",
+        "${scripts}/compacted.tombstone.with.tombstone/server"})
+    public void shouldReceiveTombstoneAfterCompactedTombstone() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
 }
