@@ -38,6 +38,17 @@ public class FetchAllIT
 
     @Test
     @Specification({
+        "${scripts}/unmerged.filter.none/client",
+        "${scripts}/unmerged.filter.none/server"})
+    public void shouldRequestUnmergedMessagesWithNoFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/unmerged.partition.offsets.earliest/client",
         "${scripts}/unmerged.partition.offsets.earliest/server"})
     public void shouldRequestUnmergedPartitionOffsetsEarliest() throws Exception
