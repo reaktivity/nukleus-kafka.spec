@@ -236,10 +236,10 @@ public final class KafkaFunctions
             this.routeExRW = new KafkaRouteExFW.Builder().wrap(writeBuffer, 0, writeBuffer.capacity());
         }
 
-        public KafkaRouteExBuilder topicName(
-            String topicName)
+        public KafkaRouteExBuilder topic(
+            String topic)
         {
-            routeExRW.topicName(topicName);
+            routeExRW.topic(topic);
             return this;
         }
 
@@ -733,6 +733,11 @@ public final class KafkaFunctions
         private KafkaDataExFW match(
             ByteBuffer byteBuf) throws Exception
         {
+            if (!byteBuf.hasRemaining())
+            {
+                return null;
+            }
+
             bufferRO.wrap(byteBuf);
             final KafkaDataExFW dataEx = dataExRO.tryWrap(bufferRO, byteBuf.position(), byteBuf.capacity());
 

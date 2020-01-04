@@ -67,7 +67,7 @@ scope kafka
     {
         struct KafkaRouteEx
         {
-            string16 topicName; // TODO: wildcard
+            string16 topic; // TODO: wildcard
         }
     }
 
@@ -143,10 +143,10 @@ scope kafka
 
         struct KafkaFetchDataEx
         {
-            int64 timestamp = 0;
-            KafkaKey key;
-            KafkaHeader[] headers;
-            KafkaOffset[] progress;
+            int64 timestamp = 0;        // INIT only
+            KafkaKey key;               // INIT only
+            KafkaHeader[] headers;      // FIN only
+            KafkaOffset[] progress;     // FIN only
         }
 
         struct KafkaFetchEndEx

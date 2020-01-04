@@ -18,6 +18,33 @@ property applicationAccept "nukleus://streams/kafka#0"
 
 accept ${applicationAccept}
     option nukleus:window 8192
-    option nukleus:transmission "duplex"
+    option nukleus:transmission "half-duplex"
+
+accepted
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .meta()
+                                  .topic("test")
+                                  .build()
+                              .build()}
+
+connected
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .meta()
+                                   .topic("test")
+                                   .build()
+                               .build()}
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .meta()
+                                  .partition(0, 177)
+                                  .build()
+                              .build()}
+write flush
 
 rejected

@@ -32,7 +32,7 @@ read [0..8] # authorization
 read ${core:string("kafka#0")}
 read ${core:string("target#0")}
 read ${kafka:routeEx()
-            .topicName("test")
+            .topic("test")
             .build()}
 
 write 0x40000001

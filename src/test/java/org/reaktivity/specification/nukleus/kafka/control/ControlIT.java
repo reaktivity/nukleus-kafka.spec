@@ -57,6 +57,26 @@ public class ControlIT
 
     @Test
     @Specification({
+        "route/cache.client/nukleus",
+        "route/cache.client/controller"
+    })
+    public void shouldRouteCacheClient() throws Exception
+    {
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "route/cache.server/nukleus",
+        "route/cache.server/controller"
+    })
+    public void shouldRouteCacheServer() throws Exception
+    {
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "unroute/client/nukleus",
         "unroute/client/controller"
     })

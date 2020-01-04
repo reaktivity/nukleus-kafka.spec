@@ -24,7 +24,7 @@ connect await ROUTED_CLIENT
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
-                                   .topic("test")
+                                   .topic("not-routed")
                                    .progress(0, 0)
                                    .build()
                                .build()}

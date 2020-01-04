@@ -85,7 +85,7 @@ write 21                                # size
 read 203                                # size
      ${newRequestId2}
      [0..4]
-     2                                  # brokers
+     3                                  # brokers
        1                                    # broker id
        19s "broker1.example.com"            # host name
        9092                                 # port

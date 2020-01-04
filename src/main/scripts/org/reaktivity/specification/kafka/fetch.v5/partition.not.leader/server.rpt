@@ -24,6 +24,41 @@ accept ${networkAccept}
 
 accepted
 
+connected
+
+read 21                                 # size
+     3s                                 # metadata
+     5s                                 # v5
+     (int:requestId)
+     -1s                                # no client id
+     1                                  # topics
+       4s "test"                        #   "test" topic
+     [0x00]                             # allow_auto_topic_creation
+
+write 97                                # size
+      ${requestId}
+      0
+      1                                 # brokers
+        0xb1                                # broker id
+        19s "broker1.example.com"           # host name
+        9092                                # port
+        -1s                                 # no rack
+      9s "cluster 1"                    # cluster id
+      1                                 # controller id
+      1                                 # topics
+        0s                                # no error
+        4s "test"                         #   "test" topic
+        [0x00]                            # not internal
+        1                                 # partitions
+          0s                                # no error
+          0                                 # partition
+          0xb1                              # leader
+          0                                 # no replicas
+          -1                                # no in-sync replicas
+          0                                 # offline replicas
+
+accepted
+
 read nukleus:begin.ext ${tcp:beginEx()
                             .typeId(nukleus:id("tcp"))
                             .localAddress("0.0.0.0")
@@ -52,7 +87,7 @@ read 65
      -1L
      [0..4]
 
-write 58
+write 60
       ${requestId}
       0
       1

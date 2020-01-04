@@ -23,6 +23,37 @@ connect await ROUTED_CLIENT
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
+                               .meta()
+                                   .topic("test")
+                                   .build()
+                               .build()}
+
+connected
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .meta()
+                                  .topic("test")
+                                  .build()
+                              .build()}
+
+read nukleus:data.ext ${kafka:dataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .meta()
+                                 .partition(0, 177)
+                                 .build()
+                             .build()}
+
+read notify ROUTED_BROKER_CLIENT
+
+connect await ROUTED_BROKER_CLIENT
+        ${applicationConnect}
+    option nukleus:window 8192
+    option nukleus:transmission "half-duplex"
+    option nukleus:affinity 0xb1
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
                                    .progress(0, 1)

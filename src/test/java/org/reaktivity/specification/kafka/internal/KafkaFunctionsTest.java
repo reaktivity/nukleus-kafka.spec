@@ -69,12 +69,12 @@ public class KafkaFunctionsTest
     public void shouldGenerateRouteExtension()
     {
         byte[] build = KafkaFunctions.routeEx()
-                                     .topicName("topic")
+                                     .topic("topic")
                                      .build();
 
         DirectBuffer buffer = new UnsafeBuffer(build);
         KafkaRouteExFW routeEx = new KafkaRouteExFW().wrap(buffer, 0, buffer.capacity());
-        assertEquals("topic", routeEx.topicName().asString());
+        assertEquals("topic", routeEx.topic().asString());
     }
 
     @Test

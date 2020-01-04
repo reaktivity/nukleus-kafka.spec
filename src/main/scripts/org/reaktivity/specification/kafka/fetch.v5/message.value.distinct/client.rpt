@@ -28,6 +28,47 @@ connect await ROUTED_SERVER
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
+connected
+
+write 21                                # size
+      3s                                # metadata
+      5s                                # v5
+      ${newRequestId}
+      -1s                               # no client id
+      1                                 # topics
+        4s "test"                       #   "test" topic
+      [0x00]                            # allow_auto_topic_creation
+
+read 97                                 # size
+     ${newRequestId}
+     [0..4]
+     1                                  # brokers
+       0xb1                                 # broker id
+       19s "broker1.example.com"            # host name
+       9092                                 # port
+       -1s                                  # no rack
+     9s "cluster 1"                     # cluster id
+     1                                  # controller id
+     1                                  # topics
+       0s                                 # no error
+       4s "test"                          #   "test" topic
+       [0x00]                             # not internal
+       1                                  # partitions
+         0s                                 # no error
+         0                                  # partition
+         0xb1                               # leader
+         0                                  # no replicas
+         -1                                 # no in-sync replicas
+         0                                  # offline replicas
+
+read notify ROUTED_BROKER_SERVER
+
+connect await ROUTED_BROKER_SERVER
+        ${networkConnect}
+  option nukleus:window ${networkConnectWindow}
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
 write nukleus:begin.ext ${tcp:beginEx()
                              .typeId(nukleus:id("tcp"))
                              .localAddress("0.0.0.0")
@@ -57,7 +98,7 @@ write 65                                # size
       -1L
       ${partitionBytesMax}
 
-read 138
+read 140
      ${newRequestId}
      [0..4]
      1

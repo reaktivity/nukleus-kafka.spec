@@ -32,7 +32,7 @@ write 0L
 write ${core:string("kafka#0")}
 write ${core:string("target#0")}
 write ${kafka:routeEx()
-             .topicName("test")
+             .topic("test")
              .build()}
 write flush
 

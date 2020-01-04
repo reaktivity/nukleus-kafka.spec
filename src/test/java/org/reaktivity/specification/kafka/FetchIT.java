@@ -83,6 +83,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/partition.offset.latest/client",
+        "${scripts}/partition.offset.latest/server"})
+    public void shouldRequestPartitionOffsetLatest() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/partition.offset.zero/client",
         "${scripts}/partition.offset.zero/server"})
     public void shouldRequestPartitionOffsetZero() throws Exception
