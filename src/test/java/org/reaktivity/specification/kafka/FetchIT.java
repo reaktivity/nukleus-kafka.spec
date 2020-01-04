@@ -202,6 +202,17 @@ public class FetchIT
         k3po.finish();
     }
 
+    @Test
+    @Specification({
+        "${scripts}/message.value.100k/client",
+        "${scripts}/message.value.100k/server"})
+    public void shouldReceiveMessageValue100k() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
     @Ignore("TODO")
     @Test
     @Specification({
