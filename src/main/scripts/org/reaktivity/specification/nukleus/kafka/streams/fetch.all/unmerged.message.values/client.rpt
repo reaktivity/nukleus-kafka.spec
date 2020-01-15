@@ -14,10 +14,10 @@
 # under the License.
 #
 
-property applicationConnect "nukleus://streams/kafka#0"
+property clientAddress "nukleus://streams/kafka#0"
 
 connect await ROUTED_CLIENT
-        ${applicationConnect}
+        ${clientAddress}
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
 
@@ -57,7 +57,7 @@ read nukleus:data.ext ${kafka:dataEx()
 read notify PARTITION_COUNT_3
 
 connect await PARTITION_COUNT_2
-        ${applicationConnect}
+        ${clientAddress}
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
 
@@ -96,7 +96,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
 read "Hello, world #A2"
 
 connect await PARTITION_COUNT_2
-        ${applicationConnect}
+        ${clientAddress}
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
 
@@ -135,7 +135,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
 read "Hello, world #B2"
 
 connect await PARTITION_COUNT_3
-        ${applicationConnect}
+        ${clientAddress}
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
 
