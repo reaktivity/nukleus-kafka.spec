@@ -126,6 +126,17 @@ public class FetchAllIT
 
     @Test
     @Specification({
+        "${scripts}/merged.partition.offsets.latest/client",
+        "${scripts}/merged.partition.offsets.latest/server"})
+    public void shouldRequestMergedPartitionOffsetsLatest() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/merged.partition.offsets.earliest/client",
         "${scripts}/merged.partition.offsets.earliest/server"})
     public void shouldRequestMergedPartitionOffsetsEarliest() throws Exception
@@ -151,6 +162,17 @@ public class FetchAllIT
         "${scripts}/unmerged.message.values/client",
         "${scripts}/unmerged.message.values/server"})
     public void shouldReceiveUnmergedMessageValues() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.partition.offsets.latest/client",
+        "${scripts}/unmerged.partition.offsets.latest/server"})
+    public void shouldRequestUnmergedPartitionOffsetsLatest() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
