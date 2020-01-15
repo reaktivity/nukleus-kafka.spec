@@ -14,9 +14,9 @@
 # under the License.
 #
 
-property applicationAccept "nukleus://streams/kafka#0"
+property serverAddress "nukleus://streams/kafka#0"
 
-accept ${applicationAccept}
+accept ${serverAddress}
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
 

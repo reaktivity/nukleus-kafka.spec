@@ -72,6 +72,8 @@ public class ControlIT
     })
     public void shouldRouteCacheServer() throws Exception
     {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CACHE_CLIENT");
         k3po.finish();
     }
 
@@ -84,6 +86,30 @@ public class ControlIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "unroute/cache.client/nukleus",
+        "unroute/cache.client/controller"
+    })
+    public void shouldUnrouteCacheClient() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CACHE_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "unroute/cache.server/nukleus",
+        "unroute/cache.server/controller"
+    })
+    public void shouldUnrouteCacheServer() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CACHE_SERVER");
         k3po.finish();
     }
 }

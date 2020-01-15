@@ -14,18 +14,19 @@
 # under the License.
 #
 
-property nukleiRG010101C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleiRG010501C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlRG010101C ${nukleiRG010101C.control()}
+property controlRG010501C ${nukleiRG010501C.control()}
 
-connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:broadcastReceiver(controlRG010101C.controller)}
-        option agrona:writer ${agrona:manyToOneWriter(controlRG010101C.nukleus)}
+connect await ROUTED_CACHE_CLIENT
+        "agrona://stream/bidirectional"
+        option agrona:reader ${agrona:broadcastReceiver(controlRG010501C.controller)}
+        option agrona:writer ${agrona:manyToOneWriter(controlRG010501C.nukleus)}
 
 connected
 
 write 0x00000001
-write ${controlRG010101C.nextCorrelationId()}
+write ${controlRG010501C.nextCorrelationId()}
 write ${core:string("kafka")}
 write [0x05]
 write 0L
@@ -34,7 +35,7 @@ write ${core:string("kafka-cache#0")}
 write flush
 
 read 0x40000001
-read ${controlRG010101C.correlationId()}
+read ${controlRG010501C.correlationId()}
 read (long:newCacheServerRouteId)
 
 read notify ROUTED_CACHE_SERVER
