@@ -27,6 +27,19 @@ connected
 write 0x00000001
 write ${controlRG010601C.nextCorrelationId()}
 write ${core:string("kafka")}
+write [0x05]
+write 0L
+write ${core:string("kafka#0")}
+write ${core:string("kafka-cache#0")}
+write flush
+
+read 0x40000001
+read ${controlRG010601C.correlationId()}
+read (long:newCacheServerRouteId)
+
+write 0x00000001
+write ${controlRG010601C.nextCorrelationId()}
+write ${core:string("kafka")}
 write [0x06]
 write 0L
 write ${core:string("kafka-cache#0")}
@@ -37,7 +50,7 @@ read 0x40000001
 read ${controlRG010601C.correlationId()}
 read (long:newCacheClientRouteId)
 
-read notify ROUTED_CACHE_CLIENT
+read notify ROUTED_CLIENT
 
 close
 closed

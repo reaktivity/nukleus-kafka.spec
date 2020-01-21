@@ -25,6 +25,19 @@ connect "agrona://stream/bidirectional"
 connected
 
 read 0x00000001
+read (long:correlationIdRG010501N)
+read ${core:string("kafka")}
+read [0x05]
+read [0..8] # authorization
+read ${core:string("kafka#0")}
+read ${core:string("kafka-cache#0")}
+
+write 0x40000001
+write ${correlationIdRG010501N}
+write ${nukleus:newCacheServerRouteId("kafka#0", "kafka-cache#0")}
+write flush
+
+read 0x00000001
 read (long:correlationIdRG010601N)
 read ${core:string("kafka")}
 read [0x06]

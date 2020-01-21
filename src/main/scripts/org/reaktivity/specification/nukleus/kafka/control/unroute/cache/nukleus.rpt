@@ -18,12 +18,21 @@ property nukleiUR020601N ${nuklei:directory("target/nukleus-itests").controlCapa
 
 property controlUR020601N ${nukleiUR020601N.controlNew()}
 
-connect await ROUTED_CACHE_CLIENT
+connect await ROUTED_CLIENT
         "agrona://stream/bidirectional"
         option agrona:reader ${agrona:manyToOneReader(controlUR020601N.nukleus)}
         option agrona:writer ${agrona:broadcastTransmitter(controlUR020601N.controller)}
 
 connected
+
+read 0x00000002
+read (long:correlationIdUR020501N)
+read ${core:string("kafka")}
+read [0..8] # routeId
+
+write 0x40000002
+write ${correlationIdUR020501N}
+write flush
 
 read 0x00000002
 read (long:correlationIdUR020601N)

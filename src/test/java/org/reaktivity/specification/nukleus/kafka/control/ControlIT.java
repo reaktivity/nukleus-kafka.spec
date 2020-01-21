@@ -57,23 +57,21 @@ public class ControlIT
 
     @Test
     @Specification({
-        "route/cache.client/nukleus",
-        "route/cache.client/controller"
+        "route/cache/nukleus",
+        "route/cache/controller"
     })
-    public void shouldRouteCacheClient() throws Exception
+    public void shouldRouteCache() throws Exception
     {
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "route/cache.server/nukleus",
-        "route/cache.server/controller"
+        "route.ext/cache/nukleus",
+        "route.ext/cache/controller"
     })
-    public void shouldRouteCacheServer() throws Exception
+    public void shouldRouteCacheWithExtension() throws Exception
     {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CACHE_CLIENT");
         k3po.finish();
     }
 
@@ -91,25 +89,13 @@ public class ControlIT
 
     @Test
     @Specification({
-        "unroute/cache.client/nukleus",
-        "unroute/cache.client/controller"
+        "unroute/cache/nukleus",
+        "unroute/cache/controller"
     })
-    public void shouldUnrouteCacheClient() throws Exception
+    public void shouldUnrouteCache() throws Exception
     {
         k3po.start();
-        k3po.notifyBarrier("ROUTED_CACHE_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "unroute/cache.server/nukleus",
-        "unroute/cache.server/controller"
-    })
-    public void shouldUnrouteCacheServer() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CACHE_SERVER");
+        k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
 }
