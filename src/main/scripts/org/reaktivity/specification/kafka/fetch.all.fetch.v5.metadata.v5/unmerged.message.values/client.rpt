@@ -14,19 +14,17 @@
 # under the License.
 #
 
-property networkConnect "nukleus://streams/kafka#0"
-property networkConnectWindow 8192
+property clientAddress "nukleus://streams/kafka#0"
 
 property newRequestId ${kafka:newRequestId()}
-property newRequestId2 ${kafka:newRequestId()}
 
 property fetchWaitMax 500
 property fetchBytesMax 65535
 property partitionBytesMax 8192
 
 connect await ROUTED_SERVER
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -78,16 +76,16 @@ read notify PARTITION_COUNT_2
 write 21                                # size
       3s                                # metadata
       5s                                # v5
-      ${newRequestId2}
+      ${newRequestId}
       -1s                               # no client id
       1                                 # topics
         4s "test"                       #   "test" topic
       [0x00]                            # allow_auto_topic_creation
 
 read 203                                # size
-     ${newRequestId2}
+     ${newRequestId}
      [0..4]
-     2                                  # brokers
+     3                                  # brokers
        1                                    # broker id
        19s "broker1.example.com"            # host name
        9092                                 # port
@@ -129,8 +127,8 @@ read 203                                # size
 read notify PARTITION_COUNT_3
 
 connect await PARTITION_COUNT_2
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -158,11 +156,11 @@ write 65                                # size
       4s "test"
       1
       0                                 # partition
-      -1L                               # offset
+      1L                                # offset
       -1L
       ${partitionBytesMax}
 
-read 226
+read 228
      ${newRequestId}
      [0..4]
      1
@@ -219,8 +217,8 @@ read 226
      ${kafka:varint(0)}
 
 connect await PARTITION_COUNT_2
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -248,11 +246,11 @@ write 65                                # size
       4s "test"
       1
       1                                 # partition
-      -1L                               # offset
+      1L                                # offset
       -1L
       ${partitionBytesMax}
 
-read 226
+read 228
      ${newRequestId}
      [0..4]
      1
@@ -309,8 +307,8 @@ read 226
      ${kafka:varint(0)}
 
 connect await PARTITION_COUNT_3
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -338,11 +336,11 @@ write 65                                # size
       4s "test"
       1
       2                                 # partition
-      -1L                               # offset
+      1L                                # offset
       -1L
       ${partitionBytesMax}
 
-read 226
+read 228
      ${newRequestId}
      [0..4]
      1

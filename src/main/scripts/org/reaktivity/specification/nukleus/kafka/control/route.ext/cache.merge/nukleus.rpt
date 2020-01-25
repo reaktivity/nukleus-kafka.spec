@@ -56,5 +56,21 @@ write ${correlationIdRG010601N}
 write ${nukleus:newCacheClientRouteId("kafka#0", "kafka-cache#0")}
 write flush
 
+read 0x00000001
+read (long:correlationIdRG010602N)
+read ${core:string("kafka")}
+read [0x06]
+read [0..8] # authorization
+read ${core:string("kafka#0")}
+read ${core:string("kafka#0")}
+read ${kafka:routeEx()
+            .topic("test")
+            .build()}
+
+write 0x40000001
+write ${correlationIdRG010602N}
+write ${nukleus:newCacheClientRouteId("kafka#0", "kafka#0")}
+write flush
+
 close
 closed

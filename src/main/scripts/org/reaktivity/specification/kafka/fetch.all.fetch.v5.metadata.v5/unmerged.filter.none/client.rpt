@@ -14,19 +14,17 @@
 # under the License.
 #
 
-property networkConnect "nukleus://streams/kafka#0"
-property networkConnectWindow 8192
+property clientAddress "nukleus://streams/kafka#0"
 
 property newRequestId ${kafka:newRequestId()}
-property newRequestId2 ${kafka:newRequestId()}
 
 property fetchWaitMax 500
 property fetchBytesMax 65535
 property partitionBytesMax 8192
 
 connect await ROUTED_SERVER
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -76,8 +74,8 @@ read 150                                # size
 read notify PARTITION_COUNT_2
 
 connect await PARTITION_COUNT_2
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -105,11 +103,11 @@ write 65                                # size
       4s "test"
       1
       0                                 # partition
-      -1L                               # offset
+      1L                                # offset
       -1L
       ${partitionBytesMax}
 
-read 443
+read 479
      ${newRequestId}
      [0..4]
      1
@@ -121,7 +119,7 @@ read 443
      -1L                                # no last stable offset
      -1L                                # no log start offset
      -1                                 # no aborted transaction count
-     395                                # record set size
+     419                                # record set size
      1L                                 # first offset
      91                                 # length
      0x00
@@ -230,8 +228,8 @@ read 443
        "value2"
 
 connect await PARTITION_COUNT_2
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -259,11 +257,11 @@ write 65                                # size
       4s "test"
       1
       1                                 # partition
-      -1L                               # offset
+      1L                                # offset
       -1L
       ${partitionBytesMax}
 
-read 443
+read 479
      ${newRequestId}
      [0..4]
      1
@@ -275,7 +273,7 @@ read 443
      -1L                                # no last stable offset
      -1L                                # no log start offset
      -1                                 # no aborted transaction count
-     395                                # record set size
+     419                                # record set size
      1L                                 # first offset
      102                                # length
      0x00

@@ -29,6 +29,8 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .topic("test")
+                                  .progress(0, 1)
+                                  .progress(1, 1)
                                   .progress(-1, -1)
                                   .build()
                               .build()}

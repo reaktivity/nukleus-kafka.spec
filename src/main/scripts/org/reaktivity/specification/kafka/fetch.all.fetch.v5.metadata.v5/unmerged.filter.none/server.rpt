@@ -14,14 +14,13 @@
 # under the License.
 #
 
-property networkAccept "nukleus://streams/kafka#0"
-property networkAcceptWindow 8192
+property serverAddress "nukleus://streams/kafka#0"
 
 property deltaMillis 0L
 property newTimestamp ${kafka:timestamp() + deltaMillis}
 
-accept ${networkAccept}
-  option nukleus:window ${networkAcceptWindow}
+accept ${serverAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -96,11 +95,11 @@ read 65
      4s "test"
      1
      0                                  # partition
-     -1L                                # offset
+     1L                                 # offset
      -1L
      [0..4]
 
-write 443
+write 479
       ${requestId}
       0
       1
@@ -112,7 +111,7 @@ write 443
       -1L                               # no last stable offset
       -1L                               # no log start offset
       -1                                # no aborted transaction count
-      395                               # record set size
+      419                               # record set size
       1L                                # first offset
       91                                # length
       0x00
@@ -260,11 +259,11 @@ read 65
      4s "test"
      1
      1                                  # partition
-     -1L                                # offset
+     1L                                 # offset
      -1L
      [0..4]
 
-write 443
+write 479
       ${requestId}
       0
       1
@@ -276,7 +275,7 @@ write 443
       -1L                               # no last stable offset
       -1L                               # no log start offset
       -1                                # no aborted transaction count
-      395                               # record set size
+      419                               # record set size
 
 write await SENT_MESSAGE_A1
 write 1L                                # first offset

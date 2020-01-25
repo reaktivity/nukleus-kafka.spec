@@ -18,14 +18,16 @@ property clientAddress "nukleus://streams/kafka#0"
 
 connect await ROUTED_CLIENT
         ${clientAddress}
-    option nukleus:window 8192
+    option nukleus:window 16
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .progress(-1, -1)
+                                   .progress(0, 1)
+                                   .progress(1, 1)
+                                   .progress(-1, 1)
                                    .build()
                                .build()}
 
@@ -37,7 +39,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .topic("test")
                                   .progress(0, 1)
                                   .progress(1, 1)
-                                  .progress(-1, -1)
+                                  .progress(-1, 1)
                                   .build()
                               .build()}
 
@@ -46,7 +48,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .fetch()
                                  .progress(0, 2)
                                  .progress(1, 1)
-                                 .progress(-1, -1)
+                                 .progress(-1, 1)
                                  .build()
                              .build()}
 read "Hello, world #A1"
@@ -56,7 +58,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .fetch()
                                  .progress(0, 2)
                                  .progress(1, 2)
-                                 .progress(-1, -1)
+                                 .progress(-1, 1)
                                  .build()
                              .build()}
 read "Hello, world #B1"
@@ -66,7 +68,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .fetch()
                                  .progress(0, 3)
                                  .progress(1, 2)
-                                 .progress(-1, -1)
+                                 .progress(-1, 1)
                                  .build()
                              .build()}
 read "Hello, world #A2"
@@ -76,7 +78,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .fetch()
                                  .progress(0, 3)
                                  .progress(1, 3)
-                                 .progress(-1, -1)
+                                 .progress(-1, 1)
                                  .build()
                              .build()}
 read "Hello, world #B2"
@@ -87,7 +89,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .progress(0, 3)
                                  .progress(1, 3)
                                  .progress(2, 2)
-                                 .progress(-1, -1)
+                                 .progress(-1, 1)
                                  .build()
                              .build()}
 read "Hello, world #C1"
@@ -98,7 +100,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .progress(0, 3)
                                  .progress(1, 3)
                                  .progress(2, 3)
-                                 .progress(-1, -1)
+                                 .progress(-1, 1)
                                  .build()
                              .build()}
 read "Hello, world #C2"

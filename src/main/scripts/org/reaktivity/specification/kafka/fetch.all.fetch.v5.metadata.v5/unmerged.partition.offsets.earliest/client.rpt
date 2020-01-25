@@ -14,19 +14,17 @@
 # under the License.
 #
 
-property networkConnect "nukleus://streams/kafka#0"
-property networkConnectWindow 8192
+property clientAddress "nukleus://streams/kafka#0"
 
 property newRequestId ${kafka:newRequestId()}
-property newRequestId2 ${kafka:newRequestId()}
 
 property fetchWaitMax 500
 property fetchBytesMax 65535
 property partitionBytesMax 8192
 
 connect await ROUTED_SERVER
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -76,8 +74,8 @@ read 150                                # size
 read notify PARTITION_COUNT_2
 
 connect await PARTITION_COUNT_2
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -138,8 +136,8 @@ read 119
      0                                  # records
 
 connect await PARTITION_COUNT_2
-        ${networkConnect}
-  option nukleus:window ${networkConnectWindow}
+        ${clientAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -157,7 +155,7 @@ connected
 write 65                                # size
       1s                                # fetch
       5s                                # v5
-      ${newRequestId2}
+      ${newRequestId}
       -1s
       -1
       ${fetchWaitMax}
@@ -173,7 +171,7 @@ write 65                                # size
       ${partitionBytesMax}
 
 read 119
-     ${newRequestId2}
+     ${newRequestId}
      [0..4]
      1
      4s "test"

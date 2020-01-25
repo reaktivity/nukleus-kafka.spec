@@ -14,13 +14,12 @@
 # under the License.
 #
 
-property networkAccept "nukleus://streams/kafka#0"
-property networkAcceptWindow 8192
+property serverAddress "nukleus://streams/kafka#0"
 
 property newTimestamp ${kafka:timestamp()}
 
-accept ${networkAccept}
-  option nukleus:window ${networkAcceptWindow}
+accept ${serverAddress}
+  option nukleus:window 8192
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
@@ -141,7 +140,7 @@ connected
 read 65
      1s
      5s
-     (int:requestId2)
+     (int:requestId)
      -1s
      -1
      [0..4]
@@ -157,7 +156,7 @@ read 65
      [0..4]
 
 write 119
-      ${requestId2}
+      ${requestId}
       0
       1
       4s "test"
