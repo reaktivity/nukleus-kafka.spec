@@ -52,14 +52,15 @@ scope kafka
 
     struct KafkaKey
     {
-        int32 length;
+        varint32 length;
         octets[length] value = null;
     }
 
     struct KafkaHeader
     {
-        string16 name;
-        int32 valueLen;
+        varint32 nameLen;
+        octets[nameLen] name;  // UTF-8
+        varint32 valueLen;
         octets[valueLen] value = null;
     }
 
@@ -75,6 +76,7 @@ scope kafka
     {
         enum KafkaApi (uint8)
         {
+            MERGED (255),
             META (3),
             DESCRIBE (32),
             FETCH (1),
@@ -83,6 +85,7 @@ scope kafka
 
         union KafkaBeginEx switch (uint8) extends core::stream::Extension
         {
+            case 255: kafka::stream::KafkaMergedBeginEx merged;
             case 3: kafka::stream::KafkaMetaBeginEx meta;
             case 32: kafka::stream::KafkaDescribeBeginEx describe;
             case 1: kafka::stream::KafkaFetchBeginEx fetch;
@@ -91,18 +94,17 @@ scope kafka
 
         union KafkaDataEx switch (uint8) extends core::stream::Extension
         {
+            case 255: kafka::stream::KafkaMergedDataEx merged;
             case 3: kafka::stream::KafkaMetaDataEx meta;
             case 32: kafka::stream::KafkaDescribeDataEx describe;
             case 1: kafka::stream::KafkaFetchDataEx fetch;
             case 0: kafka::stream::KafkaProduceDataEx produce;
         }
 
-        union KafkaEndEx switch (uint8) extends core::stream::Extension
+        union KafkaFlushEx switch (uint8) extends core::stream::Extension
         {
-            case 3: kafka::stream::KafkaMetaEndEx meta;
-            case 32: kafka::stream::KafkaDescribeEndEx describe;
-            case 1: kafka::stream::KafkaFetchEndEx fetch;
-            case 0: kafka::stream::KafkaProduceEndEx produce;
+            case 255: kafka::stream::KafkaMergedFlushEx merged;
+            case 1: kafka::stream::KafkaFetchFlushEx fetch;
         }
 
         struct KafkaResetEx extends core::stream::Extension
@@ -120,10 +122,6 @@ scope kafka
             KafkaPartition[] partitions;
         }
 
-        struct KafkaMetaEndEx
-        {
-        }
-
         struct KafkaDescribeBeginEx
         {
             string16 topic;
@@ -135,28 +133,47 @@ scope kafka
             KafkaConfig[] configs;
         }
 
-        struct KafkaDescribeEndEx
-        {
-        }
-
         struct KafkaFetchBeginEx
         {
             string16 topic;
-            KafkaOffset[] progress; // partitionId = -1 applies offset to all unspecified partitionIds
+            KafkaOffset partition;
             KafkaFilter[] filters; // ORed
         }
 
         struct KafkaFetchDataEx
         {
+            int32 deferred = 0;         // INIT only (TODO: move to DATA frame)
             int64 timestamp = 0;        // INIT only
+            int32 headersSizeMax = 4;   // INIT only
+            KafkaOffset partition;      // INIT only
             KafkaKey key;               // INIT only
             KafkaHeader[] headers;      // FIN only
-            KafkaOffset[] progress;     // FIN only
         }
 
-        struct KafkaFetchEndEx
+        struct KafkaFetchFlushEx
         {
-            KafkaOffset[] progress;
+            KafkaOffset partition;
+        }
+
+        struct KafkaMergedBeginEx
+        {
+            string16 topic;
+            KafkaOffset[] partitions;
+            KafkaFilter[] filters; // ORed
+        }
+
+        struct KafkaMergedDataEx
+        {
+            int64 timestamp = 0;        // INIT only
+            KafkaOffset partition;      // INIT only
+            KafkaOffset[] progress;     // INIT only
+            KafkaKey key;               // INIT only
+            KafkaHeader[] headers;      // FIN only
+        }
+
+        struct KafkaMergedFlushEx
+        {
+            KafkaOffset[] partitions;
         }
 
         struct KafkaProduceBeginEx
@@ -171,10 +188,6 @@ scope kafka
             KafkaKey key;
             KafkaHeader[] headers;
             KafkaOffset progress;  // partitionId == -1  implies hash(key) ⇒ partition, offset = seqno
-        }
-
-        struct KafkaProduceEndEx
-        {
         }
     }
 }

@@ -23,9 +23,10 @@ connect await ROUTED_CLIENT
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
-                               .fetch()
+                               .merged()
                                    .topic("test")
-                                   .progress(-1, -1)
+                                   .partition(0, 1)
+                                   .partition(1, 1)
                                    .filter()
                                        .header("header1", "value1")
                                        .header("header2", "value2")
@@ -35,40 +36,26 @@ write nukleus:begin.ext ${kafka:beginEx()
 
 connected
 
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .topic("test")
-                                  .progress(0, 1)
-                                  .progress(1, 1)
-                                  .progress(-1, -1)
-                                  .filter()
-                                      .header("header1", "value1")
-                                      .header("header2", "value2")
-                                      .build()
-                                  .build()
-                              .build()}
-
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
-                             .fetch()
-                                 .header("header1", "value1")
-                                 .header("header2", "value2")
+                             .merged()
+                                 .partition(1, 1)
                                  .progress(0, 1)
                                  .progress(1, 2)
-                                 .progress(-1, -1)
+                                 .header("header1", "value1")
+                                 .header("header2", "value2")
                                  .build()
                              .build()}
 read "Hello, world"
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
-                             .fetch()
-                                 .header("header1", "value1")
-                                 .header("header2", "value2")
+                             .merged()
+                                 .partition(0, 4)
                                  .progress(0, 5)
                                  .progress(1, 2)
-                                 .progress(-1, -1)
+                                 .header("header1", "value1")
+                                 .header("header2", "value2")
                                  .build()
                              .build()}
 read "Hello, world"

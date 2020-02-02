@@ -27,9 +27,10 @@ accepted
 
 read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
-                              .fetch()
+                              .merged()
                                   .topic("test")
-                                  .progress(-1, -1)
+                                  .partition(0, 1)
+                                  .partition(1, 1)
                                   .filter()
                                       .header("header1", "value1")
                                       .build()
@@ -41,32 +42,15 @@ read nukleus:begin.ext ${kafka:beginEx()
 
 connected
 
-write nukleus:begin.ext ${kafka:beginEx()
-                               .typeId(nukleus:id("kafka"))
-                               .fetch()
-                                   .topic("test")
-                                   .progress(0, 1)
-                                   .progress(1, 1)
-                                   .progress(-1, -1)
-                                   .filter()
-                                       .header("header1", "value1")
-                                       .build()
-                                   .filter()
-                                       .header("header2", "value2")
-                                       .build()
-                                   .build()
-                               .build()}
-write flush
-
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .fetch()
+                              .merged()
                                   .timestamp(newTimestamp)
-                                  .key("key1")
-                                  .header("header2", "value2")
+                                  .partition(0, 1)
                                   .progress(0, 2)
                                   .progress(1, 1)
-                                  .progress(-1, -1)
+                                  .key("key1")
+                                  .header("header2", "value2")
                                   .build()
                               .build()}
 write "Hello, world #A1"
@@ -74,12 +58,12 @@ write flush
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .header("header1", "value1")
-                                  .header("header2", "value2")
+                              .merged()
+                                  .partition(1, 1)
                                   .progress(0, 2)
                                   .progress(1, 2)
-                                  .progress(-1, -1)
+                                  .header("header1", "value1")
+                                  .header("header2", "value2")
                                   .build()
                               .build()}
 write "Hello, world #B1"
@@ -87,12 +71,12 @@ write flush
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .fetch()
+                              .merged()
                                   .timestamp(newTimestamp)
-                                  .header("header1", "value1")
+                                  .partition(0, 2)
                                   .progress(0, 3)
                                   .progress(1, 2)
-                                  .progress(-1, -1)
+                                  .header("header1", "value1")
                                   .build()
                               .build()}
 write "Hello, world #A2"
@@ -100,12 +84,12 @@ write flush
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .key("key1")
-                                  .header("header1", "value1")
+                              .merged()
+                                  .partition(1, 2)
                                   .progress(0, 3)
                                   .progress(1, 3)
-                                  .progress(-1, -1)
+                                  .key("key1")
+                                  .header("header1", "value1")
                                   .build()
                               .build()}
 write "Hello, world #B2"
@@ -113,13 +97,13 @@ write flush
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .fetch()
+                              .merged()
                                   .timestamp(newTimestamp)
-                                  .key("key1")
-                                  .header("header1", "value1")
+                                  .partition(0, 3)
                                   .progress(0, 4)
                                   .progress(1, 3)
-                                  .progress(-1, -1)
+                                  .key("key1")
+                                  .header("header1", "value1")
                                   .build()
                               .build()}
 write "Hello, world #A3"
@@ -127,11 +111,11 @@ write flush
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .header("header1", "value1")
+                              .merged()
+                                  .partition(1, 3)
                                   .progress(0, 4)
                                   .progress(1, 4)
-                                  .progress(-1, -1)
+                                  .header("header1", "value1")
                                   .build()
                               .build()}
 write "Hello, world #B3"
@@ -139,13 +123,13 @@ write flush
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .fetch()
+                              .merged()
                                   .timestamp(newTimestamp)
-                                  .header("header1", "value1")
-                                  .header("header2", "value2")
+                                  .partition(0, 4)
                                   .progress(0, 5)
                                   .progress(1, 4)
-                                  .progress(-1, -1)
+                                  .header("header1", "value1")
+                                  .header("header2", "value2")
                                   .build()
                               .build()}
 write "Hello, world #A4"
@@ -153,12 +137,12 @@ write flush
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .key("key1")
-                                  .header("header2", "value2")
+                              .merged()
+                                  .partition(1, 4)
                                   .progress(0, 5)
                                   .progress(1, 5)
-                                  .progress(-1, -1)
+                                  .key("key1")
+                                  .header("header2", "value2")
                                   .build()
                               .build()}
 write "Hello, world #B4"

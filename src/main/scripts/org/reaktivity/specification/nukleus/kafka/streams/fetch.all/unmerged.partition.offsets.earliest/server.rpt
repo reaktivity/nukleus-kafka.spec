@@ -57,7 +57,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .topic("test")
-                                  .progress(0, -2)
+                                  .partition(0, -2)
                                   .build()
                               .build()}
 
@@ -67,7 +67,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .progress(0, 1)
+                                   .partition(0, 1)
                                    .build()
                                .build()}
 write flush
@@ -78,7 +78,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .topic("test")
-                                  .progress(1, -2)
+                                  .partition(1, -2)
                                   .build()
                               .build()}
 
@@ -88,7 +88,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .progress(1, 1)
+                                   .partition(1, 1)
                                    .build()
                                .build()}
 write flush

@@ -61,28 +61,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/partition.offset.missing/client",
-        "${scripts}/partition.offset.missing/server"})
-    public void shouldRejectWhenPartitionOffsetMissing() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/partition.offset.repeated/client",
-        "${scripts}/partition.offset.repeated/server"})
-    public void shouldRejectWhenPartitionOffsetRepeated() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/partition.unknown/client",
         "${scripts}/partition.unknown/server"})
     public void shouldRejectWhenPartitionUnknown() throws Exception
