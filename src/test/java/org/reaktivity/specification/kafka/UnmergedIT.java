@@ -26,10 +26,10 @@ import org.junit.rules.Timeout;
 import org.kaazing.k3po.junit.annotation.Specification;
 import org.kaazing.k3po.junit.rules.K3poRule;
 
-public class FetchAllIT
+public class UnmergedIT
 {
     private final K3poRule k3po = new K3poRule().addScriptRoot("scripts",
-            "org/reaktivity/specification/kafka/fetch.all.fetch.v5.metadata.v5");
+            "org/reaktivity/specification/kafka/unmerged.fetch.v5.metadata.v5");
 
     private final TestRule timeout = new DisableOnDebug(new Timeout(10, SECONDS));
 
