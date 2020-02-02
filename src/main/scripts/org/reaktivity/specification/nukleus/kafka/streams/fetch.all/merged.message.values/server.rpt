@@ -31,6 +31,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .topic("test")
                                   .partition(0, 1)
                                   .partition(1, 1)
+                                  .partition(-1, 1)
                                   .build()
                               .build()}
 
