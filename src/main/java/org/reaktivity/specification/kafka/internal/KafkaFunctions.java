@@ -1017,6 +1017,7 @@ public final class KafkaFunctions
 
         public final class KafkaFetchDataExMatcherBuilder
         {
+            private Integer deferred;
             private Long timestamp;
             private KafkaOffsetFW.Builder partitionRW;
             private KafkaKeyFW.Builder keyRW;
@@ -1024,6 +1025,20 @@ public final class KafkaFunctions
 
             private KafkaFetchDataExMatcherBuilder()
             {
+            }
+
+            public KafkaFetchDataExMatcherBuilder deferred(
+                int deferred)
+            {
+                this.deferred = deferred;
+                return this;
+            }
+
+            public KafkaFetchDataExMatcherBuilder timestamp(
+                long timestamp)
+            {
+                this.timestamp = timestamp;
+                return this;
             }
 
             public KafkaFetchDataExMatcherBuilder partition(
@@ -1035,13 +1050,6 @@ public final class KafkaFunctions
 
                 partitionRW.partitionId(partitionId).offset$(partitionOffset);
 
-                return this;
-            }
-
-            public KafkaFetchDataExMatcherBuilder timestamp(
-                long timestamp)
-            {
-                this.timestamp = timestamp;
                 return this;
             }
 
@@ -1106,22 +1114,29 @@ public final class KafkaFunctions
                 KafkaDataExFW dataEx)
             {
                 final KafkaFetchDataExFW fetchDataEx = dataEx.fetch();
-                return matchPartition(fetchDataEx) &&
+                return matchDeferred(fetchDataEx) &&
                     matchTimestamp(fetchDataEx) &&
+                    matchPartition(fetchDataEx) &&
                     matchKey(fetchDataEx) &&
                     matchHeaders(fetchDataEx);
             }
 
-            private boolean matchPartition(
+            private boolean matchDeferred(
                 final KafkaFetchDataExFW fetchDataEx)
             {
-                return partitionRW == null || partitionRW.build().equals(fetchDataEx.partition());
+                return deferred == null || deferred == fetchDataEx.deferred();
             }
 
             private boolean matchTimestamp(
                 final KafkaFetchDataExFW fetchDataEx)
             {
                 return timestamp == null || timestamp == fetchDataEx.timestamp();
+            }
+
+            private boolean matchPartition(
+                final KafkaFetchDataExFW fetchDataEx)
+            {
+                return partitionRW == null || partitionRW.build().equals(fetchDataEx.partition());
             }
 
             private boolean matchKey(

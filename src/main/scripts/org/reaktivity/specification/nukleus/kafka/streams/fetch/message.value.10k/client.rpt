@@ -48,7 +48,7 @@ read notify ROUTED_BROKER_CLIENT
 
 connect await ROUTED_BROKER_CLIENT
         ${clientAddress}
-    option nukleus:window 8192
+    option nukleus:window 6144
     option nukleus:transmission "half-duplex"
     option nukleus:affinity 0xb1
 
@@ -73,6 +73,7 @@ read nukleus:begin.ext ${kafka:beginEx()
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
+                                 .deferred(10240 - 6144)
                                  .partition(0, 12)
                                  .build()
                              .build()}
@@ -80,6 +81,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
+                                 .partition(0, 12)
                                  .build()
                              .build()}
 read [0..10240]

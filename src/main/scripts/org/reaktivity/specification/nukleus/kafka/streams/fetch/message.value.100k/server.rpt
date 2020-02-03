@@ -74,6 +74,7 @@ write flush
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
+                                  .deferred(102400 - 6144)
                                   .timestamp(newTimestamp)
                                   .partition(0, 12)
                                   .build()
