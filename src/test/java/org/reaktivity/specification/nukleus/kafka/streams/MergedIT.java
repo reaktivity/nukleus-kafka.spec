@@ -165,6 +165,8 @@ public class MergedIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("CHANGING_PARTITION_COUNT");
+        k3po.notifyBarrier("CHANGED_PARTITION_COUNT");
         k3po.finish();
     }
 

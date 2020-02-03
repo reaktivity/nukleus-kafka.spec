@@ -54,6 +54,9 @@ write flush
 write await SENT_MESSAGE_A2
 write await SENT_MESSAGE_B2
 
+write notify CHANGING_PARTITION_COUNT
+write await CHANGED_PARTITION_COUNT
+
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .meta()
