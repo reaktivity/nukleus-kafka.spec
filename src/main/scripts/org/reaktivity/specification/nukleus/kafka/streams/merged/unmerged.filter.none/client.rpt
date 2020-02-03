@@ -55,7 +55,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(0, -1)
+                                   .partition(0, -2)
                                    .build()
                                .build()}
 
@@ -117,7 +117,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(1, -1)
+                                   .partition(1, -2)
                                    .build()
                                .build()}
 
