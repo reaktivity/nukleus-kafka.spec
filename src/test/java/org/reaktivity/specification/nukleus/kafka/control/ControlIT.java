@@ -57,10 +57,10 @@ public class ControlIT
 
     @Test
     @Specification({
-        "route.ext/client.merge/nukleus",
-        "route.ext/client.merge/controller"
+        "route.ext/client.merged/nukleus",
+        "route.ext/client.merged/controller"
     })
-    public void shouldRouteClientMergeWithExtension() throws Exception
+    public void shouldRouteClientMergedWithExtension() throws Exception
     {
         k3po.finish();
     }
@@ -87,10 +87,10 @@ public class ControlIT
 
     @Test
     @Specification({
-        "route.ext/cache.merge/nukleus",
-        "route.ext/cache.merge/controller"
+        "route.ext/cache.merged/nukleus",
+        "route.ext/cache.merged/controller"
     })
-    public void shouldRouteCacheMergeWithExtension() throws Exception
+    public void shouldRouteCacheMergedWithExtension() throws Exception
     {
         k3po.finish();
     }
