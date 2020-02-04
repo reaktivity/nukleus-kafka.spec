@@ -920,11 +920,11 @@ public final class KafkaFunctions
                 mergedFlushExRW.wrap(writeBuffer, KafkaFlushExFW.FIELD_OFFSET_FETCH, writeBuffer.capacity());
             }
 
-            public KafkaMergedFlushExBuilder partition(
+            public KafkaMergedFlushExBuilder progress(
                 int partitionId,
                 long offset)
             {
-                mergedFlushExRW.partitionsItem(p -> p.partitionId(partitionId).offset$(offset));
+                mergedFlushExRW.progressItem(p -> p.partitionId(partitionId).offset$(offset));
                 return this;
             }
 

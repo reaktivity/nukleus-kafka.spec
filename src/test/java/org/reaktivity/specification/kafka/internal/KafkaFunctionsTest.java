@@ -389,7 +389,7 @@ public class KafkaFunctionsTest
         byte[] build = KafkaFunctions.flushEx()
                                      .typeId(0x01)
                                      .merged()
-                                         .partition(0, 1L)
+                                         .progress(0, 1L)
                                          .build()
                                      .build();
 
@@ -399,10 +399,10 @@ public class KafkaFunctionsTest
 
         final KafkaMergedFlushExFW mergedFlushEx = flushEx.merged();
         final MutableInteger partitionsCount = new MutableInteger();
-        mergedFlushEx.partitions().forEach(f -> partitionsCount.value++);
+        mergedFlushEx.progress().forEach(f -> partitionsCount.value++);
         assertEquals(1, partitionsCount.value);
 
-        assertNotNull(mergedFlushEx.partitions()
+        assertNotNull(mergedFlushEx.progress()
                 .matchFirst(p -> p.partitionId() == 0 && p.offset$() == 1L));
     }
 
