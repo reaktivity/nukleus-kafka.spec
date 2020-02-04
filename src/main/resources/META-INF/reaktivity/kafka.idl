@@ -76,6 +76,7 @@ scope kafka
     {
         enum KafkaApi (uint8)
         {
+            BOOTSTRAP (254),
             MERGED (255),
             META (3),
             DESCRIBE (32),
@@ -85,6 +86,7 @@ scope kafka
 
         union KafkaBeginEx switch (uint8) extends core::stream::Extension
         {
+            case 254: kafka::stream::KafkaBootstrapBeginEx bootstrap;
             case 255: kafka::stream::KafkaMergedBeginEx merged;
             case 3: kafka::stream::KafkaMetaBeginEx meta;
             case 32: kafka::stream::KafkaDescribeBeginEx describe;
@@ -110,6 +112,32 @@ scope kafka
         struct KafkaResetEx extends core::stream::Extension
         {
             uint16 error = 0;
+        }
+
+        struct KafkaBootstrapBeginEx
+        {
+            string16 topic;
+        }
+
+        struct KafkaMergedBeginEx
+        {
+            string16 topic;
+            KafkaOffset[] partitions;
+            KafkaFilter[] filters; // ORed
+        }
+
+        struct KafkaMergedDataEx
+        {
+            int64 timestamp = 0;        // INIT only
+            KafkaOffset partition;      // INIT only
+            KafkaOffset[] progress;     // INIT only
+            KafkaKey key;               // INIT only
+            KafkaHeader[] headers;      // FIN only
+        }
+
+        struct KafkaMergedFlushEx
+        {
+            KafkaOffset[] progress;
         }
 
         struct KafkaMetaBeginEx
@@ -153,27 +181,6 @@ scope kafka
         struct KafkaFetchFlushEx
         {
             KafkaOffset partition;
-        }
-
-        struct KafkaMergedBeginEx
-        {
-            string16 topic;
-            KafkaOffset[] partitions;
-            KafkaFilter[] filters; // ORed
-        }
-
-        struct KafkaMergedDataEx
-        {
-            int64 timestamp = 0;        // INIT only
-            KafkaOffset partition;      // INIT only
-            KafkaOffset[] progress;     // INIT only
-            KafkaKey key;               // INIT only
-            KafkaHeader[] headers;      // FIN only
-        }
-
-        struct KafkaMergedFlushEx
-        {
-            KafkaOffset[] partitions;
         }
 
         struct KafkaProduceBeginEx

@@ -44,6 +44,7 @@ import org.reaktivity.specification.kafka.internal.types.OctetsFW;
 import org.reaktivity.specification.kafka.internal.types.control.KafkaRouteExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaApi;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaBeginExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaBootstrapBeginExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaDataExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaDescribeBeginExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaDescribeDataExFW;
@@ -79,6 +80,25 @@ public class KafkaFunctionsTest
         DirectBuffer buffer = new UnsafeBuffer(build);
         KafkaRouteExFW routeEx = new KafkaRouteExFW().wrap(buffer, 0, buffer.capacity());
         assertEquals("topic", routeEx.topic().asString());
+    }
+
+    @Test
+    public void shouldGenerateBootstrapBeginExtension()
+    {
+        byte[] build = KafkaFunctions.beginEx()
+                                     .typeId(0x01)
+                                     .bootstrap()
+                                         .topic("topic")
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaBeginExFW beginEx = new KafkaBeginExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, beginEx.typeId());
+        assertEquals(KafkaApi.BOOTSTRAP.value(), beginEx.kind());
+
+        final KafkaBootstrapBeginExFW bootstrapBeginEx = beginEx.bootstrap();
+        assertEquals("topic", bootstrapBeginEx.topic().asString());
     }
 
     @Test

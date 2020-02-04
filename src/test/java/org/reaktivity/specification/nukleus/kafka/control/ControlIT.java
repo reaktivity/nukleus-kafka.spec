@@ -97,6 +97,16 @@ public class ControlIT
 
     @Test
     @Specification({
+        "route.ext/cache.bootstrap/nukleus",
+        "route.ext/cache.bootstrap/controller"
+    })
+    public void shouldRouteCacheBootstrapWithExtension() throws Exception
+    {
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "unroute/client/nukleus",
         "unroute/client/controller"
     })

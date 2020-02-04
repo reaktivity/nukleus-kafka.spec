@@ -40,6 +40,7 @@ import org.reaktivity.specification.kafka.internal.types.OctetsFW;
 import org.reaktivity.specification.kafka.internal.types.control.KafkaRouteExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaApi;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaBeginExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaBootstrapBeginExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaDataExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaDescribeBeginExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaDescribeDataExFW;
@@ -375,6 +376,13 @@ public final class KafkaFunctions
             return this;
         }
 
+        public KafkaBootstrapBeginExBuilder bootstrap()
+        {
+            beginExRW.kind(KafkaApi.BOOTSTRAP.value());
+
+            return new KafkaBootstrapBeginExBuilder();
+        }
+
         public KafkaMergedBeginExBuilder merged()
         {
             beginExRW.kind(KafkaApi.MERGED.value());
@@ -409,6 +417,30 @@ public final class KafkaFunctions
             final byte[] array = new byte[beginEx.sizeof()];
             beginEx.buffer().getBytes(beginEx.offset(), array);
             return array;
+        }
+
+        public final class KafkaBootstrapBeginExBuilder
+        {
+            private final KafkaBootstrapBeginExFW.Builder bootstrapBeginExRW = new KafkaBootstrapBeginExFW.Builder();
+
+            private KafkaBootstrapBeginExBuilder()
+            {
+                bootstrapBeginExRW.wrap(writeBuffer, KafkaBeginExFW.FIELD_OFFSET_BOOTSTRAP, writeBuffer.capacity());
+            }
+
+            public KafkaBootstrapBeginExBuilder topic(
+                String topic)
+            {
+                bootstrapBeginExRW.topic(topic);
+                return this;
+            }
+
+            public KafkaBeginExBuilder build()
+            {
+                final KafkaBootstrapBeginExFW bootstrapBeginEx = bootstrapBeginExRW.build();
+                beginExRO.wrap(writeBuffer, 0, bootstrapBeginEx.limit());
+                return KafkaBeginExBuilder.this;
+            }
         }
 
         public final class KafkaMergedBeginExBuilder
