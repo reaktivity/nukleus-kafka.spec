@@ -97,9 +97,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #A1"
 write flush
-write notify SENT_MESSAGE_A1
 
-write await SENT_MESSAGE_B1
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
@@ -141,9 +139,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #B1"
 write flush
-write notify SENT_MESSAGE_B1
 
-write await SENT_MESSAGE_A2
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()

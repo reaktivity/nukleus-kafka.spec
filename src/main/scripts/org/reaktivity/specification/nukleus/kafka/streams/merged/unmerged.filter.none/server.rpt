@@ -83,9 +83,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #A1"
 write flush
-write notify SENT_MESSAGE_A1
 
-write await SENT_MESSAGE_B1
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
@@ -96,9 +94,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #A2"
 write flush
-write notify SENT_MESSAGE_A2
 
-write await SENT_MESSAGE_B2
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
@@ -110,9 +106,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #A3"
 write flush
-write notify SENT_MESSAGE_A3
 
-write await SENT_MESSAGE_B3
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
@@ -147,7 +141,6 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .build()}
 write flush
 
-write await SENT_MESSAGE_A1
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
@@ -158,9 +151,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #B1"
 write flush
-write notify SENT_MESSAGE_B1
 
-write await SENT_MESSAGE_A2
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
@@ -171,9 +162,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #B2"
 write flush
-write notify SENT_MESSAGE_B2
 
-write await SENT_MESSAGE_A3
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
@@ -183,9 +172,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #B3"
 write flush
-write notify SENT_MESSAGE_B3
 
-write await SENT_MESSAGE_A4
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
