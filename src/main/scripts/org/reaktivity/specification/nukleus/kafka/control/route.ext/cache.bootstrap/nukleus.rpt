@@ -56,5 +56,14 @@ write ${correlationIdRG010601N}
 write ${nukleus:newCacheServerRouteId("kafka-cache#0", "kafka-cache#0")}
 write flush
 
+read 0x00000002
+read (long:correlationIdUR020601N)
+read ${core:string("kafka")}
+read [0..8] # routeId
+
+write 0x40000002
+write ${correlationIdUR020601N}
+write flush
+
 close
 closed

@@ -102,6 +102,8 @@ public class ControlIT
     })
     public void shouldRouteCacheBootstrapWithExtension() throws Exception
     {
+        k3po.start();
+        k3po.notifyBarrier("UNROUTE_SERVER");
         k3po.finish();
     }
 

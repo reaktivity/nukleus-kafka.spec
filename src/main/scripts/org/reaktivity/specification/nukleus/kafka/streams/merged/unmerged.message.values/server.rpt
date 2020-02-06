@@ -191,3 +191,4 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #C2"
 write flush
+write notify SENT_MESSAGE_C2
