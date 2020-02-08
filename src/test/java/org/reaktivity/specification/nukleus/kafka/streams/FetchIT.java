@@ -405,6 +405,28 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/filter.key.and.header.or.header/client",
+        "${scripts}/filter.key.and.header.or.header/server"})
+    public void shouldReceiveMessagesWithKeyAndHeaderOrHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.key.or.header.and.header/client",
+        "${scripts}/filter.key.or.header.and.header/server"})
+    public void shouldReceiveMessagesWithKeyOrHeaderAndHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compact.message.with.message/client",
         "${scripts}/compact.message.with.message/server"})
     public void shouldCompactMessageWithMessage() throws Exception
