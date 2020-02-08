@@ -27,6 +27,33 @@ accepted
 
 read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
+                              .meta()
+                                  .topic("test")
+                                  .build()
+                              .build()}
+
+connected
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .meta()
+                                   .topic("test")
+                                   .build()
+                               .build()}
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .meta()
+                                  .partition(0, 177)
+                                  .build()
+                              .build()}
+write flush
+
+accepted
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .topic("test")
                                   .partition(0, 1)
@@ -43,9 +70,6 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .fetch()
                                    .topic("test")
                                    .partition(0, 1)
-                                   .filter()
-                                       .key("key1")
-                                       .build()
                                    .build()
                                .build()}
 write flush
