@@ -43,26 +43,26 @@ connected
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .merged()
-                                  .partition(1, 1)
-                                  .progress(0, 1)
-                                  .progress(1, 2)
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 4)
+                                  .progress(0, 5)
+                                  .progress(1, 1)
                                   .header("header1", "value1")
                                   .header("header2", "value2")
                                   .build()
                               .build()}
-write "Hello, world"
+write "Hello, world #A4"
 write flush
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .merged()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 4)
+                                  .partition(1, 1)
                                   .progress(0, 5)
                                   .progress(1, 2)
                                   .header("header1", "value1")
                                   .header("header2", "value2")
                                   .build()
                               .build()}
-write "Hello, world"
+write "Hello, world #B1"
 write flush
