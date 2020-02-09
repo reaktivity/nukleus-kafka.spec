@@ -463,7 +463,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                mergedBeginExRW.partitionsItem(p -> p.partitionId(partitionId).offset$(offset));
+                mergedBeginExRW.partitionsItem(p -> p.partitionId(partitionId).partitionOffset(offset));
                 return this;
             }
 
@@ -510,7 +510,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                fetchBeginExRW.partition(p -> p.partitionId(partitionId).offset$(offset));
+                fetchBeginExRW.partition(p -> p.partitionId(partitionId).partitionOffset(offset));
                 return this;
             }
 
@@ -680,7 +680,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long partitionOffset)
             {
-                fetchDataExRW.partition(p -> p.partitionId(partitionId).offset$(partitionOffset));
+                fetchDataExRW.partition(p -> p.partitionId(partitionId).partitionOffset(partitionOffset));
                 return this;
             }
 
@@ -757,7 +757,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long partitionOffset)
             {
-                mergedDataExRW.partition(p -> p.partitionId(partitionId).offset$(partitionOffset));
+                mergedDataExRW.partition(p -> p.partitionId(partitionId).partitionOffset(partitionOffset));
                 return this;
             }
 
@@ -765,7 +765,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long partitionOffset)
             {
-                mergedDataExRW.progressItem(p -> p.partitionId(partitionId).offset$(partitionOffset));
+                mergedDataExRW.progressItem(p -> p.partitionId(partitionId).partitionOffset(partitionOffset));
                 return this;
             }
 
@@ -924,7 +924,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                mergedFlushExRW.progressItem(p -> p.partitionId(partitionId).offset$(offset));
+                mergedFlushExRW.progressItem(p -> p.partitionId(partitionId).partitionOffset(offset));
                 return this;
             }
 
@@ -949,7 +949,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                fetchFlushExRW.partition(p -> p.partitionId(partitionId).offset$(offset));
+                fetchFlushExRW.partition(p -> p.partitionId(partitionId).partitionOffset(offset));
                 return this;
             }
 
@@ -1080,7 +1080,7 @@ public final class KafkaFunctions
                 assert partitionRW == null;
                 partitionRW = new KafkaOffsetFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
 
-                partitionRW.partitionId(partitionId).offset$(partitionOffset);
+                partitionRW.partitionId(partitionId).partitionOffset(partitionOffset);
 
                 return this;
             }
@@ -1210,7 +1210,7 @@ public final class KafkaFunctions
                 assert partitionRW == null;
                 partitionRW = new KafkaOffsetFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
 
-                partitionRW.partitionId(partitionId).offset$(offset);
+                partitionRW.partitionId(partitionId).partitionOffset(offset);
 
                 return this;
             }
@@ -1224,7 +1224,7 @@ public final class KafkaFunctions
                     this.progressRW = new ArrayFW.Builder<>(new KafkaOffsetFW.Builder(), new KafkaOffsetFW())
                                                  .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
                 }
-                progressRW.item(i -> i.partitionId(partitionId).offset$(offset));
+                progressRW.item(i -> i.partitionId(partitionId).partitionOffset(offset));
                 return this;
             }
 

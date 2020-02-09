@@ -30,7 +30,7 @@ scope kafka
     struct KafkaOffset
     {
         int32 partitionId;
-        int64 offset;
+        int64 partitionOffset;
     }
 
     enum KafkaConditionType (uint8)
