@@ -64,11 +64,24 @@ scope kafka
         octets[valueLen] value = null;
     }
 
+    enum KafkaDeltaType
+    {
+        NONE,
+        JSON_PATCH
+    }
+
+    struct KafkaDelta
+    {
+        KafkaDeltaType type;
+        int64 ancestorOffset = -1;
+    }
+
     scope control
     {
         struct KafkaRouteEx
         {
             string16 topic; // TODO: wildcard
+            KafkaDeltaType deltaType;
         }
     }
 
@@ -124,6 +137,7 @@ scope kafka
             string16 topic;
             KafkaOffset[] partitions;
             KafkaFilter[] filters; // ORed
+            KafkaDeltaType deltaType;
         }
 
         struct KafkaMergedDataEx
@@ -132,6 +146,7 @@ scope kafka
             KafkaOffset partition;      // INIT only
             KafkaOffset[] progress;     // INIT only
             KafkaKey key;               // INIT only
+            KafkaDelta delta;           // INIT + FIN
             KafkaHeader[] headers;      // FIN only
         }
 
@@ -166,6 +181,7 @@ scope kafka
             string16 topic;
             KafkaOffset partition;
             KafkaFilter[] filters; // ORed
+            KafkaDeltaType deltaType;
         }
 
         struct KafkaFetchDataEx
@@ -175,6 +191,7 @@ scope kafka
             int32 headersSizeMax = 4;   // INIT only
             KafkaOffset partition;      // INIT only
             KafkaKey key;               // INIT only
+            KafkaDelta delta;           // INIT + FIN
             KafkaHeader[] headers;      // FIN only
         }
 

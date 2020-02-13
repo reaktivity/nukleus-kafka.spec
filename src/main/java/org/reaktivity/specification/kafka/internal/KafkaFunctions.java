@@ -32,6 +32,8 @@ import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 import org.reaktivity.specification.kafka.internal.types.ArrayFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaConditionFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaDeltaFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaDeltaType;
 import org.reaktivity.specification.kafka.internal.types.KafkaFilterFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaHeaderFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaKeyFW;
@@ -233,6 +235,7 @@ public final class KafkaFunctions
     public static final class KafkaRouteExBuilder
     {
         private final KafkaRouteExFW.Builder routeExRW;
+        private boolean deltaTypeSet;
 
         private KafkaRouteExBuilder()
         {
@@ -247,12 +250,30 @@ public final class KafkaFunctions
             return this;
         }
 
+        public KafkaRouteExBuilder deltaType(
+            String deltaType)
+        {
+            routeExRW.deltaType(d -> d.set(KafkaDeltaType.valueOf(deltaType)));
+            deltaTypeSet = true;
+            return this;
+        }
+
         public byte[] build()
         {
+            ensureDeltaTypeSet();
+
             final KafkaRouteExFW routeEx = routeExRW.build();
             final byte[] array = new byte[routeEx.sizeof()];
             routeEx.buffer().getBytes(routeEx.offset(), array);
             return array;
+        }
+
+        private void ensureDeltaTypeSet()
+        {
+            if (!deltaTypeSet)
+            {
+                deltaType("NONE");
+            }
         }
     }
 
@@ -447,6 +468,8 @@ public final class KafkaFunctions
         {
             private final KafkaMergedBeginExFW.Builder mergedBeginExRW = new KafkaMergedBeginExFW.Builder();
 
+            private boolean deltaTypeSet;
+
             private KafkaMergedBeginExBuilder()
             {
                 mergedBeginExRW.wrap(writeBuffer, KafkaBeginExFW.FIELD_OFFSET_MERGED, writeBuffer.capacity());
@@ -482,17 +505,38 @@ public final class KafkaFunctions
                 };
             }
 
+            public KafkaMergedBeginExBuilder deltaType(
+                String delta)
+            {
+                mergedBeginExRW.deltaType(d -> d.set(KafkaDeltaType.valueOf(delta)));
+                deltaTypeSet = true;
+                return this;
+            }
+
             public KafkaBeginExBuilder build()
             {
+                ensureDeltaTypeSet();
+
                 final KafkaMergedBeginExFW mergedBeginEx = mergedBeginExRW.build();
                 beginExRO.wrap(writeBuffer, 0, mergedBeginEx.limit());
                 return KafkaBeginExBuilder.this;
+            }
+
+            private void ensureDeltaTypeSet()
+            {
+                // TODO: default enum field directly in generated flyweight
+                if (!deltaTypeSet)
+                {
+                    deltaType("NONE");
+                }
             }
         }
 
         public final class KafkaFetchBeginExBuilder
         {
             private final KafkaFetchBeginExFW.Builder fetchBeginExRW = new KafkaFetchBeginExFW.Builder();
+
+            private boolean deltaTypeSet;
 
             private KafkaFetchBeginExBuilder()
             {
@@ -529,11 +573,30 @@ public final class KafkaFunctions
                 };
             }
 
+            public KafkaFetchBeginExBuilder deltaType(
+                String deltaType)
+            {
+                fetchBeginExRW.deltaType(d -> d.set(KafkaDeltaType.valueOf(deltaType)));
+                deltaTypeSet = true;
+                return this;
+            }
+
             public KafkaBeginExBuilder build()
             {
+                ensureDeltaTypeSet();
+
                 final KafkaFetchBeginExFW fetchBeginEx = fetchBeginExRW.build();
                 beginExRO.wrap(writeBuffer, 0, fetchBeginEx.limit());
                 return KafkaBeginExBuilder.this;
+            }
+
+            private void ensureDeltaTypeSet()
+            {
+                // TODO: default enum field directly in generated flyweight
+                if (!deltaTypeSet)
+                {
+                    deltaType("NONE");
+                }
             }
         }
 
@@ -657,6 +720,8 @@ public final class KafkaFunctions
 
             private final KafkaFetchDataExFW.Builder fetchDataExRW = new KafkaFetchDataExFW.Builder();
 
+            private boolean deltaSet;
+
             private KafkaFetchDataExBuilder()
             {
                 fetchDataExRW.wrap(writeBuffer, KafkaDataExFW.FIELD_OFFSET_FETCH, writeBuffer.capacity());
@@ -701,10 +766,22 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaFetchDataExBuilder delta(
+                String deltaType,
+                long ancestorOffset)
+            {
+                fetchDataExRW.delta(d -> d.type(t -> t.set(KafkaDeltaType.valueOf(deltaType)))
+                                          .ancestorOffset(ancestorOffset));
+                deltaSet = true;
+                return this;
+            }
+
             public KafkaFetchDataExBuilder header(
                 String name,
                 String value)
             {
+                ensureDeltaSet();
+
                 if (value == null)
                 {
                     nameRO.wrap(name.getBytes(UTF_8));
@@ -727,9 +804,20 @@ public final class KafkaFunctions
 
             public KafkaDataExBuilder build()
             {
+                ensureDeltaSet();
+
                 final KafkaFetchDataExFW fetchDataEx = fetchDataExRW.build();
                 dataExRO.wrap(writeBuffer, 0, fetchDataEx.limit());
                 return KafkaDataExBuilder.this;
+            }
+
+            private void ensureDeltaSet()
+            {
+                // TODO: default enum field directly in generated flyweight
+                if (!deltaSet)
+                {
+                    delta("NONE", -1L);
+                }
             }
         }
 
@@ -740,6 +828,8 @@ public final class KafkaFunctions
             private final DirectBuffer valueRO = new UnsafeBuffer(0, 0);
 
             private final KafkaMergedDataExFW.Builder mergedDataExRW = new KafkaMergedDataExFW.Builder();
+
+            private boolean deltaTypeSet;
 
             private KafkaMergedDataExBuilder()
             {
@@ -786,10 +876,22 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaMergedDataExBuilder delta(
+                String deltaType,
+                long ancestorOffset)
+            {
+                mergedDataExRW.delta(d -> d.type(t -> t.set(KafkaDeltaType.valueOf(deltaType)))
+                                           .ancestorOffset(ancestorOffset));
+                deltaTypeSet = true;
+                return this;
+            }
+
             public KafkaMergedDataExBuilder header(
                 String name,
                 String value)
             {
+                ensureDeltaTypeSet();
+
                 if (value == null)
                 {
                     nameRO.wrap(name.getBytes(UTF_8));
@@ -812,9 +914,20 @@ public final class KafkaFunctions
 
             public KafkaDataExBuilder build()
             {
+                ensureDeltaTypeSet();
+
                 final KafkaMergedDataExFW mergedDataEx = mergedDataExRW.build();
                 dataExRO.wrap(writeBuffer, 0, mergedDataEx.limit());
                 return KafkaDataExBuilder.this;
+            }
+
+            private void ensureDeltaTypeSet()
+            {
+                // TODO: default enum field directly in generated flyweight
+                if (!deltaTypeSet)
+                {
+                    delta("NONE", -1L);
+                }
             }
         }
 
@@ -1053,6 +1166,7 @@ public final class KafkaFunctions
             private Long timestamp;
             private KafkaOffsetFW.Builder partitionRW;
             private KafkaKeyFW.Builder keyRW;
+            private KafkaDeltaFW.Builder deltaRW;
             private ArrayFW.Builder<KafkaHeaderFW.Builder, KafkaHeaderFW> headersRW;
 
             private KafkaFetchDataExMatcherBuilder()
@@ -1106,6 +1220,18 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaFetchDataExMatcherBuilder delta(
+                String delta,
+                long ancestorOffset)
+            {
+                assert deltaRW == null;
+                deltaRW = new KafkaDeltaFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
+
+                deltaRW.type(t -> t.set(KafkaDeltaType.valueOf(delta))).ancestorOffset(ancestorOffset);
+
+                return this;
+            }
+
             public KafkaFetchDataExMatcherBuilder header(
                 String name,
                 String value)
@@ -1150,6 +1276,7 @@ public final class KafkaFunctions
                     matchTimestamp(fetchDataEx) &&
                     matchPartition(fetchDataEx) &&
                     matchKey(fetchDataEx) &&
+                    matchDelta(fetchDataEx) &&
                     matchHeaders(fetchDataEx);
             }
 
@@ -1177,6 +1304,12 @@ public final class KafkaFunctions
                 return keyRW == null || keyRW.build().equals(fetchDataEx.key());
             }
 
+            private boolean matchDelta(
+                final KafkaFetchDataExFW fetchDataEx)
+            {
+                return deltaRW == null || deltaRW.build().equals(fetchDataEx.delta());
+            }
+
             private boolean matchHeaders(
                 final KafkaFetchDataExFW fetchDataEx)
             {
@@ -1189,6 +1322,7 @@ public final class KafkaFunctions
             private Long timestamp;
             private KafkaOffsetFW.Builder partitionRW;
             private ArrayFW.Builder<KafkaOffsetFW.Builder, KafkaOffsetFW> progressRW;
+            private KafkaDeltaFW.Builder deltaRW;
             private KafkaKeyFW.Builder keyRW;
             private ArrayFW.Builder<KafkaHeaderFW.Builder, KafkaHeaderFW> headersRW;
 
@@ -1249,6 +1383,18 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaMergedDataExMatcherBuilder delta(
+                String delta,
+                long ancestorOffset)
+            {
+                assert deltaRW == null;
+                deltaRW = new KafkaDeltaFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
+
+                deltaRW.type(t -> t.set(KafkaDeltaType.valueOf(delta))).ancestorOffset(ancestorOffset);
+
+                return this;
+            }
+
             public KafkaMergedDataExMatcherBuilder header(
                 String name,
                 String value)
@@ -1293,6 +1439,7 @@ public final class KafkaFunctions
                     matchProgress(mergedDataEx) &&
                     matchTimestamp(mergedDataEx) &&
                     matchKey(mergedDataEx) &&
+                    matchDelta(mergedDataEx) &&
                     matchHeaders(mergedDataEx);
             }
 
@@ -1318,6 +1465,12 @@ public final class KafkaFunctions
                 final KafkaMergedDataExFW mergedDataEx)
             {
                 return keyRW == null || keyRW.build().equals(mergedDataEx.key());
+            }
+
+            private boolean matchDelta(
+                final KafkaMergedDataExFW mergedDataEx)
+            {
+                return deltaRW == null || deltaRW.build().equals(mergedDataEx.delta());
             }
 
             private boolean matchHeaders(
