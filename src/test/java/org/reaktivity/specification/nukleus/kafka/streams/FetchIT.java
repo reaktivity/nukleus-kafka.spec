@@ -427,6 +427,28 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/filter.none.json/client",
+        "${scripts}/filter.none.json/server"})
+    public void shouldReceiveJsonMessagesWithNoFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.none.json.patch/client",
+        "${scripts}/filter.none.json.patch/server"})
+    public void shouldReceiveJsonPatchMessagesWithNoFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compact.message.with.message/client",
         "${scripts}/compact.message.with.message/server"})
     public void shouldCompactMessageWithMessage() throws Exception

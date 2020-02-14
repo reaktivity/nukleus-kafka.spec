@@ -109,6 +109,16 @@ public class ControlIT
 
     @Test
     @Specification({
+        "route.ext/cache.delta/json.patch/nukleus",
+        "route.ext/cache.delta/json.patch/controller"
+    })
+    public void shouldRouteCacheDeltaJsonPatch() throws Exception
+    {
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "unroute/client/nukleus",
         "unroute/client/controller"
     })
