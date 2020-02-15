@@ -111,3 +111,25 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .build()
                              .build()}
 read "Hello, world"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 5)
+                                 .key("planets")
+                                 .delta("NONE", -1)
+                                 .header("header2", "value2")
+                                 .build()
+                             .build()}
+read '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","pluto"]'
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 7)
+                                 .key("planets")
+                                 .delta("NONE", -1)
+                                 .header("header2", "value2")
+                                 .build()
+                             .build()}
+read '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","pluto","ceres"]'

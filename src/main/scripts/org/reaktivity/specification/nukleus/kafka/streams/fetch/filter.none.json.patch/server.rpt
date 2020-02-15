@@ -121,3 +121,29 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world"
 write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 5)
+                                  .key("planets")
+                                  .delta("JSON_PATCH", 3)
+                                  .header("header1", "value1")
+                                  .build()
+                              .build()}
+write '[{"op":"add","path":"/8","value":"pluto"}]'
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 7)
+                                  .key("planets")
+                                  .delta("JSON_PATCH", 5)
+                                  .header("header1", "value1")
+                                  .build()
+                              .build()}
+write '[{"op":"add","path":"/9","value":"ceres"}]'
+write flush

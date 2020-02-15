@@ -112,3 +112,25 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .build()
                              .build()}
 read "Hello, world"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 5)
+                                 .key("planets")
+                                 .delta("JSON_PATCH", 3)
+                                 .header("header1", "value1")
+                                 .build()
+                             .build()}
+read '[{"op":"add","path":"/8","value":"pluto"}]'
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 7)
+                                 .key("planets")
+                                 .delta("JSON_PATCH", 5)
+                                 .header("header1", "value1")
+                                 .build()
+                             .build()}
+read '[{"op":"add","path":"/9","value":"ceres"}]'

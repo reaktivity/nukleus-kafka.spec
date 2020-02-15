@@ -120,3 +120,29 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world"
 write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 5)
+                                  .key("planets")
+                                  .delta("NONE", -1)
+                                  .header("header1", "value1")
+                                  .build()
+                              .build()}
+write '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","pluto"]'
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 7)
+                                  .key("planets")
+                                  .delta("NONE", -1)
+                                  .header("header1", "value1")
+                                  .build()
+                              .build()}
+write '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","pluto","ceres"]'
+write flush
