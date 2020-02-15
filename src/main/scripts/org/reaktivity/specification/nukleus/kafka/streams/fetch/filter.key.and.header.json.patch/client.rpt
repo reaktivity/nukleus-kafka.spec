@@ -57,6 +57,10 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .fetch()
                                    .topic("test")
                                    .partition(0, 1)
+                                   .filter()
+                                       .key("planets")
+                                       .header("header2", "value2")
+                                       .build()
                                    .deltaType("JSON_PATCH")
                                    .build()
                                .build()}
@@ -86,51 +90,10 @@ read '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","p
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 2)
-                                 .header("header1", "value1")
-                                 .build()
-                             .build()}
-read "Hello, world"
-
-read nukleus:data.ext ${kafka:matchDataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .fetch()
-                                 .partition(0, 3)
-                                 .key("planets")
-                                 .delta("JSON_PATCH", 1)
-                                 .header("header1", "value1")
-                                 .build()
-                             .build()}
-read '[{"op":"remove","path":"/8"}]'
-
-read nukleus:data.ext ${kafka:matchDataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .fetch()
-                                 .partition(0, 4)
-                                 .header("header1", "value1")
-                                 .header("header2", "value2")
-                                 .build()
-                             .build()}
-read "Hello, world"
-
-read nukleus:data.ext ${kafka:matchDataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .fetch()
-                                 .partition(0, 5)
-                                 .key("planets")
-                                 .delta("JSON_PATCH", 3)
-                                 .header("header1", "value1")
-                                 .build()
-                             .build()}
-read '[{"op":"add","path":"/8","value":"pluto"}]'
-
-read nukleus:data.ext ${kafka:matchDataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .fetch()
                                  .partition(0, 7)
                                  .key("planets")
-                                 .delta("JSON_PATCH", 5)
+                                 .delta("JSON_PATCH", -1)
                                  .header("header2", "value2")
                                  .build()
                              .build()}
-read '[{"op":"add","path":"/9","value":"ceres"}]'
+read '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","pluto","ceres"]'

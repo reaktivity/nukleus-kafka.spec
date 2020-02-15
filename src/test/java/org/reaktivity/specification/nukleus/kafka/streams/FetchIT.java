@@ -449,6 +449,28 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/filter.header.json.patch/client",
+        "${scripts}/filter.header.json.patch/server"})
+    public void shouldReceiveJsonPatchMessagesWithHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.key.and.header.json.patch/client",
+        "${scripts}/filter.key.and.header.json.patch/server"})
+    public void shouldReceiveJsonPatchMessagesWithKeyAndHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/compact.message.with.message/client",
         "${scripts}/compact.message.with.message/server"})
     public void shouldCompactMessageWithMessage() throws Exception

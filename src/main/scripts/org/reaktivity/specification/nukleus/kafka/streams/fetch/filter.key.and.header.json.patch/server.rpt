@@ -57,6 +57,10 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .fetch()
                                   .topic("test")
                                   .partition(0, 1)
+                                  .filter()
+                                      .key("planets")
+                                      .header("header2", "value2")
+                                      .build()
                                   .deltaType("JSON_PATCH")
                                   .build()
                               .build()}
@@ -90,60 +94,11 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 2)
-                                  .header("header1", "value1")
-                                  .build()
-                              .build()}
-write "Hello, world"
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 3)
-                                  .key("planets")
-                                  .delta("JSON_PATCH", 1)
-                                  .header("header1", "value1")
-                                  .build()
-                              .build()}
-write '[{"op":"remove","path":"/8"}]'
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 4)
-                                  .header("header1", "value1")
-                                  .header("header2", "value2")
-                                  .build()
-                              .build()}
-write "Hello, world"
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 5)
-                                  .key("planets")
-                                  .delta("JSON_PATCH", 3)
-                                  .header("header1", "value1")
-                                  .build()
-                              .build()}
-write '[{"op":"add","path":"/8","value":"pluto"}]'
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .timestamp(newTimestamp)
                                   .partition(0, 7)
                                   .key("planets")
-                                  .delta("JSON_PATCH", 5)
+                                  .delta("JSON_PATCH", -1)
                                   .header("header2", "value2")
                                   .build()
                               .build()}
-write '[{"op":"add","path":"/9","value":"ceres"}]'
+write '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","pluto","ceres"]'
 write flush

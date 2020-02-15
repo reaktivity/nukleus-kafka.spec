@@ -57,6 +57,9 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .fetch()
                                   .topic("test")
                                   .partition(0, 1)
+                                  .filter()
+                                      .header("header1", "value1")
+                                      .build()
                                   .deltaType("JSON_PATCH")
                                   .build()
                               .build()}
@@ -77,19 +80,6 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 1)
-                                  .key("planets")
-                                  .delta("JSON_PATCH", -1)
-                                  .header("header2", "value2")
-                                  .build()
-                              .build()}
-write '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","pluto"]'
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .timestamp(newTimestamp)
                                   .partition(0, 2)
                                   .header("header1", "value1")
                                   .build()
@@ -103,11 +93,11 @@ write nukleus:data.ext ${kafka:dataEx()
                                   .timestamp(newTimestamp)
                                   .partition(0, 3)
                                   .key("planets")
-                                  .delta("JSON_PATCH", 1)
+                                  .delta("JSON_PATCH", -1)
                                   .header("header1", "value1")
                                   .build()
                               .build()}
-write '[{"op":"remove","path":"/8"}]'
+write '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune"]'
 write flush
 
 write nukleus:data.ext ${kafka:dataEx()
@@ -133,17 +123,4 @@ write nukleus:data.ext ${kafka:dataEx()
                                   .build()
                               .build()}
 write '[{"op":"add","path":"/8","value":"pluto"}]'
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 7)
-                                  .key("planets")
-                                  .delta("JSON_PATCH", 5)
-                                  .header("header2", "value2")
-                                  .build()
-                              .build()}
-write '[{"op":"add","path":"/9","value":"ceres"}]'
 write flush
