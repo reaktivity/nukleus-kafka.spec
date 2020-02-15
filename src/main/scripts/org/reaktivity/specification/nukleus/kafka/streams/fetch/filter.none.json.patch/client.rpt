@@ -101,7 +101,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .header("header1", "value1")
                                  .build()
                              .build()}
-read '[{"op":"remote","path":"/1"}]'
+read '[{"op":"remove","path":"/8"}]'
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))

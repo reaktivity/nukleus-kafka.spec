@@ -107,7 +107,7 @@ write nukleus:data.ext ${kafka:dataEx()
                                   .header("header1", "value1")
                                   .build()
                               .build()}
-write '[{"op":"remote","path":"/1"}]'
+write '[{"op":"remove","path":"/8"}]'
 write flush
 
 write nukleus:data.ext ${kafka:dataEx()
