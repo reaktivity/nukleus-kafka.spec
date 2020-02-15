@@ -141,7 +141,7 @@ write nukleus:data.ext ${kafka:dataEx()
                                   .partition(0, 7)
                                   .key("planets")
                                   .delta("NONE", -1)
-                                  .header("header1", "value1")
+                                  .header("header2", "value2")
                                   .build()
                               .build()}
 write '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","pluto","ceres"]'

@@ -130,7 +130,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .partition(0, 7)
                                  .key("planets")
                                  .delta("JSON_PATCH", 5)
-                                 .header("header1", "value1")
+                                 .header("header2", "value2")
                                  .build()
                              .build()}
 read '[{"op":"add","path":"/9","value":"ceres"}]'

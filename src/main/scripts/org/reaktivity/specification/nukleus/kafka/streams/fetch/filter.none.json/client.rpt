@@ -118,7 +118,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .partition(0, 5)
                                  .key("planets")
                                  .delta("NONE", -1)
-                                 .header("header2", "value2")
+                                 .header("header1", "value1")
                                  .build()
                              .build()}
 read '["mercury","venus","earth","mars","jupiter","saturn","uranus","neptune","pluto"]'

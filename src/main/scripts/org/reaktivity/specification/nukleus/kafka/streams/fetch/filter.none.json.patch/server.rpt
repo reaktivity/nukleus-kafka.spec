@@ -142,7 +142,7 @@ write nukleus:data.ext ${kafka:dataEx()
                                   .partition(0, 7)
                                   .key("planets")
                                   .delta("JSON_PATCH", 5)
-                                  .header("header1", "value1")
+                                  .header("header2", "value2")
                                   .build()
                               .build()}
 write '[{"op":"add","path":"/9","value":"ceres"}]'
