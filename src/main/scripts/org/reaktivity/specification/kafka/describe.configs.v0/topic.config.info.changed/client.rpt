@@ -58,6 +58,8 @@ read 55                                 # size
         [0x00]                              # not default
         [0x00]                              # not sensitive
 
+read notify RECEIVED_TOPIC_CONFIG
+
 write 41                                # size
       32s                               # describe configs
       0s                                # v0

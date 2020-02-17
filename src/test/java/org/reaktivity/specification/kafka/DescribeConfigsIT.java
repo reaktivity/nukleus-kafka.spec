@@ -66,6 +66,8 @@ public class DescribeConfigsIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.awaitBarrier("RECEIVED_TOPIC_CONFIG");
+        k3po.notifyBarrier("CHANGE_TOPIC_CONFIG");
         k3po.finish();
     }
 }

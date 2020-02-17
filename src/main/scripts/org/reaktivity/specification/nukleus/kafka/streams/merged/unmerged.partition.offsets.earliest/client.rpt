@@ -23,6 +23,56 @@ connect await ROUTED_CLIENT
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
+                               .describe()
+                                   .topic("test")
+                                   .config("cleanup.policy")
+                                   .config("max.message.bytes")
+                                   .config("segment.bytes")
+                                   .config("segment.index.bytes")
+                                   .config("segment.ms")
+                                   .config("retention.bytes")
+                                   .config("retention.ms")
+                                   .build()
+                               .build()}
+
+connected
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .describe()
+                                  .topic("test")
+                                  .config("cleanup.policy")
+                                  .config("max.message.bytes")
+                                  .config("segment.bytes")
+                                  .config("segment.index.bytes")
+                                  .config("segment.ms")
+                                  .config("retention.bytes")
+                                  .config("retention.ms")
+                                  .build()
+                              .build()}
+
+read nukleus:data.ext ${kafka:dataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .describe()
+                                 .config("cleanup.policy", "delete")
+                                 .config("max.message.bytes", 1000012)
+                                 .config("segment.bytes", 1073741824)
+                                 .config("segment.index.bytes", 10485760)
+                                 .config("segment.ms", 604800000)
+                                 .config("retention.bytes", -1)
+                                 .config("retention.ms", 604800000)
+                                 .build()
+                             .build()}
+
+read notify RECEIVED_CONFIG
+
+connect await RECEIVED_CONFIG
+        ${clientAddress}
+    option nukleus:window 8192
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
                                .meta()
                                    .topic("test")
                                    .build()

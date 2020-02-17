@@ -63,6 +63,8 @@ read 41                                 # size
        1                                # configs
          14s "cleanup.policy"             # name
 
+write await CHANGE_TOPIC_CONFIG
+
 write 54                                # size
       ${requestId2}
       0

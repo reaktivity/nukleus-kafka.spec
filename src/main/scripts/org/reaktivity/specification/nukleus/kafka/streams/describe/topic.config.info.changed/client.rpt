@@ -46,6 +46,8 @@ read nukleus:data.ext ${kafka:dataEx()
                                  .build()
                              .build()}
 
+read notify RECEIVED_TOPIC_CONFIG
+
 read nukleus:data.ext ${kafka:dataEx()
                              .typeId(nukleus:id("kafka"))
                              .describe()

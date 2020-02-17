@@ -49,6 +49,8 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write flush
 
+write await CHANGE_TOPIC_CONFIG
+
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .describe()
