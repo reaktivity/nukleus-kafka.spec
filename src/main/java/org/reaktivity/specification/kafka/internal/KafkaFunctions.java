@@ -912,6 +912,32 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaMergedDataExBuilder header(
+                String name,
+                byte[] value)
+            {
+                ensureDeltaTypeSet();
+
+                if (value == null)
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    mergedDataExRW.headersItem(h -> h.nameLen(nameRO.capacity())
+                                                     .name(nameRO, 0, nameRO.capacity())
+                                                     .valueLen(-1)
+                                                     .value((OctetsFW) null));
+                }
+                else
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    valueRO.wrap(value);
+                    mergedDataExRW.headersItem(h -> h.nameLen(nameRO.capacity())
+                                                     .name(nameRO, 0, nameRO.capacity())
+                                                     .valueLen(valueRO.capacity())
+                                                     .value(valueRO, 0, valueRO.capacity()));
+                }
+                return this;
+            }
+
             public KafkaDataExBuilder build()
             {
                 ensureDeltaTypeSet();

@@ -340,6 +340,54 @@ public class KafkaFunctionsTest
     }
 
     @Test
+    public void shouldGenerateMergedDataExtensionWithByteArrayValue()
+    {
+        byte[] build = KafkaFunctions.dataEx()
+                                     .typeId(0x01)
+                                     .merged()
+                                     .timestamp(12345678L)
+                                     .partition(0, 0L)
+                                     .progress(0, 1L)
+                                     .key("match")
+                                     .header("name", "value".getBytes(UTF_8))
+                                     .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaDataExFW dataEx = new KafkaDataExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, dataEx.typeId());
+        assertEquals(KafkaApi.MERGED.value(), dataEx.kind());
+
+        final KafkaMergedDataExFW mergedDataEx = dataEx.merged();
+        assertEquals(12345678L, mergedDataEx.timestamp());
+
+        final KafkaOffsetFW partition = mergedDataEx.partition();
+        assertEquals(0, partition.partitionId());
+        assertEquals(0L, partition.partitionOffset());
+
+        final MutableInteger progressCount = new MutableInteger();
+        mergedDataEx.progress().forEach(f -> progressCount.value++);
+        assertEquals(1, progressCount.value);
+
+        assertNotNull(mergedDataEx.progress()
+                                  .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
+
+        assertEquals("match", mergedDataEx.key()
+                                          .value()
+                                          .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
+
+        final MutableInteger headersCount = new MutableInteger();
+        mergedDataEx.headers().forEach(f -> headersCount.value++);
+        assertEquals(1, headersCount.value);
+        assertNotNull(mergedDataEx.headers()
+                                  .matchFirst(h ->
+                                                  "name".equals(h.name()
+                                                                 .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                                                      "value".equals(h.value()
+                                                             .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null);
+    }
+
+    @Test
     public void shouldGenerateMergedDataExtensionWithNullKeyAndNullHeaderValue()
     {
         byte[] build = KafkaFunctions.dataEx()
@@ -349,7 +397,7 @@ public class KafkaFunctionsTest
                                          .partition(0, 0L)
                                          .progress(0, 1L)
                                          .key(null)
-                                         .header("name", null)
+                                         .header("name", (String) null)
                                          .build()
                                      .build();
 
@@ -382,6 +430,51 @@ public class KafkaFunctionsTest
                     "name".equals(h.name()
                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
                     Objects.isNull(h.value())));
+    }
+
+    @Test
+    public void shouldGenerateMergedDataExtensionWithNullKeyAndNullByteArrayHeaderValue()
+    {
+        byte[] build = KafkaFunctions.dataEx()
+                                     .typeId(0x01)
+                                     .merged()
+                                     .timestamp(12345678L)
+                                     .partition(0, 0L)
+                                     .progress(0, 1L)
+                                     .key(null)
+                                     .header("name", (byte[]) null)
+                                     .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaDataExFW dataEx = new KafkaDataExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, dataEx.typeId());
+        assertEquals(KafkaApi.MERGED.value(), dataEx.kind());
+
+        final KafkaMergedDataExFW mergedDataEx = dataEx.merged();
+        assertEquals(12345678L, mergedDataEx.timestamp());
+
+        final KafkaOffsetFW partition = mergedDataEx.partition();
+        assertEquals(0, partition.partitionId());
+        assertEquals(0L, partition.partitionOffset());
+
+        final MutableInteger progressCount = new MutableInteger();
+        mergedDataEx.progress().forEach(f -> progressCount.value++);
+        assertEquals(1, progressCount.value);
+
+        assertNotNull(mergedDataEx.progress()
+                                  .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
+
+        assertNull(mergedDataEx.key().value());
+
+        final MutableInteger headersCount = new MutableInteger();
+        mergedDataEx.headers().forEach(f -> headersCount.value++);
+        assertEquals(1, headersCount.value);
+        assertNotNull(mergedDataEx.headers()
+                                  .matchFirst(h ->
+                                                  "name".equals(h.name()
+                                                                 .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                                                      Objects.isNull(h.value())));
     }
 
     @Test
