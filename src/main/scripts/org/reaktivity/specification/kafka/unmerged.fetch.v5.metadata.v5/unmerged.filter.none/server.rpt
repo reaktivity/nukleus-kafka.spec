@@ -28,7 +28,7 @@ accepted
 
 connected
 
-read 139                                # size
+read 233                                # size
      32s                                # describe configs
      0s                                 # v0
      (int:requestId)
@@ -36,7 +36,7 @@ read 139                                # size
      1                                  # resources
        [0x02]                           # topic resource
        4s "test"                        # "test" topic
-       7                                # configs
+       11                               # configs
          14s "cleanup.policy"             # name
          17s "max.message.bytes"
          13s "segment.bytes"
@@ -44,8 +44,12 @@ read 139                                # size
          10s "segment.ms"
          15s "retention.bytes"
          12s "retention.ms"
+         19s "delete.retention.ms"
+         21s "min.compaction.lag.ms"
+         21s "max.compaction.lag.ms"
+         25s "min.cleanable.dirty.ratio"
 
-write 220                               # size
+write 365                               # size
       ${requestId}
       0
       1                                 # resources
@@ -53,7 +57,7 @@ write 220                               # size
         -1s                               # error message
         [0x02]                            # topic resource
         4s "test"                         # "test" topic
-        7                                 # configs
+        11                                # configs
           14s "cleanup.policy"              # name
           6s "delete"                       # value
           [0x00]                            # not read only
@@ -86,6 +90,26 @@ write 220                               # size
           [0x00]
           12s "retention.ms"
           9s "604800000"
+          [0x00]
+          [0x00]
+          [0x00]
+          19s "delete.retention.ms"
+          8s "86400000"
+          [0x00]
+          [0x00]
+          [0x00]
+          21s "min.compaction.lag.ms"
+          1s "0"
+          [0x00]
+          [0x00]
+          [0x00]
+          21s "max.compaction.lag.ms"
+          19s "9223372036854775807"
+          [0x00]
+          [0x00]
+          [0x00]
+          25s "min.cleanable.dirty.ratio"
+          3s "0.5"
           [0x00]
           [0x00]
           [0x00]

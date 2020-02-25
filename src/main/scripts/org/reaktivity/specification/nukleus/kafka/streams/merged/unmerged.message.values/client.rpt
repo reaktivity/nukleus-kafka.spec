@@ -32,6 +32,10 @@ write nukleus:begin.ext ${kafka:beginEx()
                                    .config("segment.ms")
                                    .config("retention.bytes")
                                    .config("retention.ms")
+                                   .config("delete.retention.ms")
+                                   .config("min.compaction.lag.ms")
+                                   .config("max.compaction.lag.ms")
+                                   .config("min.cleanable.dirty.ratio")
                                    .build()
                                .build()}
 
@@ -48,6 +52,10 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .config("segment.ms")
                                   .config("retention.bytes")
                                   .config("retention.ms")
+                                  .config("delete.retention.ms")
+                                  .config("min.compaction.lag.ms")
+                                  .config("max.compaction.lag.ms")
+                                  .config("min.cleanable.dirty.ratio")
                                   .build()
                               .build()}
 
@@ -61,6 +69,10 @@ read nukleus:data.ext ${kafka:dataEx()
                                  .config("segment.ms", 604800000)
                                  .config("retention.bytes", -1)
                                  .config("retention.ms", 604800000)
+                                 .config("delete.retention.ms", 86400000)
+                                 .config("min.compaction.lag.ms", 0)
+                                 .config("max.compaction.lag.ms", 9223372036854775807)
+                                 .config("min.cleanable.dirty.ratio", 0.5)
                                  .build()
                              .build()}
 
