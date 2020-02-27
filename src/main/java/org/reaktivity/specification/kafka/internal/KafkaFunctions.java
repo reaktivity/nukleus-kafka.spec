@@ -912,6 +912,32 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaMergedDataExBuilder headerBytes(
+                String name,
+                byte[] value)
+            {
+                ensureDeltaTypeSet();
+
+                if (value == null)
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    mergedDataExRW.headersItem(h -> h.nameLen(nameRO.capacity())
+                                                     .name(nameRO, 0, nameRO.capacity())
+                                                     .valueLen(-1)
+                                                     .value((OctetsFW) null));
+                }
+                else
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    valueRO.wrap(value);
+                    mergedDataExRW.headersItem(h -> h.nameLen(nameRO.capacity())
+                                                     .name(nameRO, 0, nameRO.capacity())
+                                                     .valueLen(valueRO.capacity())
+                                                     .value(valueRO, 0, valueRO.capacity()));
+                }
+                return this;
+            }
+
             public KafkaDataExBuilder build()
             {
                 ensureDeltaTypeSet();
@@ -1417,6 +1443,37 @@ public final class KafkaFunctions
                 {
                     nameRO.wrap(name.getBytes(UTF_8));
                     valueRO.wrap(value.getBytes(UTF_8));
+                    headersRW.item(i -> i.nameLen(nameRO.capacity())
+                                         .name(nameRO, 0, nameRO.capacity())
+                                         .valueLen(valueRO.capacity())
+                                         .value(valueRO, 0, valueRO.capacity()));
+                }
+
+                return this;
+            }
+
+            public KafkaMergedDataExMatcherBuilder headerBytes(
+                String name,
+                byte[] value)
+            {
+                if (headersRW == null)
+                {
+                    this.headersRW = new ArrayFW.Builder<>(new KafkaHeaderFW.Builder(), new KafkaHeaderFW())
+                                                .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
+                }
+
+                if (value == null)
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    headersRW.item(i -> i.nameLen(nameRO.capacity())
+                                         .name(nameRO, 0, nameRO.capacity())
+                                         .valueLen(-1)
+                                         .value((OctetsFW) null));
+                }
+                else
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    valueRO.wrap(value);
                     headersRW.item(i -> i.nameLen(nameRO.capacity())
                                          .name(nameRO, 0, nameRO.capacity())
                                          .valueLen(valueRO.capacity())
