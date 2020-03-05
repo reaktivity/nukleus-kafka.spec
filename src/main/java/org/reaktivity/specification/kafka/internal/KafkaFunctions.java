@@ -38,6 +38,7 @@ import org.reaktivity.specification.kafka.internal.types.KafkaFilterFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaHeaderFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaKeyFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaOffsetType;
 import org.reaktivity.specification.kafka.internal.types.OctetsFW;
 import org.reaktivity.specification.kafka.internal.types.control.KafkaRouteExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaApi;
@@ -236,6 +237,7 @@ public final class KafkaFunctions
     {
         private final KafkaRouteExFW.Builder routeExRW;
         private boolean deltaTypeSet;
+        private boolean defaultOffsetSet;
 
         private KafkaRouteExBuilder()
         {
@@ -258,9 +260,18 @@ public final class KafkaFunctions
             return this;
         }
 
+        public KafkaRouteExBuilder defaultOffset(
+            String defaultOffset)
+        {
+            routeExRW.defaultOffset(p -> p.set(KafkaOffsetType.valueOf(defaultOffset)));
+            defaultOffsetSet = true;
+            return this;
+        }
+
         public byte[] build()
         {
             ensureDeltaTypeSet();
+            ensureDefaultOffsetSet();
 
             final KafkaRouteExFW routeEx = routeExRW.build();
             final byte[] array = new byte[routeEx.sizeof()];
@@ -273,6 +284,14 @@ public final class KafkaFunctions
             if (!deltaTypeSet)
             {
                 deltaType("NONE");
+            }
+        }
+
+        private void ensureDefaultOffsetSet()
+        {
+            if (!defaultOffsetSet)
+            {
+                defaultOffset("EARLIEST");
             }
         }
     }
