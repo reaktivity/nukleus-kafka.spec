@@ -1,0 +1,48 @@
+#
+# Copyright 2016-2020 The Reaktivity Project
+#
+# The Reaktivity Project licenses this file to you under the Apache License,
+# version 2.0 (the "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at:
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+property nukleiRG010101EC ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+
+property controlRG010101EC ${nukleiRG010101EC.control()}
+
+property routedTopicName "test"
+connect "agrona://stream/bidirectional"
+        option agrona:reader ${agrona:broadcastReceiver(controlRG010101EC.controller)}
+        option agrona:writer ${agrona:manyToOneWriter(controlRG010101EC.nukleus)}
+
+connected 
+
+write 0x00000001
+write ${controlRG010101EC.nextCorrelationId()}
+write ${core:string("kafka")}
+write [0x01]
+write 0L
+write ${core:string("kafka#0")}
+write ${core:string("target#0")}
+write ${kafka:routeEx()
+             .topicName(routedTopicName)
+             .header("header1", "match1")
+             .build()}
+write flush
+
+read 0x40000001
+read ${controlRG010101EC.correlationId()}
+read (long:newClientRouteId)
+
+read notify ROUTED_CLIENT
+
+close
+closed

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016-2019 The Reaktivity Project
+ * Copyright 2016-2020 The Reaktivity Project
  *
  * The Reaktivity Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -38,9 +38,9 @@ public class DescribeConfigsIT
 
     @Test
     @Specification({
-        "${scripts}/topic.with.log.compaction/client",
-        "${scripts}/topic.with.log.compaction/server"})
-    public void shouldRequestConfigForTopicWithLogCompaction() throws Exception
+        "${scripts}/topic.unknown/client",
+        "${scripts}/topic.unknown/server"})
+    public void shouldErrorWhenTopicUnkown() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -49,12 +49,25 @@ public class DescribeConfigsIT
 
     @Test
     @Specification({
-        "${scripts}/topic.with.no.log.compaction/client",
-        "${scripts}/topic.with.no.log.compaction/server"})
-    public void shouldRequestConfigForTopicWithoutLogCompaction() throws Exception
+        "${scripts}/topic.config.info/client",
+        "${scripts}/topic.config.info/server"})
+    public void shouldReceiveTopicConfigInfo() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/topic.config.info.changed/client",
+        "${scripts}/topic.config.info.changed/server"})
+    public void shouldReceiveTopicConfigInfoChanged() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.awaitBarrier("RECEIVED_TOPIC_CONFIG");
+        k3po.notifyBarrier("CHANGE_TOPIC_CONFIG");
         k3po.finish();
     }
 }

@@ -1,0 +1,53 @@
+#
+# Copyright 2016-2020 The Reaktivity Project
+#
+# The Reaktivity Project licenses this file to you under the Apache License,
+# version 2.0 (the "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at:
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+property networkConnect "nukleus://streams/kafka#0"
+property networkConnectWindow 8192
+
+property newMetadataRequestId ${kafka:newRequestId()}
+
+connect await ROUTED_SERVER
+        ${networkConnect}
+  option nukleus:window ${networkConnectWindow} 
+  option nukleus:transmission "duplex"
+  option nukleus:byteorder "network"
+
+connected
+
+write 21 # Size int32
+write 0x03s # ApiKey int16 (Metadata)
+write 0x05s # ApiVersion int16
+write ${newMetadataRequestId} # CorrelationId int32
+write -1s # ClientId string (null)
+write 1 # [TopicName] array length
+  write 4s "test"
+write [0x00] # allow_auto_topic_creation (boolean)
+
+read 63 # Size int32
+read ${newMetadataRequestId} # CorrelationId int32 # 151
+read [0..4] # throttle_time_ms int32
+read 1      # brokers array length
+  read 1    # broker id # 12 + 127 = 139
+  read 7s "broker1"
+  read 9093 # port int32
+  read -1s  # rack string (null)
+read 9s "cluster 1"  # 125
+read 1 # controller broker id
+read 1 # topic array length
+  read 3s # UnknownTopic
+  read 4s "test"
+  read [0x00] # is_internal boolean
+  read -1 # partition array length (null)

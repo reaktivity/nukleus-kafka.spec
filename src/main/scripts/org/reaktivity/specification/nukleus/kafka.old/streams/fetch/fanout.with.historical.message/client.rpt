@@ -1,0 +1,91 @@
+#
+# Copyright 2016-2020 The Reaktivity Project
+#
+# The Reaktivity Project licenses this file to you under the Apache License,
+# version 2.0 (the "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at:
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+property applicationConnect "nukleus://streams/kafka#0"
+property applicationConnectWindow 8192
+
+connect await ROUTED_CLIENT
+        ${applicationConnect}
+    option nukleus:window ${applicationConnectWindow}
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .build()}
+
+connected
+
+write notify CLIENT_ONE_CONNECTED
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .build()}
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(1)
+                             .build()}
+read "Hello, world"
+
+read notify CLIENT_ONE_RECEIVED_MESSAGE_ONE
+
+read await SERVER_DELIVER_LIVE_RESPONSE_TWO
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(2)
+                             .build()}
+read "Hello, again"
+
+
+connect await CLIENT_ONE_RECEIVED_MESSAGE_ONE
+        ${applicationConnect}
+    option nukleus:window ${applicationConnectWindow}
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .topicName("test")
+                               .fetchOffset(0)
+                               .build()}
+
+connected
+
+write notify CLIENT_TWO_CONNECTED
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .topicName("test")
+                              .fetchOffset(0)
+                              .build()}
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(1)
+                             .build()}
+read "Hello, world"
+
+read notify SERVER_DELIVER_LIVE_RESPONSE_TWO
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetchOffset(2)
+                             .build()}
+read "Hello, again"

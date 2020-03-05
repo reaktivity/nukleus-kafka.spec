@@ -1,5 +1,5 @@
 /**
- * Copyright 2016-2019 The Reaktivity Project
+ * Copyright 2016-2020 The Reaktivity Project
  *
  * The Reaktivity Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -57,50 +57,62 @@ public class ControlIT
 
     @Test
     @Specification({
-        "route.ext.header/client/nukleus",
-        "route.ext.header/client/controller"
+        "route.ext/client.merged/nukleus",
+        "route.ext/client.merged/controller"
     })
-    public void shouldRouteClientWithHeaderCondition() throws Exception
+    public void shouldRouteClientMergedWithExtension() throws Exception
     {
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "route.ext.headers/client/nukleus",
-        "route.ext.headers/client/controller"
+        "route/cache/nukleus",
+        "route/cache/controller"
     })
-    public void shouldRouteClientWithHeaderConditions() throws Exception
+    public void shouldRouteCache() throws Exception
     {
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "route.ext.multiple.headers/client/nukleus",
-        "route.ext.multiple.headers/client/controller"
+        "route.ext/cache/nukleus",
+        "route.ext/cache/controller"
     })
-    public void shouldRouteClientWithMultipleRoutesDifferingOnlyInHeaders() throws Exception
+    public void shouldRouteCacheWithExtension() throws Exception
     {
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "route.ext.multiple.networks/client/nukleus",
-        "route.ext.multiple.networks/client/controller"
+        "route.ext/cache.merged/nukleus",
+        "route.ext/cache.merged/controller"
     })
-    public void shouldRouteClientWithMultipleNetworks() throws Exception
+    public void shouldRouteCacheMergedWithExtension() throws Exception
     {
         k3po.finish();
     }
 
     @Test
     @Specification({
-        "route.ext.multiple.topics/client/nukleus",
-        "route.ext.multiple.topics/client/controller"
+        "route.ext/cache.bootstrap/nukleus",
+        "route.ext/cache.bootstrap/controller"
     })
-    public void shouldRouteClientWithMultipleTopics() throws Exception
+    public void shouldRouteCacheBootstrapWithExtension() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("UNROUTE_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "route.ext/cache.delta/json.patch/nukleus",
+        "route.ext/cache.delta/json.patch/controller"
+    })
+    public void shouldRouteCacheDeltaJsonPatch() throws Exception
     {
         k3po.finish();
     }
@@ -111,6 +123,18 @@ public class ControlIT
         "unroute/client/controller"
     })
     public void shouldUnrouteClient() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "unroute/cache/nukleus",
+        "unroute/cache/controller"
+    })
+    public void shouldUnrouteCache() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
