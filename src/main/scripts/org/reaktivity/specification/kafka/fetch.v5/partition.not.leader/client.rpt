@@ -63,6 +63,15 @@ read 97                                 # size
 
 read notify ROUTED_BROKER_SERVER
 
+write 21                                # size
+      3s                                # metadata
+      5s                                # v5
+      ${newRequestId}
+      -1s                               # no client id
+      1                                 # topics
+        4s "test"                       #   "test" topic
+      [0x00]                            # allow_auto_topic_creation
+
 connect await ROUTED_BROKER_SERVER
         ${networkConnect}
   option nukleus:window ${networkConnectWindow}
