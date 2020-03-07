@@ -57,6 +57,15 @@ write 97                                # size
           -1                                # no in-sync replicas
           0                                 # offline replicas
 
+read 21                                 # size
+     3s                                 # metadata
+     5s                                 # v5
+     (int:requestId)
+     -1s                                # no client id
+     1                                  # topics
+       4s "test"                        #   "test" topic
+     [0x00]                             # allow_auto_topic_creation
+
 accepted
 
 read nukleus:begin.ext ${tcp:beginEx()
