@@ -209,7 +209,7 @@ scope kafka
 
         struct KafkaProduceBeginEx
         {
-            string transaction; // = null;
+            string8 transaction; // = null;
             int64 producerId = 0;
             string16 topic;
         }
