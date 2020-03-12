@@ -148,6 +148,17 @@ public class MergedIT
 
     @Test
     @Specification({
+        "${scripts}/merged.partition.leader.changed/client",
+        "${scripts}/merged.partition.leader.changed/server"})
+    public void shouldRequestMergedPartitionLeaderChanged() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/unmerged.filter.none/client",
         "${scripts}/unmerged.filter.none/server"})
     public void shouldReceiveUnmergedMessagesWithNoFilter() throws Exception
@@ -189,6 +200,19 @@ public class MergedIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.partition.leader.changed/client",
+        "${scripts}/unmerged.partition.leader.changed/server"})
+    public void shouldRequestUnmergedPartitionLeaderChanged() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("CHANGING_PARTITION_LEADER");
+        k3po.notifyBarrier("CHANGED_PARTITION_LEADER");
         k3po.finish();
     }
 }
