@@ -104,8 +104,10 @@ write flush
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .meta()
-                                  .partition(0, 1)
-                                  .partition(1, 2)
+                                  .partition(0, 3)
+                                  .partition(1, 3)
+                                  .partition(2, 3)
+                                  .partition(3, 3)
                                   .build()
                               .build()}
 write flush
@@ -117,7 +119,9 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .meta()
                                   .partition(0, 1)
-                                  .partition(1, 1)
+                                  .partition(1, 3)
+                                  .partition(2, 3)
+                                  .partition(3, 1)
                                   .build()
                               .build()}
 write flush
@@ -143,6 +147,9 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .build()}
 write flush
 
+read aborted
+write aborted
+
 accepted
 
 read nukleus:begin.ext ${kafka:beginEx()
@@ -164,16 +171,13 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .build()}
 write flush
 
-read aborted
-write aborted
-
 accepted
 
 read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .topic("test")
-                                  .partition(1, 1)
+                                  .partition(2, -2)
                                   .build()
                               .build()}
 
@@ -183,7 +187,73 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(1, 1)
+                                   .partition(2, 1)
+                                   .build()
+                               .build()}
+write flush
+
+accepted
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .topic("test")
+                                  .partition(3, -2)
+                                  .build()
+                              .build()}
+
+connected
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .fetch()
+                                   .topic("test")
+                                   .partition(3, 1)
+                                   .build()
+                               .build()}
+write flush
+
+read aborted
+write aborted
+
+accepted
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .topic("test")
+                                  .partition(0, 1)
+                                  .build()
+                              .build()}
+
+connected
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .fetch()
+                                   .topic("test")
+                                   .partition(0, 1)
+                                   .build()
+                               .build()}
+write flush
+
+accepted
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .topic("test")
+                                  .partition(3, 1)
+                                  .build()
+                              .build()}
+
+connected
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .fetch()
+                                   .topic("test")
+                                   .partition(3, 1)
                                    .build()
                                .build()}
 write flush
