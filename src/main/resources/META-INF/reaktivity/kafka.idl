@@ -70,7 +70,7 @@ scope kafka
         JSON_PATCH
     }
 
-    enum KafkaOffsetType (uint8)
+    enum KafkaOffsetType (int8)
     {
         EARLIEST(-2),
         LATEST(-1)
