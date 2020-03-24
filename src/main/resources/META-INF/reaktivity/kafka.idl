@@ -149,6 +149,7 @@ scope kafka
 
         struct KafkaMergedDataEx
         {
+            int32 deferred = 0;         // INIT only (TODO: move to DATA frame)
             int64 timestamp = 0;        // INIT only
             KafkaOffset partition;      // INIT only
             KafkaOffset[] progress;     // INIT only
