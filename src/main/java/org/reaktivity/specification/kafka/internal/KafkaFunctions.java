@@ -30,7 +30,7 @@ import org.agrona.concurrent.UnsafeBuffer;
 import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
-import org.reaktivity.specification.kafka.internal.types.ArrayFW;
+import org.reaktivity.specification.kafka.internal.types.Array32FW;
 import org.reaktivity.specification.kafka.internal.types.KafkaConditionFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaType;
@@ -363,13 +363,13 @@ public final class KafkaFunctions
             KafkaFilterFW.Builder builder,
             KafkaFilterFW filter)
         {
-            final ArrayFW<KafkaConditionFW> conditions = filter.conditions();
+            final Array32FW<KafkaConditionFW> conditions = filter.conditions();
             builder.conditions(csb -> set(csb, conditions));
         }
 
         private void set(
-            ArrayFW.Builder<KafkaConditionFW.Builder, KafkaConditionFW> builder,
-            ArrayFW<KafkaConditionFW> conditions)
+            Array32FW.Builder<KafkaConditionFW.Builder, KafkaConditionFW> builder,
+            Array32FW<KafkaConditionFW> conditions)
         {
             conditions.forEach(c -> builder.item(ib -> set(ib, c)));
         }
@@ -1131,7 +1131,7 @@ public final class KafkaFunctions
         private final KafkaDataExFW dataExRO = new KafkaDataExFW();
 
         private Integer typeId;
-        private Short kind;
+        private Integer kind;
         private Predicate<KafkaDataExFW> caseMatcher;
 
         public KafkaMergedDataExMatcherBuilder merged()
@@ -1212,7 +1212,7 @@ public final class KafkaFunctions
             private KafkaOffsetFW.Builder partitionRW;
             private KafkaKeyFW.Builder keyRW;
             private KafkaDeltaFW.Builder deltaRW;
-            private ArrayFW.Builder<KafkaHeaderFW.Builder, KafkaHeaderFW> headersRW;
+            private Array32FW.Builder<KafkaHeaderFW.Builder, KafkaHeaderFW> headersRW;
 
             private KafkaFetchDataExMatcherBuilder()
             {
@@ -1283,7 +1283,7 @@ public final class KafkaFunctions
             {
                 if (headersRW == null)
                 {
-                    this.headersRW = new ArrayFW.Builder<>(new KafkaHeaderFW.Builder(), new KafkaHeaderFW())
+                    this.headersRW = new Array32FW.Builder<>(new KafkaHeaderFW.Builder(), new KafkaHeaderFW())
                                                 .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
                 }
 
@@ -1366,10 +1366,10 @@ public final class KafkaFunctions
         {
             private Long timestamp;
             private KafkaOffsetFW.Builder partitionRW;
-            private ArrayFW.Builder<KafkaOffsetFW.Builder, KafkaOffsetFW> progressRW;
+            private Array32FW.Builder<KafkaOffsetFW.Builder, KafkaOffsetFW> progressRW;
             private KafkaDeltaFW.Builder deltaRW;
             private KafkaKeyFW.Builder keyRW;
-            private ArrayFW.Builder<KafkaHeaderFW.Builder, KafkaHeaderFW> headersRW;
+            private Array32FW.Builder<KafkaHeaderFW.Builder, KafkaHeaderFW> headersRW;
 
             private KafkaMergedDataExMatcherBuilder()
             {
@@ -1400,7 +1400,7 @@ public final class KafkaFunctions
             {
                 if (progressRW == null)
                 {
-                    this.progressRW = new ArrayFW.Builder<>(new KafkaOffsetFW.Builder(), new KafkaOffsetFW())
+                    this.progressRW = new Array32FW.Builder<>(new KafkaOffsetFW.Builder(), new KafkaOffsetFW())
                                                  .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
                 }
                 progressRW.item(i -> i.partitionId(partitionId).partitionOffset(offset));
@@ -1446,7 +1446,7 @@ public final class KafkaFunctions
             {
                 if (headersRW == null)
                 {
-                    this.headersRW = new ArrayFW.Builder<>(new KafkaHeaderFW.Builder(), new KafkaHeaderFW())
+                    this.headersRW = new Array32FW.Builder<>(new KafkaHeaderFW.Builder(), new KafkaHeaderFW())
                                                 .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
                 }
 
@@ -1477,7 +1477,7 @@ public final class KafkaFunctions
             {
                 if (headersRW == null)
                 {
-                    this.headersRW = new ArrayFW.Builder<>(new KafkaHeaderFW.Builder(), new KafkaHeaderFW())
+                    this.headersRW = new Array32FW.Builder<>(new KafkaHeaderFW.Builder(), new KafkaHeaderFW())
                                                 .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
                 }
 

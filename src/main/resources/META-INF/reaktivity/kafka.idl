@@ -70,7 +70,7 @@ scope kafka
         JSON_PATCH
     }
 
-    enum KafkaOffsetType (uint8)
+    enum KafkaOffsetType (int8)
     {
         EARLIEST(-2),
         LATEST(-1)
@@ -210,7 +210,7 @@ scope kafka
 
         struct KafkaProduceBeginEx
         {
-            string transaction; // = null;
+            string8 transaction; // = null;
             int64 producerId = 0;
             string16 topic;
         }

@@ -48,10 +48,10 @@
     <junit.version>4.12</junit.version>
 
     <k3po.version>3.0.0-alpha-106</k3po.version>
-    <reaktor.version>0.123</reaktor.version>
+    <reaktor.version>0.130</reaktor.version>
 
-    <nukleus.plugin.version>0.45</nukleus.plugin.version>
-    <nukleus.tcp.spec.version>0.60</nukleus.tcp.spec.version>
+    <nukleus.plugin.version>0.46</nukleus.plugin.version>
+    <nukleus.tcp.spec.version>0.61</nukleus.tcp.spec.version>
   </properties>
 
   <dependencies>
