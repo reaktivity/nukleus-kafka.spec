@@ -30,3 +30,19 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .build()}
 
 connected
+
+
+connect await ROUTED_CLIENT
+        ${clientAddress}
+    option nukleus:window 8192
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .merged()
+                                   .topic("test")
+                                   .partition(-1, -2)
+                                   .build()
+                               .build()}
+
+connected

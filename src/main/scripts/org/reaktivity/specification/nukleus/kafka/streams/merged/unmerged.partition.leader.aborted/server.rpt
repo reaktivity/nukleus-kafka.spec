@@ -23,6 +23,7 @@ accept ${serverAddress}
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
 
+
 accepted
 
 read nukleus:begin.ext ${kafka:beginEx()
@@ -82,6 +83,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write flush
 
+
 accepted
 
 read nukleus:begin.ext ${kafka:beginEx()
@@ -119,9 +121,6 @@ write await PARTITION_THREE_LEADER_READY
 
 write notify ABORT_PARTITION_LEADERS_ONE_AND_TWO
 
-write await PARTITION_ONE_LEADER_RECOVERY
-write await PARTITION_TWO_LEADER_RECOVERY
-
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .meta()
@@ -132,6 +131,7 @@ write nukleus:data.ext ${kafka:dataEx()
                                   .build()
                               .build()}
 write flush
+
 
 accepted
 
@@ -155,6 +155,7 @@ write nukleus:begin.ext ${kafka:beginEx()
 write flush
 
 write notify PARTITION_ZERO_LEADER_READY
+
 
 accepted
 
@@ -181,8 +182,9 @@ write notify PARTITION_ONE_LEADER_READY
 
 write await ABORT_PARTITION_LEADERS_ONE_AND_TWO
 
-write abort
-read aborted
+read abort
+write aborted
+
 
 accepted
 
@@ -209,8 +211,9 @@ write notify PARTITION_TWO_LEADER_READY
 
 write await ABORT_PARTITION_LEADERS_ONE_AND_TWO
 
-write abort
-read aborted
+read abort
+write aborted
+
 
 accepted
 
@@ -235,57 +238,14 @@ write flush
 
 write notify PARTITION_THREE_LEADER_READY
 
-accepted
 
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .topic("test")
-                                  .partition(1, 1)
-                                  .build()
-                              .build()}
+# rejected nukleus:resetEx ${kafka:resetEx("NOT_LEADER_FOR_PARTITION")}
+rejected
 
-connected
 
-write nukleus:begin.ext ${kafka:beginEx()
-                               .typeId(nukleus:id("kafka"))
-                               .fetch()
-                                   .topic("test")
-                                   .partition(1, 1)
-                                   .build()
-                               .build()}
-write flush
+# rejected nukleus:resetEx ${kafka:resetEx("NOT_LEADER_FOR_PARTITION")}
+rejected
 
-write notify PARTITION_ONE_LEADER_RECOVERY
-
-read aborted
-write aborted
-
-accepted
-
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .topic("test")
-                                  .partition(2, 1)
-                                  .build()
-                              .build()}
-
-connected
-
-write nukleus:begin.ext ${kafka:beginEx()
-                               .typeId(nukleus:id("kafka"))
-                               .fetch()
-                                   .topic("test")
-                                   .partition(2, 1)
-                                   .build()
-                               .build()}
-write flush
-
-write notify PARTITION_TWO_LEADER_RECOVERY
-
-read aborted
-write aborted
 
 accepted
 
@@ -308,7 +268,6 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .build()}
 write flush
 
-write notify PARTITION_ONE_LEADER_MIGRATED
 
 accepted
 
@@ -330,5 +289,3 @@ write nukleus:begin.ext ${kafka:beginEx()
                                    .build()
                                .build()}
 write flush
-
-write notify PARTITION_TWO_LEADER_MIGRATED

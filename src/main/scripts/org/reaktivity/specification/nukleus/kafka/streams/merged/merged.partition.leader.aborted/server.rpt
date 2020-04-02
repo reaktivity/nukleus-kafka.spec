@@ -33,3 +33,17 @@ read nukleus:begin.ext ${kafka:beginEx()
 connected
 
 write flush
+
+accepted
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .topic("test")
+                                  .partition(-1, -2)
+                                  .build()
+                              .build()}
+
+connected
+
+write flush

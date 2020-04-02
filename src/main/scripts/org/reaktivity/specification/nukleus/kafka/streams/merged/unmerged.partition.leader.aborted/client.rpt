@@ -119,7 +119,6 @@ read nukleus:data.ext ${kafka:dataEx()
                                  .partition(3, 3)
                                  .build()
                              .build()}
-read notify PARTITION_LEADERS_ONE_AND_TWO_CHANGED
 
 connect await PARTITION_COUNT_4
         ${clientAddress}
@@ -169,8 +168,8 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .build()
                               .build()}
 
-read aborted
-write abort
+write aborted
+read abort
 
 write notify PARTITION_ONE_LEADER_ABORTED
 
@@ -198,8 +197,8 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .build()
                               .build()}
 
-read aborted
-write abort
+write aborted
+read abort
 
 write notify PARTITION_TWO_LEADER_ABORTED
 
@@ -241,12 +240,9 @@ write nukleus:begin.ext ${kafka:beginEx()
                                    .build()
                                .build()}
 
-connected
+connect aborted
 
-write await PARTITION_LEADERS_ONE_AND_TWO_CHANGED
-
-write abort
-read abort
+read notify PARTITION_LEADER_ONE_CHANGED
 
 connect await PARTITION_TWO_LEADER_ABORTED
         ${clientAddress}
@@ -262,14 +258,11 @@ write nukleus:begin.ext ${kafka:beginEx()
                                    .build()
                                .build()}
 
-connected
+connect aborted
 
-write await PARTITION_LEADERS_ONE_AND_TWO_CHANGED
+read notify PARTITION_LEADER_TWO_CHANGED
 
-write abort
-read abort
-
-connect await PARTITION_LEADERS_ONE_AND_TWO_CHANGED
+connect await PARTITION_LEADER_ONE_CHANGED
         ${clientAddress}
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
@@ -293,7 +286,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .build()
                               .build()}
 
-connect await PARTITION_LEADERS_ONE_AND_TWO_CHANGED
+connect await PARTITION_LEADER_TWO_CHANGED
         ${clientAddress}
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
