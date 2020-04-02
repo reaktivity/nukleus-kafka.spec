@@ -147,7 +147,10 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .build()}
 write flush
 
-read aborted
+read await CHANGED_PARTITION_LEADER
+
+# read nukleus:resetEx ${kafka:resetEx("NOT_LEADER_FOR_PARTITION")}
+read abort
 write aborted
 
 accepted
@@ -213,7 +216,10 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .build()}
 write flush
 
-read aborted
+read await CHANGED_PARTITION_LEADER
+
+# read nukleus:resetEx ${kafka:resetEx("NOT_LEADER_FOR_PARTITION")}
+read abort
 write aborted
 
 accepted

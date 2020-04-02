@@ -145,7 +145,8 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .build()
                               .build()}
 
-write abort
+# write nukleus:resetEx ${kafka:resetEx("NOT_LEADER_FOR_PARTITION")}
+write aborted
 read abort
 
 connect await PARTITION_COUNT_4
@@ -220,7 +221,8 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .build()
                               .build()}
 
-write abort
+# write nukleus:resetEx ${kafka:resetEx("NOT_LEADER_FOR_PARTITION")}
+write aborted
 read abort
 
 connect await PARTITION_LEADER_CHANGED
