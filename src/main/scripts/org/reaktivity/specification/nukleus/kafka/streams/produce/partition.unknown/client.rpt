@@ -60,4 +60,13 @@ write nukleus:begin.ext ${kafka:beginEx()
                                    .build()
                                .build()}
 
-connect aborted
+connected
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .produce()
+                                  .build()
+                              .build()}
+
+write flush
+write aborted
