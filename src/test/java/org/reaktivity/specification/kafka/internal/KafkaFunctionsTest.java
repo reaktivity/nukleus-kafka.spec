@@ -58,6 +58,8 @@ import org.reaktivity.specification.kafka.internal.types.stream.KafkaMergedDataE
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaMergedFlushExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaMetaBeginExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaMetaDataExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaProduceBeginExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaProduceDataExFW;
 
 public class KafkaFunctionsTest
 {
@@ -1582,6 +1584,345 @@ public class KafkaFunctionsTest
                 .build();
 
         matcher.match(byteBuf);
+    }
+
+    @Test
+    public void shouldGenerateProduceBeginExtension()
+    {
+        byte[] build = KafkaFunctions.beginEx()
+                                     .typeId(0x01)
+                                     .produce()
+                                         .transaction("transaction")
+                                         .producerId(1)
+                                         .topic("topic")
+                                         .partitionId(0)
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaBeginExFW beginEx = new KafkaBeginExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, beginEx.typeId());
+        assertEquals(KafkaApi.PRODUCE.value(), beginEx.kind());
+
+        final KafkaProduceBeginExFW produceBeginEx = beginEx.produce();
+        assertEquals("transaction", produceBeginEx.transaction().asString());
+        assertEquals(1, produceBeginEx.producerId());
+        assertEquals("topic", produceBeginEx.topic().asString());
+        assertEquals(0, produceBeginEx.partitionId());
+    }
+
+    @Test
+    public void shouldGenerateProduceDataExtension()
+    {
+        byte[] build = KafkaFunctions.dataEx()
+                                     .typeId(0x01)
+                                     .produce()
+                                         .deferred(10)
+                                         .timestamp(12345678L)
+                                         .sequence(0)
+                                         .key("match")
+                                         .header("name", "value")
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaDataExFW dataEx = new KafkaDataExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, dataEx.typeId());
+        assertEquals(KafkaApi.PRODUCE.value(), dataEx.kind());
+
+        final KafkaProduceDataExFW produceDataEx = dataEx.produce();
+        assertEquals(10, produceDataEx.deferred());
+        assertEquals(12345678L, produceDataEx.timestamp());
+        assertEquals(0, produceDataEx.sequence());
+
+        assertEquals("match", produceDataEx.key()
+                                           .value()
+                                           .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
+
+        final MutableInteger headersCount = new MutableInteger();
+        produceDataEx.headers().forEach(f -> headersCount.value++);
+        assertEquals(1, headersCount.value);
+        assertNotNull(produceDataEx.headers()
+                .matchFirst(h ->
+                    "name".equals(h.name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    "value".equals(h.value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null);
+    }
+
+
+    @Test
+    public void shouldMatchProduceDataExtensionTimestamp() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .produce()
+                                                 .timestamp(12345678L)
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .produce(p -> p.timestamp(12345678L)
+                               .sequence(0)
+                               .key(k -> k.length(5)
+                                          .value(v -> v.set("match".getBytes(UTF_8))))
+                               .headersItem(h -> h.nameLen(4)
+                                                  .name(n -> n.set("name".getBytes(UTF_8)))
+                                                  .valueLen(5)
+                                                  .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        assertNotNull(matcher.match(byteBuf));
+    }
+
+    @Test
+    public void shouldMatchProduceDataExtensionSequence() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .produce()
+                                                 .sequence(0)
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .produce(p -> p.timestamp(12345678L)
+                        .sequence(0)
+                        .key(k -> k.length(5)
+                                   .value(v -> v.set("match".getBytes(UTF_8))))
+                        .headersItem(h -> h.nameLen(4)
+                                           .name(n -> n.set("name".getBytes(UTF_8)))
+                                           .valueLen(5)
+                                           .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        assertNotNull(matcher.match(byteBuf));
+    }
+
+    @Test
+    public void shouldMatchProduceDataExtensionKey() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .produce()
+                                                 .key("match")
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .produce(p -> p.timestamp(12345678L)
+                        .sequence(0)
+                        .key(k -> k.length(5)
+                                   .value(v -> v.set("match".getBytes(UTF_8))))
+                        .headersItem(h -> h.nameLen(4)
+                                           .name(n -> n.set("name".getBytes(UTF_8)))
+                                           .valueLen(5)
+                                           .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        assertNotNull(matcher.match(byteBuf));
+    }
+
+    @Test
+    public void shouldMatchProduceDataExtensionNullKey() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .produce()
+                                                 .key(null)
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .produce(p -> p.timestamp(12345678L)
+                        .sequence(0)
+                        .key(k -> k.length(-1)
+                                   .value((OctetsFW) null))
+                        .headersItem(h -> h.nameLen(4)
+                                           .name(n -> n.set("name".getBytes(UTF_8)))
+                                           .valueLen(5)
+                                           .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        assertNotNull(matcher.match(byteBuf));
+    }
+
+    @Test
+    public void shouldMatchProduceDataExtensionHeader() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .produce()
+                                                 .header("name", "value")
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .produce(p -> p.timestamp(12345678L)
+                        .sequence(0)
+                        .key(k -> k.length(5)
+                                   .value(v -> v.set("match".getBytes(UTF_8))))
+                        .headersItem(h -> h.nameLen(4)
+                                           .name(n -> n.set("name".getBytes(UTF_8)))
+                                           .valueLen(5)
+                                           .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        assertNotNull(matcher.match(byteBuf));
+    }
+
+    @Test
+    public void shouldMatchProduceDataExtensionHeaderWithNullValue() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .produce()
+                                                 .header("name", null)
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .produce(p -> p.timestamp(12345678L)
+                        .sequence(0)
+                        .key(k -> k.length(5)
+                                   .value(v -> v.set("match".getBytes(UTF_8))))
+                        .headersItem(h -> h.nameLen(4)
+                                           .name(n -> n.set("name".getBytes(UTF_8)))
+                                           .valueLen(-1)
+                                           .value((OctetsFW) null)))
+                .build();
+
+        assertNotNull(matcher.match(byteBuf));
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldNotMatchProduceDataExtensionTimestamp() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .typeId(0x01)
+                                             .produce()
+                                                 .timestamp(123456789L)
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .produce(p -> p.timestamp(12345678L)
+                        .sequence(0)
+                        .key(k -> k.length(5)
+                                   .value(v -> v.set("match".getBytes(UTF_8))))
+                        .headersItem(h -> h.nameLen(4)
+                                           .name(n -> n.set("name".getBytes(UTF_8)))
+                                           .valueLen(5)
+                                           .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        matcher.match(byteBuf);
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldNotMatchProduceDataExtensionSequence() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .typeId(0x01)
+                                             .produce()
+                                                 .timestamp(12345678L)
+                                                 .sequence(1)
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .produce(p -> p.timestamp(12345678L)
+                        .sequence(0)
+                        .key(k -> k.length(5)
+                                   .value(v -> v.set("match".getBytes(UTF_8))))
+                        .headersItem(h -> h.nameLen(4)
+                                           .name(n -> n.set("name".getBytes(UTF_8)))
+                                           .valueLen(5)
+                                           .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        matcher.match(byteBuf);
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldNotMatchProduceDataExtensionKey() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .typeId(0x01)
+                                             .produce()
+                                                 .sequence(0)
+                                                 .timestamp(12345678L)
+                                                 .key("no match")
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .produce(p -> p.timestamp(12345678L)
+                        .sequence(0)
+                        .key(k -> k.length(5)
+                                   .value(v -> v.set("match".getBytes(UTF_8))))
+                        .headersItem(h -> h.nameLen(4)
+                                           .name(n -> n.set("name".getBytes(UTF_8)))
+                                           .valueLen(5)
+                                           .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        matcher.match(byteBuf);
+    }
+
+    @Test
+    public void shouldGenerateProduceDataExtensionWithNullKeyAndNullHeaderValue()
+    {
+        byte[] build = KafkaFunctions.dataEx()
+                                     .typeId(0x01)
+                                     .produce()
+                                         .timestamp(12345678L)
+                                         .sequence(0)
+                                         .key(null)
+                                         .header("name", null)
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaDataExFW dataEx = new KafkaDataExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, dataEx.typeId());
+        assertEquals(KafkaApi.PRODUCE.value(), dataEx.kind());
+
+        final KafkaProduceDataExFW produceDataEx = dataEx.produce();
+        assertEquals(12345678L, produceDataEx.timestamp());
+        assertEquals(0, produceDataEx.sequence());
+
+        assertNull(produceDataEx.key().value());
+
+        final MutableInteger headersCount = new MutableInteger();
+        produceDataEx.headers().forEach(f -> headersCount.value++);
+        assertEquals(1, headersCount.value);
+        assertNotNull(produceDataEx.headers()
+                .matchFirst(h ->
+                    "name".equals(h.name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    Objects.isNull(h.value())));
     }
 
     @Test

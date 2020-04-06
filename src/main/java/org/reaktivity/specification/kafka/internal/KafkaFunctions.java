@@ -56,6 +56,8 @@ import org.reaktivity.specification.kafka.internal.types.stream.KafkaMergedDataE
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaMergedFlushExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaMetaBeginExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaMetaDataExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaProduceBeginExFW;
+import org.reaktivity.specification.kafka.internal.types.stream.KafkaProduceDataExFW;
 
 public final class KafkaFunctions
 {
@@ -451,6 +453,13 @@ public final class KafkaFunctions
             return new KafkaDescribeBeginExBuilder();
         }
 
+        public KafkaProduceBeginExBuilder produce()
+        {
+            beginExRW.kind(KafkaApi.PRODUCE.value());
+
+            return new KafkaProduceBeginExBuilder();
+        }
+
         public byte[] build()
         {
             final KafkaBeginExFW beginEx = beginExRO;
@@ -673,6 +682,65 @@ public final class KafkaFunctions
                 return KafkaBeginExBuilder.this;
             }
         }
+
+        public final class KafkaProduceBeginExBuilder
+        {
+            private final KafkaProduceBeginExFW.Builder produceBeginExRW = new KafkaProduceBeginExFW.Builder();
+
+            private boolean transactionSet;
+
+            private KafkaProduceBeginExBuilder()
+            {
+                produceBeginExRW.wrap(writeBuffer, KafkaBeginExFW.FIELD_OFFSET_PRODUCE, writeBuffer.capacity());
+            }
+
+            public KafkaProduceBeginExBuilder transaction(
+                String transaction)
+            {
+                produceBeginExRW.transaction(transaction);
+                transactionSet = true;
+                return this;
+            }
+
+            public KafkaProduceBeginExBuilder producerId(
+                long producerId)
+            {
+                ensureTransactionSet();
+                produceBeginExRW.producerId(producerId);
+                return this;
+            }
+
+            public KafkaProduceBeginExBuilder topic(
+                String topic)
+            {
+                ensureTransactionSet();
+                produceBeginExRW.topic(topic);
+                return this;
+            }
+
+            public KafkaProduceBeginExBuilder partitionId(
+                int partitionId)
+            {
+                ensureTransactionSet();
+                produceBeginExRW.partitionId(partitionId);
+                return this;
+            }
+
+            public KafkaBeginExBuilder build()
+            {
+                final KafkaProduceBeginExFW produceBeginEx = produceBeginExRW.build();
+                beginExRO.wrap(writeBuffer, 0, produceBeginEx.limit());
+                return KafkaBeginExBuilder.this;
+            }
+
+            private void ensureTransactionSet()
+            {
+                if (!transactionSet)
+                {
+                    transaction(null);
+                }
+            }
+        }
     }
 
     public static final class KafkaDataExBuilder
@@ -721,6 +789,13 @@ public final class KafkaFunctions
             dataExRW.kind(KafkaApi.DESCRIBE.value());
 
             return new KafkaDescribeDataExBuilder();
+        }
+
+        public KafkaProduceDataExBuilder produce()
+        {
+            dataExRW.kind(KafkaApi.PRODUCE.value());
+
+            return new KafkaProduceDataExBuilder();
         }
 
         public byte[] build()
@@ -1025,6 +1100,89 @@ public final class KafkaFunctions
                 return KafkaDataExBuilder.this;
             }
         }
+
+        public final class KafkaProduceDataExBuilder
+        {
+            private final DirectBuffer keyRO = new UnsafeBuffer(0, 0);
+            private final DirectBuffer nameRO = new UnsafeBuffer(0, 0);
+            private final DirectBuffer valueRO = new UnsafeBuffer(0, 0);
+
+            private final KafkaProduceDataExFW.Builder produceDataExRW = new KafkaProduceDataExFW.Builder();
+
+            private KafkaProduceDataExBuilder()
+            {
+                produceDataExRW.wrap(writeBuffer, KafkaDataExFW.FIELD_OFFSET_DESCRIBE, writeBuffer.capacity());
+            }
+
+            public KafkaProduceDataExBuilder deferred(
+                int deferred)
+            {
+                produceDataExRW.deferred(deferred);
+                return this;
+            }
+
+            public KafkaProduceDataExBuilder timestamp(
+                long timestamp)
+            {
+                produceDataExRW.timestamp(timestamp);
+                return this;
+            }
+
+            public KafkaProduceDataExBuilder sequence(
+                int sequence)
+            {
+                produceDataExRW.sequence(sequence);
+                return this;
+            }
+
+            public KafkaProduceDataExBuilder key(
+                String key)
+            {
+                if (key == null)
+                {
+                    produceDataExRW.key(m -> m.length(-1)
+                                              .value((OctetsFW) null));
+                }
+                else
+                {
+                    keyRO.wrap(key.getBytes(UTF_8));
+                    produceDataExRW.key(k -> k.length(keyRO.capacity())
+                                              .value(keyRO, 0, keyRO.capacity()));
+                }
+                return this;
+            }
+
+            public KafkaProduceDataExBuilder header(
+                String name,
+                String value)
+            {
+                if (value == null)
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    produceDataExRW.headersItem(h -> h.nameLen(nameRO.capacity())
+                                                      .name(nameRO, 0, nameRO.capacity())
+                                                      .valueLen(-1)
+                                                      .value((OctetsFW) null));
+                }
+                else
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    valueRO.wrap(value.getBytes(UTF_8));
+                    produceDataExRW.headersItem(h -> h.nameLen(nameRO.capacity())
+                                                      .name(nameRO, 0, nameRO.capacity())
+                                                      .valueLen(valueRO.capacity())
+                                                      .value(valueRO, 0, valueRO.capacity()));
+                }
+                return this;
+            }
+
+            public KafkaDataExBuilder build()
+            {
+                final KafkaProduceDataExFW produceDataEx = produceDataExRW.build();
+                dataExRO.wrap(writeBuffer, 0, produceDataEx.limit());
+                return KafkaDataExBuilder.this;
+            }
+        }
     }
 
     public static final class KafkaFlushExBuilder
@@ -1148,6 +1306,15 @@ public final class KafkaFunctions
             final KafkaFetchDataExMatcherBuilder matcherBuilder = new KafkaFetchDataExMatcherBuilder();
 
             this.kind = KafkaApi.FETCH.value();
+            this.caseMatcher = matcherBuilder::match;
+            return matcherBuilder;
+        }
+
+        public KafkaProduceDataExMatcherBuilder produce()
+        {
+            final KafkaProduceDataExMatcherBuilder matcherBuilder = new KafkaProduceDataExMatcherBuilder();
+
+            this.kind = KafkaApi.PRODUCE.value();
             this.caseMatcher = matcherBuilder::match;
             return matcherBuilder;
         }
@@ -1359,6 +1526,138 @@ public final class KafkaFunctions
                 final KafkaFetchDataExFW fetchDataEx)
             {
                 return headersRW == null || headersRW.build().equals(fetchDataEx.headers());
+            }
+        }
+
+        public final class KafkaProduceDataExMatcherBuilder
+        {
+            private Integer deferred;
+            private Long timestamp;
+            private Integer sequence;
+            private KafkaKeyFW.Builder keyRW;
+            private Array32FW.Builder<KafkaHeaderFW.Builder, KafkaHeaderFW> headersRW;
+
+            private KafkaProduceDataExMatcherBuilder()
+            {
+            }
+
+            public KafkaProduceDataExMatcherBuilder deferred(
+                int deferred)
+            {
+                this.deferred = deferred;
+                return this;
+            }
+
+            public KafkaProduceDataExMatcherBuilder timestamp(
+                long timestamp)
+            {
+                this.timestamp = timestamp;
+                return this;
+            }
+
+            public KafkaProduceDataExMatcherBuilder sequence(
+                int sequence)
+            {
+                this.sequence = sequence;
+                return this;
+            }
+
+            public KafkaProduceDataExMatcherBuilder key(
+                String key)
+            {
+                assert keyRW == null;
+                keyRW = new KafkaKeyFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
+
+                if (key == null)
+                {
+                    keyRW.length(-1)
+                         .value((OctetsFW) null);
+                }
+                else
+                {
+                    keyRO.wrap(key.getBytes(UTF_8));
+                    keyRW.length(keyRO.capacity())
+                         .value(keyRO, 0, keyRO.capacity());
+                }
+
+                return this;
+            }
+
+            public KafkaProduceDataExMatcherBuilder header(
+                String name,
+                String value)
+            {
+                if (headersRW == null)
+                {
+                    this.headersRW = new Array32FW.Builder<>(new KafkaHeaderFW.Builder(), new KafkaHeaderFW())
+                                                  .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
+                }
+
+                if (value == null)
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    headersRW.item(i -> i.nameLen(nameRO.capacity())
+                                         .name(nameRO, 0, nameRO.capacity())
+                                         .valueLen(-1)
+                                         .value((OctetsFW) null));
+                }
+                else
+                {
+                    nameRO.wrap(name.getBytes(UTF_8));
+                    valueRO.wrap(value.getBytes(UTF_8));
+                    headersRW.item(i -> i.nameLen(nameRO.capacity())
+                                         .name(nameRO, 0, nameRO.capacity())
+                                         .valueLen(valueRO.capacity())
+                                         .value(valueRO, 0, valueRO.capacity()));
+                }
+
+                return this;
+            }
+
+            public KafkaDataExMatcherBuilder build()
+            {
+                return KafkaDataExMatcherBuilder.this;
+            }
+
+            private boolean match(
+                KafkaDataExFW dataEx)
+            {
+                final KafkaProduceDataExFW produceDataEx = dataEx.produce();
+                return matchDeferred(produceDataEx) &&
+                    matchTimestamp(produceDataEx) &&
+                    matchSequence(produceDataEx) &&
+                    matchKey(produceDataEx) &&
+                    matchHeaders(produceDataEx);
+            }
+
+            private boolean matchDeferred(
+                final KafkaProduceDataExFW produceDataEx)
+            {
+                return deferred == null || deferred == produceDataEx.deferred();
+            }
+
+            private boolean matchTimestamp(
+                final KafkaProduceDataExFW produceDataEx)
+            {
+                return timestamp == null || timestamp == produceDataEx.timestamp();
+            }
+
+            private boolean matchSequence(
+                final KafkaProduceDataExFW produceDataEx)
+            {
+                return sequence == null || sequence == produceDataEx.sequence();
+            }
+
+            private boolean matchKey(
+                final KafkaProduceDataExFW produceDataEx)
+            {
+                return keyRW == null || keyRW.build().equals(produceDataEx.key());
+            }
+
+            private boolean matchHeaders(
+                final KafkaProduceDataExFW produceDataEx)
+            {
+                return headersRW == null || headersRW.build().equals(produceDataEx.headers());
             }
         }
 

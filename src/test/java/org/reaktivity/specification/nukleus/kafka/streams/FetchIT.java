@@ -295,8 +295,8 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/message.header/client",
-        "${scripts}/message.header/server"})
+        "${scripts}/message.header.null/client",
+        "${scripts}/message.header.null/server"})
     public void shouldReceiveMessageHeaderNull() throws Exception
     {
         k3po.start();
