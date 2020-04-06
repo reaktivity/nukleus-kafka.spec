@@ -72,7 +72,7 @@ read nukleus:begin.ext ${tcp:beginEx()
 
 connected
 
-read 139
+read 112
      0s
      3s
      (int:requestId)
@@ -84,9 +84,9 @@ read 139
      4s "test"
      1
      0
-     95                                 # record set size
+     68                                 # record set size
      0L                                 # first offset
-     87                                 # length
+     60                                 # length
      -1
      [0x02]
      [0..4]
@@ -98,18 +98,13 @@ read 139
      -1s
      -1
      1                                  # records
-     ${kafka:varint(33)}
+     ${kafka:varint(6)}
      [0x00]
      ${kafka:varint(0)}
      ${kafka:varint(0)}
      ${kafka:varint(-1)}
-     ${kafka:varint(12)}
-     "Hello, world"
-     ${kafka:varint(1)}                 # headers
-       ${kafka:varint(7)}                   # key size
-       "header1"                            # key bytes
-       ${kafka:varint(6)}                   # value size
-       "value1"                             # value bytes
+     ${kafka:varint(-1)}
+     ${kafka:varint(0)}                 # headers
 
 write 40
       ${requestId}
