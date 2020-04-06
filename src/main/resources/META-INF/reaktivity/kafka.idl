@@ -213,13 +213,16 @@ scope kafka
             string8 transaction; // = null;
             int64 producerId = 0;
             string16 topic;
+            int32 partitionId;
         }
 
         struct KafkaProduceDataEx
         {
+            int32 deferred = 0;
+            int64 timestamp = 0;
+            int32 sequence = -1;
             KafkaKey key;
             KafkaHeader[] headers;
-            KafkaOffset progress;  // partitionId == -1  implies hash(key) ⇒ partition, offset = seqno
         }
     }
 }
