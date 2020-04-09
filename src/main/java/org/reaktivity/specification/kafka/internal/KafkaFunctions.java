@@ -31,6 +31,7 @@ import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 import org.reaktivity.specification.kafka.internal.types.Array32FW;
+import org.reaktivity.specification.kafka.internal.types.KafkaCapabilities;
 import org.reaktivity.specification.kafka.internal.types.KafkaConditionFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaType;
@@ -496,6 +497,7 @@ public final class KafkaFunctions
         {
             private final KafkaMergedBeginExFW.Builder mergedBeginExRW = new KafkaMergedBeginExFW.Builder();
 
+            private boolean capabilitiesSet;
             private boolean deltaTypeSet;
 
             private KafkaMergedBeginExBuilder()
@@ -503,9 +505,18 @@ public final class KafkaFunctions
                 mergedBeginExRW.wrap(writeBuffer, KafkaBeginExFW.FIELD_OFFSET_MERGED, writeBuffer.capacity());
             }
 
+            public KafkaMergedBeginExBuilder capabilities(
+                String capabilities)
+            {
+                mergedBeginExRW.capabilities(c -> c.set(KafkaCapabilities.valueOf(capabilities)));
+                capabilitiesSet = true;
+                return this;
+            }
+
             public KafkaMergedBeginExBuilder topic(
                 String topic)
             {
+                ensureCapabilitiesSet();
                 mergedBeginExRW.topic(topic);
                 return this;
             }
@@ -548,6 +559,15 @@ public final class KafkaFunctions
                 final KafkaMergedBeginExFW mergedBeginEx = mergedBeginExRW.build();
                 beginExRO.wrap(writeBuffer, 0, mergedBeginEx.limit());
                 return KafkaBeginExBuilder.this;
+            }
+
+            private void ensureCapabilitiesSet()
+            {
+                // TODO: default enum field directly in generated flyweight
+                if (!capabilitiesSet)
+                {
+                    capabilities("PRODUCE_AND_FETCH");
+                }
             }
 
             private void ensureDeltaTypeSet()
@@ -1231,6 +1251,8 @@ public final class KafkaFunctions
         {
             private final KafkaMergedFlushExFW.Builder mergedFlushExRW = new KafkaMergedFlushExFW.Builder();
 
+            private boolean capabilitiesSet;
+
             private KafkaMergedFlushExBuilder()
             {
                 mergedFlushExRW.wrap(writeBuffer, KafkaFlushExFW.FIELD_OFFSET_FETCH, writeBuffer.capacity());
@@ -1244,11 +1266,30 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaMergedFlushExBuilder capabilities(
+                String capabilities)
+            {
+                mergedFlushExRW.capabilities(c -> c.set(KafkaCapabilities.valueOf(capabilities)));
+                capabilitiesSet = true;
+                return this;
+            }
+
             public KafkaFlushExBuilder build()
             {
+                ensureCapabilitiesSet();
+
                 final KafkaMergedFlushExFW mergedFlushEx = mergedFlushExRW.build();
                 flushExRO.wrap(writeBuffer, 0, mergedFlushEx.limit());
                 return KafkaFlushExBuilder.this;
+            }
+
+            private void ensureCapabilitiesSet()
+            {
+                // TODO: default enum field directly in generated flyweight
+                if (!capabilitiesSet)
+                {
+                    capabilities("PRODUCE_AND_FETCH");
+                }
             }
         }
 

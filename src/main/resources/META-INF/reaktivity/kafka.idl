@@ -82,6 +82,13 @@ scope kafka
         int64 ancestorOffset = -1;
     }
 
+    enum KafkaCapabilities
+    {
+        PRODUCE_ONLY,
+        FETCH_ONLY,
+        PRODUCE_AND_FETCH
+    }
+
     scope control
     {
         struct KafkaRouteEx
@@ -141,6 +148,7 @@ scope kafka
 
         struct KafkaMergedBeginEx
         {
+            KafkaCapabilities capabilities;
             string16 topic;
             KafkaOffset[] partitions;
             KafkaFilter[] filters; // ORed
@@ -161,6 +169,7 @@ scope kafka
         struct KafkaMergedFlushEx
         {
             KafkaOffset[] progress;
+            KafkaCapabilities capabilities;
         }
 
         struct KafkaMetaBeginEx
