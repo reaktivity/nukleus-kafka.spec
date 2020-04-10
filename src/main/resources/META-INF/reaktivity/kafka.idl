@@ -78,7 +78,7 @@ scope kafka
 
     struct KafkaDelta
     {
-        KafkaDeltaType type;
+        KafkaDeltaType type = NONE;
         int64 ancestorOffset = -1;
     }
 
@@ -94,8 +94,8 @@ scope kafka
         struct KafkaRouteEx
         {
             string16 topic; // TODO: wildcard
-            KafkaDeltaType deltaType;
-            KafkaOffsetType defaultOffset;
+            KafkaDeltaType deltaType = NONE;
+            KafkaOffsetType defaultOffset = EARLIEST;
         }
     }
 
@@ -148,11 +148,11 @@ scope kafka
 
         struct KafkaMergedBeginEx
         {
-            KafkaCapabilities capabilities;
+            KafkaCapabilities capabilities = PRODUCE_AND_FETCH;
             string16 topic;
             KafkaOffset[] partitions;
             KafkaFilter[] filters; // ORed
-            KafkaDeltaType deltaType;
+            KafkaDeltaType deltaType = NONE;
         }
 
         struct KafkaMergedDataEx
@@ -169,7 +169,7 @@ scope kafka
         struct KafkaMergedFlushEx
         {
             KafkaOffset[] progress;
-            KafkaCapabilities capabilities;
+            KafkaCapabilities capabilities = PRODUCE_AND_FETCH;
         }
 
         struct KafkaMetaBeginEx
@@ -198,7 +198,7 @@ scope kafka
             string16 topic;
             KafkaOffset partition;
             KafkaFilter[] filters; // ORed
-            KafkaDeltaType deltaType;
+            KafkaDeltaType deltaType = NONE;
         }
 
         struct KafkaFetchDataEx
