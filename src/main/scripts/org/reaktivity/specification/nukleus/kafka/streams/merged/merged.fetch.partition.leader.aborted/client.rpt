@@ -40,6 +40,7 @@ connect await ROUTED_CLIENT
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .merged()
+                                   .capabilities("FETCH_ONLY")
                                    .topic("test")
                                    .partition(-1, -2)
                                    .build()

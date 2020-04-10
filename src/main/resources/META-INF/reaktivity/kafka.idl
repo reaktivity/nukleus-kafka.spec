@@ -82,11 +82,11 @@ scope kafka
         int64 ancestorOffset = -1;
     }
 
-    enum KafkaCapabilities
+    enum KafkaCapabilities (uint8)
     {
-        PRODUCE_ONLY,
-        FETCH_ONLY,
-        PRODUCE_AND_FETCH
+        PRODUCE_ONLY(1),
+        FETCH_ONLY(2),
+        PRODUCE_AND_FETCH(3)
     }
 
     scope control
