@@ -194,7 +194,7 @@ write nukleus:begin.ext ${tcp:beginEx()
 
 connected
 
-write 128                               # size
+write 124                               # size
       0s                                # produce
       3s                                # v3
       ${newRequestId}
@@ -208,7 +208,7 @@ write 128                               # size
       0                                 # partition
       84                                # record set size
       0L                                # first offset
-      76                                # length
+      72                                # length
       -1
       [0x02]
       0x4e8723aa
@@ -229,7 +229,7 @@ write 128                               # size
       "Hello, world #A1"
       ${kafka:varint(0)}                # headers
 
-read 40
+read 44
      ${newRequestId}
      1                                  # topics
      4s "test"
@@ -240,7 +240,7 @@ read 40
      [0..8]                             # log append time
      [0..4]                             # throttle ms
 
-write 128                               # size
+write 124                               # size
       0s                                # produce
       3s                                # v3
       ${newRequestId2}
@@ -254,7 +254,7 @@ write 128                               # size
       0                                 # partition
       84                                # record set size
       0L                                # first offset
-      76                                # length
+      72                                # length
       -1
       [0x02]
       0x4e8723aa
@@ -275,7 +275,7 @@ write 128                               # size
       "Hello, world #A2"
       ${kafka:varint(0)}                # headers
 
-read 40
+read 44
      ${newRequestId2}
      1                                  # topics
      4s "test"
@@ -302,7 +302,7 @@ write nukleus:begin.ext ${tcp:beginEx()
 
 connected
 
-write 128                               # size
+write 124                               # size
       0s                                # produce
       3s                                # v3
       ${newRequestId}
@@ -316,7 +316,7 @@ write 128                               # size
       1                                 # partition
       84                                # record set size
       0L                                # first offset
-      76                                # length
+      72                                # length
       -1
       [0x02]
       0x4e8723aa
@@ -337,7 +337,7 @@ write 128                               # size
       "Hello, world #B1"
       ${kafka:varint(0)}                # headers
 
-read 40
+read 44
      ${newRequestId}
      1                                  # topics
      4s "test"
@@ -348,7 +348,7 @@ read 40
      [0..8]                             # log append time
      [0..4]                             # throttle ms
 
-write 128                               # size
+write 124                               # size
       0s                                # produce
       3s                                # v3
       ${newRequestId2}
@@ -362,7 +362,7 @@ write 128                               # size
       1                                 # partition
       84                                # record set size
       0L                                # first offset
-      76                                # length
+      72                                # length
       -1
       [0x02]
       0x4e8723aa
@@ -383,7 +383,7 @@ write 128                               # size
       "Hello, world #B2"
       ${kafka:varint(0)}                # headers
 
-read 40
+read 44
      ${newRequestId2}
      1                                  # topics
      4s "test"
@@ -410,7 +410,7 @@ write nukleus:begin.ext ${tcp:beginEx()
 
 connected
 
-write 128                               # size
+write 124                               # size
       0s                                # produce
       3s                                # v3
       ${newRequestId}
@@ -424,7 +424,7 @@ write 128                               # size
       2                                 # partition
       84                                # record set size
       0L                                # first offset
-      76                                # length
+      72                                # length
       -1
       [0x02]
       0x4e8723aa
@@ -445,7 +445,7 @@ write 128                               # size
       "Hello, world #C1"
       ${kafka:varint(0)}                # headers
 
-read 40
+read 44
      ${newRequestId}
      1                                  # topics
      4s "test"
@@ -456,7 +456,7 @@ read 40
      [0..8]                             # log append time
      [0..4]                             # throttle ms
 
-write 128                               # size
+write 124                               # size
       0s                                # produce
       3s                                # v3
       ${newRequestId2}
@@ -470,7 +470,7 @@ write 128                               # size
       2                                 # partition
       84                                # record set size
       0L                                # first offset
-      76                                # length
+      72                                # length
       -1
       [0x02]
       0x4e8723aa
@@ -491,7 +491,7 @@ write 128                               # size
       "Hello, world #C2"
       ${kafka:varint(0)}                # headers
 
-read 40
+read 44
      ${newRequestId2}
      1                                  # topics
      4s "test"

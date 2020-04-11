@@ -181,7 +181,7 @@ read nukleus:begin.ext ${tcp:beginEx()
 
 connected
 
-read 128
+read 124
      0s
      3s
      (int:requestId)
@@ -195,7 +195,7 @@ read 128
      0                                  # partition
      84                                 # record set size
      0L                                 # first offset
-     76                                 # length
+     72                                 # length
      -1
      [0x02]
      [0..4]
@@ -216,7 +216,7 @@ read 128
      "Hello, world #A1"
      ${kafka:varint(0)}                 # headers
 
-write 40
+write 44
       ${requestId}
       1                                 # topics
       4s "test"
@@ -227,7 +227,7 @@ write 40
       0L                                # log append time
       0                                 # throttle
 
-read 128
+read 124
      0s
      3s
      (int:requestId2)
@@ -241,7 +241,7 @@ read 128
      0                                  # partition
      84                                 # record set size
      0L                                 # first offset
-     76                                 # length
+     72                                 # length
      -1
      [0x02]
      [0..4]
@@ -262,7 +262,7 @@ read 128
      "Hello, world #A2"
      ${kafka:varint(0)}                 # headers
 
-write 40
+write 44
       ${requestId2}
       1                                 # topics
       4s "test"
@@ -285,7 +285,7 @@ read nukleus:begin.ext ${tcp:beginEx()
 
 connected
 
-read 128
+read 124
      0s
      3s
      (int:requestId)
@@ -299,7 +299,7 @@ read 128
      1                                  # partition
      84                                 # record set size
      0L                                 # first offset
-     76                                 # length
+     72                                 # length
      -1
      [0x02]
      [0..4]
@@ -320,7 +320,7 @@ read 128
      "Hello, world #B1"
      ${kafka:varint(0)}                 # headers
 
-write 40
+write 44
       ${requestId}
       1                                 # topics
       4s "test"
@@ -331,7 +331,7 @@ write 40
       0L                                # log append time
       0                                 # throttle
 
-read 128
+read 124
      0s
      3s
      (int:requestId2)
@@ -345,7 +345,7 @@ read 128
      1                                  # partition
      84                                 # record set size
      0L                                 # first offset
-     76                                 # length
+     72                                 # length
      -1
      [0x02]
      [0..4]
@@ -366,7 +366,7 @@ read 128
      "Hello, world #B2"
      ${kafka:varint(0)}                 # headers
 
-write 40
+write 44
       ${requestId2}
       1                                 # topics
       4s "test"
@@ -389,7 +389,7 @@ read nukleus:begin.ext ${tcp:beginEx()
 
 connected
 
-read 128
+read 124
      0s
      3s
      (int:requestId)
@@ -403,7 +403,7 @@ read 128
      2                                  # partition
      84                                 # record set size
      0L                                 # first offset
-     76                                 # length
+     72                                 # length
      -1
      [0x02]
      [0..4]
@@ -424,7 +424,7 @@ read 128
      "Hello, world #C1"
      ${kafka:varint(0)}                 # headers
 
-write 40
+write 44
       ${requestId}
       1                                 # topics
       4s "test"
@@ -435,7 +435,7 @@ write 40
       0L                                # log append time
       0                                 # throttle
 
-read 128
+read 124
      0s
      3s
      (int:requestId2)
@@ -449,7 +449,7 @@ read 128
      2                                  # partition
      84                                 # record set size
      0L                                 # first offset
-     76                                 # length
+     72                                 # length
      -1
      [0x02]
      [0..4]
@@ -470,7 +470,7 @@ read 128
      "Hello, world #C2"
      ${kafka:varint(0)}                 # headers
 
-write 40
+write 44
       ${requestId2}
       1                                 # topics
       4s "test"
