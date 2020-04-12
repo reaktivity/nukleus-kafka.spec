@@ -29,7 +29,7 @@ import org.kaazing.k3po.junit.rules.K3poRule;
 public class UnmergedIT
 {
     private final K3poRule k3po = new K3poRule().addScriptRoot("scripts",
-            "org/reaktivity/specification/kafka/unmerged.fetch.v5.metadata.v5");
+            "org/reaktivity/specification/kafka/unmerged.p3.f5.d0.m5");
 
     private final TestRule timeout = new DisableOnDebug(new Timeout(10, SECONDS));
 
@@ -38,9 +38,9 @@ public class UnmergedIT
 
     @Test
     @Specification({
-        "${scripts}/unmerged.filter.none/client",
-        "${scripts}/unmerged.filter.none/server"})
-    public void shouldRequestUnmergedMessagesWithNoFilter() throws Exception
+        "${scripts}/unmerged.fetch.filter.none/client",
+        "${scripts}/unmerged.fetch.filter.none/server"})
+    public void shouldFetchUnmergedMessagesWithNoFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -49,9 +49,9 @@ public class UnmergedIT
 
     @Test
     @Specification({
-        "${scripts}/unmerged.partition.offsets.earliest/client",
-        "${scripts}/unmerged.partition.offsets.earliest/server"})
-    public void shouldRequestUnmergedPartitionOffsetsEarliest() throws Exception
+        "${scripts}/unmerged.fetch.partition.offsets.earliest/client",
+        "${scripts}/unmerged.fetch.partition.offsets.earliest/server"})
+    public void shouldFetchUnmergedPartitionOffsetsEarliest() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");
@@ -60,9 +60,20 @@ public class UnmergedIT
 
     @Test
     @Specification({
-        "${scripts}/unmerged.message.values/client",
-        "${scripts}/unmerged.message.values/server"})
-    public void shouldReceiveUnmergedMessageValues() throws Exception
+        "${scripts}/unmerged.fetch.message.values/client",
+        "${scripts}/unmerged.fetch.message.values/server"})
+    public void shouldFetchUnmergedMessageValues() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.produce.message.values/client",
+        "${scripts}/unmerged.produce.message.values/server"})
+    public void shouldProduceUnmergedMessageValues() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_SERVER");

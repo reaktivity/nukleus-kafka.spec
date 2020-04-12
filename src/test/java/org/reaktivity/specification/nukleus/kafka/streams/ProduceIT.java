@@ -240,6 +240,17 @@ public class ProduceIT
 
     @Test
     @Specification({
+        "${scripts}/message.value.repeated/client",
+        "${scripts}/message.value.repeated/server"})
+    public void shouldSendMessageValueRepeated() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/message.header/client",
         "${scripts}/message.header/server"})
     public void shouldSendMessageHeader() throws Exception
