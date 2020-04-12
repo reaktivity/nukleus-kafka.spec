@@ -72,7 +72,7 @@ read nukleus:begin.ext ${tcp:beginEx()
 
 connected
 
-read 10353
+read 10349
      0s
      3s
      (int:requestId)
@@ -86,7 +86,7 @@ read 10353
      0
      10309                              # record set size
      0L                                 # first offset
-     10301                              # length
+     10297                              # length
      -1
      [0x02]
      [0..4]
@@ -107,7 +107,7 @@ read 10353
      [0..10240]
      ${kafka:varint(0)}                 # headers
 
-write 40
+write 44
       ${requestId}
       1                                 # topics
       4s "test"

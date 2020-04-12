@@ -77,7 +77,7 @@ write nukleus:begin.ext ${tcp:beginEx()
 
 connected
 
-write 143                               # size
+write 139                               # size
       0s                                # produce
       3s                                # v3
       ${newRequestId}
@@ -91,7 +91,7 @@ write 143                               # size
       0                                 # partition
       99                                # record set size
       0L                                # first offset
-      91                                # length
+      87                                # length
       -1
       [0x02]
       0x4e8723aa
@@ -117,7 +117,7 @@ write 143                               # size
         ${kafka:varint(6)}                  # value size
         "value1"                            # value bytes
 
-read 40
+read 44
      ${newRequestId}
      1                                  # topics
      4s "test"
