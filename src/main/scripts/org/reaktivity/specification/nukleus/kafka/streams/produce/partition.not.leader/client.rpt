@@ -16,6 +16,9 @@
 
 property clientAddress "nukleus://streams/kafka#0"
 
+property deltaMillis 0L
+property newTimestamp ${kafka:timestamp() + deltaMillis}
+
 connect await ROUTED_CLIENT
         ${clientAddress}
     option nukleus:window 8192
@@ -65,6 +68,7 @@ connected
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
+                                  .timestamp(newTimestamp)
                                   .build()
                               .build()}
 

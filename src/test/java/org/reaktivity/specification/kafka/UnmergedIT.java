@@ -79,4 +79,26 @@ public class UnmergedIT
         k3po.notifyBarrier("ROUTED_SERVER");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.produce.message.values.dynamic/client",
+        "${scripts}/unmerged.produce.message.values.dynamic/server"})
+    public void shouldProduceUnmergedMessageValuesDynamic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.produce.message.values.dynamic.hashed/client",
+        "${scripts}/unmerged.produce.message.values.dynamic.hashed/server"})
+    public void shouldProduceUnmergedMessageValuesDynamicHashed() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_SERVER");
+        k3po.finish();
+    }
 }

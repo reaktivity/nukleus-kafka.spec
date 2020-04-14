@@ -26,67 +26,76 @@ connect await ROUTED_CLIENT
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
-                               .meta()
+                               .merged()
+                                   .capabilities("PRODUCE_ONLY")
                                    .topic("test")
                                    .build()
                                .build()}
 
 connected
-
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .meta()
-                                  .topic("test")
-                                  .build()
-                              .build()}
-
-read nukleus:data.ext ${kafka:dataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .meta()
-                                 .partition(0, 177)
-                                 .build()
-                             .build()}
-
-read notify ROUTED_BROKER_CLIENT
-
-connect await ROUTED_BROKER_CLIENT
-        ${clientAddress}
-    option nukleus:window 8192
-    option nukleus:transmission "half-duplex"
-    option nukleus:affinity 0xb1
-
-write nukleus:begin.ext ${kafka:beginEx()
-                               .typeId(nukleus:id("kafka"))
-                               .produce()
-                                   .topic("test")
-                                   .partitionId(0)
-                                   .build()
-                               .build()}
-
-connected
-
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .produce()
-                                  .topic("test")
-                                  .partitionId(0)
-                                  .build()
-                              .build()}
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .produce()
+                              .merged()
                                   .timestamp(newTimestamp)
+                                  .partition(-1, -1)
+                                  .key("key3")
                                   .build()
                               .build()}
-write "Hello, world"
+write "Hello, world #A1"
 write flush
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
-                              .produce()
+                              .merged()
                                   .timestamp(newTimestamp)
+                                  .partition(-1, -1)
+                                  .key("key2")
                                   .build()
                               .build()}
-write "Hello, world"
+write "Hello, world #B1"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .timestamp(newTimestamp)
+                                  .partition(-1, -1)
+                                  .key("key3")
+                                  .build()
+                              .build()}
+write "Hello, world #A2"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .timestamp(newTimestamp)
+                                  .partition(-1, -1)
+                                  .key("key2")
+                                  .build()
+                              .build()}
+write "Hello, world #B2"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .timestamp(newTimestamp)
+                                  .partition(-1, -1)
+                                  .key("keyC")
+                                  .build()
+                              .build()}
+write "Hello, world #C1"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .timestamp(newTimestamp)
+                                  .partition(-1, -1)
+                                  .key("keyC")
+                                  .build()
+                              .build()}
+write "Hello, world #C2"
 write flush
