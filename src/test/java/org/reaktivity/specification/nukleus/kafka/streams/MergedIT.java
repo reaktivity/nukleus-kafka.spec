@@ -40,7 +40,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.filter.header/client",
         "${scripts}/merged.fetch.filter.header/server"})
-    public void shouldReceiveMergedMessagesWithHeaderFilter() throws Exception
+    public void shouldFetchMergedMessagesWithHeaderFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -51,7 +51,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.filter.header.and.header/client",
         "${scripts}/merged.fetch.filter.header.and.header/server"})
-    public void shouldReceiveMergedMessagesWithHeaderAndHeaderFilter() throws Exception
+    public void shouldFetchMergedMessagesWithHeaderAndHeaderFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -62,7 +62,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.filter.header.or.header/client",
         "${scripts}/merged.fetch.filter.header.or.header/server"})
-    public void shouldReceiveMergedMessagesWithHeaderOrHeaderFilter() throws Exception
+    public void shouldFetchMergedMessagesWithHeaderOrHeaderFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -73,7 +73,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.filter.key/client",
         "${scripts}/merged.fetch.filter.key/server"})
-    public void shouldReceiveMergedMessagesWithKeyFilter() throws Exception
+    public void shouldFetchMergedMessagesWithKeyFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -84,7 +84,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.filter.key.and.header/client",
         "${scripts}/merged.fetch.filter.key.and.header/server"})
-    public void shouldReceiveMergedMessagesWithKeyAndHeaderFilter() throws Exception
+    public void shouldFetchMergedMessagesWithKeyAndHeaderFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -95,7 +95,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.filter.key.or.header/client",
         "${scripts}/merged.fetch.filter.key.or.header/server"})
-    public void shouldReceiveMergedMessagesWithKeyOrHeaderFilter() throws Exception
+    public void shouldFetchMergedMessagesWithKeyOrHeaderFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -106,7 +106,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.filter.none/client",
         "${scripts}/merged.fetch.filter.none/server"})
-    public void shouldReceiveMergedMessagesWithNoFilter() throws Exception
+    public void shouldFetchMergedMessagesWithNoFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -117,7 +117,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.message.values/client",
         "${scripts}/merged.fetch.message.values/server"})
-    public void shouldReceiveMergedMessageValues() throws Exception
+    public void shouldFetchMergedMessageValues() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -181,6 +181,28 @@ public class MergedIT
 
     @Test
     @Specification({
+        "${scripts}/merged.produce.message.values.dynamic/client",
+        "${scripts}/merged.produce.message.values.dynamic/server"})
+    public void shouldProduceMergedMessageValuesDynamic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.produce.message.values.dynamic.hashed/client",
+        "${scripts}/merged.produce.message.values.dynamic.hashed/server"})
+    public void shouldProduceMergedMessageValuesDynamicHashed() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/unmerged.fetch.filter.none/client",
         "${scripts}/unmerged.fetch.filter.none/server"})
     public void shouldFetchUnmergedMessagesWithNoFilter() throws Exception
@@ -207,7 +229,7 @@ public class MergedIT
     @Specification({
         "${scripts}/unmerged.fetch.partition.offsets.latest/client",
         "${scripts}/unmerged.fetch.partition.offsets.latest/server"})
-    public void shouldRequestUnmergedPartitionOffsetsLatest() throws Exception
+    public void shouldFetchUnmergedPartitionOffsetsLatest() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -218,7 +240,7 @@ public class MergedIT
     @Specification({
         "${scripts}/unmerged.fetch.partition.offsets.earliest/client",
         "${scripts}/unmerged.fetch.partition.offsets.earliest/server"})
-    public void shouldRequestUnmergedPartitionOffsetsEarliest() throws Exception
+    public void shouldFetchUnmergedPartitionOffsetsEarliest() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -229,7 +251,7 @@ public class MergedIT
     @Specification({
         "${scripts}/unmerged.fetch.partition.leader.changed/client",
         "${scripts}/unmerged.fetch.partition.leader.changed/server"})
-    public void shouldRequestUnmergedPartitionLeaderChanged() throws Exception
+    public void shouldFetchUnmergedPartitionLeaderChanged() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -242,7 +264,7 @@ public class MergedIT
     @Specification({
         "${scripts}/unmerged.fetch.partition.leader.aborted/client",
         "${scripts}/unmerged.fetch.partition.leader.aborted/server"})
-    public void shouldRequestUnmergedPartitionLeaderAborted() throws Exception
+    public void shouldFetchUnmergedPartitionLeaderAborted() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -254,6 +276,28 @@ public class MergedIT
         "${scripts}/unmerged.produce.message.values/client",
         "${scripts}/unmerged.produce.message.values/server"})
     public void shouldProduceUnmergedMessageValues() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.produce.message.values.dynamic/client",
+        "${scripts}/unmerged.produce.message.values.dynamic/server"})
+    public void shouldProduceUnmergedMessageValuesDynamic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.produce.message.values.dynamic.hashed/client",
+        "${scripts}/unmerged.produce.message.values.dynamic.hashed/server"})
+    public void shouldProduceUnmergedMessageValuesDynamicHashed() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");

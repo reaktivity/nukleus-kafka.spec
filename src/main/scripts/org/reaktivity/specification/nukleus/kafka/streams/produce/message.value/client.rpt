@@ -76,6 +76,7 @@ read nukleus:begin.ext ${kafka:beginEx()
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
+                                  .timestamp(newTimestamp)
                                   .build()
                               .build()}
 write "Hello, world"
