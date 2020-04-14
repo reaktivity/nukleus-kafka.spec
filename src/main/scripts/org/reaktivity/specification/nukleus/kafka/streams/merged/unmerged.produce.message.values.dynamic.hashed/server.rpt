@@ -136,7 +136,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .produce()
                                  .timestamp(newTimestamp)
-                                 .key("key1")
+                                 .key("key3")
                                  .build()
                              .build()}
 read "Hello, world #A1"
@@ -145,7 +145,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .produce()
                                  .timestamp(newTimestamp)
-                                 .key("key1")
+                                 .key("key3")
                                  .build()
                              .build()}
 read "Hello, world #A2"
@@ -214,7 +214,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .produce()
                                  .timestamp(newTimestamp)
-                                 .key("key3")
+                                 .key("keyC")
                                  .build()
                              .build()}
 read "Hello, world #C1"
@@ -223,7 +223,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .produce()
                                  .timestamp(newTimestamp)
-                                 .key("key3")
+                                 .key("keyC")
                                  .build()
                              .build()}
 read "Hello, world #C2"

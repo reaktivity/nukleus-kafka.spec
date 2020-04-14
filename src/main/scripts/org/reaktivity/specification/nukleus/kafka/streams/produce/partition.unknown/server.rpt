@@ -59,5 +59,12 @@ read nukleus:begin.ext ${kafka:beginEx()
 
 connected
 
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .produce()
+                                 .build()
+                             .build()}
+read nukleus:data.null
+
 read abort
 
