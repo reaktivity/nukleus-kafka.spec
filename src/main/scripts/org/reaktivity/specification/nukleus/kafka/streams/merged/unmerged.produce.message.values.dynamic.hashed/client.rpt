@@ -137,7 +137,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
                                   .timestamp(newTimestamp)
-                                  .key("key1")
+                                  .key("key3")
                                   .build()
                               .build()}
 write "Hello, world #A1"
@@ -147,7 +147,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
                                   .timestamp(newTimestamp)
-                                  .key("key1")
+                                  .key("key3")
                                   .build()
                               .build()}
 write "Hello, world #A2"
@@ -225,7 +225,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
                                   .timestamp(newTimestamp)
-                                  .key("key3")
+                                  .key("keyC")
                                   .build()
                               .build()}
 write "Hello, world #C1"
@@ -235,7 +235,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
                                   .timestamp(newTimestamp)
-                                  .key("key3")
+                                  .key("keyC")
                                   .build()
                               .build()}
 write "Hello, world #C2"
