@@ -71,6 +71,7 @@ write nukleus:data.ext ${kafka:dataEx()
                                   .timestamp(newTimestamp)
                                   .build()
                               .build()}
-
 write flush
+
 write aborted
+read abort
