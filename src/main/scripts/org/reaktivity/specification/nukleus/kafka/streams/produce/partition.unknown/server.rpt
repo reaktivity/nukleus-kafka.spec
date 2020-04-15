@@ -67,4 +67,3 @@ read nukleus:data.ext ${kafka:matchDataEx()
 read nukleus:data.null
 
 read abort
-
