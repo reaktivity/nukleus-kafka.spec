@@ -212,7 +212,7 @@ read 128
      ${kafka:varint(0)}
      ${kafka:varint(0)}
      ${kafka:varint(4)}                 # key
-     "key3"
+     "key7"
      ${kafka:varint(16)}                # value
      "Hello, world #A1"
      ${kafka:varint(0)}                 # headers
@@ -259,7 +259,7 @@ read 128
      ${kafka:varint(0)}
      ${kafka:varint(0)}
      ${kafka:varint(4)}                 # key
-     "key3"
+     "key7"
      ${kafka:varint(16)}                # value
      "Hello, world #A2"
      ${kafka:varint(0)}                 # headers
@@ -318,7 +318,7 @@ read 128
      ${kafka:varint(0)}
      ${kafka:varint(0)}
      ${kafka:varint(4)}                 # key
-     "key2"
+     "key8"
      ${kafka:varint(16)}                # value
      "Hello, world #B1"
      ${kafka:varint(0)}                 # headers
@@ -365,7 +365,7 @@ read 128
      ${kafka:varint(0)}
      ${kafka:varint(0)}
      ${kafka:varint(4)}                 # key
-     "key2"
+     "key8"
      ${kafka:varint(16)}                # value
      "Hello, world #B2"
      ${kafka:varint(0)}                 # headers
@@ -424,7 +424,7 @@ read 128
      ${kafka:varint(0)}
      ${kafka:varint(0)}
      ${kafka:varint(4)}                 # key
-     "keyC"
+     "key9"
      ${kafka:varint(16)}                # value
      "Hello, world #C1"
      ${kafka:varint(0)}                 # headers
@@ -471,7 +471,7 @@ read 128
      ${kafka:varint(0)}
      ${kafka:varint(0)}
      ${kafka:varint(4)}                 # key
-     "keyC"
+     "key9"
      ${kafka:varint(16)}                # value
      "Hello, world #C2"
      ${kafka:varint(0)}                 # headers
