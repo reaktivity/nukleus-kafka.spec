@@ -50,6 +50,7 @@ connect await ROUTED_BROKER_CLIENT
         ${clientAddress}
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
+    option nukleus:affinity 0xb1
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
