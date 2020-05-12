@@ -44,7 +44,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
 read "Hello, world #A1"
 
 read notify RECEIVED_MESSAGE
-read await CLOSE_FETCH
+read await CLOSE_MERGED
 
 write close
 

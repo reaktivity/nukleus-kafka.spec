@@ -221,7 +221,7 @@ public class MergedIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.awaitBarrier("RECEIVED_MESSAGE");
-        k3po.notifyBarrier("CLOSE_FETCH");
+        k3po.notifyBarrier("CLOSE_MERGED");
         k3po.finish();
     }
 

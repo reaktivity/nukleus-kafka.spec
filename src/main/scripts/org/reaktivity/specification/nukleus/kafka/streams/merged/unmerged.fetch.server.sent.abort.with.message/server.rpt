@@ -142,6 +142,6 @@ write nukleus:data.ext ${kafka:dataEx()
 write "Hello, world #A1"
 write flush
 
-write await SENT_MESSAGE
+write await ABORT_FETCH
 
 write abort
