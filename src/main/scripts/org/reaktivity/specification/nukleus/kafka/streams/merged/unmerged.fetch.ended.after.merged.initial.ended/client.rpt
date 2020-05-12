@@ -103,7 +103,6 @@ read nukleus:data.ext ${kafka:dataEx()
                              .typeId(nukleus:id("kafka"))
                              .meta()
                                  .partition(0, 1)
-                                 .partition(1, 2)
                                  .build()
                              .build()}
 read notify PARTITION_COUNT_2

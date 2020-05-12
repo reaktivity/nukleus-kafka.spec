@@ -50,6 +50,4 @@ write "Hello, world #A1"
 
 write flush
 
-write END_FETCH
-
 write close
