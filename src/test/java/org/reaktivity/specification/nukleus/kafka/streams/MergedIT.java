@@ -364,8 +364,8 @@ public class MergedIT
 
     @Test
     @Specification({
-        "${scripts}/unmerged.fetch.ended.after.merged.initial.aborted/client",
-        "${scripts}/unmerged.fetch.ended.after.merged.initial.aborted/server"})
+        "${scripts}/unmerged.fetch.aborted.after.merged.initial.ended/client",
+        "${scripts}/unmerged.fetch.aborted.after.merged.initial.ended/server"})
     public void shouldEndUnmergeFetchAfterMergedInitialEndedAndFetchAborted() throws Exception
     {
         k3po.start();
