@@ -205,7 +205,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.ended/client",
         "${scripts}/merged.fetch.ended/server"})
-    public void shouldEndMergedOnFetchEnd() throws Exception
+    public void shouldEndMergedOnFetchEnded() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -224,6 +224,18 @@ public class MergedIT
         k3po.notifyBarrier("FETCH_ENDED");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.aborted/client",
+        "${scripts}/merged.fetch.aborted/server"})
+    public void shouldEndMergedOnFetchAborted() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
 
     @Test
     @Specification({
@@ -343,7 +355,18 @@ public class MergedIT
     @Specification({
         "${scripts}/unmerged.fetch.ended.after.merged.initial.ended/client",
         "${scripts}/unmerged.fetch.ended.after.merged.initial.ended/server"})
-    public void shouldEndUnmergeFetchAfterMergedInitialEnded() throws Exception
+    public void shouldEndUnmergeFetchAfterMergedInitialEndedAndFetchEnded() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.fetch.ended.after.merged.initial.aborted/client",
+        "${scripts}/unmerged.fetch.ended.after.merged.initial.aborted/server"})
+    public void shouldEndUnmergeFetchAfterMergedInitialEndedAndFetchAborted() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
