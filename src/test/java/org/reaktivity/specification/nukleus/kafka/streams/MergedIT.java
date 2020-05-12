@@ -214,14 +214,14 @@ public class MergedIT
 
     @Test
     @Specification({
-        "${scripts}/merged.fetch.server.sent.close.with.payload/client",
-        "${scripts}/merged.fetch.server.sent.close.with.payload/server"})
-    public void shouldMergedFetchServerSentClosePayload() throws Exception
+        "${scripts}/merged.fetch.server.sent.close.with.message/client",
+        "${scripts}/merged.fetch.server.sent.close.with.message/server"})
+    public void shouldMergedFetchServerSentCloseWithMessage() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.awaitBarrier("MERGED_MESSAGE_RECEIVED");
-        k3po.notifyBarrier("FETCH_ENDED");
+        k3po.awaitBarrier("RECEIVED_MESSAGE");
+        k3po.notifyBarrier("CLOSE_FETCH");
         k3po.finish();
     }
 
@@ -353,9 +353,9 @@ public class MergedIT
 
     @Test
     @Specification({
-        "${scripts}/unmerged.fetch.server.sent.close.with.payload/client",
-        "${scripts}/unmerged.fetch.server.sent.close.with.payload/server"})
-    public void shouldUnmergedFetchServerSentCloseWithPayload() throws Exception
+        "${scripts}/unmerged.fetch.server.sent.close.with.message/client",
+        "${scripts}/unmerged.fetch.server.sent.close.with.message/server"})
+    public void shouldUnmergedFetchServerSentCloseWithMessage() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -364,9 +364,9 @@ public class MergedIT
 
     @Test
     @Specification({
-        "${scripts}/unmerged.fetch.server.sent.abort.with.payload/client",
-        "${scripts}/unmerged.fetch.server.sent.abort.with.payload/server"})
-    public void shouldUnmergedFetchServerSentAbortWithPayload() throws Exception
+        "${scripts}/unmerged.fetch.server.sent.abort.with.message/client",
+        "${scripts}/unmerged.fetch.server.sent.abort.with.message/server"})
+    public void shouldUnmergedFetchServerSentAbortWithMessage() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");

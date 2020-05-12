@@ -140,8 +140,6 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .build()}
 read "Hello, world #A1"
 
-read notify END_FETCH
-
-read abort
+read notify SENT_MESSAGE
 
 read aborted
