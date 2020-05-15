@@ -45,7 +45,6 @@ read "Hello, world #A1"
 
 read notify RECEIVED_MESSAGE
 
-write await CLOSE_MERGED_INITIAL
 write close
 
 read closed
