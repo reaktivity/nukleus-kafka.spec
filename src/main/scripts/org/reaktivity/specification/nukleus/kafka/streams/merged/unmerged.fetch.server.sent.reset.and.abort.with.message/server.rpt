@@ -142,7 +142,7 @@ write nukleus:data.ext ${kafka:dataEx()
 write "Hello, world #A1"
 write flush
 
-write await RESET_UNMERGED_FETCH_INITIAL
+read await RESET_UNMERGED_FETCH_INITIAL
 read abort
 
 write abort
