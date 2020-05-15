@@ -203,6 +203,40 @@ public class MergedIT
 
     @Test
     @Specification({
+        "${scripts}/merged.fetch.server.sent.close/client",
+        "${scripts}/merged.fetch.server.sent.close/server"})
+    public void shouldMergedFetchServerSentClose() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.server.sent.close.with.message/client",
+        "${scripts}/merged.fetch.server.sent.close.with.message/server"})
+    public void shouldMergedFetchServerSentCloseWithMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.server.sent.abort/client",
+        "${scripts}/merged.fetch.server.sent.abort/server"})
+    public void shouldMergedFetchServerSentAbort() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+
+    @Test
+    @Specification({
         "${scripts}/unmerged.fetch.filter.none/client",
         "${scripts}/unmerged.fetch.filter.none/server"})
     public void shouldFetchUnmergedMessagesWithNoFilter() throws Exception
@@ -301,6 +335,53 @@ public class MergedIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.fetch.server.sent.close/client",
+        "${scripts}/unmerged.fetch.server.sent.close/server"})
+    public void shouldUnmergedFetchServerSentClose() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.fetch.server.sent.close.with.message/client",
+        "${scripts}/unmerged.fetch.server.sent.close.with.message/server"})
+    public void shouldUnmergedFetchServerSentCloseWithMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("CLOSE_UNMERGED_FETCH_REPLY");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.fetch.server.sent.abort.with.message/client",
+        "${scripts}/unmerged.fetch.server.sent.abort.with.message/server"})
+    public void shouldUnmergedFetchServerSentAbortWithMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("ABORT_UNMERGED_FETCH_REPLY");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.fetch.server.sent.reset.and.abort.with.message/client",
+        "${scripts}/unmerged.fetch.server.sent.reset.and.abort.with.message/server"})
+    public void shouldUnmergedFetchServerSentResetAndAbortWithMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("RESET_UNMERGED_FETCH_INITIAL");
         k3po.finish();
     }
 }
