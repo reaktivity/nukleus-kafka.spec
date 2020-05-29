@@ -39,8 +39,6 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .build()}
 write flush
 
-write await SEND_SECOND_META
-
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .meta()
@@ -50,7 +48,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write flush
 
-write await SEND_THIRD_META
+write await SEND_SECOND_META
 
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
