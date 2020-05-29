@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.reaktivity</groupId>
   <artifactId>nukleus-kafka.spec</artifactId>
-  <version>0.139</version>
+  <version>0.140</version>
   <name>Kafka Nukleus Specification</name>
   <description>Kafka Nukleus Specification</description>
   <url>https://github.com/reaktivity/nukleus-kafka.spec</url>
@@ -208,6 +208,9 @@
         <version>2.22.1</version>
         <configuration>
           <argLine>@{argLine}</argLine>
+          <excludes>
+            <exclude/>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>
