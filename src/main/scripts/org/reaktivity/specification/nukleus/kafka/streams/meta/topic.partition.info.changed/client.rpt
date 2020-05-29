@@ -45,6 +45,8 @@ read nukleus:data.ext ${kafka:dataEx()
                                  .build()
                              .build()}
 
+read notify RECEIVED_FIRST_META
+
 read nukleus:data.ext ${kafka:dataEx()
                              .typeId(nukleus:id("kafka"))
                              .meta()

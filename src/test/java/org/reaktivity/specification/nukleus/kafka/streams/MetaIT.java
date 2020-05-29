@@ -77,6 +77,8 @@ public class MetaIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("RECEIVED_FIRST_META");
+        k3po.notifyBarrier("SEND_SECOND_META");
         k3po.finish();
     }
 }
