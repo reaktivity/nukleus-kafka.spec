@@ -31,6 +31,8 @@ import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 import org.reaktivity.specification.kafka.internal.types.Array32FW;
+import org.reaktivity.specification.kafka.internal.types.KafkaAge;
+import org.reaktivity.specification.kafka.internal.types.KafkaAgeFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaCapabilities;
 import org.reaktivity.specification.kafka.internal.types.KafkaConditionFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaFW;
@@ -330,6 +332,13 @@ public final class KafkaFunctions
             return this;
         }
 
+        public KafkaFilterBuilder<T> age(
+            String age)
+        {
+            filterRW.conditionsItem(c -> c.age(a -> a.set(KafkaAge.valueOf(age))));
+            return this;
+        }
+
         public T build()
         {
             final KafkaFilterFW filter = filterRW.build();
@@ -371,6 +380,10 @@ public final class KafkaFunctions
                                        .name(header.name())
                                        .valueLen(header.valueLen())
                                        .value(header.value()));
+                break;
+            case KafkaConditionFW.KIND_AGE:
+                final KafkaAgeFW age = condition.age();
+                builder.age(ab -> ab.set(age));
                 break;
             }
         }
@@ -906,6 +919,13 @@ public final class KafkaFunctions
                     mergedDataExRW.key(k -> k.length(keyRO.capacity())
                                             .value(keyRO, 0, keyRO.capacity()));
                 }
+                return this;
+            }
+
+            public KafkaMergedDataExBuilder age(
+                String age)
+            {
+                mergedDataExRW.age(a -> a.set(KafkaAge.valueOf(age)));
                 return this;
             }
 
@@ -1598,6 +1618,7 @@ public final class KafkaFunctions
             private Array32FW.Builder<KafkaOffsetFW.Builder, KafkaOffsetFW> progressRW;
             private KafkaDeltaFW.Builder deltaRW;
             private KafkaKeyFW.Builder keyRW;
+            private KafkaAgeFW.Builder ageRW;
             private Array32FW.Builder<KafkaHeaderFW.Builder, KafkaHeaderFW> headersRW;
 
             private KafkaMergedDataExMatcherBuilder()
@@ -1654,6 +1675,15 @@ public final class KafkaFunctions
                          .value(keyRO, 0, keyRO.capacity());
                 }
 
+                return this;
+            }
+
+            public KafkaMergedDataExMatcherBuilder age(
+                String age)
+            {
+                assert ageRW == null;
+                ageRW = new KafkaAgeFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
+                ageRW.set(KafkaAge.valueOf(age));
                 return this;
             }
 

@@ -36,13 +36,15 @@ scope kafka
     enum KafkaConditionType (uint8)
     {
         KEY (0),
-        HEADER (1)
+        HEADER (1),
+        AGE (2)
     }
 
     union KafkaCondition switch (uint8)
     {
         case 0: kafka::KafkaKey key;
         case 1: kafka::KafkaHeader header;
+        case 2: kafka::KafkaAge age;
     }
 
     struct KafkaFilter
@@ -62,6 +64,12 @@ scope kafka
         octets[nameLen] name;  // UTF-8
         varint32 valueLen;
         octets[valueLen] value = null;
+    }
+
+    enum KafkaAge
+    {
+        LIVE,
+        HISTORICAL
     }
 
     enum KafkaDeltaType
@@ -162,6 +170,7 @@ scope kafka
             KafkaOffset partition;      // INIT only
             KafkaOffset[] progress;     // INIT only
             KafkaKey key;               // INIT only
+            KafkaAge age = LIVE;        //
             KafkaDelta delta;           // INIT + FIN
             KafkaHeader[] headers;      // FIN only
         }
