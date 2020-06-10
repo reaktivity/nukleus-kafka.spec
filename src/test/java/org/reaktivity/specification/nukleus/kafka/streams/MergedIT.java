@@ -104,17 +104,6 @@ public class MergedIT
 
     @Test
     @Specification({
-        "${scripts}/merged.fetch.filter.age/client",
-        "${scripts}/merged.fetch.filter.age/server"})
-    public void shouldFetchMergedMessagesWithAgeFilter() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/merged.fetch.filter.none/client",
         "${scripts}/merged.fetch.filter.none/server"})
     public void shouldFetchMergedMessagesWithNoFilter() throws Exception

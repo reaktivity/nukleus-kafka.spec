@@ -568,6 +568,13 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaFetchBeginExBuilder latestOffset(
+                long latestOffset)
+            {
+                fetchBeginExRW.latestOffset(latestOffset);
+                return this;
+            }
+
             public KafkaFilterBuilder<KafkaFetchBeginExBuilder> filter()
             {
                 return new KafkaFilterBuilder<>()
@@ -808,6 +815,13 @@ public final class KafkaFunctions
                 long partitionOffset)
             {
                 fetchDataExRW.partition(p -> p.partitionId(partitionId).partitionOffset(partitionOffset));
+                return this;
+            }
+
+            public KafkaFetchDataExBuilder latestOffset(
+                long latestOffset)
+            {
+                fetchDataExRW.latestOffset(latestOffset);
                 return this;
             }
 
@@ -1216,6 +1230,13 @@ public final class KafkaFunctions
                 long offset)
             {
                 fetchFlushExRW.partition(p -> p.partitionId(partitionId).partitionOffset(offset));
+                return this;
+            }
+
+            public KafkaFetchFlushExBuilder latestOffset(
+                long latestOffset)
+            {
+                fetchFlushExRW.latestOffset(latestOffset);
                 return this;
             }
 

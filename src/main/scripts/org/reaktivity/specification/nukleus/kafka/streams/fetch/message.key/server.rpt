@@ -67,6 +67,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .fetch()
                                    .topic("test")
                                    .partition(0, 1)
+                                   .latestOffset(1)
                                    .build()
                                .build()}
 write flush
@@ -76,6 +77,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .fetch()
                                   .timestamp(newTimestamp)
                                   .partition(0, 1)
+                                  .latestOffset(1)
                                   .key("key1")
                                   .build()
                               .build()}

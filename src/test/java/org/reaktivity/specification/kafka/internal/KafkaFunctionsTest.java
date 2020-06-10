@@ -1212,6 +1212,54 @@ public class KafkaFunctionsTest
     }
 
     @Test
+    public void shouldGenerateFetchBeginExtensionWithLatestOffset()
+    {
+        byte[] build = KafkaFunctions.beginEx()
+                                     .typeId(0x01)
+                                     .fetch()
+                                         .topic("topic")
+                                         .partition(0, 0L)
+                                         .latestOffset(0)
+                                         .filter()
+                                             .key("match")
+                                             .build()
+                                         .filter()
+                                             .header("name", "value")
+                                             .build()
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaBeginExFW beginEx = new KafkaBeginExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, beginEx.typeId());
+        assertEquals(KafkaApi.FETCH.value(), beginEx.kind());
+
+        final KafkaFetchBeginExFW fetchBeginEx = beginEx.fetch();
+        assertEquals("topic", fetchBeginEx.topic().asString());
+
+        final KafkaOffsetFW partition = fetchBeginEx.partition();
+        assertEquals(0, partition.partitionId());
+        assertEquals(0L, partition.partitionOffset());
+        assertEquals(0L, fetchBeginEx.latestOffset());
+
+        final MutableInteger filterCount = new MutableInteger();
+        fetchBeginEx.filters().forEach(f -> filterCount.value++);
+        assertEquals(2, filterCount.value);
+        assertNotNull(fetchBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == KEY.value() &&
+                    "match".equals(c.key()
+                                    .value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        assertNotNull(fetchBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == HEADER.value() &&
+                    "name".equals(c.header().name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    "value".equals(c.header().value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+    }
+    @Test
     public void shouldGenerateFetchBeginExtensionWithNullKeyAndNullHeaderValue()
     {
         byte[] build = KafkaFunctions.beginEx()
@@ -1298,6 +1346,50 @@ public class KafkaFunctionsTest
     }
 
     @Test
+    public void shouldGenerateFetchDataExtensionWithLatestOffset()
+    {
+        byte[] build = KafkaFunctions.dataEx()
+                                     .typeId(0x01)
+                                     .fetch()
+                                         .deferred(10)
+                                         .timestamp(12345678L)
+                                         .partition(0, 0L)
+                                         .latestOffset(0L)
+                                         .key("match")
+                                         .header("name", "value")
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaDataExFW dataEx = new KafkaDataExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, dataEx.typeId());
+        assertEquals(KafkaApi.FETCH.value(), dataEx.kind());
+
+        final KafkaFetchDataExFW fetchDataEx = dataEx.fetch();
+        assertEquals(10, fetchDataEx.deferred());
+        assertEquals(12345678L, fetchDataEx.timestamp());
+
+        final KafkaOffsetFW partition = fetchDataEx.partition();
+        assertEquals(0, partition.partitionId());
+        assertEquals(0L, partition.partitionOffset());
+        assertEquals(0L, fetchDataEx.latestOffset());
+
+        assertEquals("match", fetchDataEx.key()
+                                         .value()
+                                         .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
+
+        final MutableInteger headersCount = new MutableInteger();
+        fetchDataEx.headers().forEach(f -> headersCount.value++);
+        assertEquals(1, headersCount.value);
+        assertNotNull(fetchDataEx.headers()
+                                 .matchFirst(h ->
+                                     "name".equals(h.name()
+                                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                                         "value".equals(h.value()
+                                                         .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null);
+    }
+
+    @Test
     public void shouldGenerateFetchDataExtensionWithNullKeyAndNullHeaderValue()
     {
         byte[] build = KafkaFunctions.dataEx()
@@ -1352,6 +1444,28 @@ public class KafkaFunctionsTest
         final KafkaOffsetFW partition = fetchFlushEx.partition();
         assertEquals(0, partition.partitionId());
         assertEquals(1L, partition.partitionOffset());
+    }
+
+    @Test
+    public void shouldGenerateFetchFlushExtensionWithLatestOffset()
+    {
+        byte[] build = KafkaFunctions.flushEx()
+                                     .typeId(0x01)
+                                     .fetch()
+                                         .partition(0, 1L)
+                                         .latestOffset(1)
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaFlushExFW flushEx = new KafkaFlushExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, flushEx.typeId());
+
+        final KafkaFetchFlushExFW fetchFlushEx = flushEx.fetch();
+        final KafkaOffsetFW partition = fetchFlushEx.partition();
+        assertEquals(0, partition.partitionId());
+        assertEquals(1L, partition.partitionOffset());
+        assertEquals(1L, fetchFlushEx.latestOffset());
     }
 
     @Test

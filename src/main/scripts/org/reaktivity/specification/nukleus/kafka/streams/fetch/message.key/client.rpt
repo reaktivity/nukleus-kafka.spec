@@ -67,6 +67,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .fetch()
                                   .topic("test")
                                   .partition(0, 1)
+                                  .latestOffset(1)
                                   .build()
                               .build()}
 
@@ -74,6 +75,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
                                  .partition(0, 1)
+                                 .latestOffset(1)
                                  .key("key1")
                                  .build()
                              .build()}
