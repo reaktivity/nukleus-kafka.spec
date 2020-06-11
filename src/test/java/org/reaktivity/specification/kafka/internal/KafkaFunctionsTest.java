@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.kaazing.k3po.lang.internal.el.ExpressionFactoryUtils.newExpressionFactory;
 import static org.reaktivity.specification.kafka.internal.types.KafkaAge.HISTORICAL;
-import static org.reaktivity.specification.kafka.internal.types.KafkaAge.LIVE;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.AGE;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.HEADER;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.KEY;
@@ -385,59 +384,6 @@ public class KafkaFunctionsTest
                                          .value()
                                          .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
 
-        assertEquals(LIVE, mergedDataEx.age().get());
-
-        final MutableInteger headersCount = new MutableInteger();
-        mergedDataEx.headers().forEach(f -> headersCount.value++);
-        assertEquals(1, headersCount.value);
-        assertNotNull(mergedDataEx.headers()
-                .matchFirst(h ->
-                    "name".equals(h.name()
-                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
-                    "value".equals(h.value()
-                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null);
-    }
-
-    @Test
-    public void shouldGenerateMergedDataExtensionWithHistoricalAge()
-    {
-        byte[] build = KafkaFunctions.dataEx()
-                                     .typeId(0x01)
-                                     .merged()
-                                         .timestamp(12345678L)
-                                         .partition(0, 0L)
-                                         .progress(0, 1L)
-                                         .key("match")
-                                         .age("HISTORICAL")
-                                         .header("name", "value")
-                                         .build()
-                                     .build();
-
-        DirectBuffer buffer = new UnsafeBuffer(build);
-        KafkaDataExFW dataEx = new KafkaDataExFW().wrap(buffer, 0, buffer.capacity());
-        assertEquals(0x01, dataEx.typeId());
-        assertEquals(KafkaApi.MERGED.value(), dataEx.kind());
-
-        final KafkaMergedDataExFW mergedDataEx = dataEx.merged();
-        assertEquals(12345678L, mergedDataEx.timestamp());
-
-        final KafkaOffsetFW partition = mergedDataEx.partition();
-        assertEquals(0, partition.partitionId());
-        assertEquals(0L, partition.partitionOffset());
-
-        final MutableInteger progressCount = new MutableInteger();
-        mergedDataEx.progress().forEach(f -> progressCount.value++);
-        assertEquals(1, progressCount.value);
-
-        assertNotNull(mergedDataEx.progress()
-                .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
-
-        assertEquals("match", mergedDataEx.key()
-                                         .value()
-                                         .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
-
-        assertEquals(HISTORICAL, mergedDataEx.age().get());
-
         final MutableInteger headersCount = new MutableInteger();
         mergedDataEx.headers().forEach(f -> headersCount.value++);
         assertEquals(1, headersCount.value);
@@ -486,8 +432,6 @@ public class KafkaFunctionsTest
                                           .value()
                                           .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
 
-        assertEquals(LIVE, mergedDataEx.age().get());
-
         final MutableInteger headersCount = new MutableInteger();
         mergedDataEx.headers().forEach(f -> headersCount.value++);
         assertEquals(1, headersCount.value);
@@ -534,8 +478,6 @@ public class KafkaFunctionsTest
 
         assertNull(mergedDataEx.key().value());
 
-        assertEquals(LIVE, mergedDataEx.age().get());
-
         final MutableInteger headersCount = new MutableInteger();
         mergedDataEx.headers().forEach(f -> headersCount.value++);
         assertEquals(1, headersCount.value);
@@ -580,8 +522,6 @@ public class KafkaFunctionsTest
                                   .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
 
         assertNull(mergedDataEx.key().value());
-
-        assertEquals(LIVE, mergedDataEx.age().get());
 
         final MutableInteger headersCount = new MutableInteger();
         mergedDataEx.headers().forEach(f -> headersCount.value++);
@@ -823,33 +763,6 @@ public class KafkaFunctionsTest
                                            .valueLen(5)
                                            .value(v -> v.set("value".getBytes(UTF_8)))))
                 .build();
-
-        assertNotNull(matcher.match(byteBuf));
-    }
-
-    @Test
-    public void shouldMatchMergedDataExtensionAge() throws Exception
-    {
-        BytesMatcher matcher = KafkaFunctions.matchDataEx()
-                                             .merged()
-                                                 .age("HISTORICAL")
-                                                 .build()
-                                             .build();
-
-        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
-
-        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
-                                   .typeId(0x01)
-                                   .merged(f -> f.timestamp(12345678L)
-                                                 .partition(p -> p.partitionId(0).partitionOffset(0L))
-                                                 .progressItem(p -> p.partitionId(0).partitionOffset(1L))
-                                                 .age(a -> a.set(HISTORICAL))
-                                                 .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
-                                                 .headersItem(h -> h.nameLen(4)
-                                                                    .name(n -> n.set("name".getBytes(UTF_8)))
-                                                                    .valueLen(5)
-                                                                    .value(v -> v.set("value".getBytes(UTF_8)))))
-                                   .build();
 
         assertNotNull(matcher.match(byteBuf));
     }

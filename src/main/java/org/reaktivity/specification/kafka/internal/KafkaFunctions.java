@@ -936,13 +936,6 @@ public final class KafkaFunctions
                 return this;
             }
 
-            public KafkaMergedDataExBuilder age(
-                String age)
-            {
-                mergedDataExRW.age(a -> a.set(KafkaAge.valueOf(age)));
-                return this;
-            }
-
             public KafkaMergedDataExBuilder delta(
                 String deltaType,
                 long ancestorOffset)
@@ -1696,15 +1689,6 @@ public final class KafkaFunctions
                          .value(keyRO, 0, keyRO.capacity());
                 }
 
-                return this;
-            }
-
-            public KafkaMergedDataExMatcherBuilder age(
-                String age)
-            {
-                assert ageRW == null;
-                ageRW = new KafkaAgeFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
-                ageRW.set(KafkaAge.valueOf(age));
                 return this;
             }
 

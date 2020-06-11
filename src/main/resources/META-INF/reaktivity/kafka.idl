@@ -170,7 +170,6 @@ scope kafka
             KafkaOffset partition;      // INIT only
             KafkaOffset[] progress;     // INIT only
             KafkaKey key;               // INIT only
-            KafkaAge age = LIVE;        //
             KafkaDelta delta;           // INIT + FIN
             KafkaHeader[] headers;      // FIN only
         }
@@ -217,7 +216,7 @@ scope kafka
             int64 timestamp = 0;        // INIT only
             int32 headersSizeMax = 4;   // INIT only
             KafkaOffset partition;      // INIT only
-            int64 latestOffset = 0;
+            int64 latestOffset = 0;     // INIT only
             KafkaKey key;               // INIT only
             KafkaDelta delta;           // INIT + FIN
             KafkaHeader[] headers;      // FIN only
