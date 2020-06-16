@@ -31,6 +31,7 @@ scope kafka
     {
         int32 partitionId;
         int64 partitionOffset;
+        int64 latestOffset = -1;
     }
 
     enum KafkaConditionType (uint8)
@@ -205,7 +206,6 @@ scope kafka
         {
             string16 topic;
             KafkaOffset partition;
-            int64 latestOffset = 0;
             KafkaFilter[] filters; // ORed
             KafkaDeltaType deltaType = NONE;
         }
@@ -216,7 +216,6 @@ scope kafka
             int64 timestamp = 0;        // INIT only
             int32 headersSizeMax = 4;   // INIT only
             KafkaOffset partition;      // INIT only
-            int64 latestOffset = 0;     // INIT only
             KafkaKey key;               // INIT only
             KafkaDelta delta;           // INIT + FIN
             KafkaHeader[] headers;      // FIN only
@@ -225,7 +224,6 @@ scope kafka
         struct KafkaFetchFlushEx
         {
             KafkaOffset partition;
-            int64 latestOffset = 0;
         }
 
         struct KafkaProduceBeginEx

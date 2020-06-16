@@ -18,6 +18,7 @@ package org.reaktivity.specification.nukleus.kafka.streams;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.rules.RuleChain.outerRule;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.DisableOnDebug;
@@ -36,6 +37,7 @@ public class MergedIT
     @Rule
     public final TestRule chain = outerRule(k3po).around(timeout);
 
+    @Ignore
     @Test
     @Specification({
         "${scripts}/merged.fetch.filter.header/client",
@@ -47,6 +49,7 @@ public class MergedIT
         k3po.finish();
     }
 
+    @Ignore
     @Test
     @Specification({
         "${scripts}/merged.fetch.filter.header.and.header/client",
@@ -58,6 +61,7 @@ public class MergedIT
         k3po.finish();
     }
 
+    @Ignore
     @Test
     @Specification({
         "${scripts}/merged.fetch.filter.header.or.header/client",
@@ -69,6 +73,7 @@ public class MergedIT
         k3po.finish();
     }
 
+    @Ignore
     @Test
     @Specification({
         "${scripts}/merged.fetch.filter.key/client",
@@ -91,6 +96,7 @@ public class MergedIT
         k3po.finish();
     }
 
+    @Ignore
     @Test
     @Specification({
         "${scripts}/merged.fetch.filter.key.or.header/client",
@@ -102,6 +108,7 @@ public class MergedIT
         k3po.finish();
     }
 
+    @Ignore
     @Test
     @Specification({
         "${scripts}/merged.fetch.filter.none/client",
@@ -113,6 +120,7 @@ public class MergedIT
         k3po.finish();
     }
 
+    @Ignore
     @Test
     @Specification({
         "${scripts}/merged.fetch.message.values/client",

@@ -576,7 +576,42 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                              .partition(p -> p.partitionId(0).partitionOffset(0L))
-                             .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                             .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
+                             .key(k -> k.length(5)
+                                        .value(v -> v.set("match".getBytes(UTF_8))))
+                             .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
+
+                             .headersItem(h -> h.nameLen(4)
+                                                .name(n -> n.set("name".getBytes(UTF_8)))
+                                                .valueLen(5)
+                                                .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        assertNotNull(matcher.match(byteBuf));
+    }
+
+    @Test
+    public void shouldMatchMergedDataExtensionWithLatestOffset() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .typeId(0x01)
+                                             .merged()
+                                                 .partition(0, 0L, 1L)
+                                                 .progress(0, 1L, 1L)
+                                                 .timestamp(12345678L)
+                                                 .key("match")
+                                                 .header("name", "value")
+                                                 .build()
+                                             .build();
+
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .merged(f -> f.timestamp(12345678L)
+                             .partition(p -> p.partitionId(0).partitionOffset(0L).latestOffset(1L))
+                             .progressItem(p -> p.partitionId(0).partitionOffset(1L).latestOffset(1L).build())
                              .key(k -> k.length(5)
                                         .value(v -> v.set("match".getBytes(UTF_8))))
                              .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -610,7 +645,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                              .partition(p -> p.partitionId(0).partitionOffset(0L))
-                             .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                             .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                              .key(k -> k.length(5)
                                         .value(v -> v.set("match".getBytes(UTF_8))))
                              .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -637,7 +672,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(5)
                                    .value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -666,7 +701,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(5)
                                    .value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -695,7 +730,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(5)
                                    .value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -724,7 +759,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(5)
                                    .value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -753,7 +788,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(5)
                                    .value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -782,7 +817,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(-1)
                                    .value((OctetsFW) null))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -811,7 +846,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(5)
                                    .value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -839,7 +874,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(5)
                                    .value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -867,7 +902,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(5)
                                    .value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -896,7 +931,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.length(5)
                                    .value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
@@ -923,7 +958,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
 
@@ -952,7 +987,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
 
@@ -980,7 +1015,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
 
@@ -1008,7 +1043,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
 
@@ -1037,7 +1072,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(0L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
 
@@ -1066,7 +1101,7 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .merged(f -> f.timestamp(12345678L)
                         .partition(p -> p.partitionId(0).partitionOffset(10L))
-                        .progressItem(p -> p.partitionId(0).partitionOffset(1L))
+                        .progressItem(p -> p.partitionId(0).partitionOffset(1L).build())
                         .key(k -> k.value(v -> v.set("match".getBytes(UTF_8))))
                         .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
 
@@ -1131,8 +1166,7 @@ public class KafkaFunctionsTest
                                      .typeId(0x01)
                                      .fetch()
                                          .topic("topic")
-                                         .partition(0, 0L)
-                                         .latestOffset(0)
+                                         .partition(0, 0L, 0L)
                                          .filter()
                                              .key("match")
                                              .build()
@@ -1153,7 +1187,7 @@ public class KafkaFunctionsTest
         final KafkaOffsetFW partition = fetchBeginEx.partition();
         assertEquals(0, partition.partitionId());
         assertEquals(0L, partition.partitionOffset());
-        assertEquals(0L, fetchBeginEx.latestOffset());
+        assertEquals(0L, partition.latestOffset());
 
         final MutableInteger filterCount = new MutableInteger();
         fetchBeginEx.filters().forEach(f -> filterCount.value++);
@@ -1266,8 +1300,7 @@ public class KafkaFunctionsTest
                                      .fetch()
                                          .deferred(10)
                                          .timestamp(12345678L)
-                                         .partition(0, 0L)
-                                         .latestOffset(0L)
+                                         .partition(0, 0L, 0L)
                                          .key("match")
                                          .header("name", "value")
                                          .build()
@@ -1285,7 +1318,7 @@ public class KafkaFunctionsTest
         final KafkaOffsetFW partition = fetchDataEx.partition();
         assertEquals(0, partition.partitionId());
         assertEquals(0L, partition.partitionOffset());
-        assertEquals(0L, fetchDataEx.latestOffset());
+        assertEquals(0L, partition.latestOffset());
 
         assertEquals("match", fetchDataEx.key()
                                          .value()
@@ -1365,8 +1398,7 @@ public class KafkaFunctionsTest
         byte[] build = KafkaFunctions.flushEx()
                                      .typeId(0x01)
                                      .fetch()
-                                         .partition(0, 1L)
-                                         .latestOffset(1)
+                                         .partition(0, 1L, 1L)
                                          .build()
                                      .build();
 
@@ -1378,7 +1410,7 @@ public class KafkaFunctionsTest
         final KafkaOffsetFW partition = fetchFlushEx.partition();
         assertEquals(0, partition.partitionId());
         assertEquals(1L, partition.partitionOffset());
-        assertEquals(1L, fetchFlushEx.latestOffset());
+        assertEquals(1L, partition.latestOffset());
     }
 
     @Test
@@ -1400,6 +1432,38 @@ public class KafkaFunctionsTest
                 .typeId(0x01)
                 .fetch(f -> f.timestamp(12345678L)
                              .partition(p -> p.partitionId(0).partitionOffset(0L))
+                             .key(k -> k.length(5)
+                                        .value(v -> v.set("match".getBytes(UTF_8))))
+                             .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
+
+                             .headersItem(h -> h.nameLen(4)
+                                                .name(n -> n.set("name".getBytes(UTF_8)))
+                                                .valueLen(5)
+                                                .value(v -> v.set("value".getBytes(UTF_8)))))
+                .build();
+
+        assertNotNull(matcher.match(byteBuf));
+    }
+
+    @Test
+    public void shouldMatchFetchDataExtensionWithLatestOffset() throws Exception
+    {
+        BytesMatcher matcher = KafkaFunctions.matchDataEx()
+                                             .typeId(0x01)
+                                             .fetch()
+                                                 .timestamp(12345678L)
+                                                 .partition(0, 0L, 0L)
+                                                 .key("match")
+                                                 .header("name", "value")
+                                                 .build()
+                                             .build();
+
+        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
+
+        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
+                .typeId(0x01)
+                .fetch(f -> f.timestamp(12345678L)
+                             .partition(p -> p.partitionId(0).partitionOffset(0L).latestOffset(0L))
                              .key(k -> k.length(5)
                                         .value(v -> v.set("match".getBytes(UTF_8))))
                              .delta(d -> d.type(t -> t.set(KafkaDeltaType.NONE)))
