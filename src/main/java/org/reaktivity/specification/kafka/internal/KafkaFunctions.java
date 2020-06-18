@@ -19,6 +19,7 @@ import static java.lang.Long.highestOneBit;
 import static java.lang.Long.numberOfTrailingZeros;
 import static java.lang.System.currentTimeMillis;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW.Builder.DEFAULT_LATEST_OFFSET;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.ThreadLocalRandom;
@@ -915,7 +916,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long partitionOffset)
             {
-                mergedDataExRW.partition(p -> p.partitionId(partitionId).partitionOffset(partitionOffset));
+                partition(partitionId, partitionOffset, DEFAULT_LATEST_OFFSET);
                 return this;
             }
 
@@ -933,7 +934,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long partitionOffset)
             {
-                mergedDataExRW.progressItem(p -> p.partitionId(partitionId).partitionOffset(partitionOffset).build());
+                progress(partitionId, partitionOffset, DEFAULT_LATEST_OFFSET);
                 return this;
             }
 
@@ -1399,11 +1400,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long partitionOffset)
             {
-                assert partitionRW == null;
-                partitionRW = new KafkaOffsetFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
-
-                partitionRW.partitionId(partitionId).partitionOffset(partitionOffset);
-
+                partition(partitionId, partitionOffset, DEFAULT_LATEST_OFFSET);
                 return this;
             }
 
@@ -1694,11 +1691,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                assert partitionRW == null;
-                partitionRW = new KafkaOffsetFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
-
-                partitionRW.partitionId(partitionId).partitionOffset(offset);
-
+                partition(partitionId, offset, DEFAULT_LATEST_OFFSET);
                 return this;
             }
 
