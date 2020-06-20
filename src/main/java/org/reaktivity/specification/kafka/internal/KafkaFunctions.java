@@ -511,7 +511,18 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                mergedBeginExRW.partitionsItem(p -> p.partitionId(partitionId).partitionOffset(offset).build());
+                partition(partitionId, offset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaMergedBeginExBuilder partition(
+                int partitionId,
+                long offset,
+                long latestOffset)
+            {
+                mergedBeginExRW.partitionsItem(p -> p.partitionId(partitionId)
+                                                     .partitionOffset(offset)
+                                                     .latestOffset(latestOffset));
                 return this;
             }
 
@@ -1219,7 +1230,16 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                mergedFlushExRW.progressItem(p -> p.partitionId(partitionId).partitionOffset(offset).build());
+                progress(partitionId, offset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaMergedFlushExBuilder progress(
+                int partitionId,
+                long offset,
+                long latestOffset)
+            {
+                mergedFlushExRW.progressItem(p -> p.partitionId(partitionId).partitionOffset(offset).latestOffset(latestOffset));
                 return this;
             }
 
@@ -1712,12 +1732,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                if (progressRW == null)
-                {
-                    this.progressRW = new Array32FW.Builder<>(new KafkaOffsetFW.Builder(), new KafkaOffsetFW())
-                                                 .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
-                }
-                progressRW.item(i -> i.partitionId(partitionId).partitionOffset(offset).build());
+                progress(partitionId, offset, DEFAULT_LATEST_OFFSET);
                 return this;
             }
 
