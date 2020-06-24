@@ -576,7 +576,7 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                fetchBeginExRW.partition(p -> p.partitionId(partitionId).partitionOffset(offset));
+                partition(partitionId, offset, DEFAULT_LATEST_OFFSET);
                 return this;
             }
 

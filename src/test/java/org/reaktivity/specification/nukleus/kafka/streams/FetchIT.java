@@ -138,6 +138,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/message.key.with.latest.offset/client",
+        "${scripts}/message.key.with.latest.offset/server"})
+    public void shouldReceiveMessageKeyWithLatestOffset() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/message.key.null/client",
         "${scripts}/message.key.null/server"})
     public void shouldReceiveMessageKeyNull() throws Exception
