@@ -52,5 +52,5 @@ write nukleus:data.ext ${kafka:dataEx()
                                   .age("HISTORICAL")
                                   .build()
                               .build()}
-write "Hello, world"
+write "Hello, world #A1"
 write flush
