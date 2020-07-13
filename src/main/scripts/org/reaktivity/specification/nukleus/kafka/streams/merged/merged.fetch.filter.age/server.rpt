@@ -33,7 +33,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .partition(0, 1)
                                   .partition(1, 1)
                                   .filter()
-                                      .age("HISTORICAL")
+                                      .age("LIVE")
                                       .build()
                                   .build()
                               .build()}
@@ -44,13 +44,25 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .merged()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 1)
-                                  .progress(0, 2)
+                                  .partition(0, 4, 4)
+                                  .progress(0, 5)
                                   .progress(1, 1)
-                                  .key("key")
-                                  .header("header", "value")
-                                  .age("HISTORICAL")
+                                  .header("header1", "value1")
+                                  .header("header2", "value2")
                                   .build()
                               .build()}
-write "Hello, world #A1"
+write "Hello, world #A4"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .partition(1, 4, 4)
+                                  .progress(0, 5)
+                                  .progress(1, 5)
+                                  .key("key1")
+                                  .header("header2", "value2")
+                                  .build()
+                              .build()}
+write "Hello, world #B4"
 write flush
