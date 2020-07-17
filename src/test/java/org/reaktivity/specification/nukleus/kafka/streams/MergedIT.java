@@ -84,8 +84,8 @@ public class MergedIT
     @Ignore
     @Test
     @Specification({
-        "${scripts}/merged.fetch.filter.age/client",
-        "${scripts}/merged.fetch.filter.age/server"})
+        "${scripts}/merged.fetch.filter.age.live/client",
+        "${scripts}/merged.fetch.filter.age.live/server"})
     public void shouldFetchMergedMessagesWithAgeFilter() throws Exception
     {
         k3po.start();

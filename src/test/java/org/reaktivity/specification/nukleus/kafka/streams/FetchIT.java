@@ -334,6 +334,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("SEND_MESSAGE_3");
         k3po.finish();
     }
 
