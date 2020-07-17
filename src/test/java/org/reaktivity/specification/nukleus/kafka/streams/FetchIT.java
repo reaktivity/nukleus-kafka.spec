@@ -428,6 +428,28 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/filter.age.live/client",
+        "${scripts}/filter.age.live/server"})
+    public void shouldReceiveMessagesWithLiveAgeFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.age.historical/client",
+        "${scripts}/filter.age.historical/server"})
+    public void shouldReceiveMessagesWithHistoricalAgeFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/filter.none.json/client",
         "${scripts}/filter.none.json/server"})
     public void shouldReceiveJsonMessagesWithNoFilter() throws Exception
