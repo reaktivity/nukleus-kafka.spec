@@ -73,7 +73,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .build()
                               .build()}
 
-read notify RECEIVED_MESSAGE_3
+read notify RECEIVED_MESSAGE_2
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
