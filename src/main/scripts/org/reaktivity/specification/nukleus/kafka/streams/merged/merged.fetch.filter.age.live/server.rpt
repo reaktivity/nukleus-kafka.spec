@@ -21,7 +21,7 @@ property newTimestamp ${kafka:timestamp() + deltaMillis}
 
 accept ${serverAddress}
     option nukleus:window 8192
-    option nukleus:transmission "half-duplex"
+    option nukleus:transmission "duplex"
 
 accepted
 
@@ -44,9 +44,35 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .merged()
                                   .timestamp(newTimestamp)
+                                  .partition(0, 3, 4)
+                                  .progress(0, 4)
+                                  .progress(1, 1)
+                                  .key("key1")
+                                  .header("header1", "value1")
+                                  .build()
+                              .build()}
+write "Hello, world #A3"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .partition(1, 3, 4)
+                                  .progress(0, 4)
+                                  .progress(1, 4)
+                                  .header("header1", "value1")
+                                  .build()
+                              .build()}
+write "Hello, world #B3"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .timestamp(newTimestamp)
                                   .partition(0, 4, 4)
                                   .progress(0, 5)
-                                  .progress(1, 1)
+                                  .progress(1, 4)
                                   .header("header1", "value1")
                                   .header("header2", "value2")
                                   .build()

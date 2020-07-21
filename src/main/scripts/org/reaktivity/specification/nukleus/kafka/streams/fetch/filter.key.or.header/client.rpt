@@ -94,6 +94,8 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .build()}
 read "Hello, world"
 
+read notify RECEIVED_MESSAGE_2
+
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()

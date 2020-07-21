@@ -256,6 +256,8 @@ public class MergedIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("SEND_MESSAGE_A3");
+        k3po.notifyBarrier("SEND_MESSAGE_B3");
         k3po.finish();
     }
 
