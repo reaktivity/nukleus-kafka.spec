@@ -203,7 +203,7 @@ write 65                                # size
       -1L
       ${partitionBytesMax}
 
-read 479
+read 262
      ${newRequestId}
      [0..4]
      1
@@ -212,10 +212,10 @@ read 479
      0                                  # partition
      0s                                 # no error
      -1L                                # no high water mark
-     -1L                                # no last stable offset
+     2L                                 # last stable offset
      -1L                                # no log start offset
      -1                                 # no aborted transaction count
-     419                                # record set size
+     202                                # record set size
      1L                                 # first offset
      91                                 # length
      0x00
@@ -267,6 +267,38 @@ read 479
        "header1"
        ${kafka:varint(6)}                   # value
        "value1"
+
+write 65                                # size
+      1s                                # fetch
+      5s                                # v5
+      ${newRequestId}
+      -1s
+      -1
+      ${fetchWaitMax}
+      1
+      ${fetchBytesMax}
+      [0x00]
+      1
+      4s "test"
+      1
+      0                                 # partition
+      3L                                # offset
+      -1L
+      ${partitionBytesMax}
+
+read 277
+     ${newRequestId}
+     [0..4]
+     1
+     4s "test"
+     1                                  # partitions
+     0                                  # partition
+     0s                                 # no error
+     -1L                                # no high water mark
+     4L                                 # last stable offset
+     -1L                                # no log start offset
+     -1                                 # no aborted transaction count
+     217                                # record set size
      3L                                 # first offset
      91                                 # length
      0x00
@@ -357,7 +389,7 @@ write 65                                # size
       -1L
       ${partitionBytesMax}
 
-read 479
+read 277
      ${newRequestId}
      [0..4]
      1
@@ -366,10 +398,10 @@ read 479
      1                                  # partition
      0s                                 # no error
      -1L                                # no high water mark
-     -1L                                # no last stable offset
+     2L                                 # last stable offset
      -1L                                # no log start offset
      -1                                 # no aborted transaction count
-     419                                # record set size
+     217                                # record set size
      1L                                 # first offset
      102                                # length
      0x00
@@ -425,6 +457,38 @@ read 479
        "header1"
        ${kafka:varint(6)}                   # value
        "value1"
+
+write 65                                # size
+      1s                                # fetch
+      5s                                # v5
+      ${newRequestId}
+      -1s
+      -1
+      ${fetchWaitMax}
+      1
+      ${fetchBytesMax}
+      [0x00]
+      1
+      4s "test"
+      1
+      1                                 # partition
+      3L                                # offset
+      -1L
+      ${partitionBytesMax}
+
+read 262
+     ${newRequestId}
+     [0..4]
+     1
+     4s "test"
+     1                                  # partitions
+     1                                  # partition
+     0s                                 # no error
+     -1L                                # no high water mark
+     4L                                 # last stable offset
+     -1L                                # no log start offset
+     -1                                 # no aborted transaction count
+     202                                # record set size
      3L                                 # first offset
      87                                 # length
      0x00

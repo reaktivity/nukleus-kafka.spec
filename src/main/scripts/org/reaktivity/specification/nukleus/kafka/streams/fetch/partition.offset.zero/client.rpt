@@ -66,6 +66,6 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .topic("test")
-                                  .partition(0, 0)
+                                  .partition(0, 0, 0)
                                   .build()
                               .build()}
