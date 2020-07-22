@@ -66,7 +66,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .topic("test")
-                                  .partition(0, 12)
+                                  .partition(0, 12, 12)
                                   .build()
                               .build()}
 
@@ -74,14 +74,14 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
                                  .deferred(10240 - 6144)
-                                 .partition(0, 12)
+                                 .partition(0, 12, 12)
                                  .build()
                              .build()}
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 12)
+                                 .partition(0, 12, 12)
                                  .build()
                              .build()}
 read [0..10240]
