@@ -27,7 +27,10 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .merged()
                                   .capabilities("FETCH_ONLY")
                                   .topic("test")
-                                  .partition(-1, -2)
+                                  .partition(0, -2)
+                                  .partition(1, -2)
+                                  .partition(2, -2)
+                                  .partition(3, -2)
                                   .build()
                               .build()}
 

@@ -173,6 +173,17 @@ public class MergedIT
 
     @Test
     @Specification({
+        "${scripts}/merged.fetch.partition.offsets.earliest.overflow/client",
+        "${scripts}/merged.fetch.partition.offsets.earliest.overflow/server"})
+    public void shouldFetchMergedPartitionOffsetsEarliestOverflow() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/merged.fetch.partition.leader.changed/client",
         "${scripts}/merged.fetch.partition.leader.changed/server"})
     public void shouldFetchMergedPartitionLeaderChanged() throws Exception

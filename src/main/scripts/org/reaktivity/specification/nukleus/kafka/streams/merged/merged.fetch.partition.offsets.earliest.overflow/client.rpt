@@ -14,21 +14,23 @@
 # under the License.
 #
 
-property serverAddress "nukleus://streams/kafka#0"
+property clientAddress "nukleus://streams/kafka#0"
 
-accept ${serverAddress}
+connect await ROUTED_CLIENT
+        ${clientAddress}
     option nukleus:window 8192
     option nukleus:transmission "duplex"
 
-accepted
-
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .merged()
-                                  .capabilities("FETCH_ONLY")
-                                  .topic("test")
-                                  .partition(-1, -2)
-                                  .build()
-                              .build()}
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .merged()
+                                   .capabilities("FETCH_ONLY")
+                                   .topic("test")
+                                   .partition(0, -2)
+                                   .partition(1, -2)
+                                   .partition(2, -2)
+                                   .partition(3, -2)
+                                   .build()
+                               .build()}
 
 connected
