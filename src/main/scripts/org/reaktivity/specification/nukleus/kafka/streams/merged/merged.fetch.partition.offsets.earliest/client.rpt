@@ -19,7 +19,7 @@ property clientAddress "nukleus://streams/kafka#0"
 connect await ROUTED_CLIENT
         ${clientAddress}
     option nukleus:window 8192
-    option nukleus:transmission "half-duplex"
+    option nukleus:transmission "duplex"
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))

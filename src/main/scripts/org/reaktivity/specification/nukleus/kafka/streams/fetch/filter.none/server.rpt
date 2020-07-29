@@ -66,7 +66,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(0, 1)
+                                   .partition(0, 1, 2)
                                    .build()
                                .build()}
 write flush
@@ -75,7 +75,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 1)
+                                  .partition(0, 1, 2)
                                   .key("key1")
                                   .header("header2", "value2")
                                   .build()
@@ -87,18 +87,20 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 2)
+                                  .partition(0, 2, 2)
                                   .header("header1", "value1")
                                   .build()
                               .build()}
 write "Hello, world"
 write flush
 
+write await SEND_MESSAGE_3
+
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 3)
+                                  .partition(0, 3, 4)
                                   .key("key1")
                                   .header("header1", "value1")
                                   .build()
@@ -110,10 +112,12 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 4)
+                                  .partition(0, 4, 4)
                                   .header("header1", "value1")
                                   .header("header2", "value2")
                                   .build()
                               .build()}
 write "Hello, world"
 write flush
+
+write close

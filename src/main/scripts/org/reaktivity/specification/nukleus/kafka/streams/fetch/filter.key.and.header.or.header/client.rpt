@@ -73,23 +73,25 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .topic("test")
-                                  .partition(0, 1)
+                                  .partition(0, 1, 2)
                                   .build()
                               .build()}
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 1)
+                                 .partition(0, 1, 2)
                                  .header("header2", "value2")
                                  .build()
                              .build()}
 read "Hello, world"
 
+read notify RECEIVED_MESSAGE_2
+
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 3)
+                                 .partition(0, 3, 4)
                                  .key("key1")
                                  .header("header1", "value1")
                                  .build()
