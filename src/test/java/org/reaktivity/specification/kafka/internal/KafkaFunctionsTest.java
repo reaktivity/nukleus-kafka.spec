@@ -401,6 +401,7 @@ public class KafkaFunctionsTest
         byte[] build = KafkaFunctions.dataEx()
                                      .typeId(0x01)
                                      .merged()
+                                     .deferred(100)
                                      .timestamp(12345678L)
                                      .partition(0, 0L)
                                      .progress(0, 1L)
@@ -415,6 +416,7 @@ public class KafkaFunctionsTest
         assertEquals(KafkaApi.MERGED.value(), dataEx.kind());
 
         final KafkaMergedDataExFW mergedDataEx = dataEx.merged();
+        assertEquals(100, mergedDataEx.deferred());
         assertEquals(12345678L, mergedDataEx.timestamp());
 
         final KafkaOffsetFW partition = mergedDataEx.partition();
@@ -562,6 +564,7 @@ public class KafkaFunctionsTest
         BytesMatcher matcher = KafkaFunctions.matchDataEx()
                                              .typeId(0x01)
                                              .merged()
+                                                 .deferred(100)
                                                  .partition(0, 0L)
                                                  .progress(0, 1L)
                                                  .timestamp(12345678L)
@@ -574,7 +577,8 @@ public class KafkaFunctionsTest
 
         new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
                 .typeId(0x01)
-                .merged(f -> f.timestamp(12345678L)
+                .merged(f -> f.deferred(100)
+                             .timestamp(12345678L)
                              .partition(p -> p.partitionId(0).partitionOffset(0L))
                              .progressItem(p -> p.partitionId(0).partitionOffset(1L))
                              .key(k -> k.length(5)
