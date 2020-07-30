@@ -916,6 +916,13 @@ public final class KafkaFunctions
                 mergedDataExRW.wrap(writeBuffer, KafkaDataExFW.FIELD_OFFSET_MERGED, writeBuffer.capacity());
             }
 
+            public KafkaMergedDataExBuilder deferred(
+                int deferred)
+            {
+                mergedDataExRW.deferred(deferred);
+                return this;
+            }
+
             public KafkaMergedDataExBuilder timestamp(
                 long timestamp)
             {
@@ -1689,6 +1696,7 @@ public final class KafkaFunctions
 
         public final class KafkaMergedDataExMatcherBuilder
         {
+            private Integer deferred;
             private Long timestamp;
             private KafkaOffsetFW.Builder partitionRW;
             private Array32FW.Builder<KafkaOffsetFW.Builder, KafkaOffsetFW> progressRW;
@@ -1698,6 +1706,13 @@ public final class KafkaFunctions
 
             private KafkaMergedDataExMatcherBuilder()
             {
+            }
+
+            public KafkaMergedDataExMatcherBuilder deferred(
+                int deferred)
+            {
+                this.deferred = deferred;
+                return this;
             }
 
             public KafkaMergedDataExMatcherBuilder timestamp(
@@ -1856,6 +1871,7 @@ public final class KafkaFunctions
                 final KafkaMergedDataExFW mergedDataEx = dataEx.merged();
                 return matchPartition(mergedDataEx) &&
                     matchProgress(mergedDataEx) &&
+                    matchDeferred(mergedDataEx) &&
                     matchTimestamp(mergedDataEx) &&
                     matchKey(mergedDataEx) &&
                     matchDelta(mergedDataEx) &&
@@ -1872,6 +1888,12 @@ public final class KafkaFunctions
                 final KafkaMergedDataExFW mergedDataEx)
             {
                 return progressRW == null || progressRW.build().equals(mergedDataEx.progress());
+            }
+
+            private boolean matchDeferred(
+                final KafkaMergedDataExFW mergedDataEx)
+            {
+                return deferred == null || deferred == mergedDataEx.deferred();
             }
 
             private boolean matchTimestamp(
