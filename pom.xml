@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.reaktivity</groupId>
   <artifactId>nukleus-kafka.spec</artifactId>
-  <version>develop-SNAPSHOT</version>
+  <version>0.146</version>
   <name>Kafka Nukleus Specification</name>
   <description>Kafka Nukleus Specification</description>
   <url>https://github.com/reaktivity/nukleus-kafka.spec</url>
