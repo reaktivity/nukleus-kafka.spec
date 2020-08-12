@@ -170,6 +170,7 @@ scope kafka
         {
             KafkaOffset[] progress;
             KafkaCapabilities capabilities = PRODUCE_AND_FETCH;
+            KafkaFilter[] filters;
         }
 
         struct KafkaMetaBeginEx
