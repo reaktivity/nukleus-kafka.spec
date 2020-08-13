@@ -19,6 +19,7 @@ import static java.lang.Long.highestOneBit;
 import static java.lang.Long.numberOfTrailingZeros;
 import static java.lang.System.currentTimeMillis;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW.Builder.DEFAULT_LATEST_OFFSET;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.ThreadLocalRandom;
@@ -31,6 +32,8 @@ import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 import org.reaktivity.specification.kafka.internal.types.Array32FW;
+import org.reaktivity.specification.kafka.internal.types.KafkaAge;
+import org.reaktivity.specification.kafka.internal.types.KafkaAgeFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaCapabilities;
 import org.reaktivity.specification.kafka.internal.types.KafkaConditionFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaFW;
@@ -330,6 +333,13 @@ public final class KafkaFunctions
             return this;
         }
 
+        public KafkaFilterBuilder<T> age(
+            String age)
+        {
+            filterRW.conditionsItem(c -> c.age(a -> a.set(KafkaAge.valueOf(age))));
+            return this;
+        }
+
         public T build()
         {
             final KafkaFilterFW filter = filterRW.build();
@@ -371,6 +381,10 @@ public final class KafkaFunctions
                                        .name(header.name())
                                        .valueLen(header.valueLen())
                                        .value(header.value()));
+                break;
+            case KafkaConditionFW.KIND_AGE:
+                final KafkaAgeFW age = condition.age();
+                builder.age(ab -> ab.set(age));
                 break;
             }
         }
@@ -497,7 +511,18 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                mergedBeginExRW.partitionsItem(p -> p.partitionId(partitionId).partitionOffset(offset));
+                partition(partitionId, offset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaMergedBeginExBuilder partition(
+                int partitionId,
+                long offset,
+                long latestOffset)
+            {
+                mergedBeginExRW.partitionsItem(p -> p.partitionId(partitionId)
+                                                     .partitionOffset(offset)
+                                                     .latestOffset(latestOffset));
                 return this;
             }
 
@@ -551,7 +576,18 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                fetchBeginExRW.partition(p -> p.partitionId(partitionId).partitionOffset(offset));
+                partition(partitionId, offset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaFetchBeginExBuilder partition(
+                int partitionId,
+                long offset,
+                long latestOffset)
+            {
+                fetchBeginExRW.partition(p -> p.partitionId(partitionId)
+                                               .partitionOffset(offset)
+                                               .latestOffset(latestOffset));
                 return this;
             }
 
@@ -798,6 +834,17 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaFetchDataExBuilder partition(
+                int partitionId,
+                long partitionOffset,
+                long latestOffset)
+            {
+                fetchDataExRW.partition(p -> p.partitionId(partitionId)
+                                              .partitionOffset(partitionOffset)
+                                              .latestOffset(latestOffset));
+                return this;
+            }
+
             public KafkaFetchDataExBuilder key(
                 String key)
             {
@@ -869,6 +916,13 @@ public final class KafkaFunctions
                 mergedDataExRW.wrap(writeBuffer, KafkaDataExFW.FIELD_OFFSET_MERGED, writeBuffer.capacity());
             }
 
+            public KafkaMergedDataExBuilder deferred(
+                int deferred)
+            {
+                mergedDataExRW.deferred(deferred);
+                return this;
+            }
+
             public KafkaMergedDataExBuilder timestamp(
                 long timestamp)
             {
@@ -880,7 +934,17 @@ public final class KafkaFunctions
                 int partitionId,
                 long partitionOffset)
             {
-                mergedDataExRW.partition(p -> p.partitionId(partitionId).partitionOffset(partitionOffset));
+                partition(partitionId, partitionOffset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaMergedDataExBuilder partition(
+                int partitionId,
+                long partitionOffset,
+                long latestOffset)
+            {
+                mergedDataExRW.partition(p -> p.partitionId(partitionId).partitionOffset(partitionOffset)
+                                               .latestOffset(latestOffset));
                 return this;
             }
 
@@ -888,7 +952,17 @@ public final class KafkaFunctions
                 int partitionId,
                 long partitionOffset)
             {
-                mergedDataExRW.progressItem(p -> p.partitionId(partitionId).partitionOffset(partitionOffset));
+                progress(partitionId, partitionOffset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaMergedDataExBuilder progress(
+                int partitionId,
+                long partitionOffset,
+                long latestOffset)
+            {
+                mergedDataExRW.progressItem(p -> p.partitionId(partitionId).partitionOffset(partitionOffset)
+                                                  .latestOffset(latestOffset));
                 return this;
             }
 
@@ -1163,7 +1237,16 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
-                mergedFlushExRW.progressItem(p -> p.partitionId(partitionId).partitionOffset(offset));
+                progress(partitionId, offset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaMergedFlushExBuilder progress(
+                int partitionId,
+                long offset,
+                long latestOffset)
+            {
+                mergedFlushExRW.progressItem(p -> p.partitionId(partitionId).partitionOffset(offset).latestOffset(latestOffset));
                 return this;
             }
 
@@ -1196,6 +1279,17 @@ public final class KafkaFunctions
                 long offset)
             {
                 fetchFlushExRW.partition(p -> p.partitionId(partitionId).partitionOffset(offset));
+                return this;
+            }
+
+            public KafkaFetchFlushExBuilder partition(
+                int partitionId,
+                long offset,
+                long latestOffset)
+            {
+                fetchFlushExRW.partition(p -> p.partitionId(partitionId)
+                                               .partitionOffset(offset)
+                                               .latestOffset(latestOffset));
                 return this;
             }
 
@@ -1333,10 +1427,19 @@ public final class KafkaFunctions
                 int partitionId,
                 long partitionOffset)
             {
+                partition(partitionId, partitionOffset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaFetchDataExMatcherBuilder partition(
+                int partitionId,
+                long partitionOffset,
+                long latestOffset)
+            {
                 assert partitionRW == null;
                 partitionRW = new KafkaOffsetFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
 
-                partitionRW.partitionId(partitionId).partitionOffset(partitionOffset);
+                partitionRW.partitionId(partitionId).partitionOffset(partitionOffset).latestOffset(latestOffset);
 
                 return this;
             }
@@ -1593,6 +1696,7 @@ public final class KafkaFunctions
 
         public final class KafkaMergedDataExMatcherBuilder
         {
+            private Integer deferred;
             private Long timestamp;
             private KafkaOffsetFW.Builder partitionRW;
             private Array32FW.Builder<KafkaOffsetFW.Builder, KafkaOffsetFW> progressRW;
@@ -1602,6 +1706,13 @@ public final class KafkaFunctions
 
             private KafkaMergedDataExMatcherBuilder()
             {
+            }
+
+            public KafkaMergedDataExMatcherBuilder deferred(
+                int deferred)
+            {
+                this.deferred = deferred;
+                return this;
             }
 
             public KafkaMergedDataExMatcherBuilder timestamp(
@@ -1615,10 +1726,19 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
+                partition(partitionId, offset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaMergedDataExMatcherBuilder partition(
+                int partitionId,
+                long offset,
+                long latestOffset)
+            {
                 assert partitionRW == null;
                 partitionRW = new KafkaOffsetFW.Builder().wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
 
-                partitionRW.partitionId(partitionId).partitionOffset(offset);
+                partitionRW.partitionId(partitionId).partitionOffset(offset).latestOffset(latestOffset);
 
                 return this;
             }
@@ -1627,12 +1747,21 @@ public final class KafkaFunctions
                 int partitionId,
                 long offset)
             {
+                progress(partitionId, offset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaMergedDataExMatcherBuilder progress(
+                int partitionId,
+                long offset,
+                long latestOffset)
+            {
                 if (progressRW == null)
                 {
                     this.progressRW = new Array32FW.Builder<>(new KafkaOffsetFW.Builder(), new KafkaOffsetFW())
                                                  .wrap(new UnsafeBuffer(new byte[1024]), 0, 1024);
                 }
-                progressRW.item(i -> i.partitionId(partitionId).partitionOffset(offset));
+                progressRW.item(i -> i.partitionId(partitionId).partitionOffset(offset).latestOffset(latestOffset));
                 return this;
             }
 
@@ -1742,6 +1871,7 @@ public final class KafkaFunctions
                 final KafkaMergedDataExFW mergedDataEx = dataEx.merged();
                 return matchPartition(mergedDataEx) &&
                     matchProgress(mergedDataEx) &&
+                    matchDeferred(mergedDataEx) &&
                     matchTimestamp(mergedDataEx) &&
                     matchKey(mergedDataEx) &&
                     matchDelta(mergedDataEx) &&
@@ -1755,9 +1885,15 @@ public final class KafkaFunctions
             }
 
             private boolean matchProgress(
-                    final KafkaMergedDataExFW mergedDataEx)
+                final KafkaMergedDataExFW mergedDataEx)
             {
                 return progressRW == null || progressRW.build().equals(mergedDataEx.progress());
+            }
+
+            private boolean matchDeferred(
+                final KafkaMergedDataExFW mergedDataEx)
+            {
+                return deferred == null || deferred == mergedDataEx.deferred();
             }
 
             private boolean matchTimestamp(

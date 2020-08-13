@@ -334,6 +334,7 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.notifyBarrier("SEND_MESSAGE_3");
         k3po.finish();
     }
 
@@ -422,6 +423,29 @@ public class FetchIT
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.age.live/client",
+        "${scripts}/filter.age.live/server"})
+    public void shouldReceiveMessagesWithLiveAgeFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.age.historical/client",
+        "${scripts}/filter.age.historical/server"})
+    public void shouldReceiveMessagesWithHistoricalAgeFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.awaitBarrier("RECEIVED_MESSAGE_2");
         k3po.finish();
     }
 
