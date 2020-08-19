@@ -83,4 +83,6 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .build()}
 read "Hello, world #B2"
 
-read notify RECEIVED_MESSAGE_B2
+read closed
+
+write close
