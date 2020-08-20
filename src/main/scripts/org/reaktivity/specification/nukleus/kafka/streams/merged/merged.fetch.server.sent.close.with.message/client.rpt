@@ -45,6 +45,8 @@ read "Hello, world #A1"
 
 read notify RECEIVED_MESSAGE
 
+write await RECEIVED_MESSAGE
+
 write close
 
 read closed
