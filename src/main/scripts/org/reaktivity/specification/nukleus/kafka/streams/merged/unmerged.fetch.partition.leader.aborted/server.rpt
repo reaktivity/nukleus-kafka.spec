@@ -149,7 +149,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(0, 1)
+                                   .partition(0, 1, 2)
                                    .build()
                                .build()}
 write flush
@@ -173,7 +173,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(1, 1)
+                                   .partition(1, 1, 2)
                                    .build()
                                .build()}
 write flush
@@ -202,7 +202,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(2, 1)
+                                   .partition(2, 1, 2)
                                    .build()
                                .build()}
 write flush
@@ -231,7 +231,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(3, 1)
+                                   .partition(3, 1, 2)
                                    .build()
                                .build()}
 write flush
@@ -263,7 +263,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(1, 1)
+                                   .partition(1, 1, 2)
                                    .build()
                                .build()}
 write flush
@@ -285,7 +285,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(2, 1)
+                                   .partition(2, 1, 2)
                                    .build()
                                .build()}
 write flush
