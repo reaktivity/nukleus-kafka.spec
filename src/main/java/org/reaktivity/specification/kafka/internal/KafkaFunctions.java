@@ -1922,6 +1922,13 @@ public final class KafkaFunctions
         }
     }
 
+    @Function
+    public static long offset(
+        String type)
+    {
+        return KafkaOffsetType.valueOf(type).value();
+    }
+
     private KafkaFunctions()
     {
         // utility
