@@ -422,4 +422,15 @@ public class MergedIT
         k3po.notifyBarrier("RESET_UNMERGED_FETCH_INITIAL");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.fetch.filter.age.historical/client",
+        "${scripts}/unmerged.fetch.filter.age.historical/server"})
+    public void shouldFetchUnmergedMessagesWithAgeHistoricFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
 }

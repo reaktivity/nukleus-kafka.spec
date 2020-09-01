@@ -103,6 +103,7 @@ read nukleus:data.ext ${kafka:dataEx()
                              .typeId(nukleus:id("kafka"))
                              .meta()
                                  .partition(0, 1)
+                                 .partition(1, 2)
                                  .build()
                              .build()}
 read notify PARTITION_COUNT_2
@@ -140,6 +141,60 @@ read nukleus:data.ext ${kafka:matchDataEx()
                              .build()}
 read "Hello, world #A1"
 
-write aborted
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 2, 2)
+                                 .header("header1", "value1")
+                                 .build()
+                             .build()}
+read "Hello, world #A2"
 
-read aborted
+write abort
+read abort
+
+connect await PARTITION_COUNT_2
+        ${clientAddress}
+    option nukleus:window 8192
+    option nukleus:transmission "half-duplex"
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .fetch()
+                                   .topic("test")
+                                   .partition(1, -2)
+                                   .build()
+                               .build()}
+
+connected
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .topic("test")
+                                  .partition(1, 1, 2)
+                                  .build()
+                              .build()}
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(1, 1, 2)
+                                 .header("header1", "value1")
+                                 .header("header2", "value2")
+                                 .build()
+                             .build()}
+read "Hello, world #B1"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(1, 2, 2)
+                                 .key("key1")
+                                 .header("header1", "value1")
+                                 .build()
+                             .build()}
+read "Hello, world #B2"
+
+write abort
+read abort

@@ -92,3 +92,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world #B2"
 write flush
+
+write close
+
+read closed

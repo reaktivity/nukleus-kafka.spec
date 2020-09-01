@@ -2044,33 +2044,6 @@ public class KafkaFunctionsTest
     }
 
     @Test(expected = Exception.class)
-    public void shouldNotMatchProduceDataExtensionTimestamp() throws Exception
-    {
-        BytesMatcher matcher = KafkaFunctions.matchDataEx()
-                                             .typeId(0x01)
-                                             .produce()
-                                                 .timestamp(123456789L)
-                                                 .build()
-                                             .build();
-
-        ByteBuffer byteBuf = ByteBuffer.allocate(1024);
-
-        new KafkaDataExFW.Builder().wrap(new UnsafeBuffer(byteBuf), 0, byteBuf.capacity())
-                .typeId(0x01)
-                .produce(p -> p.timestamp(12345678L)
-                        .sequence(0)
-                        .key(k -> k.length(5)
-                                   .value(v -> v.set("match".getBytes(UTF_8))))
-                        .headersItem(h -> h.nameLen(4)
-                                           .name(n -> n.set("name".getBytes(UTF_8)))
-                                           .valueLen(5)
-                                           .value(v -> v.set("value".getBytes(UTF_8)))))
-                .build();
-
-        matcher.match(byteBuf);
-    }
-
-    @Test(expected = Exception.class)
     public void shouldNotMatchProduceDataExtensionSequence() throws Exception
     {
         BytesMatcher matcher = KafkaFunctions.matchDataEx()
@@ -2401,5 +2374,17 @@ public class KafkaFunctionsTest
         ValueExpression expression = factory.createValueExpression(ctx, expressionText, byte[].class);
         byte[] actuals = (byte[]) expression.getValue(ctx);
         assertArrayEquals(new byte[] { 0x00 }, actuals);
+    }
+
+    @Test
+    public void shouldResolveOffsetTypeHistorical()
+    {
+        assertEquals(-2, KafkaFunctions.offset("HISTORICAL"));
+    }
+
+    @Test
+    public void shouldResolveOffsetTypeLive()
+    {
+        assertEquals(-1, KafkaFunctions.offset("LIVE"));
     }
 }
