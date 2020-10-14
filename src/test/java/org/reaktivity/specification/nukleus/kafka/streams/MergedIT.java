@@ -250,6 +250,17 @@ public class MergedIT
 
     @Test
     @Specification({
+        "${scripts}/merged.fetch.server.sent.abort.with.message/client",
+        "${scripts}/merged.fetch.server.sent.abort.with.message/server"})
+    public void shouldMergedFetchServerSentAbortWithMessage() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/merged.fetch.server.sent.close.with.message/client",
         "${scripts}/merged.fetch.server.sent.close.with.message/server"})
     public void shouldMergedFetchServerSentCloseWithMessage() throws Exception
