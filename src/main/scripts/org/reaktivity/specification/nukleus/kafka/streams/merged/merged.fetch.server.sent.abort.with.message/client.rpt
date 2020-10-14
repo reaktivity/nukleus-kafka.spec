@@ -45,6 +45,6 @@ read "Hello, world #A1"
 
 write notify RECEIVED_MESSAGE
 
-read closed
+read aborted
 
-write close
+write abort
