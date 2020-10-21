@@ -413,7 +413,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.filter.not.header/client",
         "${scripts}/merged.fetch.filter.not.header/server"})
-    public void shouldFetchMergedMessagesWithHeaderNotEqualsFilter() throws Exception
+    public void shouldFetchMergedMessagesWithNotHeaderFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -424,7 +424,7 @@ public class MergedIT
     @Specification({
         "${scripts}/merged.fetch.filter.not.key/client",
         "${scripts}/merged.fetch.filter.not.key/server"})
-    public void shouldFetchMergedMessagesWithKeyNotEqualsFilter() throws Exception
+    public void shouldFetchMergedMessagesWithNotKeyFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
