@@ -560,9 +560,20 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/filter.not.equals.header/client",
-        "${scripts}/filter.not.equals.header/server"})
+        "${scripts}/filter.not.header/client",
+        "${scripts}/filter.not.header/server"})
     public void shouldReceiveMessagesWithHeaderNotEqualsFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.not.key/client",
+        "${scripts}/filter.not.key/server"})
+    public void shouldReceiveMessagesWithKeyNotEqualsFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
