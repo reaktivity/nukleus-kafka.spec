@@ -26,6 +26,7 @@ import static org.reaktivity.specification.kafka.internal.types.KafkaAge.HISTORI
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.AGE;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.HEADER;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.KEY;
+import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.NOT;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
@@ -298,6 +299,194 @@ public class KafkaFunctionsTest
         assertNotNull(mergedBeginEx.filters()
                 .matchFirst(f -> f.conditions()
                 .matchFirst(c -> c.kind() == AGE.value() && c.age().get() == HISTORICAL) != null));
+    }
+
+    @Test
+    public void shouldGenerateMergedBeginExtensionWithHeaderNotEqualsFilter()
+    {
+        byte[] build = KafkaFunctions.beginEx()
+                                     .typeId(0x01)
+                                     .merged()
+                                         .topic("topic")
+                                         .partition(0, 1L)
+                                         .filter()
+                                             .key("match")
+                                             .build()
+                                         .filter()
+                                             .headerNot("name", "value")
+                                             .build()
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaBeginExFW beginEx = new KafkaBeginExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, beginEx.typeId());
+        assertEquals(KafkaApi.MERGED.value(), beginEx.kind());
+
+        final KafkaMergedBeginExFW mergedBeginEx = beginEx.merged();
+        assertEquals("topic", mergedBeginEx.topic().asString());
+
+        assertNotNull(mergedBeginEx.partitions()
+                                   .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
+
+        final MutableInteger filterCount = new MutableInteger();
+        mergedBeginEx.filters().forEach(f -> filterCount.value++);
+        assertEquals(2, filterCount.value);
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == KEY.value() &&
+                    "match".equals(c.key()
+                                    .value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == NOT.value() && c.not().condition().kind() == HEADER.value() &&
+                    "name".equals(c.not().condition().header().name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    "value".equals(c.not().condition().header().value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+    }
+
+    @Test
+    public void shouldGenerateMergedBeginExtensionWithKeyNotEqualsFilter()
+    {
+        byte[] build = KafkaFunctions.beginEx()
+                                     .typeId(0x01)
+                                     .merged()
+                                         .topic("topic")
+                                         .partition(0, 1L)
+                                         .filter()
+                                             .keyNot("match")
+                                             .build()
+                                         .filter()
+                                             .header("name", "value")
+                                             .build()
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaBeginExFW beginEx = new KafkaBeginExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, beginEx.typeId());
+        assertEquals(KafkaApi.MERGED.value(), beginEx.kind());
+
+        final KafkaMergedBeginExFW mergedBeginEx = beginEx.merged();
+        assertEquals("topic", mergedBeginEx.topic().asString());
+
+        assertNotNull(mergedBeginEx.partitions()
+                                   .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
+
+        final MutableInteger filterCount = new MutableInteger();
+        mergedBeginEx.filters().forEach(f -> filterCount.value++);
+        assertEquals(2, filterCount.value);
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == NOT.value() && c.not().condition().kind() == KEY.value() &&
+                    "match".equals(c.not().condition().key()
+                                    .value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == HEADER.value() &&
+                    "name".equals(c.header().name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    "value".equals(c.header().value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+    }
+
+    @Test
+    public void shouldGenerateMergedBeginExtensionWithAgeNotEqualsFilter()
+    {
+        byte[] build = KafkaFunctions.beginEx()
+                                     .typeId(0x01)
+                                     .merged()
+                                         .topic("topic")
+                                         .partition(0, 1L)
+                                         .filter()
+                                             .key("match")
+                                             .build()
+                                         .filter()
+                                             .header("name", "value")
+                                             .build()
+                                         .filter()
+                                            .ageNot("HISTORICAL")
+                                            .build()
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaBeginExFW beginEx = new KafkaBeginExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, beginEx.typeId());
+        assertEquals(KafkaApi.MERGED.value(), beginEx.kind());
+
+        final KafkaMergedBeginExFW mergedBeginEx = beginEx.merged();
+        assertEquals("topic", mergedBeginEx.topic().asString());
+
+        assertNotNull(mergedBeginEx.partitions()
+                                   .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
+
+        final MutableInteger filterCount = new MutableInteger();
+        mergedBeginEx.filters().forEach(f -> filterCount.value++);
+        assertEquals(3, filterCount.value);
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == KEY.value() &&
+                    "match".equals(c.key()
+                                    .value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == HEADER.value() &&
+                    "name".equals(c.header().name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    "value".equals(c.header().value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == NOT.value() && c.not().condition().kind() == AGE.value() &&
+                                     c.not().condition().age().get() == HISTORICAL) != null));
+    }
+
+    @Test
+    public void shouldGenerateMergedBeginExtensionWithNullKeyAndHeaderNotEqualsFilter()
+    {
+        byte[] build = KafkaFunctions.beginEx()
+                                     .typeId(0x01)
+                                     .merged()
+                                         .topic("topic")
+                                         .partition(0, 1L)
+                                         .filter()
+                                             .keyNot(null)
+                                             .build()
+                                         .filter()
+                                             .headerNot("name", null)
+                                             .build()
+                                         .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaBeginExFW beginEx = new KafkaBeginExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, beginEx.typeId());
+        assertEquals(KafkaApi.MERGED.value(), beginEx.kind());
+
+        final KafkaMergedBeginExFW mergedBeginEx = beginEx.merged();
+        assertEquals("topic", mergedBeginEx.topic().asString());
+
+        assertNotNull(mergedBeginEx.partitions()
+                                   .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
+
+        final MutableInteger filterCount = new MutableInteger();
+        mergedBeginEx.filters().forEach(f -> filterCount.value++);
+        assertEquals(2, filterCount.value);
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == NOT.value() && c.not().condition().kind() == KEY.value() &&
+                    Objects.isNull(c.not().condition().key().value())) != null));
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == NOT.value() && c.not().condition().kind() == HEADER.value() &&
+                    "name".equals(c.not().condition().header().name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    Objects.isNull(c.not().condition().header().value())) != null));
     }
 
     @Test
