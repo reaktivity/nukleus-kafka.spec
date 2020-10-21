@@ -340,7 +340,7 @@ public class KafkaFunctionsTest
     }
 
     @Test
-    public void shouldGenerateMergedBeginExtensionWithNullKeyAndHeaderNotEqualsFilter()
+    public void shouldGenerateMergedBeginExtensionWithNullKeyOrHeaderNotEqualsFilter()
     {
         byte[] build = KafkaFunctions.beginEx()
                                      .typeId(0x01)
@@ -383,7 +383,7 @@ public class KafkaFunctionsTest
     }
 
     @Test
-    public void shouldGenerateMergedBeginExtensionWithNullKeyAndNullHeaderValue()
+    public void shouldGenerateMergedBeginExtensionWithNullKeyOrNullHeaderValue()
     {
         byte[] build = KafkaFunctions.beginEx()
                                      .typeId(0x01)
@@ -483,13 +483,13 @@ public class KafkaFunctionsTest
         byte[] build = KafkaFunctions.dataEx()
                                      .typeId(0x01)
                                      .merged()
-                                     .deferred(100)
-                                     .timestamp(12345678L)
-                                     .partition(0, 0L)
-                                     .progress(0, 1L)
-                                     .key("match")
-                                     .headerBytes("name", "value".getBytes(UTF_8))
-                                     .build()
+                                         .deferred(100)
+                                         .timestamp(12345678L)
+                                         .partition(0, 0L)
+                                         .progress(0, 1L)
+                                         .key("match")
+                                         .headerBytes("name", "value".getBytes(UTF_8))
+                                         .build()
                                      .build();
 
         DirectBuffer buffer = new UnsafeBuffer(build);

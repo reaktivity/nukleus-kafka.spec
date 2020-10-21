@@ -411,9 +411,20 @@ public class MergedIT
 
     @Test
     @Specification({
-        "${scripts}/merged.fetch.not.equals.filter.header/client",
-        "${scripts}/merged.fetch.not.equals.filter.header/server"})
+        "${scripts}/merged.fetch.filter.not.header/client",
+        "${scripts}/merged.fetch.filter.not.header/server"})
     public void shouldFetchMergedMessagesWithHeaderNotEqualsFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.filter.not.key/client",
+        "${scripts}/merged.fetch.filter.not.key/server"})
+    public void shouldFetchMergedMessagesWithKeyNotEqualsFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
