@@ -383,13 +383,6 @@ public final class KafkaFunctions
             return this;
         }
 
-        public KafkaFilterBuilder<T> ageNot(
-            String age)
-        {
-            filterRW.conditionsItem(i -> i.not(n -> n.condition(c -> c.age(a -> a.set(KafkaAge.valueOf(age))))));
-            return this;
-        }
-
         public T build()
         {
             final KafkaFilterFW filter = filterRW.build();
@@ -453,10 +446,6 @@ public final class KafkaFunctions
                                                                        .name(notHeader.name())
                                                                        .valueLen(notHeader.valueLen())
                                                                        .value(notHeader.value()))));
-                    break;
-                case KafkaConditionFW.KIND_AGE:
-                    final KafkaAgeFW notAge = notCondition.age();
-                    builder.not(n -> n.condition(c -> c.age(ab -> ab.set(notAge))));
                     break;
                 }
                 break;
