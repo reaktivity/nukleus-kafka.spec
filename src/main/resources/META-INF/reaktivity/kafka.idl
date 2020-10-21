@@ -38,7 +38,8 @@ scope kafka
     {
         KEY (0),
         HEADER (1),
-        AGE (2)
+        AGE (2),
+        NOT (3)
     }
 
     union KafkaCondition switch (uint8)
@@ -46,6 +47,7 @@ scope kafka
         case 0: kafka::KafkaKey key;
         case 1: kafka::KafkaHeader header;
         case 2: kafka::KafkaAge age;
+        case 3: kafka::KafkaNot not;
     }
 
     struct KafkaFilter
@@ -71,6 +73,11 @@ scope kafka
     {
         LIVE,
         HISTORICAL
+    }
+
+    struct KafkaNot
+    {
+        KafkaCondition condition;
     }
 
     enum KafkaDeltaType
