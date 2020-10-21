@@ -18,7 +18,6 @@ package org.reaktivity.specification.nukleus.kafka.streams;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.rules.RuleChain.outerRule;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.DisableOnDebug;
@@ -75,30 +74,6 @@ public class MergedIT
         "${scripts}/merged.fetch.filter.key/client",
         "${scripts}/merged.fetch.filter.key/server"})
     public void shouldFetchMergedMessagesWithKeyFilter() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Ignore
-    @Test
-    @Specification({
-        "${scripts}/merged.fetch.filter.age.live/client",
-        "${scripts}/merged.fetch.filter.age.live/server"})
-    public void shouldFetchMergedMessagesWithLiveAgeFilter() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Ignore
-    @Test
-    @Specification({
-        "${scripts}/merged.fetch.filter.age.historical/client",
-        "${scripts}/merged.fetch.filter.age.historical/server"})
-    public void shouldFetchMergedMessagesWithHistoricalAgeFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
@@ -431,17 +406,6 @@ public class MergedIT
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.notifyBarrier("RESET_UNMERGED_FETCH_INITIAL");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/unmerged.fetch.filter.age.historical/client",
-        "${scripts}/unmerged.fetch.filter.age.historical/server"})
-    public void shouldFetchUnmergedMessagesWithAgeHistoricFilter() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
 
