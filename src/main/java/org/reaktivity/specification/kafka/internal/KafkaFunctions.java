@@ -32,8 +32,6 @@ import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 import org.reaktivity.specification.kafka.internal.types.Array32FW;
-import org.reaktivity.specification.kafka.internal.types.KafkaAge;
-import org.reaktivity.specification.kafka.internal.types.KafkaAgeFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaCapabilities;
 import org.reaktivity.specification.kafka.internal.types.KafkaConditionFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaFW;
@@ -334,13 +332,6 @@ public final class KafkaFunctions
             return this;
         }
 
-        public KafkaFilterBuilder<T> age(
-            String age)
-        {
-            filterRW.conditionsItem(c -> c.age(a -> a.set(KafkaAge.valueOf(age))));
-            return this;
-        }
-
         public KafkaFilterBuilder<T> keyNot(
             String key)
         {
@@ -424,10 +415,6 @@ public final class KafkaFunctions
                                        .name(header.name())
                                        .valueLen(header.valueLen())
                                        .value(header.value()));
-                break;
-            case KafkaConditionFW.KIND_AGE:
-                final KafkaAgeFW age = condition.age();
-                builder.age(ab -> ab.set(age));
                 break;
             case KafkaConditionFW.KIND_NOT:
                 final KafkaNotFW not = condition.not();
