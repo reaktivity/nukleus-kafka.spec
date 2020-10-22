@@ -22,6 +22,7 @@ property newTimestamp ${kafka:timestamp() + deltaMillis}
 
 accept ${networkAccept}
   option nukleus:window ${networkAcceptWindow}
+  option nukleus:padding 512
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
