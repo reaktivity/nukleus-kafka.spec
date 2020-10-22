@@ -58,7 +58,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                    .topic("test")
                                    .partition(0, 1)
                                    .filter()
-                                       .keyNot("key2")
+                                       .keyNot("key1")
                                        .build()
                                    .build()
                                .build()}
@@ -76,8 +76,8 @@ read nukleus:begin.ext ${kafka:beginEx()
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 1, 2)
-                                 .key("key1")
+                                 .partition(0, 2, 2)
+                                 .header("header1", "value1")
                                  .build()
                              .build()}
 read "Hello, world"
@@ -87,8 +87,9 @@ read notify RECEIVED_MESSAGE_2
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 3, 4)
-                                 .key("key1")
+                                 .partition(0, 4, 4)
+                                 .header("header1", "value1")
+                                 .header("header2", "value2")
                                  .build()
                              .build()}
 read "Hello, world"
