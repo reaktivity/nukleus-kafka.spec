@@ -204,6 +204,18 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/message.value.empty/client",
+        "${scripts}/message.value.empty/server"})
+    public void shouldReceiveMessageValueEmpty() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+
+    @Test
+    @Specification({
         "${scripts}/message.value.null/client",
         "${scripts}/message.value.null/server"})
     public void shouldReceiveMessageValueNull() throws Exception
