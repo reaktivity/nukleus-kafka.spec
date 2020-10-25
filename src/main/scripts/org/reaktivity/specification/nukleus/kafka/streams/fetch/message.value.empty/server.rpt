@@ -16,9 +16,11 @@
 
 property serverAddress "nukleus://streams/kafka#0"
 
+property deltaMillis 0L
+property newTimestamp ${kafka:timestamp() + deltaMillis}
+
 accept ${serverAddress}
     option nukleus:window 8192
-    option nukleus:padding 512
     option nukleus:transmission "half-duplex"
 
 accepted
@@ -52,9 +54,9 @@ accepted
 
 read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
-                              .produce()
+                              .fetch()
                                   .topic("test")
-                                  .partitionId(0)
+                                  .partition(0, 10)
                                   .build()
                               .build()}
 
@@ -62,22 +64,19 @@ connected
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
-                               .produce()
+                               .fetch()
                                    .topic("test")
-                                   .partitionId(0)
+                                   .partition(0, 10, 10)
                                    .build()
                                .build()}
+write flush
 
-read nukleus:data.ext ${kafka:matchDataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .produce()
-                                 .deferred(10240 - 6144)
-                                 .build()
-                             .build()}
-
-read nukleus:data.ext ${kafka:matchDataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .produce()
-                                 .build()
-                             .build()}
-read [0..10240]
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 10, 10)
+                                  .build()
+                              .build()}
+write nukleus:data.empty
+write flush

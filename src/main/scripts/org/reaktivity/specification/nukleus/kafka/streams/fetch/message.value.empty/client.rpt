@@ -14,23 +14,12 @@
 # under the License.
 #
 
-property serverAddress "nukleus://streams/kafka#0"
+property clientAddress "nukleus://streams/kafka#0"
 
-accept ${serverAddress}
+connect await ROUTED_CLIENT
+        ${clientAddress}
     option nukleus:window 8192
-    option nukleus:padding 512
     option nukleus:transmission "half-duplex"
-
-accepted
-
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .meta()
-                                  .topic("test")
-                                  .build()
-                              .build()}
-
-connected
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
@@ -38,46 +27,53 @@ write nukleus:begin.ext ${kafka:beginEx()
                                    .topic("test")
                                    .build()
                                .build()}
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .meta()
-                                  .partition(0, 177)
-                                  .build()
-                              .build()}
-write flush
-
-accepted
-
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .produce()
-                                  .topic("test")
-                                  .partitionId(0)
-                                  .build()
-                              .build()}
 
 connected
 
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .meta()
+                                  .topic("test")
+                                  .build()
+                              .build()}
+
+read nukleus:data.ext ${kafka:dataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .meta()
+                                 .partition(0, 177)
+                                 .build()
+                             .build()}
+
+read notify ROUTED_BROKER_CLIENT
+
+connect await ROUTED_BROKER_CLIENT
+        ${clientAddress}
+    option nukleus:window 8192
+    option nukleus:transmission "half-duplex"
+    option nukleus:affinity 0xb1
+
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
-                               .produce()
+                               .fetch()
                                    .topic("test")
-                                   .partitionId(0)
+                                   .partition(0, 10)
                                    .build()
                                .build()}
 
-read nukleus:data.ext ${kafka:matchDataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .produce()
-                                 .deferred(10240 - 6144)
-                                 .build()
-                             .build()}
+connected
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .fetch()
+                                  .topic("test")
+                                  .partition(0, 10, 10)
+                                  .build()
+                              .build()}
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
-                             .produce()
+                             .fetch()
+                                 .partition(0, 10, 10)
                                  .build()
                              .build()}
-read [0..10240]
+
