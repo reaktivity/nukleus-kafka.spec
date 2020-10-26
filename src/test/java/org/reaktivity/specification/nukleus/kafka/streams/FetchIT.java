@@ -440,29 +440,6 @@ public class FetchIT
 
     @Test
     @Specification({
-        "${scripts}/filter.age.live/client",
-        "${scripts}/filter.age.live/server"})
-    public void shouldReceiveMessagesWithLiveAgeFilter() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
-        "${scripts}/filter.age.historical/client",
-        "${scripts}/filter.age.historical/server"})
-    public void shouldReceiveMessagesWithHistoricalAgeFilter() throws Exception
-    {
-        k3po.start();
-        k3po.notifyBarrier("ROUTED_CLIENT");
-        k3po.awaitBarrier("RECEIVED_MESSAGE_2");
-        k3po.finish();
-    }
-
-    @Test
-    @Specification({
         "${scripts}/filter.none.json/client",
         "${scripts}/filter.none.json/server"})
     public void shouldReceiveJsonMessagesWithNoFilter() throws Exception
@@ -587,6 +564,28 @@ public class FetchIT
         "${scripts}/compacted.tombstone.with.tombstone/client",
         "${scripts}/compacted.tombstone.with.tombstone/server"})
     public void shouldReceiveTombstoneAfterCompactedTombstone() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.not.header/client",
+        "${scripts}/filter.not.header/server"})
+    public void shouldReceiveMessagesWithNotHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.not.key/client",
+        "${scripts}/filter.not.key/server"})
+    public void shouldReceiveMessagesWithNotKeyFilter() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
