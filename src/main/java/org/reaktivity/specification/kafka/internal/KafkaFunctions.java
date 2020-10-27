@@ -32,8 +32,6 @@ import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 import org.reaktivity.specification.kafka.internal.types.Array32FW;
-import org.reaktivity.specification.kafka.internal.types.KafkaAge;
-import org.reaktivity.specification.kafka.internal.types.KafkaAgeFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaCapabilities;
 import org.reaktivity.specification.kafka.internal.types.KafkaConditionFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaFW;
@@ -41,6 +39,7 @@ import org.reaktivity.specification.kafka.internal.types.KafkaDeltaType;
 import org.reaktivity.specification.kafka.internal.types.KafkaFilterFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaHeaderFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaKeyFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaNotFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetType;
 import org.reaktivity.specification.kafka.internal.types.OctetsFW;
@@ -333,10 +332,45 @@ public final class KafkaFunctions
             return this;
         }
 
-        public KafkaFilterBuilder<T> age(
-            String age)
+        public KafkaFilterBuilder<T> keyNot(
+            String key)
         {
-            filterRW.conditionsItem(c -> c.age(a -> a.set(KafkaAge.valueOf(age))));
+            if (key != null)
+            {
+                keyRO.wrap(key.getBytes(UTF_8));
+                filterRW.conditionsItem(i -> i.not(n -> n.condition(c -> c.key(k -> k.length(keyRO.capacity())
+                                                                                     .value(keyRO, 0, keyRO.capacity())))));
+            }
+            else
+            {
+                filterRW.conditionsItem(i -> i.not(n -> n.condition(c -> c.key(k -> k.length(-1)
+                                                                                     .value((OctetsFW) null)))));
+            }
+            return this;
+        }
+
+        public KafkaFilterBuilder<T> headerNot(
+            String name,
+            String value)
+        {
+            if (value == null)
+            {
+                nameRO.wrap(name.getBytes(UTF_8));
+                filterRW.conditionsItem(i -> i.not(n -> n.condition(c -> c.header(h -> h.nameLen(nameRO.capacity())
+                                                                                        .name(nameRO, 0, nameRO.capacity())
+                                                                                        .valueLen(-1)
+                                                                                        .value((OctetsFW) null)))));
+            }
+            else
+            {
+                nameRO.wrap(name.getBytes(UTF_8));
+                valueRO.wrap(value.getBytes(UTF_8));
+                filterRW.conditionsItem(i -> i.not(n -> n.condition(c -> c.header(h ->
+                                                                            h.nameLen(nameRO.capacity())
+                                                                              .name(nameRO, 0, nameRO.capacity())
+                                                                              .valueLen(valueRO.capacity())
+                                                                              .value(valueRO, 0, valueRO.capacity())))));
+            }
             return this;
         }
 
@@ -382,9 +416,25 @@ public final class KafkaFunctions
                                        .valueLen(header.valueLen())
                                        .value(header.value()));
                 break;
-            case KafkaConditionFW.KIND_AGE:
-                final KafkaAgeFW age = condition.age();
-                builder.age(ab -> ab.set(age));
+            case KafkaConditionFW.KIND_NOT:
+                final KafkaNotFW not = condition.not();
+                final KafkaConditionFW notCondition = not.condition();
+
+                switch (notCondition.kind())
+                {
+                case KafkaConditionFW.KIND_KEY:
+                    final KafkaKeyFW notKey = notCondition.key();
+                    builder.not(n -> n.condition(c -> c.key(kb -> kb.length(notKey.length())
+                                                                    .value(notKey.value()))));
+                    break;
+                case KafkaConditionFW.KIND_HEADER:
+                    final KafkaHeaderFW notHeader = notCondition.header();
+                    builder.not(n -> n.condition(c -> c.header(hb -> hb.nameLen(notHeader.nameLen())
+                                                                       .name(notHeader.name())
+                                                                       .valueLen(notHeader.valueLen())
+                                                                       .value(notHeader.value()))));
+                    break;
+                }
                 break;
             }
         }

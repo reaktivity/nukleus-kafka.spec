@@ -56,10 +56,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .topic("test")
-                                  .partition(0, 1)
-                                  .filter()
-                                      .age("LIVE")
-                                      .build()
+                                  .partition(0, 10)
                                   .build()
                               .build()}
 
@@ -69,7 +66,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .fetch()
                                    .topic("test")
-                                   .partition(0, 1, 2)
+                                   .partition(0, 10, 10)
                                    .build()
                                .build()}
 write flush
@@ -78,22 +75,8 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 3, 4)
-                                  .key("key1")
-                                  .header("header1", "value1")
+                                  .partition(0, 10, 10)
                                   .build()
                               .build()}
-write "Hello, world"
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 4, 4)
-                                  .header("header1", "value1")
-                                  .header("header2", "value2")
-                                  .build()
-                              .build()}
-write "Hello, world"
+write nukleus:data.empty
 write flush
