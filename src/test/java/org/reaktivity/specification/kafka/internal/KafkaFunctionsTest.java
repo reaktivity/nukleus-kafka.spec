@@ -26,7 +26,6 @@ import static org.reaktivity.specification.kafka.internal.types.KafkaConditionTy
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.HEADERS;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.KEY;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.NOT;
-import static org.reaktivity.specification.kafka.internal.types.KafkaValueMatchType.VALUE;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
@@ -43,11 +42,10 @@ import org.junit.Test;
 import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.internal.el.ExpressionContext;
 import org.reaktivity.specification.kafka.internal.types.Array32FW;
-import org.reaktivity.specification.kafka.internal.types.KafkaConditionType;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaType;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaSkip;
 import org.reaktivity.specification.kafka.internal.types.KafkaValueMatchFW;
-import org.reaktivity.specification.kafka.internal.types.KafkaValueMatchType;
 import org.reaktivity.specification.kafka.internal.types.OctetsFW;
 import org.reaktivity.specification.kafka.internal.types.control.KafkaRouteExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaApi;
@@ -2223,8 +2221,95 @@ public class KafkaFunctionsTest
     }
 
     @Test
-    public void shouldGenerateKafkaHeaders()
+    public void shouldGenerateFetchBeginExtensionWithHeadersFilter()
     {
+        KafkaValueMatchFW valueMatchRO = new KafkaValueMatchFW();
+        byte[] build = KafkaFunctions.beginEx()
+                                     .typeId(0x01)
+                                     .fetch()
+                                        .topic("topic")
+                                        .partition(0, 1L)
+                                        .filter()
+                                            .headers("headers")
+                                                .sequence("one", "two")
+                                                .skip(1)
+                                                .sequence("four")
+                                                .skipMany()
+                                                .build()
+                                            .build()
+                                        .filter()
+                                            .header("name", "value")
+                                            .build()
+                                        .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaBeginExFW beginEx = new KafkaBeginExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, beginEx.typeId());
+        assertEquals(KafkaApi.FETCH.value(), beginEx.kind());
+
+        final KafkaFetchBeginExFW fetchBeginEx = beginEx.fetch();
+        assertEquals("topic", fetchBeginEx.topic().asString());
+
+        final MutableInteger filterCount = new MutableInteger();
+        fetchBeginEx.filters().forEach(f -> filterCount.value++);
+        assertEquals(2, filterCount.value);
+        assertNotNull(fetchBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == HEADERS.value() &&
+                    "headers".equals(c.headers().name()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        assertNotNull(fetchBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c ->
+                {
+                    boolean matches;
+                    final Array32FW<KafkaValueMatchFW> values = c.headers().values();
+                    final DirectBuffer items = values.items();
+
+                    int progress = 0;
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches = "one".equals(valueMatchRO.value()
+                                                       .value()
+                                                       .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches &= "two".equals(valueMatchRO.value()
+                                                        .value()
+                                                        .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches &= KafkaSkip.SKIP == valueMatchRO.skip().get();
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches &= "four".equals(valueMatchRO.value()
+                                                         .value()
+                                                         .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches &= KafkaSkip.SKIP_MANY == valueMatchRO.skip().get();
+
+                    return c.kind() == HEADERS.value() && matches;
+                }) != null));
+        assertNotNull(fetchBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == HEADER.value() &&
+                    "name".equals(c.header().name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    "value".equals(c.header().value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+    }
+
+    @Test
+    public void shouldGenerateMergedBeginExtensionWithHeadersFilter()
+    {
+        KafkaValueMatchFW valueMatchRO = new KafkaValueMatchFW();
         byte[] build = KafkaFunctions.beginEx()
                                      .typeId(0x01)
                                      .merged()
@@ -2233,6 +2318,9 @@ public class KafkaFunctionsTest
                                         .filter()
                                             .headers("headers")
                                                 .sequence("one", "two")
+                                                .skip(1)
+                                                .sequence("four")
+                                                .skipMany()
                                                 .build()
                                             .build()
                                         .filter()
@@ -2264,10 +2352,37 @@ public class KafkaFunctionsTest
                 .matchFirst(f -> f.conditions()
                 .matchFirst(c ->
                 {
-                    boolean matches = false;
+                    boolean matches;
                     final Array32FW<KafkaValueMatchFW> values = c.headers().values();
+                    final DirectBuffer items = values.items();
 
-                    // TODO: walk down values and match in order
+                    int progress = 0;
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches = "one".equals(valueMatchRO.value()
+                                                       .value()
+                                                       .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches &= "two".equals(valueMatchRO.value()
+                                                        .value()
+                                                        .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches &= KafkaSkip.SKIP == valueMatchRO.skip().get();
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches &= "four".equals(valueMatchRO.value()
+                                                         .value()
+                                                         .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)));
+
+                    valueMatchRO.wrap(items, progress, items.capacity());
+                    progress = valueMatchRO.limit();
+                    matches &= KafkaSkip.SKIP_MANY == valueMatchRO.skip().get();
 
                     return c.kind() == HEADERS.value() && matches;
                 }) != null));
