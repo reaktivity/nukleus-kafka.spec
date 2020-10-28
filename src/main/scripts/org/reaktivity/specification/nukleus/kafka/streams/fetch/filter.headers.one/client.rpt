@@ -58,40 +58,16 @@ write nukleus:begin.ext ${kafka:beginEx()
                                    .topic("test")
                                    .partition(0, 1)
                                    .filter()
-                                       .headerNot("header2", "value2")
+                                       .headers("name")
+                                           .sequence("one")
+                                          .build()
                                        .build()
                                    .build()
                                .build()}
 
 connected
 
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .topic("test")
-                                  .partition(0, 1, 2)
-                                  .build()
-                              .build()}
-
-read nukleus:data.ext ${kafka:matchDataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .fetch()
-                                 .partition(0, 2, 2)
-                                 .header("header1", "value1")
-                                 .build()
-                             .build()}
-read "Hello, world"
-
 read notify RECEIVED_MESSAGE_2
-
-read nukleus:data.ext ${kafka:matchDataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .fetch()
-                                 .partition(0, 3, 4)
-                                 .header("header1", "value1")
-                                 .build()
-                             .build()}
-read "Hello, world"
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))

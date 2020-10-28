@@ -58,7 +58,9 @@ read nukleus:begin.ext ${kafka:beginEx()
                                   .topic("test")
                                   .partition(0, 1)
                                   .filter()
-                                      .headerNot("header2", "value2")
+                                      .headers("name")
+                                          .sequence("one", "two", "three", "four")
+                                          .build()
                                       .build()
                                   .build()
                               .build()}
@@ -77,49 +79,6 @@ write flush
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .fetch()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 2, 2)
-                                  .header("header1", "value1")
-                                  .build()
-                              .build()}
-write "Hello, world"
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 3, 4)
-                                  .header("header1", "value1")
-                                  .build()
-                              .build()}
-write "Hello, world"
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .partition(0, 5, 8)
-                                  .header("name", "one")
-                                  .build()
-                              .build()}
-write "Hello, world"
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .partition(0, 6, 8)
-                                  .header("name", "one")
-                                  .header("name", "")
-                                  .build()
-                              .build()}
-write "Hello, world"
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
                                   .partition(0, 7, 8)
                                   .header("name", "one")
                                   .header("name", "two")
@@ -129,18 +88,3 @@ write nukleus:data.ext ${kafka:dataEx()
                               .build()}
 write "Hello, world"
 write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .partition(0, 8, 8)
-                                  .header("name", "one")
-                                  .header("name", "")
-                                  .header("name", "three")
-                                  .header("name", "")
-                                  .build()
-                              .build()}
-write "Hello, world"
-write flush
-
-write close
