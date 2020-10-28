@@ -74,17 +74,35 @@ scope kafka
         KafkaCondition condition;
     }
 
-    struct KafkaSequence
+    struct KafkaValue
     {
         varint32 length;
         octets[length] value = null;
+    }
+
+    enum KafkaSkip (uint8)
+    {
+        SKIP (0),
+        SKIP_MANY (1)
+    }
+
+    enum KafkaValueMatchType (uint8)
+    {
+        VALUE (0),
+        SKIP (1)
+    }
+
+    union KafkaValueMatch switch (uint8)
+    {
+        case 0: kafka::KafkaValue value;
+        case 1: kafka::KafkaSkip skip;
     }
 
     struct KafkaHeaders
     {
         varint32 nameLen;
         octets[nameLen] name;  // UTF-8
-        KafkaSequence[] sequences;
+        KafkaValueMatch[] values;
     }
 
     enum KafkaDeltaType

@@ -23,8 +23,10 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.kaazing.k3po.lang.internal.el.ExpressionFactoryUtils.newExpressionFactory;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.HEADER;
+import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.HEADERS;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.KEY;
 import static org.reaktivity.specification.kafka.internal.types.KafkaConditionType.NOT;
+import static org.reaktivity.specification.kafka.internal.types.KafkaValueMatchType.VALUE;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
@@ -40,8 +42,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.internal.el.ExpressionContext;
+import org.reaktivity.specification.kafka.internal.types.KafkaConditionType;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaType;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaValueMatchFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaValueMatchType;
 import org.reaktivity.specification.kafka.internal.types.OctetsFW;
 import org.reaktivity.specification.kafka.internal.types.control.KafkaRouteExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaApi;
@@ -2214,6 +2219,60 @@ public class KafkaFunctionsTest
                     "name".equals(h.name()
                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
                     Objects.isNull(h.value())));
+    }
+
+    @Test
+    public void shouldGenerateKafkaHeaders()
+    {
+        byte[] build = KafkaFunctions.beginEx()
+                                     .typeId(0x01)
+                                     .merged()
+                                        .topic("topic")
+                                        .partition(0, 1L)
+                                        .filter()
+                                            .headers("headers")
+                                                .sequence("one", "two")
+                                                .build()
+                                            .build()
+                                        .filter()
+                                            .header("name", "value")
+                                            .build()
+                                        .build()
+                                     .build();
+
+        DirectBuffer buffer = new UnsafeBuffer(build);
+        KafkaBeginExFW beginEx = new KafkaBeginExFW().wrap(buffer, 0, buffer.capacity());
+        assertEquals(0x01, beginEx.typeId());
+        assertEquals(KafkaApi.MERGED.value(), beginEx.kind());
+
+        final KafkaMergedBeginExFW mergedBeginEx = beginEx.merged();
+        assertEquals("topic", mergedBeginEx.topic().asString());
+
+        assertNotNull(mergedBeginEx.partitions()
+                .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
+
+        final MutableInteger filterCount = new MutableInteger();
+        mergedBeginEx.filters().forEach(f -> filterCount.value++);
+        assertEquals(2, filterCount.value);
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == HEADERS.value() &&
+                    "headers".equals(c.headers().name()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        // assertNotNull(mergedBeginEx.filters()
+        //         .matchFirst(f -> f.conditions()
+        //         .matchFirst(c -> c.kind() == HEADERS.value() &&
+        //             c.headers().values().matchFirst(v -> v.kind() == VALUE.value() &&
+        //                    "one".equals(v.value().value().get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))))
+                    // "headers".equals(c.headers().name()
+                    //                 .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == HEADER.value() &&
+                    "name".equals(c.header().name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    "value".equals(c.header().value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
     }
 
     @Test
