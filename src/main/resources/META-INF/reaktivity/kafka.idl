@@ -38,7 +38,8 @@ scope kafka
     {
         KEY (0),
         HEADER (1),
-        NOT (2)
+        NOT (2),
+        HEADERS (3)
     }
 
     union KafkaCondition switch (uint8)
@@ -46,6 +47,7 @@ scope kafka
         case 0: kafka::KafkaKey key;
         case 1: kafka::KafkaHeader header;
         case 2: kafka::KafkaNot not;
+        case 3: kafka::KafkaHeaders headers;
     }
 
     struct KafkaFilter
@@ -70,6 +72,19 @@ scope kafka
     struct KafkaNot
     {
         KafkaCondition condition;
+    }
+
+    struct KafkaSequence
+    {
+        varint32 length;
+        octets[length] value = null;
+    }
+
+    struct KafkaHeaders
+    {
+        varint32 nameLen;
+        octets[nameLen] name;  // UTF-8
+        KafkaSequence[] sequences;
     }
 
     enum KafkaDeltaType

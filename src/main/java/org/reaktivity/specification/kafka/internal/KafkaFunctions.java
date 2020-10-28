@@ -38,6 +38,7 @@ import org.reaktivity.specification.kafka.internal.types.KafkaDeltaFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaType;
 import org.reaktivity.specification.kafka.internal.types.KafkaFilterFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaHeaderFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaHeadersFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaKeyFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaNotFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
@@ -275,6 +276,46 @@ public final class KafkaFunctions
             final byte[] array = new byte[routeEx.sizeof()];
             routeEx.buffer().getBytes(routeEx.offset(), array);
             return array;
+        }
+    }
+
+    public abstract static class KafkaHeadersBuilder<T>
+    {
+        private final KafkaHeadersFW.Builder headersRW = new KafkaHeadersFW.Builder();
+        private final DirectBuffer nameRO = new UnsafeBuffer(0, 0);
+        private final DirectBuffer valueRO = new UnsafeBuffer(0, 0);
+
+        private KafkaHeadersBuilder(
+            String name)
+        {
+            MutableDirectBuffer buffer = new UnsafeBuffer(new byte[1024]);
+            nameRO.wrap(name.getBytes(UTF_8));
+            headersRW.wrap(buffer, 0, buffer.capacity())
+                     .nameLen(nameRO.capacity())
+                     .name(c -> c.put(nameRO, 0, nameRO.capacity()));
+        }
+
+        public KafkaHeadersBuilder<T> sequence(
+            String... values)
+        {
+            for (String value : values)
+            {
+                valueRO.wrap(value.getBytes(UTF_8));
+                headersRW.sequencesItem(c -> c.length(valueRO.capacity())
+                                              .value(valueRO, 0, valueRO.capacity()));
+            }
+            return this;
+        }
+
+        public KafkaHeadersBuilder<T> skip(
+            int count)
+        {
+            return this;
+        }
+
+        public KafkaHeadersBuilder<T> skipMany()
+        {
+            return this;
         }
     }
 
