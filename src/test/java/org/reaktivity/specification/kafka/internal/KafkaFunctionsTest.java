@@ -42,6 +42,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.internal.el.ExpressionContext;
+import org.reaktivity.specification.kafka.internal.types.Array32FW;
 import org.reaktivity.specification.kafka.internal.types.KafkaConditionType;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaType;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
@@ -2259,13 +2260,17 @@ public class KafkaFunctionsTest
                 .matchFirst(c -> c.kind() == HEADERS.value() &&
                     "headers".equals(c.headers().name()
                                     .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
-        // assertNotNull(mergedBeginEx.filters()
-        //         .matchFirst(f -> f.conditions()
-        //         .matchFirst(c -> c.kind() == HEADERS.value() &&
-        //             c.headers().values().matchFirst(v -> v.kind() == VALUE.value() &&
-        //                    "one".equals(v.value().value().get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))))
-                    // "headers".equals(c.headers().name()
-                    //                 .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        assertNotNull(mergedBeginEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c ->
+                {
+                    boolean matches = false;
+                    final Array32FW<KafkaValueMatchFW> values = c.headers().values();
+
+                    // TODO: walk down values and match in order
+
+                    return c.kind() == HEADERS.value() && matches;
+                }) != null));
         assertNotNull(mergedBeginEx.filters()
                 .matchFirst(f -> f.conditions()
                 .matchFirst(c -> c.kind() == HEADER.value() &&
