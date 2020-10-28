@@ -2230,15 +2230,12 @@ public class KafkaFunctionsTest
                                         .topic("topic")
                                         .partition(0, 1L)
                                         .filter()
-                                            .headers("headers")
+                                            .headers("name")
                                                 .sequence("one", "two")
                                                 .skip(1)
                                                 .sequence("four")
                                                 .skipMany()
                                                 .build()
-                                            .build()
-                                        .filter()
-                                            .header("name", "value")
                                             .build()
                                         .build()
                                      .build();
@@ -2253,11 +2250,11 @@ public class KafkaFunctionsTest
 
         final MutableInteger filterCount = new MutableInteger();
         fetchBeginEx.filters().forEach(f -> filterCount.value++);
-        assertEquals(2, filterCount.value);
+        assertEquals(1, filterCount.value);
         assertNotNull(fetchBeginEx.filters()
                 .matchFirst(f -> f.conditions()
                 .matchFirst(c -> c.kind() == HEADERS.value() &&
-                    "headers".equals(c.headers().name()
+                    "name".equals(c.headers().name()
                                     .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
         assertNotNull(fetchBeginEx.filters()
                 .matchFirst(f -> f.conditions()
@@ -2297,13 +2294,6 @@ public class KafkaFunctionsTest
 
                     return c.kind() == HEADERS.value() && matches;
                 }) != null));
-        assertNotNull(fetchBeginEx.filters()
-                .matchFirst(f -> f.conditions()
-                .matchFirst(c -> c.kind() == HEADER.value() &&
-                    "name".equals(c.header().name()
-                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
-                    "value".equals(c.header().value()
-                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
     }
 
     @Test
@@ -2316,15 +2306,12 @@ public class KafkaFunctionsTest
                                         .topic("topic")
                                         .partition(0, 1L)
                                         .filter()
-                                            .headers("headers")
+                                            .headers("name")
                                                 .sequence("one", "two")
                                                 .skip(1)
                                                 .sequence("four")
                                                 .skipMany()
                                                 .build()
-                                            .build()
-                                        .filter()
-                                            .header("name", "value")
                                             .build()
                                         .build()
                                      .build();
@@ -2342,11 +2329,11 @@ public class KafkaFunctionsTest
 
         final MutableInteger filterCount = new MutableInteger();
         mergedBeginEx.filters().forEach(f -> filterCount.value++);
-        assertEquals(2, filterCount.value);
+        assertEquals(1, filterCount.value);
         assertNotNull(mergedBeginEx.filters()
                 .matchFirst(f -> f.conditions()
                 .matchFirst(c -> c.kind() == HEADERS.value() &&
-                    "headers".equals(c.headers().name()
+                    "name".equals(c.headers().name()
                                     .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
         assertNotNull(mergedBeginEx.filters()
                 .matchFirst(f -> f.conditions()
@@ -2386,13 +2373,6 @@ public class KafkaFunctionsTest
 
                     return c.kind() == HEADERS.value() && matches;
                 }) != null));
-        assertNotNull(mergedBeginEx.filters()
-                .matchFirst(f -> f.conditions()
-                .matchFirst(c -> c.kind() == HEADER.value() &&
-                    "name".equals(c.header().name()
-                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
-                    "value".equals(c.header().value()
-                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
     }
 
     @Test
