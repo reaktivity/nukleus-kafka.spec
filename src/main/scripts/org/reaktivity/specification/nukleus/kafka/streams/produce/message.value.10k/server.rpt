@@ -71,7 +71,7 @@ write nukleus:begin.ext ${kafka:beginEx()
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .produce()
-                                 .deferred(10240 - 6144)
+                                 .deferred(10240 - 7580)
                                  .build()
                              .build()}
 
