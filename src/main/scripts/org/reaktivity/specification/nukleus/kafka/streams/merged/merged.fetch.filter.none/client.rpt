@@ -138,7 +138,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .header("header3", "one")
                                  .build()
                              .build()}
-read "Hello, world #A4"
+read "Hello, world #A5"
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
@@ -150,7 +150,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .header("header3", "")
                                  .build()
                              .build()}
-read "Hello, world #B4"
+read "Hello, world #B5"
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
@@ -164,7 +164,7 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .header("header3", "")
                                  .build()
                              .build()}
-read "Hello, world #A4"
+read "Hello, world #A6"
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
@@ -178,4 +178,4 @@ read nukleus:data.ext ${kafka:matchDataEx()
                                  .header("header3", "four")
                                  .build()
                              .build()}
-read "Hello, world #B4"
+read "Hello, world #B6"
