@@ -181,6 +181,31 @@ write "Hello, world #A4"
 write flush
 write notify SENT_MESSAGE_A4
 
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 5, 6)
+                                  .header("header3", "one")
+                                  .build()
+                              .build()}
+write "Hello, world #A5"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 6, 6)
+                                  .header("header3", "one")
+                                  .header("header3", "")
+                                  .header("header3", "three")
+                                  .header("header3", "")
+                                  .build()
+                              .build()}
+write "Hello, world #A6"
+write flush
+
 accepted
 
 read nukleus:begin.ext ${kafka:beginEx()
@@ -251,37 +276,12 @@ write notify SENT_MESSAGE_B4
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .merged()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 5, 6)
-                                  .header("header3", "one")
-                                  .build()
-                              .build()}
-write "Hello, world #A5"
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .merged()
                                   .partition(1, 5, 6)
                                   .header("header3", "one")
                                   .header("header3", "")
                                   .build()
                               .build()}
 write "Hello, world #B5"
-write flush
-
-write nukleus:data.ext ${kafka:dataEx()
-                              .typeId(nukleus:id("kafka"))
-                              .merged()
-                                  .timestamp(newTimestamp)
-                                  .partition(0, 6, 6)
-                                  .header("header3", "one")
-                                  .header("header3", "")
-                                  .header("header3", "three")
-                                  .header("header3", "")
-                                  .build()
-                              .build()}
-write "Hello, world #A6"
 write flush
 
 write nukleus:data.ext ${kafka:dataEx()
