@@ -249,7 +249,7 @@ read 414
        ${kafka:varint(7)}                   # key
        "header3"
        ${kafka:varint(0)}                   # value (empty)
-     ${kafka:varint(70)}
+     ${kafka:varint(69)}
      [0x00]
      ${kafka:varint(0)}                 # timestamp delta
      ${kafka:varint(4)}                 # offset delta
@@ -273,7 +273,7 @@ read 414
        "header3"
        ${kafka:varint(4)}                   # value
        "four"
-     ${kafka:varint(63)}
+     ${kafka:varint(62)}
      [0x00]
      ${kafka:varint(0)}                 # timestamp delta
      ${kafka:varint(5)}                 # offset delta
