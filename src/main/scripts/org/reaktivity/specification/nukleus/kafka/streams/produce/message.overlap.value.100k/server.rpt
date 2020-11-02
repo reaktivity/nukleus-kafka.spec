@@ -83,26 +83,6 @@ read nukleus:data.ext ${kafka:matchDataEx()
 read [0..102400]
 
 
-accepted
-
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .produce()
-                                  .topic("test")
-                                  .partitionId(0)
-                                  .build()
-                              .build()}
-
-connected
-
-write nukleus:begin.ext ${kafka:beginEx()
-                               .typeId(nukleus:id("kafka"))
-                               .produce()
-                                   .topic("test")
-                                   .partitionId(0)
-                                   .build()
-                               .build()}
-
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .produce()
