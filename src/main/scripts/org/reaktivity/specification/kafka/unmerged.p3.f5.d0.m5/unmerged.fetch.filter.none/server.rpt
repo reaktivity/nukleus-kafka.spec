@@ -281,7 +281,7 @@ read 65
      -1L
      [0..4]
 
-write 277
+write 501
       ${requestId}
       0
       1
@@ -289,11 +289,11 @@ write 277
       1                                 # partitions
       0                                 # partition
       0s                                # no error
-      5L                                # high water mark
+      7L                                # high water mark
       -1L                               # last stable offset
       -1L                               # no log start offset
       -1                                # no aborted transaction count
-      217                               # record set size
+      441                               # record set size
 
 write await SENT_MESSAGE_B2
 write 3L                                # first offset
@@ -357,6 +357,74 @@ write 4L                                # first offset
         "value2"
 write flush
 write notify SENT_MESSAGE_A4
+
+write await SENT_MESSAGE_B4
+write 5L                                 # first offset
+      84                                 # length
+      0x00
+      [0x02]
+      0x4e8723aa
+      0s
+      0                                  # last offset delta
+      ${newTimestamp}                       # first timestamp
+      ${newTimestamp}                       # last timestamp
+      -1L
+      -1s
+      -1
+      1                                  # records
+      ${kafka:varint(34)}
+      [0x00]
+      ${kafka:varint(0)}
+      ${kafka:varint(0)}
+      ${kafka:varint(-1)}                 # key
+      ${kafka:varint(16)}                # value
+      "Hello, world #A5"
+      ${kafka:varint(1)}                 # headers
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(3)}                   # value
+        "one"
+write flush
+write notify SENT_MESSAGE_A5
+
+write await SENT_MESSAGE_B5
+write 6L                                 # first offset
+      116                                # length
+      0x00
+      [0x02]
+      0x4e8723aa
+      0s
+      0                                  # last offset delta
+      ${newTimestamp}                       # first timestamp
+      ${newTimestamp}                       # last timestamp
+      -1L
+      -1s
+      -1
+      1                                  # records
+      ${kafka:varint(66)}
+      [0x00]
+      ${kafka:varint(0)}
+      ${kafka:varint(0)}
+      ${kafka:varint(-1)}                 # key
+      ${kafka:varint(16)}                # value
+      "Hello, world #A6"
+      ${kafka:varint(4)}                 # headers
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(3)}                   # value
+        "one"
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(0)}                   # value (empty)
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(5)}                   # value
+        "three"
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(0)}                   # value (empty)
+write flush
+write notify SENT_MESSAGE_A6
 
 accepted
 
@@ -485,7 +553,7 @@ read 65
      -1L
      [0..4]
 
-write 262
+write 502
       ${requestId}
       0
       1
@@ -493,11 +561,11 @@ write 262
       1                                 # partitions
       1                                 # partition
       0s                                # no error
-      5L                                # high water mark
+      7L                                # high water mark
       -1L                               # last stable offset
       -1L                               # no log start offset
       -1                                # no aborted transaction count
-      202                               # record set size
+      442                               # record set size
 
 write await SENT_MESSAGE_A3
 write 3L                                # first offset
@@ -557,3 +625,76 @@ write 4L                                # first offset
         "value2"
 write flush
 write notify SENT_MESSAGE_B4
+
+write await SENT_MESSAGE_A5
+write 5L                                 # first offset
+      93                                 # length
+      0x00
+      [0x02]
+      0x4e8723aa
+      0s
+      0                                  # last offset delta
+      ${newTimestamp}                       # first timestamp
+      ${newTimestamp}                       # last timestamp
+      -1L
+      -1s
+      -1
+      1                                  # records
+      ${kafka:varint(43)}
+      [0x00]
+      ${kafka:varint(0)}
+      ${kafka:varint(0)}
+      ${kafka:varint(-1)}                 # key
+      ${kafka:varint(16)}                # value
+      "Hello, world #B5"
+      ${kafka:varint(2)}                 # headers
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(3)}                   # value
+        "one"
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(0)}                   # value (empty)
+write flush
+write notify SENT_MESSAGE_B5
+
+write await SENT_MESSAGE_A6
+write 6L                                 # first offset
+      123                                # length
+      0x00
+      [0x02]
+      0x4e8723aa
+      0s
+      0                                  # last offset delta
+      ${newTimestamp}                       # first timestamp
+      ${newTimestamp}                       # last timestamp
+      -1L
+      -1s
+      -1
+      1                                  # records
+      ${kafka:varint(73)}
+      [0x00]
+      ${kafka:varint(0)}
+      ${kafka:varint(0)}
+      ${kafka:varint(-1)}                 # key
+      ${kafka:varint(16)}                # value
+      "Hello, world #B6"
+      ${kafka:varint(4)}                 # headers
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(3)}                   # value
+        "one"
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(3)}                   # value
+        "two"
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(5)}                   # value
+        "three"
+        ${kafka:varint(7)}                   # key
+        "header3"
+        ${kafka:varint(4)}                   # value
+        "four"
+write flush
+write notify SENT_MESSAGE_B6
