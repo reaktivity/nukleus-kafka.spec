@@ -281,7 +281,7 @@ read 65
      -1L
      [0..4]
 
-write 501
+write 502
       ${requestId}
       0
       1
@@ -293,7 +293,7 @@ write 501
       -1L                               # last stable offset
       -1L                               # no log start offset
       -1                                # no aborted transaction count
-      441                               # record set size
+      442                               # record set size
 
 write await SENT_MESSAGE_B2
 write 3L                                # first offset
@@ -389,7 +389,7 @@ write notify SENT_MESSAGE_A5
 
 write await SENT_MESSAGE_B5
 write 6L                                 # first offset
-      116                                # length
+      117                                # length
       0x00
       [0x02]
       0x4e8723aa
@@ -553,7 +553,7 @@ read 65
      -1L
      [0..4]
 
-write 502
+write 503
       ${requestId}
       0
       1
@@ -565,7 +565,7 @@ write 502
       -1L                               # last stable offset
       -1L                               # no log start offset
       -1                                # no aborted transaction count
-      442                               # record set size
+      443                               # record set size
 
 write await SENT_MESSAGE_A3
 write 3L                                # first offset
@@ -660,7 +660,7 @@ write notify SENT_MESSAGE_B5
 
 write await SENT_MESSAGE_A6
 write 6L                                 # first offset
-      123                                # length
+      124                                # length
       0x00
       [0x02]
       0x4e8723aa

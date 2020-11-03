@@ -286,7 +286,7 @@ write 65                                # size
       -1L
       ${partitionBytesMax}
 
-read 501
+read 502
      ${newRequestId}
      [0..4]
      1
@@ -298,7 +298,7 @@ read 501
      -1L                                # last stable offset
      -1L                                # no log start offset
      -1                                 # no aborted transaction count
-     441                                # record set size
+     442                                # record set size
      3L                                 # first offset
      91                                 # length
      0x00
@@ -380,7 +380,7 @@ read 501
        ${kafka:varint(3)}                   # value
        "one"
      6L                                 # first offset
-     116                                # length
+     117                                # length
      0x00
      [0x02]
      0x4e8723aa
@@ -536,7 +536,7 @@ write 65                                # size
       -1L
       ${partitionBytesMax}
 
-read 502
+read 503
      ${newRequestId}
      [0..4]
      1
@@ -548,7 +548,7 @@ read 502
      -1L                                # last stable offset
      -1L                                # no log start offset
      -1                                 # no aborted transaction count
-     442                                # record set size
+     443                                # record set size
      3L                                 # first offset
      87                                 # length
      0x00
@@ -629,7 +629,7 @@ read 502
        "header3"
        ${kafka:varint(0)}                   # value (empty)
      6L                                 # first offset
-     123                                # length
+     124                                # length
      0x00
      [0x02]
      0x4e8723aa
