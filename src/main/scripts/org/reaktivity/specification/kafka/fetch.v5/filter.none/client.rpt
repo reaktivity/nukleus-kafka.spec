@@ -167,7 +167,7 @@ write 65                                # size
       -1L
       ${partitionBytesMax}
 
-read 210
+read 414
      ${newRequestId}
      [0..4]
      1
@@ -175,13 +175,13 @@ read 210
      1                                  # partitions
      0                                  # partition
      0s                                 # no error
-     5L                                 # high water mark
+     9L                                 # high water mark
      -1L                                # last stable offset
      -1L                                # no log start offset
      -1                                 # no aborted transaction count
-     150                                # record set size
+     354                                # record set size
      3L                                 # first offset
-     138                                # length
+     342                                # length
      0x00
      [0x02]
      0x4e8723aa
@@ -192,7 +192,7 @@ read 210
      -1L
      -1s
      -1
-     2                                  # records
+     6                                  # records
      ${kafka:varint(37)}
      [0x00]
      ${kafka:varint(0)}                 # timestamp delta
@@ -222,3 +222,76 @@ read 210
        "header2"
        ${kafka:varint(6)}                   # value
        "value2"
+     ${kafka:varint(30)}
+     [0x00]
+     ${kafka:varint(0)}                 # timestamp delta
+     ${kafka:varint(2)}                 # offset delta
+     ${kafka:varint(-1)}                # key
+     ${kafka:varint(12)}                # value
+     "Hello, world"
+     ${kafka:varint(1)}                 # headers
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "one"
+     ${kafka:varint(39)}
+     [0x00]
+     ${kafka:varint(0)}                 # timestamp delta
+     ${kafka:varint(3)}                 # offset delta
+     ${kafka:varint(-1)}                # key
+     ${kafka:varint(12)}                # value
+     "Hello, world"
+     ${kafka:varint(2)}                 # headers
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "one"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(0)}                   # value (empty)
+     ${kafka:varint(69)}
+     [0x00]
+     ${kafka:varint(0)}                 # timestamp delta
+     ${kafka:varint(4)}                 # offset delta
+     ${kafka:varint(-1)}                # key
+     ${kafka:varint(12)}                # value
+     "Hello, world"
+     ${kafka:varint(4)}                 # headers
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "one"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "two"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(5)}                   # value
+       "three"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(4)}                   # value
+       "four"
+     ${kafka:varint(62)}
+     [0x00]
+     ${kafka:varint(0)}                 # timestamp delta
+     ${kafka:varint(5)}                 # offset delta
+     ${kafka:varint(-1)}                # key
+     ${kafka:varint(12)}                # value
+     "Hello, world"
+     ${kafka:varint(4)}                 # headers
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "one"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(0)}                   # value (empty)
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(5)}                   # value
+       "three"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(0)}                   # value (empty)

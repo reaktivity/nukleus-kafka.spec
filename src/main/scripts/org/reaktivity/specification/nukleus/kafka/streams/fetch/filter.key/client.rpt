@@ -87,7 +87,7 @@ read notify RECEIVED_MESSAGE_2
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 3, 4)
+                                 .partition(0, 3, 8)
                                  .key("key1")
                                  .build()
                              .build()}

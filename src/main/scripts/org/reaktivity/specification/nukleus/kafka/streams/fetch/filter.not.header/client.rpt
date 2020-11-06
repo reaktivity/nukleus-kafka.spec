@@ -87,8 +87,17 @@ read notify RECEIVED_MESSAGE_2
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 3, 4)
+                                 .partition(0, 3, 8)
                                  .header("header1", "value1")
+                                 .build()
+                             .build()}
+read "Hello, world"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 5, 8)
+                                 .header("header3", "one")
                                  .build()
                              .build()}
 read "Hello, world"

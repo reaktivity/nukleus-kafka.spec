@@ -591,4 +591,48 @@ public class FetchIT
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.headers.one/client",
+        "${scripts}/filter.headers.one/server"})
+    public void shouldReceiveMessagesWithHeadersOneFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.headers.one.empty/client",
+        "${scripts}/filter.headers.one.empty/server"})
+    public void shouldReceiveMessagesWithHeadersOneEmptyFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.headers.many/client",
+        "${scripts}/filter.headers.many/server"})
+    public void shouldReceiveMessagesWithHeadersManyFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/filter.headers.many.empty/client",
+        "${scripts}/filter.headers.many.empty/server"})
+    public void shouldReceiveMessagesWithHeadersManyEmptyFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
 }
