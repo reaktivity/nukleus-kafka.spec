@@ -50,6 +50,6 @@ write "Hello, world #A1"
 
 write flush
 
-read closed
-
 write close
+
+read closed

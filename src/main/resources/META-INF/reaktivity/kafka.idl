@@ -38,14 +38,16 @@ scope kafka
     {
         KEY (0),
         HEADER (1),
-        AGE (2)
+        NOT (2),
+        HEADERS (3)
     }
 
     union KafkaCondition switch (uint8)
     {
         case 0: kafka::KafkaKey key;
         case 1: kafka::KafkaHeader header;
-        case 2: kafka::KafkaAge age;
+        case 2: kafka::KafkaNot not;
+        case 3: kafka::KafkaHeaders headers;
     }
 
     struct KafkaFilter
@@ -67,10 +69,40 @@ scope kafka
         octets[valueLen] value = null;
     }
 
-    enum KafkaAge
+    struct KafkaNot
     {
-        LIVE,
-        HISTORICAL
+        KafkaCondition condition;
+    }
+
+    struct KafkaValue
+    {
+        varint32 length;
+        octets[length] value = null;
+    }
+
+    enum KafkaSkip (uint8)
+    {
+        SKIP (0),
+        SKIP_MANY (1)
+    }
+
+    enum KafkaValueMatchType (uint8)
+    {
+        VALUE (0),
+        SKIP (1)
+    }
+
+    union KafkaValueMatch switch (uint8)
+    {
+        case 0: kafka::KafkaValue value;
+        case 1: kafka::KafkaSkip skip;
+    }
+
+    struct KafkaHeaders
+    {
+        varint32 nameLen;
+        octets[nameLen] name;  // UTF-8
+        KafkaValueMatch[] values;
     }
 
     enum KafkaDeltaType

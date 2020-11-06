@@ -32,17 +32,21 @@ import org.kaazing.k3po.lang.el.BytesMatcher;
 import org.kaazing.k3po.lang.el.Function;
 import org.kaazing.k3po.lang.el.spi.FunctionMapperSpi;
 import org.reaktivity.specification.kafka.internal.types.Array32FW;
-import org.reaktivity.specification.kafka.internal.types.KafkaAge;
-import org.reaktivity.specification.kafka.internal.types.KafkaAgeFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaCapabilities;
 import org.reaktivity.specification.kafka.internal.types.KafkaConditionFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaDeltaType;
 import org.reaktivity.specification.kafka.internal.types.KafkaFilterFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaHeaderFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaHeadersFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaKeyFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaNotFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaOffsetType;
+import org.reaktivity.specification.kafka.internal.types.KafkaSkip;
+import org.reaktivity.specification.kafka.internal.types.KafkaSkipFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaValueFW;
+import org.reaktivity.specification.kafka.internal.types.KafkaValueMatchFW;
 import org.reaktivity.specification.kafka.internal.types.OctetsFW;
 import org.reaktivity.specification.kafka.internal.types.control.KafkaRouteExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaApi;
@@ -279,6 +283,101 @@ public final class KafkaFunctions
         }
     }
 
+    public abstract static class KafkaHeadersBuilder<T>
+    {
+        private final KafkaHeadersFW.Builder headersRW = new KafkaHeadersFW.Builder();
+        private final DirectBuffer nameRO = new UnsafeBuffer(0, 0);
+        private final DirectBuffer valueRO = new UnsafeBuffer(0, 0);
+
+        private KafkaHeadersBuilder(
+            String name)
+        {
+            MutableDirectBuffer buffer = new UnsafeBuffer(new byte[1024]);
+            headersRW.wrap(buffer, 0, buffer.capacity());
+            nameRO.wrap(name.getBytes(UTF_8));
+
+            headersRW.nameLen(nameRO.capacity())
+                     .name(nameRO, 0, nameRO.capacity());
+        }
+
+        public KafkaHeadersBuilder<T> sequence(
+            String... values)
+        {
+            for (String value : values)
+            {
+                valueRO.wrap(value.getBytes(UTF_8));
+                headersRW.valuesItem(vi -> vi.value(vb -> vb.length(valueRO.capacity())
+                                                            .value(valueRO, 0, valueRO.capacity())));
+            }
+            return this;
+        }
+
+        public KafkaHeadersBuilder<T> skip(
+            int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                headersRW.valuesItem(vi -> vi.skip(sb -> sb.set(KafkaSkip.SKIP)));
+            }
+            return this;
+        }
+
+        public KafkaHeadersBuilder<T> skipMany()
+        {
+            headersRW.valuesItem(vi -> vi.skip(sb -> sb.set(KafkaSkip.SKIP_MANY)));
+            return this;
+        }
+
+        public T build()
+        {
+            final KafkaHeadersFW headers = headersRW.build();
+            return build(headers);
+        }
+
+        protected abstract T build(
+            KafkaHeadersFW headers);
+
+
+        protected void set(
+            KafkaConditionFW.Builder builder,
+            KafkaHeadersFW headers)
+        {
+            final OctetsFW name = headers.name();
+            final int length = headers.nameLen();
+            final Array32FW<KafkaValueMatchFW> values = headers.values();
+            builder.headers(hb -> set(hb, name, length, values));
+        }
+
+        private void set(
+            KafkaHeadersFW.Builder builder,
+            OctetsFW name,
+            int length,
+            Array32FW<KafkaValueMatchFW> values)
+        {
+            builder.nameLen(length)
+                   .name(name);
+            values.forEach(v -> builder.valuesItem(vb -> set(vb, v)));
+        }
+
+        private void set(
+            KafkaValueMatchFW.Builder builder,
+            KafkaValueMatchFW valueMatch)
+        {
+            switch (valueMatch.kind())
+            {
+            case KafkaValueMatchFW.KIND_VALUE:
+                final KafkaValueFW value = valueMatch.value();
+                builder.value(vb -> vb.length(value.length())
+                                      .value(value.value()));
+                break;
+            case KafkaValueMatchFW.KIND_SKIP:
+                final KafkaSkipFW skip = valueMatch.skip();
+                builder.skip(s -> s.set(skip.get()));
+                break;
+            }
+        }
+    }
+
     public abstract static class KafkaFilterBuilder<T>
     {
         private final KafkaFilterFW.Builder filterRW = new KafkaFilterFW.Builder();
@@ -288,8 +387,8 @@ public final class KafkaFunctions
 
         private KafkaFilterBuilder()
         {
-            MutableDirectBuffer buffer = new UnsafeBuffer(new byte[1024]);
-            filterRW.wrap(buffer, 0, buffer.capacity());
+            MutableDirectBuffer filterBuffer = new UnsafeBuffer(new byte[1024]);
+            filterRW.wrap(filterBuffer, 0, filterBuffer.capacity());
         }
 
         public KafkaFilterBuilder<T> key(
@@ -333,10 +432,60 @@ public final class KafkaFunctions
             return this;
         }
 
-        public KafkaFilterBuilder<T> age(
-            String age)
+        public KafkaHeadersBuilder<KafkaFilterBuilder<T>> headers(
+            String name)
         {
-            filterRW.conditionsItem(c -> c.age(a -> a.set(KafkaAge.valueOf(age))));
+            return new KafkaHeadersBuilder<>(name)
+            {
+                @Override
+                protected KafkaFilterBuilder<T> build(
+                    KafkaHeadersFW headers)
+                {
+                    filterRW.conditionsItem(ci -> set(ci, headers));
+                    return KafkaFilterBuilder.this;
+                }
+            };
+        }
+
+        public KafkaFilterBuilder<T> keyNot(
+            String key)
+        {
+            if (key != null)
+            {
+                keyRO.wrap(key.getBytes(UTF_8));
+                filterRW.conditionsItem(i -> i.not(n -> n.condition(c -> c.key(k -> k.length(keyRO.capacity())
+                                                                                     .value(keyRO, 0, keyRO.capacity())))));
+            }
+            else
+            {
+                filterRW.conditionsItem(i -> i.not(n -> n.condition(c -> c.key(k -> k.length(-1)
+                                                                                     .value((OctetsFW) null)))));
+            }
+            return this;
+        }
+
+        public KafkaFilterBuilder<T> headerNot(
+            String name,
+            String value)
+        {
+            if (value == null)
+            {
+                nameRO.wrap(name.getBytes(UTF_8));
+                filterRW.conditionsItem(i -> i.not(n -> n.condition(c -> c.header(h -> h.nameLen(nameRO.capacity())
+                                                                                        .name(nameRO, 0, nameRO.capacity())
+                                                                                        .valueLen(-1)
+                                                                                        .value((OctetsFW) null)))));
+            }
+            else
+            {
+                nameRO.wrap(name.getBytes(UTF_8));
+                valueRO.wrap(value.getBytes(UTF_8));
+                filterRW.conditionsItem(i -> i.not(n -> n.condition(c -> c.header(h ->
+                                                                            h.nameLen(nameRO.capacity())
+                                                                              .name(nameRO, 0, nameRO.capacity())
+                                                                              .valueLen(valueRO.capacity())
+                                                                              .value(valueRO, 0, valueRO.capacity())))));
+            }
             return this;
         }
 
@@ -382,9 +531,32 @@ public final class KafkaFunctions
                                        .valueLen(header.valueLen())
                                        .value(header.value()));
                 break;
-            case KafkaConditionFW.KIND_AGE:
-                final KafkaAgeFW age = condition.age();
-                builder.age(ab -> ab.set(age));
+            case KafkaConditionFW.KIND_NOT:
+                final KafkaNotFW not = condition.not();
+                final KafkaConditionFW notCondition = not.condition();
+
+                switch (notCondition.kind())
+                {
+                case KafkaConditionFW.KIND_KEY:
+                    final KafkaKeyFW notKey = notCondition.key();
+                    builder.not(n -> n.condition(c -> c.key(kb -> kb.length(notKey.length())
+                                                                    .value(notKey.value()))));
+                    break;
+                case KafkaConditionFW.KIND_HEADER:
+                    final KafkaHeaderFW notHeader = notCondition.header();
+                    builder.not(n -> n.condition(c -> c.header(hb -> hb.nameLen(notHeader.nameLen())
+                                                                       .name(notHeader.name())
+                                                                       .valueLen(notHeader.valueLen())
+                                                                       .value(notHeader.value()))));
+                    break;
+                }
+                break;
+            case KafkaConditionFW.KIND_HEADERS:
+                final KafkaHeadersFW headers = condition.headers();
+                final Array32FW<KafkaValueMatchFW> values = headers.values();
+                builder.headers(hb -> hb.nameLen(headers.nameLen())
+                                        .name(headers.name())
+                                        .values(values));
                 break;
             }
         }

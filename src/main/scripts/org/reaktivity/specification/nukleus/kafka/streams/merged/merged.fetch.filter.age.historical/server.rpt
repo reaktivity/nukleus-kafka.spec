@@ -30,11 +30,8 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .merged()
                                   .capabilities("FETCH_ONLY")
                                   .topic("test")
-                                  .partition(0, 1)
-                                  .partition(1, 1)
-                                  .filter()
-                                      .age("HISTORICAL")
-                                      .build()
+                                  .partition(0, 1, -2)
+                                  .partition(1, 1, -2)
                                   .build()
                               .build()}
 

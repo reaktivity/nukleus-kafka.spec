@@ -18,79 +18,66 @@ property clientAddress "nukleus://streams/kafka#0"
 
 connect await ROUTED_CLIENT
         ${clientAddress}
-    option nukleus:window 8192
+    option nukleus:window 16
     option nukleus:transmission "half-duplex"
 
 write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
-                               .meta()
-                                   .topic("test")
-                                   .build()
-                               .build()}
-
-connected
-
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .meta()
-                                  .topic("test")
-                                  .build()
-                              .build()}
-
-read nukleus:data.ext ${kafka:dataEx()
-                             .typeId(nukleus:id("kafka"))
-                             .meta()
-                                 .partition(0, 177)
-                                 .build()
-                             .build()}
-
-read notify ROUTED_BROKER_CLIENT
-
-connect await ROUTED_BROKER_CLIENT
-        ${clientAddress}
-    option nukleus:window 8192
-    option nukleus:transmission "half-duplex"
-    option nukleus:affinity 0xb1
-
-write nukleus:begin.ext ${kafka:beginEx()
-                               .typeId(nukleus:id("kafka"))
-                               .fetch()
+                               .merged()
+                                   .capabilities("FETCH_ONLY")
                                    .topic("test")
                                    .partition(0, 1)
+                                   .partition(1, 1)
                                    .filter()
-                                       .age("LIVE")
+                                       .headerNot("header2", "value2")
                                        .build()
                                    .build()
                                .build()}
 
 connected
 
-read nukleus:begin.ext ${kafka:beginEx()
-                              .typeId(nukleus:id("kafka"))
-                              .fetch()
-                                  .topic("test")
-                                  .partition(0, 1, 2)
-                                  .build()
-                              .build()}
-
-read notify RECEIVED_MESSAGE_2
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .merged()
+                                 .partition(0, 2, 2)
+                                 .progress(0, 3)
+                                 .progress(1, 1)
+                                 .header("header1", "value1")
+                                 .build()
+                             .build()}
+read "Hello, world #A2"
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
-                             .fetch()
+                             .merged()
+                                 .key("key1")
                                  .partition(0, 3, 4)
+                                 .progress(0, 4)
+                                 .progress(1, 2)
+                                 .header("header1", "value1")
+                                 .build()
+                             .build()}
+read "Hello, world #A3"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .merged()
+                                 .partition(1, 2, 2)
+                                 .progress(0, 4)
+                                 .progress(1, 3)
                                  .key("key1")
                                  .header("header1", "value1")
                                  .build()
                              .build()}
-read "Hello, world"
+read "Hello, world #B2"
 
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
-                             .fetch()
-                                 .partition(0, 4, 4)
+                             .merged()
+                                 .partition(1, 3, 4)
+                                 .progress(0, 5)
+                                 .progress(1, 4)
                                  .header("header1", "value1")
-                                 .header("header2", "value2")
                                  .build()
                              .build()}
-read "Hello, world"
+read "Hello, world #B3"

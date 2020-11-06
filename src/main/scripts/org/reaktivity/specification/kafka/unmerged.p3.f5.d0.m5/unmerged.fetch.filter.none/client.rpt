@@ -286,7 +286,7 @@ write 65                                # size
       -1L
       ${partitionBytesMax}
 
-read 277
+read 502
      ${newRequestId}
      [0..4]
      1
@@ -294,11 +294,11 @@ read 277
      1                                  # partitions
      0                                  # partition
      0s                                 # no error
-     5L                                 # high water mark
+     7L                                 # high water mark
      -1L                                # last stable offset
      -1L                                # no log start offset
      -1                                 # no aborted transaction count
-     217                                # record set size
+     442                                # record set size
      3L                                 # first offset
      91                                 # length
      0x00
@@ -354,6 +354,66 @@ read 277
        "header2"
        ${kafka:varint(6)}                   # value
        "value2"
+     5L                                 # first offset
+     84                                 # length
+     0x00
+     [0x02]
+     0x4e8723aa
+     0s
+     0                                  # last offset delta
+     (long:timestamp)                   # first timestamp
+     ${timestamp}                       # last timestamp
+     -1L
+     -1s
+     -1
+     1                                  # records
+     ${kafka:varint(34)}
+     [0x00]
+     ${kafka:varint(0)}
+     ${kafka:varint(0)}
+     ${kafka:varint(-1)}                 # key
+     ${kafka:varint(16)}                # value
+     "Hello, world #A5"
+     ${kafka:varint(1)}                 # headers
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "one"
+     6L                                 # first offset
+     117                                # length
+     0x00
+     [0x02]
+     0x4e8723aa
+     0s
+     0                                  # last offset delta
+     (long:timestamp)                   # first timestamp
+     ${timestamp}                       # last timestamp
+     -1L
+     -1s
+     -1
+     1                                  # records
+     ${kafka:varint(66)}
+     [0x00]
+     ${kafka:varint(0)}
+     ${kafka:varint(0)}
+     ${kafka:varint(-1)}                 # key
+     ${kafka:varint(16)}                # value
+     "Hello, world #A6"
+     ${kafka:varint(4)}                 # headers
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "one"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(0)}                   # value (empty)
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(5)}                   # value
+       "three"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(0)}                   # value (empty)
 
 connect await PARTITION_COUNT_2
         ${clientAddress}
@@ -476,7 +536,7 @@ write 65                                # size
       -1L
       ${partitionBytesMax}
 
-read 262
+read 503
      ${newRequestId}
      [0..4]
      1
@@ -484,11 +544,11 @@ read 262
      1                                  # partitions
      1                                  # partition
      0s                                 # no error
-     5L                                 # high water mark
+     7L                                 # high water mark
      -1L                                # last stable offset
      -1L                                # no log start offset
      -1                                 # no aborted transaction count
-     202                                # record set size
+     443                                # record set size
      3L                                 # first offset
      87                                 # length
      0x00
@@ -540,3 +600,68 @@ read 262
        "header2"
        ${kafka:varint(6)}                   # value
        "value2"
+     5L                                 # first offset
+     93                                 # length
+     0x00
+     [0x02]
+     0x4e8723aa
+     0s
+     0                                  # last offset delta
+     (long:timestamp)                   # first timestamp
+     ${timestamp}                       # last timestamp
+     -1L
+     -1s
+     -1
+     1                                  # records
+     ${kafka:varint(43)}
+     [0x00]
+     ${kafka:varint(0)}
+     ${kafka:varint(0)}
+     ${kafka:varint(-1)}                 # key
+     ${kafka:varint(16)}                # value
+     "Hello, world #B5"
+     ${kafka:varint(2)}                 # headers
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "one"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(0)}                   # value (empty)
+     6L                                 # first offset
+     124                                # length
+     0x00
+     [0x02]
+     0x4e8723aa
+     0s
+     0                                  # last offset delta
+     (long:timestamp)                   # first timestamp
+     ${timestamp}                       # last timestamp
+     -1L
+     -1s
+     -1
+     1                                  # records
+     ${kafka:varint(73)}
+     [0x00]
+     ${kafka:varint(0)}
+     ${kafka:varint(0)}
+     ${kafka:varint(-1)}                 # key
+     ${kafka:varint(16)}                # value
+     "Hello, world #B6"
+     ${kafka:varint(4)}                 # headers
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "one"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(3)}                   # value
+       "two"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(5)}                   # value
+       "three"
+       ${kafka:varint(7)}                   # key
+       "header3"
+       ${kafka:varint(4)}                   # value
+       "four"

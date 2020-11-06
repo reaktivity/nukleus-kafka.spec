@@ -94,7 +94,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .merged()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 3, 4)
+                                  .partition(0, 3, 6)
                                   .progress(0, 4)
                                   .progress(1, 3)
                                   .key("key1")
@@ -107,7 +107,7 @@ write flush
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .merged()
-                                  .partition(1, 3, 4)
+                                  .partition(1, 3, 6)
                                   .progress(0, 4)
                                   .progress(1, 4)
                                   .header("header1", "value1")
@@ -120,7 +120,7 @@ write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .merged()
                                   .timestamp(newTimestamp)
-                                  .partition(0, 4, 4)
+                                  .partition(0, 4, 6)
                                   .progress(0, 5)
                                   .progress(1, 4)
                                   .header("header1", "value1")
@@ -133,7 +133,7 @@ write flush
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .merged()
-                                  .partition(1, 4, 4)
+                                  .partition(1, 4, 6)
                                   .progress(0, 5)
                                   .progress(1, 5)
                                   .key("key1")
@@ -141,4 +141,61 @@ write nukleus:data.ext ${kafka:dataEx()
                                   .build()
                               .build()}
 write "Hello, world #B4"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 5, 6)
+                                  .progress(0, 6)
+                                  .progress(1, 5)
+                                  .header("header3", "one")
+                                  .build()
+                              .build()}
+write "Hello, world #A5"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .partition(1, 5, 6)
+                                  .progress(0, 6)
+                                  .progress(1, 6)
+                                  .header("header3", "one")
+                                  .header("header3", "")
+                                  .build()
+                              .build()}
+write "Hello, world #B5"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .timestamp(newTimestamp)
+                                  .partition(0, 6, 6)
+                                  .progress(0, 7)
+                                  .progress(1, 6)
+                                  .header("header3", "one")
+                                  .header("header3", "")
+                                  .header("header3", "three")
+                                  .header("header3", "")
+                                  .build()
+                              .build()}
+write "Hello, world #A6"
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .merged()
+                                  .partition(1, 6, 6)
+                                  .progress(0, 7)
+                                  .progress(1, 7)
+                                  .header("header3", "one")
+                                  .header("header3", "two")
+                                  .header("header3", "three")
+                                  .header("header3", "four")
+                                  .build()
+                              .build()}
+write "Hello, world #B6"
 write flush
