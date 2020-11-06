@@ -430,4 +430,81 @@ public class MergedIT
         k3po.notifyBarrier("ROUTED_CLIENT");
         k3po.finish();
     }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.filter.headers.one/client",
+        "${scripts}/merged.fetch.filter.headers.one/server"})
+    public void shouldFetchMergedMessagesWithHeadersOneFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.filter.headers.one.empty/client",
+        "${scripts}/merged.fetch.filter.headers.one.empty/server"})
+    public void shouldFetchMergedMessagesWithHeadersOneEmptyFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.filter.headers.many/client",
+        "${scripts}/merged.fetch.filter.headers.many/server"})
+    public void shouldFetchMergedMessagesWithHeadersManyFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.filter.headers.many.empty/client",
+        "${scripts}/merged.fetch.filter.headers.many.empty/server"})
+    public void shouldFetchMergedMessagesWithHeadersManyEmptyFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.filter.headers.skip.one/client",
+        "${scripts}/merged.fetch.filter.headers.skip.one/server"})
+    public void shouldFetchMergedMessagesWithHeadersSkipOneFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.filter.headers.skip.two/client",
+        "${scripts}/merged.fetch.filter.headers.skip.two/server"})
+    public void shouldFetchMergedMessagesWithHeadersSkipTwoFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/merged.fetch.filter.headers.skip.many/client",
+        "${scripts}/merged.fetch.filter.headers.skip.many/server"})
+    public void shouldFetchMergedMessagesWithHeadersSkipManyFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
 }

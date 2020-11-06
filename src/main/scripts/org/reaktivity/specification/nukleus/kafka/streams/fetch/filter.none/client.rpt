@@ -94,7 +94,7 @@ read notify RECEIVED_MESSAGE_2
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 3, 4)
+                                 .partition(0, 3, 8)
                                  .key("key1")
                                  .header("header1", "value1")
                                  .build()
@@ -104,9 +104,52 @@ read "Hello, world"
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .fetch()
-                                 .partition(0, 4, 4)
+                                 .partition(0, 4, 8)
                                  .header("header1", "value1")
                                  .header("header2", "value2")
+                                 .build()
+                             .build()}
+read "Hello, world"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 5, 8)
+                                 .header("header3", "one")
+                                 .build()
+                             .build()}
+read "Hello, world"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 6, 8)
+                                 .header("header3", "one")
+                                 .header("header3", "")
+                                 .build()
+                             .build()}
+read "Hello, world"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 7, 8)
+                                 .header("header3", "one")
+                                 .header("header3", "two")
+                                 .header("header3", "three")
+                                 .header("header3", "four")
+                                 .build()
+                             .build()}
+read "Hello, world"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .fetch()
+                                 .partition(0, 8, 8)
+                                 .header("header3", "one")
+                                 .header("header3", "")
+                                 .header("header3", "three")
+                                 .header("header3", "")
                                  .build()
                              .build()}
 read "Hello, world"
