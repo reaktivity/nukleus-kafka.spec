@@ -1429,6 +1429,21 @@ public final class KafkaFunctions
                 return this;
             }
 
+            public KafkaFilterBuilder<KafkaMergedFlushExBuilder> filter()
+            {
+                return new KafkaFilterBuilder<>()
+                {
+
+                    @Override
+                    protected KafkaMergedFlushExBuilder build(
+                        KafkaFilterFW filter)
+                    {
+                        mergedFlushExRW.filtersItem(fb -> set(fb, filter));
+                        return KafkaMergedFlushExBuilder.this;
+                    }
+                };
+            }
+
             public KafkaFlushExBuilder build()
             {
                 final KafkaMergedFlushExFW mergedFlushEx = mergedFlushExRW.build();
