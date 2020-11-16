@@ -142,6 +142,7 @@ scope kafka
         {
             case 255: kafka::stream::KafkaMergedFlushEx merged;
             case 1: kafka::stream::KafkaFetchFlushEx fetch;
+            case 0: kafka::stream::KafkaProduceFlushEx produce;
         }
 
         struct KafkaResetEx extends core::stream::Extension
@@ -226,12 +227,18 @@ scope kafka
             KafkaOffset partition;
         }
 
+        struct KafkaProduceFlushEx
+        {
+            KafkaOffset partition;
+        }
+
         struct KafkaProduceBeginEx
         {
             string8 transaction; // = null;
             int64 producerId = 0;
             string16 topic;
             int32 partitionId;
+            int32 index = 0;
         }
 
         struct KafkaProduceDataEx
