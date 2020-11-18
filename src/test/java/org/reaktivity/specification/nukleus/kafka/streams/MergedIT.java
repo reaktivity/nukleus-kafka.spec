@@ -433,6 +433,17 @@ public class MergedIT
 
     @Test
     @Specification({
+        "${scripts}/merged.fetch.filter.key.and.not.header/client",
+        "${scripts}/merged.fetch.filter.key.and.not.header/server"})
+    public void shouldFetchMergedMessagesWithKeyAndNotHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/merged.fetch.filter.headers.one/client",
         "${scripts}/merged.fetch.filter.headers.one/server"})
     public void shouldFetchMergedMessagesWithHeadersOneFilter() throws Exception
