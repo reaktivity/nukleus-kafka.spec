@@ -270,7 +270,7 @@ scope kafka
             string8 transaction; // = null;
             int64 producerId = 0;
             string16 topic;
-            int32 partitionId;
+            KafkaOffset partition;
             int32 index = 0;
         }
 

@@ -883,11 +883,29 @@ public final class KafkaFunctions
                 return this;
             }
 
-            public KafkaProduceBeginExBuilder partitionId(
+            public KafkaProduceBeginExBuilder partition(
                 int partitionId)
             {
-                ensureTransactionSet();
-                produceBeginExRW.partitionId(partitionId);
+                partition(partitionId, DEFAULT_LATEST_OFFSET, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaProduceBeginExBuilder partition(
+                int partitionId,
+                long offset)
+            {
+                partition(partitionId, offset, DEFAULT_LATEST_OFFSET);
+                return this;
+            }
+
+            public KafkaProduceBeginExBuilder partition(
+                int partitionId,
+                long offset,
+                long latestOffset)
+            {
+                produceBeginExRW.partition(p -> p.partitionId(partitionId)
+                                                 .partitionOffset(offset)
+                                                 .latestOffset(latestOffset));
                 return this;
             }
 
