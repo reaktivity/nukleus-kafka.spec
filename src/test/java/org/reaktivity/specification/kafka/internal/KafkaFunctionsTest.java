@@ -863,6 +863,12 @@ public class KafkaFunctionsTest
                                      .typeId(0x01)
                                      .merged()
                                          .progress(0, 1L)
+                                         .filter()
+                                             .key("match")
+                                             .build()
+                                         .filter()
+                                             .header("name", "value")
+                                             .build()
                                          .build()
                                      .build();
 
@@ -877,6 +883,23 @@ public class KafkaFunctionsTest
 
         assertNotNull(mergedFlushEx.progress()
                 .matchFirst(p -> p.partitionId() == 0 && p.partitionOffset() == 1L));
+
+        final MutableInteger filterCount = new MutableInteger();
+        mergedFlushEx.filters().forEach(f -> filterCount.value++);
+        assertEquals(2, filterCount.value);
+        assertNotNull(mergedFlushEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == KEY.value() &&
+                    "match".equals(c.key()
+                                    .value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
+        assertNotNull(mergedFlushEx.filters()
+                .matchFirst(f -> f.conditions()
+                .matchFirst(c -> c.kind() == HEADER.value() &&
+                    "name".equals(c.header().name()
+                                   .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o))) &&
+                    "value".equals(c.header().value()
+                                    .get((b, o, m) -> b.getStringWithoutLengthUtf8(o, m - o)))) != null));
     }
 
     @Test
