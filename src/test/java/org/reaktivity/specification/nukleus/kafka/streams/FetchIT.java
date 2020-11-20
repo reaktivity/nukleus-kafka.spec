@@ -594,6 +594,17 @@ public class FetchIT
 
     @Test
     @Specification({
+        "${scripts}/filter.key.and.not.header/client",
+        "${scripts}/filter.key.and.not.header/server"})
+    public void shouldFetchMergedMessagesWithKeyAndNotHeaderFilter() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/filter.headers.one/client",
         "${scripts}/filter.headers.one/server"})
     public void shouldReceiveMessagesWithHeadersOneFilter() throws Exception
