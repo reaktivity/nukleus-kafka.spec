@@ -271,7 +271,6 @@ scope kafka
             int64 producerId = 0;
             string16 topic;
             KafkaOffset partition;
-            int32 index = 0;
         }
 
         struct KafkaProduceDataEx
