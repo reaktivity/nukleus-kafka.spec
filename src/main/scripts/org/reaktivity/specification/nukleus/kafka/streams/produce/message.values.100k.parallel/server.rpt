@@ -18,6 +18,7 @@ property serverAddress "nukleus://streams/kafka#0"
 
 accept ${serverAddress}
     option nukleus:window 8192
+    option nukleus:padding 512
     option nukleus:transmission "half-duplex"
 
 accepted
@@ -70,8 +71,39 @@ write nukleus:begin.ext ${kafka:beginEx()
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .produce()
-                                 .header("header1", "value1")
-                                 .header("header2", "value2")
+                                 .deferred(102400 - 7580)
                                  .build()
                              .build()}
-read "Hello, world"
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .produce()
+                                 .build()
+                             .build()}
+read [0..102400]
+
+accepted
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .produce()
+                                  .topic("test")
+                                  .partition(0)
+                                  .build()
+                              .build()}
+
+connected
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .produce()
+                                 .deferred(102400 - 7580)
+                                 .build()
+                             .build()}
+
+read nukleus:data.ext ${kafka:matchDataEx()
+                             .typeId(nukleus:id("kafka"))
+                             .produce()
+                                 .build()
+                             .build()}
+read [0..102400]

@@ -103,7 +103,7 @@ write 10352                             # size
       -1s
       -1
       1                                 # records
-      ${kafka:varint(10247)}
+      ${kafka:varint(10248)}
       [0x00]
       ${kafka:varint(0)}
       ${kafka:varint(0)}
