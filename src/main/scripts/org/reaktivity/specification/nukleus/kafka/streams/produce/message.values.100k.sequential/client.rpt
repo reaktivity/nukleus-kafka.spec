@@ -76,7 +76,7 @@ read nukleus:begin.ext ${kafka:beginEx()
 write nukleus:data.ext ${kafka:dataEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
-                                  .deferred(10240 - 7580)
+                                  .deferred(102400 - 7580)
                                   .timestamp(newTimestamp)
                                   .build()
                               .build()}
@@ -85,5 +85,59 @@ write nukleus:data.ext ${kafka:dataEx()
                               .produce()
                                   .build()
                               .build()}
-write ${kafka:randomBytes(10240)}
+write ${kafka:randomBytes(102400)}
+write flush
+
+connect await ROUTED_BROKER_CLIENT
+        ${clientAddress}
+    option nukleus:window 8192
+    option nukleus:transmission "half-duplex"
+    option nukleus:affinity 0xb1
+
+write nukleus:begin.ext ${kafka:beginEx()
+                               .typeId(nukleus:id("kafka"))
+                               .produce()
+                                   .topic("test")
+                                   .partition(0)
+                                   .build()
+                               .build()}
+
+connected
+
+read nukleus:begin.ext ${kafka:beginEx()
+                              .typeId(nukleus:id("kafka"))
+                              .produce()
+                                  .topic("test")
+                                  .partition(0)
+                                  .build()
+                              .build()}
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .produce()
+                                  .deferred(102400 - 7580)
+                                  .timestamp(newTimestamp)
+                                  .build()
+                              .build()}
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .produce()
+                                  .build()
+                              .build()}
+write ${kafka:randomBytes(102400)}
+write flush
+
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .produce()
+                                  .deferred(102400 - 7580)
+                                  .timestamp(newTimestamp)
+                                  .build()
+                              .build()}
+write nukleus:data.ext ${kafka:dataEx()
+                              .typeId(nukleus:id("kafka"))
+                              .produce()
+                                  .build()
+                              .build()}
+write ${kafka:randomBytes(102400)}
 write flush
