@@ -892,19 +892,19 @@ public final class KafkaFunctions
 
             public KafkaProduceBeginExBuilder partition(
                 int partitionId,
-                long offset)
+                long partitionOffset)
             {
-                partition(partitionId, offset, DEFAULT_LATEST_OFFSET);
+                partition(partitionId, partitionOffset, DEFAULT_LATEST_OFFSET);
                 return this;
             }
 
             public KafkaProduceBeginExBuilder partition(
                 int partitionId,
-                long offset,
+                long partitionOffset,
                 long latestOffset)
             {
                 produceBeginExRW.partition(p -> p.partitionId(partitionId)
-                                                 .partitionOffset(offset)
+                                                 .partitionOffset(partitionOffset)
                                                  .latestOffset(latestOffset));
                 return this;
             }
