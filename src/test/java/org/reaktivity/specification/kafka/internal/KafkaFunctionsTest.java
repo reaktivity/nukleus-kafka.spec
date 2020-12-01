@@ -2347,9 +2347,8 @@ public class KafkaFunctionsTest
                                      .typeId(0x01)
                                      .produce()
                                          .transaction("transaction")
-                                         .producerId(1)
                                          .topic("topic")
-                                         .partitionId(0)
+                                         .partition(1, 0)
                                          .build()
                                      .build();
 
@@ -2360,9 +2359,9 @@ public class KafkaFunctionsTest
 
         final KafkaProduceBeginExFW produceBeginEx = beginEx.produce();
         assertEquals("transaction", produceBeginEx.transaction().asString());
-        assertEquals(1, produceBeginEx.producerId());
+        assertEquals(1, produceBeginEx.partition().partitionId());
         assertEquals("topic", produceBeginEx.topic().asString());
-        assertEquals(0, produceBeginEx.partitionId());
+        assertEquals(0, produceBeginEx.partition().partitionOffset());
     }
 
     @Test

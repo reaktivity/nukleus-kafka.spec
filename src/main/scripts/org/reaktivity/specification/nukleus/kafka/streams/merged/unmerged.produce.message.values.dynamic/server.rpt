@@ -20,7 +20,7 @@ property deltaMillis 0L
 property newTimestamp ${kafka:timestamp() + deltaMillis}
 
 accept ${serverAddress}
-    option nukleus:window 16
+    option nukleus:window 64
     option nukleus:transmission "half-duplex"
 
 accepted
@@ -117,7 +117,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
                                   .topic("test")
-                                  .partitionId(0)
+                                  .partition(0)
                                   .build()
                               .build()}
 
@@ -127,7 +127,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .produce()
                                    .topic("test")
-                                   .partitionId(0)
+                                   .partition(0)
                                    .build()
                                .build()}
 write flush
@@ -154,7 +154,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
                                   .topic("test")
-                                  .partitionId(1)
+                                  .partition(1)
                                   .build()
                               .build()}
 
@@ -164,7 +164,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .produce()
                                    .topic("test")
-                                   .partitionId(1)
+                                   .partition(1)
                                    .build()
                                .build()}
 write flush
@@ -191,7 +191,7 @@ read nukleus:begin.ext ${kafka:beginEx()
                               .typeId(nukleus:id("kafka"))
                               .produce()
                                   .topic("test")
-                                  .partitionId(2)
+                                  .partition(2)
                                   .build()
                               .build()}
 
@@ -201,7 +201,7 @@ write nukleus:begin.ext ${kafka:beginEx()
                                .typeId(nukleus:id("kafka"))
                                .produce()
                                    .topic("test")
-                                   .partitionId(2)
+                                   .partition(2)
                                    .build()
                                .build()}
 write flush
