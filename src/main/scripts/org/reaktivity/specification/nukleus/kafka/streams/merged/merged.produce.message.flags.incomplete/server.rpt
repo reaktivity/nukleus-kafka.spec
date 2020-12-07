@@ -35,6 +35,7 @@ connected
 read nukleus:data.ext ${kafka:matchDataEx()
                              .typeId(nukleus:id("kafka"))
                              .merged()
+                                 .deferred(28)
                                  .partition(-1, -1)
                                  .build()
                              .build()}
