@@ -228,13 +228,16 @@ connect await PARTITION_COUNT_2
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginEx()
-                             .typeId(nukleus:id("tcp"))
-                             .localAddress("0.0.0.0")
-                             .localPort(0)
-                             .remoteHost("broker1.example.com")
-                             .remotePort(9092)
-                             .build()}
+write nukleus:begin.ext ${proxy:beginEx()
+                               .typeId(nukleus:id("proxy"))
+                               .addressInet()
+                                 .protocol("stream")
+                                 .source("0.0.0.0")
+                                 .destination("broker1.example.com")
+                                 .sourcePort(0)
+                                 .destinationPort(9092)
+                                 .build()
+                               .build()}
 
 connected
 
@@ -318,13 +321,16 @@ connect await PARTITION_COUNT_2
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginEx()
-                             .typeId(nukleus:id("tcp"))
-                             .localAddress("0.0.0.0")
-                             .localPort(0)
-                             .remoteHost("broker2.example.com")
-                             .remotePort(9092)
-                             .build()}
+write nukleus:begin.ext ${proxy:beginEx()
+                               .typeId(nukleus:id("proxy"))
+                               .addressInet()
+                                 .protocol("stream")
+                                 .source("0.0.0.0")
+                                 .destination("broker2.example.com")
+                                 .sourcePort(0)
+                                 .destinationPort(9092)
+                                 .build()
+                               .build()}
 
 connected
 
@@ -408,13 +414,16 @@ connect await PARTITION_COUNT_3
   option nukleus:transmission "duplex"
   option nukleus:byteorder "network"
 
-write nukleus:begin.ext ${tcp:beginEx()
-                             .typeId(nukleus:id("tcp"))
-                             .localAddress("0.0.0.0")
-                             .localPort(0)
-                             .remoteHost("broker3.example.com")
-                             .remotePort(9092)
-                             .build()}
+write nukleus:begin.ext ${proxy:beginEx()
+                               .typeId(nukleus:id("proxy"))
+                               .addressInet()
+                                 .protocol("stream")
+                                 .source("0.0.0.0")
+                                 .destination("broker3.example.com")
+                                 .sourcePort(0)
+                                 .destinationPort(9092)
+                                 .build()
+                               .build()}
 
 connected
 
