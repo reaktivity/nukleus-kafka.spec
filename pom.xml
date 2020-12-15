@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.reaktivity</groupId>
   <artifactId>nukleus-kafka.spec</artifactId>
-  <version>0.166</version>
+  <version>0.167</version>
   <name>Kafka Nukleus Specification</name>
   <description>Kafka Nukleus Specification</description>
   <url>https://github.com/reaktivity/nukleus-kafka.spec</url>
@@ -141,10 +141,7 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>3.1.0</version>
         <configuration>
-          <sourceDirectories>
-            <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-            <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
-          </sourceDirectories>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
         </configuration>
         <executions>
           <execution>
@@ -170,7 +167,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.5</version>
+        <version>0.8.6</version>
         <configuration>
           <excludes>
             <exclude>org/reaktivity/specification/kafka/internal/types/**/*.class</exclude>
