@@ -214,6 +214,17 @@ public class MergedIT
 
     @Test
     @Specification({
+        "${scripts}/merged.produce.message.flags.incomplete/client",
+        "${scripts}/merged.produce.message.flags.incomplete/server"})
+    public void shouldProduceMergedMessageWithIncompleteFlags() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
         "${scripts}/merged.fetch.server.sent.close/client",
         "${scripts}/merged.fetch.server.sent.close/server"})
     public void shouldMergedFetchServerSentClose() throws Exception
@@ -345,6 +356,17 @@ public class MergedIT
         "${scripts}/unmerged.produce.message.values.dynamic/client",
         "${scripts}/unmerged.produce.message.values.dynamic/server"})
     public void shouldProduceUnmergedMessageValuesDynamic() throws Exception
+    {
+        k3po.start();
+        k3po.notifyBarrier("ROUTED_CLIENT");
+        k3po.finish();
+    }
+
+    @Test
+    @Specification({
+        "${scripts}/unmerged.produce.message.flags.incomplete/client",
+        "${scripts}/unmerged.produce.message.flags.incomplete/server"})
+    public void shouldProduceUnmergedMessageFlagsIncomplete() throws Exception
     {
         k3po.start();
         k3po.notifyBarrier("ROUTED_CLIENT");
