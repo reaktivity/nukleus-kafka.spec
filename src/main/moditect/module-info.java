@@ -15,5 +15,5 @@
  */
 open module org.reaktivity.specification.nukleus.kafka
 {
-    requires transitive org.reaktivity.specification.nukleus;
+    requires transitive org.reaktivity.specification.nukleus.proxy;
 }
