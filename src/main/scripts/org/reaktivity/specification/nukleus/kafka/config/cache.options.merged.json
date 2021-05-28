@@ -1,0 +1,48 @@
+{
+    "bindings":
+    [
+        {
+            "entry": "app#0",
+            "type" : "kafka",
+            "kind": "cache_client",
+            "options":
+            {
+                "merged":
+                [
+                    {
+                        "topic": "test"
+                    }
+                ]
+            },
+            "routes":
+            [
+                {
+                    "exit": "cache#0",
+                    "when":
+                    [
+                        {
+                            "topic": "test"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "entry": "cache#0",
+            "type" : "kafka",
+            "kind": "cache_server",
+            "routes":
+            [
+                {
+                    "exit": "app#1",
+                    "when":
+                    [
+                        {
+                            "topic": "test"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
