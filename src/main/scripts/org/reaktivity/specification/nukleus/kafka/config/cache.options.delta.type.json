@@ -24,11 +24,11 @@
             "kind": "cache_server",
             "options":
             {
-                "bootstrap":
+                "topics":
                 [
                     {
-                        "topic": "test",
-                        "deltas": "json_patch"
+                        "name": "test",
+                        "deltaType": "json_patch"
                     }
                 ]
             },

@@ -26,9 +26,7 @@
             {
                 "bootstrap":
                 [
-                    {
-                        "topic": "test"
-                    }
+                    "test"
                 ]
             },
             "routes":

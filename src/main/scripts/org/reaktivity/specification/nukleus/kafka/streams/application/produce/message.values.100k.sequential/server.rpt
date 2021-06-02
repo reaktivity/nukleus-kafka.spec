@@ -14,7 +14,9 @@
 # under the License.
 #
 
-accept "nukleus://streams/app#0"
+property serverAddress "nukleus://streams/app#0"
+
+accept ${serverAddress}
     option nukleus:window 8192
     option nukleus:padding 512
     option nukleus:transmission "half-duplex"

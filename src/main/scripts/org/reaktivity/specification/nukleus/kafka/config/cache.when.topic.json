@@ -2,7 +2,7 @@
     "bindings":
     [
         {
-            "entry": "app#1",
+            "entry": "app#0",
             "type" : "kafka",
             "kind": "cache_client",
             "routes":
@@ -25,7 +25,7 @@
             "routes":
             [
                 {
-                    "exit": "app#0",
+                    "exit": "app#1",
                     "when":
                     [
                         {

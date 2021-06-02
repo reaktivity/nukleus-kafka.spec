@@ -9,9 +9,7 @@
             {
                 "merged":
                 [
-                    {
-                        "topic": "test"
-                    }
+                    "test"
                 ]
             },
             "exit": "net#0"

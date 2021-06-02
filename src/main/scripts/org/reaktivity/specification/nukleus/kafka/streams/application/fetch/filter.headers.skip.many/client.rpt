@@ -43,7 +43,8 @@ read nukleus:data.ext ${kafka:dataEx()
 
 read notify ROUTED_BROKER_CLIENT
 
-connect "nukleus://streams/app#0"
+connect await ROUTED_BROKER_CLIENT
+        "nukleus://streams/app#0"
     option nukleus:window 8192
     option nukleus:transmission "half-duplex"
     option nukleus:affinity 0xb1
