@@ -48,7 +48,6 @@ import org.reaktivity.specification.kafka.internal.types.KafkaSkipFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaValueFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaValueMatchFW;
 import org.reaktivity.specification.kafka.internal.types.OctetsFW;
-import org.reaktivity.specification.kafka.internal.types.control.KafkaRouteExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaApi;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaBeginExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaBootstrapBeginExFW;
@@ -69,12 +68,6 @@ import org.reaktivity.specification.kafka.internal.types.stream.KafkaProduceData
 
 public final class KafkaFunctions
 {
-    @Function
-    public static KafkaRouteExBuilder routeEx()
-    {
-        return new KafkaRouteExBuilder();
-    }
-
     @Function
     public static KafkaBeginExBuilder beginEx()
     {
@@ -240,46 +233,6 @@ public final class KafkaFunctions
                 (byte) ((bits >> 56) & 0x7f | 0x80),
                 (byte) ((bits >> 63) & 0x01)
             };
-        }
-    }
-
-    public static final class KafkaRouteExBuilder
-    {
-        private final KafkaRouteExFW.Builder routeExRW;
-
-        private KafkaRouteExBuilder()
-        {
-            MutableDirectBuffer writeBuffer = new UnsafeBuffer(new byte[1024 * 8]);
-            this.routeExRW = new KafkaRouteExFW.Builder().wrap(writeBuffer, 0, writeBuffer.capacity());
-        }
-
-        public KafkaRouteExBuilder topic(
-            String topic)
-        {
-            routeExRW.topic(topic);
-            return this;
-        }
-
-        public KafkaRouteExBuilder deltaType(
-            String deltaType)
-        {
-            routeExRW.deltaType(d -> d.set(KafkaDeltaType.valueOf(deltaType)));
-            return this;
-        }
-
-        public KafkaRouteExBuilder defaultOffset(
-            String defaultOffset)
-        {
-            routeExRW.defaultOffset(p -> p.set(KafkaOffsetType.valueOf(defaultOffset)));
-            return this;
-        }
-
-        public byte[] build()
-        {
-            final KafkaRouteExFW routeEx = routeExRW.build();
-            final byte[] array = new byte[routeEx.sizeof()];
-            routeEx.buffer().getBytes(routeEx.offset(), array);
-            return array;
         }
     }
 
