@@ -130,16 +130,6 @@ scope kafka
         PRODUCE_AND_FETCH(3)
     }
 
-    scope control
-    {
-        struct KafkaRouteEx
-        {
-            string16 topic; // TODO: wildcard
-            KafkaDeltaType deltaType = NONE;
-            KafkaOffsetType defaultOffset = HISTORICAL;
-        }
-    }
-
     scope stream
     {
         enum KafkaApi (uint8)

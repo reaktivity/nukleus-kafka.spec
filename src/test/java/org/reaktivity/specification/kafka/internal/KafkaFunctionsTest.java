@@ -47,7 +47,6 @@ import org.reaktivity.specification.kafka.internal.types.KafkaOffsetFW;
 import org.reaktivity.specification.kafka.internal.types.KafkaSkip;
 import org.reaktivity.specification.kafka.internal.types.KafkaValueMatchFW;
 import org.reaktivity.specification.kafka.internal.types.OctetsFW;
-import org.reaktivity.specification.kafka.internal.types.control.KafkaRouteExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaApi;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaBeginExFW;
 import org.reaktivity.specification.kafka.internal.types.stream.KafkaBootstrapBeginExFW;
@@ -76,18 +75,6 @@ public class KafkaFunctionsTest
     {
         factory = newExpressionFactory();
         ctx = new ExpressionContext();
-    }
-
-    @Test
-    public void shouldGenerateRouteExtension()
-    {
-        byte[] build = KafkaFunctions.routeEx()
-                                     .topic("topic")
-                                     .build();
-
-        DirectBuffer buffer = new UnsafeBuffer(build);
-        KafkaRouteExFW routeEx = new KafkaRouteExFW().wrap(buffer, 0, buffer.capacity());
-        assertEquals("topic", routeEx.topic().asString());
     }
 
     @Test
